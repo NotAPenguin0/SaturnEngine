@@ -13,13 +13,60 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\glad">
+      <UniqueIdentifier>{ae8027bd-49bb-4dbd-8cb2-73f265be410f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{cd8c5fa4-9fd6-4fed-b3dc-eae9c9b55821}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{dcdaf431-c83f-44f4-bc01-56a2a44b9cce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subsystems">
+      <UniqueIdentifier>{8f09908d-84c0-4f4a-946d-45b30bc0110c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subsystems\Logging">
+      <UniqueIdentifier>{17f6053b-8887-4d46-ad37-fb6b50d62950}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Subsystems">
+      <UniqueIdentifier>{24d86a75-306b-4948-a147-4b3ae45809c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Subsystems\Logging">
+      <UniqueIdentifier>{2c26891e-a59b-42a0-bc31-3cab940546f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="glad\src\glad.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="glad\src\glad.cpp">
+      <Filter>Source Files\glad</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="LogSystem.cpp">
+      <Filter>Source Files\Subsystems\Logging</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Application.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="LogSystem.hpp">
+      <Filter>Header Files\Subsystems\Logging</Filter>
+    </ClInclude>
+    <ClInclude Include="rang.hpp">
+      <Filter>Header Files\Subsystems\Logging</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
