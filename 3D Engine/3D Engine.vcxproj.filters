@@ -72,6 +72,12 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Source Files\Subsystems\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Utility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Framebuffer.cpp">
+      <Filter>Source Files\Subsystems\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp">
@@ -96,6 +102,12 @@
       <Filter>Header Files\Subsystems\Input</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.hpp">
+      <Filter>Header Files\Subsystems\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Framebuffer.hpp">
+      <Filter>Header Files\Subsystems\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL.hpp">
       <Filter>Header Files\Subsystems\Renderer</Filter>
     </ClInclude>
   </ItemGroup>

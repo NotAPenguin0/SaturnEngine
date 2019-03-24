@@ -1,10 +1,12 @@
 #ifndef MVG_APPLICATION_HPP_
 #define MVG_APPLICATION_HPP_
 
+#include "Renderer.hpp"
 #include "Utility.hpp"
 
 #include "glad\glad.h"
 #include <GLFW\glfw3.h>
+#include <memory>
 #include <string_view>
 
 namespace Saturn {
@@ -45,9 +47,11 @@ private:
     WindowDim window_dimensions;
     bool window_is_open;
 
+	std::unique_ptr<Renderer> renderer = nullptr;
+
     // Window callback functions
     static void
-    resize_callback([[maybe_unused]] GLFWwindow* window, int w, int h);
+        resize_callback([[maybe_unused]] GLFWwindow* window, int w, int h);
 };
 
 } // namespace Saturn

@@ -1,6 +1,7 @@
 #ifndef MVG_RENDERER_HPP_
 #define MVG_RENDERER_HPP_
 
+#include "glad/glad.h"
 #include "Utility.hpp"
 
 #include <functional>
@@ -23,7 +24,8 @@ public:
     Renderer& operator=(Renderer const&) = default;
     Renderer& operator=(Renderer&&) = default;
 
-	void clear(Color clear_color);
+    void clear(Color clear_color,
+               GLenum flags = GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 private:
     std::reference_wrapper<Application> app;

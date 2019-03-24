@@ -4,11 +4,13 @@
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 
-#include "Input.hpp"
 #include "Application.hpp"
 #include "ErrorHandler.hpp"
+#include "Input.hpp"
 #include "LogSystem.hpp"
 #include "Utility.hpp"
+
+#include "Renderer.hpp"
 
 namespace Saturn {
 

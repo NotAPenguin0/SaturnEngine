@@ -67,8 +67,15 @@ Application Engine::initialize(CreateInfo create_info) {
         Input::bind(GLFW_KEY_ESCAPE, [&app]() { app.quit(); });
     });
 
+    std::thread renderer_init([&app, &create_info]() {
+        Renderer::CreateInfo renderer_create_info{
+            create_info.app_create_info.window_size, app};
+        app.renderer = std::make_unique<Renderer>(renderer_create_info);
+    });
+
     // Join all subsystem threads
     input_init.join();
+    renderer_init.join();
 
     return app;
 }

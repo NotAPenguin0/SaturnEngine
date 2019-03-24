@@ -58,6 +58,8 @@ void Application::run() {
     while (!glfwWindowShouldClose(window_handle)) {
         Input::update();
 
+        renderer->clear(Color{0.1f, 0.1f, 0.1f, 1.0f});
+
         glfwSwapBuffers(window_handle);
         glfwPollEvents();
     }

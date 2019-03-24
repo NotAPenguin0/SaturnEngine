@@ -21,9 +21,11 @@ struct Dimensions {
 using WindowDim = Dimensions<std::size_t>;
 using ImgDim = Dimensions<std::size_t>;
 
+//Basic color class. Needs expanding
 class Color {
 public:
     Color() = default;
+    Color(float aR, float aG, float aB, float aA);
     Color(Color const&) = default;
     Color(Color&&) = default;
 
