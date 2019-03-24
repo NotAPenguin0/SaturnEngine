@@ -6,6 +6,8 @@
 #include <string>
 #include <string_view>
 
+#include <mutex>
+
 #include "rang.hpp"
 
 namespace Saturn {
@@ -18,14 +20,17 @@ public:
 
     template<typename T>
     static void write_raw(T const& data) {
+        std::lock_guard<std::mutex> lock(mut);
         target_stream.get() << data;
     }
 
     template<typename T>
-    static void write_colored(T const& data, rang::fgB color = rang::fgB::gray) {
-        target_stream.get() << color;
+    static void write_colored(T const& data,
+                              rang::fgB color = rang::fgB::gray) {
+        write_raw(color);
         write_raw(data);
-        target_stream.get() << rang::fgB::gray;
+        // reset color. Bright gray is essentially white
+        write_raw(rang::fgB::gray);
     }
 
     template<typename T>
@@ -59,6 +64,7 @@ private:
     // default to std::cout
     static inline std::reference_wrapper<std::ostream> target_stream =
         std::cout;
+    static inline std::mutex mut;
 };
 
 } // namespace Saturn

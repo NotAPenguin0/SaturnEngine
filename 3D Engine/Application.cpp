@@ -1,5 +1,6 @@
 #include "Application.hpp"
 
+#include "Input.hpp"
 #include "LogSystem.hpp"
 
 namespace Saturn {
@@ -54,10 +55,12 @@ Application::~Application() {
 }
 
 void Application::run() {
-	while (!glfwWindowShouldClose(window_handle)) {
-		glfwSwapBuffers(window_handle);
+    while (!glfwWindowShouldClose(window_handle)) {
+        Input::update();
+
+        glfwSwapBuffers(window_handle);
         glfwPollEvents();
-	}
+    }
 }
 
 void Application::quit() {
@@ -67,10 +70,13 @@ void Application::quit() {
     }
 }
 
-void Application::resize_callback([[maybe_unused]] GLFWwindow* window, int w, int h) {
-	//Set the viewport correctly
+void Application::resize_callback([[maybe_unused]] GLFWwindow* window,
+                                  int w,
+                                  int h) {
+    // Set the viewport correctly
     glViewport(0, 0, w, h);
 }
 
+GLFWwindow* Application::window() { return window_handle; }
 
 } // namespace Saturn

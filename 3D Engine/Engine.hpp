@@ -4,6 +4,7 @@
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 
+#include "Input.hpp"
 #include "Application.hpp"
 #include "ErrorHandler.hpp"
 #include "LogSystem.hpp"

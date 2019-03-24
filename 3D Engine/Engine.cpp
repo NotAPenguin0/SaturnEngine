@@ -1,5 +1,7 @@
 #include "Engine.hpp"
 
+#include <thread>
+
 namespace Saturn {
 
 Application Engine::initialize(CreateInfo create_info) {
@@ -56,6 +58,17 @@ Application Engine::initialize(CreateInfo create_info) {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // Initialize subsystems. This process is multithreaded for all subsystems.
+    std::thread input_init([&app]() {
+        Input::initialize(app);
+        // Bind the escape key to quit. This may change in the future or be
+        // configurable somewhere
+        Input::bind(GLFW_KEY_ESCAPE, [&app]() { app.quit(); });
+    });
+
+    // Join all subsystem threads
+    input_init.join();
 
     return app;
 }

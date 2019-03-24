@@ -36,6 +36,10 @@ public:
     // \brief Call to quit the application.
     void quit();
 
+    // \brief Obtains a handle to the native window
+    // \return A pointer to a GLFWwindow, used as a handle in the GLFW API.
+    GLFWwindow* window();
+
 private:
     GLFWwindow* window_handle;
     WindowDim window_dimensions;
@@ -43,8 +47,7 @@ private:
 
     // Window callback functions
     static void
-        resize_callback([[maybe_unused]] GLFWwindow* window, int w, int h);
-   
+    resize_callback([[maybe_unused]] GLFWwindow* window, int w, int h);
 };
 
 } // namespace Saturn

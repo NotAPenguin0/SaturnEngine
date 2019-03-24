@@ -11,7 +11,7 @@ namespace Saturn {
 
 struct SafeTerminateException {};
 
-[[noreturn]] inline void safe_terminate() { throw SafeTerminateException {}; }
+[[noreturn]] inline void safe_terminate() { throw SafeTerminateException{}; }
 
 template<typename T>
 struct Dimensions {
@@ -20,6 +20,18 @@ struct Dimensions {
 
 using WindowDim = Dimensions<std::size_t>;
 using ImgDim = Dimensions<std::size_t>;
+
+class Color {
+public:
+    Color() = default;
+    Color(Color const&) = default;
+    Color(Color&&) = default;
+
+    Color& operator=(Color const&) = default;
+    Color& operator=(Color&&) = default;
+
+    float r, g, b, a;
+};
 
 } // namespace Saturn
 

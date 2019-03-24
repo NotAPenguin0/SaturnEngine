@@ -34,6 +34,18 @@
     <Filter Include="Source Files\Subsystems\Logging">
       <UniqueIdentifier>{2c26891e-a59b-42a0-bc31-3cab940546f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Subsystems\Input">
+      <UniqueIdentifier>{3dfcb8a2-e48b-4c67-890c-eb1dc8b28bfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subsystems\Input">
+      <UniqueIdentifier>{fc516dc8-3917-4ddb-aca5-48356651fd84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subsystems\Renderer">
+      <UniqueIdentifier>{a3fbdd00-2ca5-49d5-829f-6483ad138807}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Subsystems\Renderer">
+      <UniqueIdentifier>{9de445f4-10b6-4a35-b991-8c9bb101787d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,6 +66,12 @@
     <ClCompile Include="ErrorHandler.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Source Files\Subsystems\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files\Subsystems\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp">
@@ -73,6 +91,12 @@
     </ClInclude>
     <ClInclude Include="ErrorHandler.hpp">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.hpp">
+      <Filter>Header Files\Subsystems\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.hpp">
+      <Filter>Header Files\Subsystems\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
