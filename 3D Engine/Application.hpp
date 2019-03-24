@@ -3,6 +3,7 @@
 
 #include "Utility.hpp"
 
+#include "glad\glad.h"
 #include <GLFW\glfw3.h>
 #include <string_view>
 
@@ -10,6 +11,8 @@ namespace Saturn {
 
 class Application {
 public:
+    friend class Engine;
+
     struct CreateInfo {
         WindowDim window_size;
         std::string_view window_caption = "";
@@ -18,19 +21,30 @@ public:
 
     Application(CreateInfo create_info);
 
-	//Not copyable
+    // This class is not copyable
     Application(Application const&) = delete;
     Application& operator=(Application const&) = delete;
 
-	Application(Application&&);
+    Application(Application&&);
     Application& operator=(Application&&);
 
-	~Application();
+    ~Application();
+
+    // \brief Runs the application. Blocks the calling thread.
+    void run();
+
+    // \brief Call to quit the application.
+    void quit();
 
 private:
     GLFWwindow* window_handle;
     WindowDim window_dimensions;
     bool window_is_open;
+
+    // Window callback functions
+    static void
+        resize_callback([[maybe_unused]] GLFWwindow* window, int w, int h);
+   
 };
 
 } // namespace Saturn

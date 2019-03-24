@@ -22,31 +22,32 @@ public:
     }
 
     template<typename T>
-    static void write_colored(T const& data, rang::fg color = rang::fg::reset) {
+    static void write_colored(T const& data, rang::fgB color = rang::fgB::gray) {
         target_stream.get() << color;
-        write_raw(str);
-        target_stream.get() << rang::fg::reset;
+        write_raw(data);
+        target_stream.get() << rang::fgB::gray;
     }
 
     template<typename T>
     static void write(Severity sev, T const& data) {
-        rang::fg color;
+        rang::fgB color;
         std::string prefix;
         switch (sev) {
             case Severity::Info:
                 prefix = "[INFO]: ";
-                color = rang::fg::reset;
+                color = rang::fgB::gray;
                 break;
             case Severity::Warning:
                 prefix = "[WARNING]: ";
-                color = rang::fg::yellow;
+                color = rang::fgB::yellow;
                 break;
             case Severity::Error:
                 prefix = "[ERROR]: ";
-                color = rang::fg::red;
+                color = rang::fgB::red;
                 break;
             case Severity::FatalError:
-                prefix = "[FATAL ERORR]: " color = rang::fg::red;
+                prefix = "[FATAL ERORR]: ";
+                color = rang::fgB::red;
                 break;
         }
         write_colored(prefix, color);
@@ -55,7 +56,9 @@ public:
     }
 
 private:
-    static inline std::reference_wrapper<std::ostream> target_stream;
+    // default to std::cout
+    static inline std::reference_wrapper<std::ostream> target_stream =
+        std::cout;
 };
 
 } // namespace Saturn

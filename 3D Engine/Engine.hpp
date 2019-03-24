@@ -1,9 +1,11 @@
 #ifndef MVG_ENGINE_HPP_
 #define MVG_ENGINE_HPP_
 
+#include "glad/glad.h"
 #include <GLFW/glfw3.h>
 
 #include "Application.hpp"
+#include "ErrorHandler.hpp"
 #include "LogSystem.hpp"
 #include "Utility.hpp"
 
@@ -19,6 +21,9 @@ public:
         // Specifies the output steam to log all output to. Defaults to
         // std::cout
         std::ostream& log_target = std::cout;
+
+        // Antialiasing level. Defaults to 4x
+        std::size_t samples = 4;
 
         // Application create info
         Application::CreateInfo app_create_info;
