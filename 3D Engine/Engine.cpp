@@ -73,9 +73,12 @@ Application Engine::initialize(CreateInfo create_info) {
         app.renderer = std::make_unique<Renderer>(renderer_create_info);
     });
 
+	std::thread random_init(Math::RandomEngine::initialize);
+
     // Join all subsystem threads
     input_init.join();
     renderer_init.join();
+    random_init.join();
 
     return app;
 }

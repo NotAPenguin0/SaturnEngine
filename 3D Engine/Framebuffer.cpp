@@ -5,7 +5,6 @@
 
 namespace Saturn {
 
-
 Framebuffer::Framebuffer(CreateInfo create_info) : size(create_info.size) {
 
     // Create the framebuffer and bind it
@@ -17,6 +16,41 @@ Framebuffer::Framebuffer(CreateInfo create_info) : size(create_info.size) {
                            texture, 0);
     create_rbo();
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+Framebuffer::Framebuffer(Framebuffer&& other) :
+    fbo(other.fbo), rbo(other.rbo), texture(other.texture) {
+    other.fbo = 0;
+    other.rbo = 0;
+    other.texture = 0;
+}
+
+Framebuffer& Framebuffer::operator=(Framebuffer&& other) {
+    fbo = other.fbo;
+    rbo = other.rbo;
+    texture = other.texture;
+
+    other.fbo = 0;
+    other.rbo = 0;
+    other.texture = 0;
+
+    return *this;
+}
+
+Framebuffer::~Framebuffer() {
+    glDeleteFramebuffers(1, &fbo);
+    glDeleteRenderbuffers(1, &rbo);
+    glDeleteTextures(1, &texture);
+}
+
+void Framebuffer::bind(Framebuffer const& buf) {
+    glBindFramebuffer(GL_FRAMEBUFFER, buf.fbo);
+}
+
+void Framebuffer::unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
+
+void Framebuffer::unbind(Framebuffer const&) {
+    unbind();
 }
 
 ImgDim Framebuffer::dimensions() const { return size; }
@@ -52,6 +86,7 @@ void Framebuffer::create_texture() {
 }
 
 void Framebuffer::check_complete() {
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     auto framebuffer_status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if (framebuffer_status == GL_FRAMEBUFFER_COMPLETE) {
         return;
@@ -90,6 +125,7 @@ void Framebuffer::check_complete() {
                              "GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS");
         }
     }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 } // namespace Saturn

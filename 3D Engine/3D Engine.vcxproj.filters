@@ -46,6 +46,12 @@
     <Filter Include="Source Files\Subsystems\Renderer">
       <UniqueIdentifier>{9de445f4-10b6-4a35-b991-8c9bb101787d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Subsystems\Math">
+      <UniqueIdentifier>{fce44ea3-927f-486f-976c-c0764f480c3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Subsystems\Math">
+      <UniqueIdentifier>{944a9d4e-0846-41bf-bd6f-0a48a70c4233}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -78,6 +84,9 @@
     <ClCompile Include="Framebuffer.cpp">
       <Filter>Source Files\Subsystems\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="RandomEngine.cpp">
+      <Filter>Source Files\Subsystems\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp">
@@ -109,6 +118,12 @@
     </ClInclude>
     <ClInclude Include="OpenGL.hpp">
       <Filter>Header Files\Subsystems\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomEngine.hpp">
+      <Filter>Header Files\Subsystems\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.hpp">
+      <Filter>Header Files\Subsystems\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

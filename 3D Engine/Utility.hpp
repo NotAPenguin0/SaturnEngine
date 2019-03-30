@@ -21,7 +21,7 @@ struct Dimensions {
 using WindowDim = Dimensions<std::size_t>;
 using ImgDim = Dimensions<std::size_t>;
 
-//Basic color class. Needs expanding
+// Basic color class. Needs expanding
 class Color {
 public:
     Color() = default;
@@ -33,6 +33,13 @@ public:
     Color& operator=(Color&&) = default;
 
     float r, g, b, a;
+};
+
+class NonCopyable {
+public:
+    NonCopyable() = default;
+    NonCopyable(NonCopyable const&) = delete;
+    NonCopyable& operator=(NonCopyable const&) = delete;
 };
 
 } // namespace Saturn

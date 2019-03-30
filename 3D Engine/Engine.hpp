@@ -9,6 +9,7 @@
 #include "Input.hpp"
 #include "LogSystem.hpp"
 #include "Utility.hpp"
+#include "Math.hpp"
 
 #include "Renderer.hpp"
 

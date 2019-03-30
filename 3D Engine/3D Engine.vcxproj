@@ -187,6 +187,7 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="LogSystem.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="RandomEngine.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
@@ -197,7 +198,9 @@
     <ClInclude Include="Framebuffer.hpp" />
     <ClInclude Include="Input.hpp" />
     <ClInclude Include="LogSystem.hpp" />
+    <ClInclude Include="Math.hpp" />
     <ClInclude Include="OpenGL.hpp" />
+    <ClInclude Include="RandomEngine.hpp" />
     <ClInclude Include="rang.hpp" />
     <ClInclude Include="Renderer.hpp" />
     <ClInclude Include="Utility.hpp" />

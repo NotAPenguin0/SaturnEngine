@@ -6,13 +6,24 @@
 namespace Saturn {
 
 // TODO: Allow different settings for renderbuffer (do when we need to)
-class Framebuffer {
+class Framebuffer : public NonCopyable {
 public:
     struct CreateInfo {
         ImgDim size;
     };
 
+	Framebuffer() = default;
     Framebuffer(CreateInfo create_info);
+    Framebuffer(Framebuffer&& other);
+
+    Framebuffer& operator=(Framebuffer&& other);
+
+    ~Framebuffer();
+
+    static void bind(Framebuffer const& buf);
+    static void unbind();
+	//Overload with unused Framebuffer argument. Equivalent to calling unbind()
+	static void unbind(Framebuffer const&);
 
     ImgDim dimensions() const;
 
