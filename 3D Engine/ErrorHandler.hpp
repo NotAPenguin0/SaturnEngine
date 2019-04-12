@@ -8,12 +8,23 @@ namespace Saturn {
 
 class GLErrorHandler {
 public:
+	friend class Engine;
+
     static void initialize();
 
 private:
-    static void callback(const char* name, void* fptr, int len_args, ...);
     static void glfw_error_callback(int code, const char* msg);
-    static void dummy_callback(const char* name, void* fpts, int len_args, ...);
+    static void dummy_callback([[maybe_unused]] const char* name,
+                               [[maybe_unused]] void* fptr,
+                               [[maybe_unused]] int len_args,
+                               ...);
+    static void gl_error_callback([[maybe_unused]] GLenum source,
+                                  GLenum type,
+                                  [[maybe_unused]] GLuint id,
+                                  GLenum severity, 
+								  [[maybe_unused]] GLsizei length,
+                                  const GLchar* message,
+                                  [[maybe_unused]] const void* userParam);
 };
 
 } // namespace Saturn

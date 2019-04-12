@@ -54,12 +54,16 @@ Application::~Application() {
     }
 }
 
+void Application::initialize_keybinds() {}
+
 void Application::run() {
     while (!glfwWindowShouldClose(window_handle)) {
         Input::update();
 
         renderer->clear(Color{0.1f, 0.1f, 0.1f, 1.0f});
 
+        // Copy framebuffer to screen
+        renderer->update_screen();
         glfwSwapBuffers(window_handle);
         glfwPollEvents();
     }
@@ -76,7 +80,7 @@ void Application::resize_callback([[maybe_unused]] GLFWwindow* window,
                                   int w,
                                   int h) {
     // Set the viewport correctly
-    glViewport(0, 0, w, h);
+    Viewport::set_active(Viewport(0u, 0u, static_cast<unsigned int>(w), static_cast<unsigned int>(h)));
 }
 
 GLFWwindow* Application::window() { return window_handle; }

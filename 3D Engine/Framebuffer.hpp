@@ -28,6 +28,8 @@ public:
     ImgDim dimensions() const;
 
 private:
+	friend class Renderer;
+
     // OpenGL Framebuffer object
     unsigned int fbo;
     // OpenGL Renderbuffer object
@@ -42,6 +44,8 @@ private:
     void create_texture();
 
     void check_complete();
+
+	static inline unsigned int currently_bound = 0;
 };
 
 } // namespace Saturn

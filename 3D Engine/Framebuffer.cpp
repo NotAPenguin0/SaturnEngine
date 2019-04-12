@@ -19,7 +19,7 @@ Framebuffer::Framebuffer(CreateInfo create_info) : size(create_info.size) {
 }
 
 Framebuffer::Framebuffer(Framebuffer&& other) :
-    fbo(other.fbo), rbo(other.rbo), texture(other.texture) {
+    fbo(other.fbo), rbo(other.rbo), texture(other.texture), size(other.size) {
     other.fbo = 0;
     other.rbo = 0;
     other.texture = 0;
@@ -29,6 +29,7 @@ Framebuffer& Framebuffer::operator=(Framebuffer&& other) {
     fbo = other.fbo;
     rbo = other.rbo;
     texture = other.texture;
+    size = other.size;
 
     other.fbo = 0;
     other.rbo = 0;
@@ -44,10 +45,18 @@ Framebuffer::~Framebuffer() {
 }
 
 void Framebuffer::bind(Framebuffer const& buf) {
-    glBindFramebuffer(GL_FRAMEBUFFER, buf.fbo);
+	if (currently_bound != buf.fbo) {
+        glBindFramebuffer(GL_FRAMEBUFFER, buf.fbo);
+        currently_bound = buf.fbo;
+    }
 }
 
-void Framebuffer::unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
+void Framebuffer::unbind() {
+	if (currently_bound != 0) {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        currently_bound = 0;
+    }
+}
 
 void Framebuffer::unbind(Framebuffer const&) {
     unbind();

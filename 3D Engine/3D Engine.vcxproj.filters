@@ -52,6 +52,9 @@
     <Filter Include="Source Files\Subsystems\Math">
       <UniqueIdentifier>{944a9d4e-0846-41bf-bd6f-0a48a70c4233}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Subsystems\Math\Vector">
+      <UniqueIdentifier>{d64ba0c4-10f0-41e8-9891-b61187168aa6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -86,6 +89,15 @@
     </ClCompile>
     <ClCompile Include="RandomEngine.cpp">
       <Filter>Source Files\Subsystems\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\Subsystems\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Viewport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>Source Files\Subsystems\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +136,39 @@
     </ClInclude>
     <ClInclude Include="Math.hpp">
       <Filter>Header Files\Subsystems\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.hpp">
+      <Filter>Header Files\Subsystems\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Viewport.hpp">
+      <Filter>Header Files\Subsystems\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Exceptions.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBuffer.hpp">
+      <Filter>Header Files\Subsystems\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.hpp">
+      <Filter>Header Files\Subsystems\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="VecBase.hpp">
+      <Filter>Header Files\Subsystems\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec1.hpp">
+      <Filter>Header Files\Subsystems\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec2.hpp">
+      <Filter>Header Files\Subsystems\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec3.hpp">
+      <Filter>Header Files\Subsystems\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec4.hpp">
+      <Filter>Header Files\Subsystems\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="VecMath.hpp">
+      <Filter>Header Files\Subsystems\Math\Vector</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -31,6 +31,9 @@ public:
 
         // Application create info
         Application::CreateInfo app_create_info;
+
+		// Enable debug output. This causes a big performance drop, so be careful when using it.
+		bool enable_debug_output = false;
     };
 
     // \brief Initializes the complete Engine.

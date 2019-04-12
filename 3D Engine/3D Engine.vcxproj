@@ -82,19 +82,19 @@
     <IncludePath>C:\Libs\;C:\Users\michi_000\Desktop\C++\3D Engine\3D Engine\glad\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Label="LLVM" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClangClAdditionalOptions>-Wall -Wno-unused-private-field -Wno-exit-time-destructors -Wno-double-promotion -Wno-missing-prototypes -Wextra -Wno-newline-eof -Wno-unused-command-line-argument -Wno-c++98-compat-pedantic -Wno-unused-variable -Wno-global-constructors -Werror -Wno-shorten-64-to-32 -Wno-c++98-compat -Wno-reserved-id-macro</ClangClAdditionalOptions>
+    <ClangClAdditionalOptions>-Wall -Wno-missing-noreturn -Wno-zero-as-null-pointer-constant -Wno-old-style-cast -Wno-unused-private-field -Wno-exit-time-destructors -Wno-double-promotion -Wno-missing-prototypes -Wextra -Wno-newline-eof -Wno-unused-command-line-argument -Wno-c++98-compat-pedantic -Wno-unused-variable -Wno-global-constructors -Werror -Wno-shorten-64-to-32 -Wno-c++98-compat -Wno-reserved-id-macro</ClangClAdditionalOptions>
     <LldLinkAdditionalOptions>/debug:ghash /opt:noref</LldLinkAdditionalOptions>
   </PropertyGroup>
   <PropertyGroup Label="LLVM" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClangClAdditionalOptions>-Wall -Wno-unused-private-field -Wno-exit-time-destructors -Wno-double-promotion -Wno-missing-prototypes -Wextra -Wno-newline-eof -Wno-unused-command-line-argument -Wno-c++98-compat-pedantic -Wno-unused-variable -Wno-global-constructors -Werror -Wno-shorten-64-to-32 -Wno-c++98-compat -Wno-reserved-id-macro</ClangClAdditionalOptions>
+    <ClangClAdditionalOptions>-Wall -Wno-missing-noreturn -Wno-zero-as-null-pointer-constant -Wno-old-style-cast -Wno-unused-private-field -Wno-exit-time-destructors -Wno-double-promotion -Wno-missing-prototypes -Wextra -Wno-newline-eof -Wno-unused-command-line-argument -Wno-c++98-compat-pedantic -Wno-unused-variable -Wno-global-constructors -Werror -Wno-shorten-64-to-32 -Wno-c++98-compat -Wno-reserved-id-macro</ClangClAdditionalOptions>
     <LldLinkAdditionalOptions>/debug:ghash /opt:noref</LldLinkAdditionalOptions>
   </PropertyGroup>
   <PropertyGroup Label="LLVM" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClangClAdditionalOptions>-Wall -Wno-unused-private-field -Wno-exit-time-destructors -Wno-double-promotion -Wno-missing-prototypes -Wextra -Wno-newline-eof -Wno-unused-command-line-argument -Wno-c++98-compat-pedantic -Wno-unused-variable -Wno-global-constructors -Werror -Wno-shorten-64-to-32 -Wno-c++98-compat -Wno-reserved-id-macro</ClangClAdditionalOptions>
+    <ClangClAdditionalOptions>-Wall -Wno-missing-noreturn -Wno-zero-as-null-pointer-constant -Wno-old-style-cast -Wno-unused-private-field -Wno-exit-time-destructors -Wno-double-promotion -Wno-missing-prototypes -Wextra -Wno-newline-eof -Wno-unused-command-line-argument -Wno-c++98-compat-pedantic -Wno-unused-variable -Wno-global-constructors -Werror -Wno-shorten-64-to-32 -Wno-c++98-compat -Wno-reserved-id-macro</ClangClAdditionalOptions>
     <LldLinkAdditionalOptions>/debug:ghash /opt:noref</LldLinkAdditionalOptions>
   </PropertyGroup>
   <PropertyGroup Label="LLVM" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClangClAdditionalOptions>-Wall -Wno-unused-private-field -Wno-exit-time-destructors -Wno-double-promotion -Wno-missing-prototypes -Wextra -Wno-newline-eof -Wno-unused-command-line-argument -Wno-c++98-compat-pedantic -Wno-unused-variable -Wno-global-constructors -Werror -Wno-shorten-64-to-32 -Wno-c++98-compat -Wno-reserved-id-macro</ClangClAdditionalOptions>
+    <ClangClAdditionalOptions>-Wall -Wno-missing-noreturn -Wno-zero-as-null-pointer-constant -Wno-old-style-cast -Wno-unused-private-field -Wno-exit-time-destructors -Wno-double-promotion -Wno-missing-prototypes -Wextra -Wno-newline-eof -Wno-unused-command-line-argument -Wno-c++98-compat-pedantic -Wno-unused-variable -Wno-global-constructors -Werror -Wno-shorten-64-to-32 -Wno-c++98-compat -Wno-reserved-id-macro</ClangClAdditionalOptions>
     <LldLinkAdditionalOptions>/debug:ghash /opt:noref</LldLinkAdditionalOptions>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -189,12 +189,16 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RandomEngine.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Utility.cpp" />
+    <ClCompile Include="VertexBuffer.cpp" />
+    <ClCompile Include="Viewport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp" />
     <ClInclude Include="Engine.hpp" />
     <ClInclude Include="ErrorHandler.hpp" />
+    <ClInclude Include="Exceptions.hpp" />
     <ClInclude Include="Framebuffer.hpp" />
     <ClInclude Include="Input.hpp" />
     <ClInclude Include="LogSystem.hpp" />
@@ -203,7 +207,17 @@
     <ClInclude Include="RandomEngine.hpp" />
     <ClInclude Include="rang.hpp" />
     <ClInclude Include="Renderer.hpp" />
+    <ClInclude Include="Shader.hpp" />
     <ClInclude Include="Utility.hpp" />
+    <ClInclude Include="Vec1.hpp" />
+    <ClInclude Include="Vec2.hpp" />
+    <ClInclude Include="Vec3.hpp" />
+    <ClInclude Include="Vec4.hpp" />
+    <ClInclude Include="VecBase.hpp" />
+    <ClInclude Include="VecMath.hpp" />
+    <ClInclude Include="Vector.hpp" />
+    <ClInclude Include="VertexBuffer.hpp" />
+    <ClInclude Include="Viewport.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

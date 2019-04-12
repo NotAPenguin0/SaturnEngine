@@ -4,5 +4,7 @@
 // Header that includes all other math headers
 
 #include "RandomEngine.hpp"
+#include "Vector.hpp"
+#include "VecMath.hpp"
 
 #endif

@@ -32,6 +32,8 @@ public:
 
     ~Application();
 
+	void initialize_keybinds();
+
     // \brief Runs the application. Blocks the calling thread.
     void run();
 
@@ -42,16 +44,15 @@ public:
     // \return A pointer to a GLFWwindow, used as a handle in the GLFW API.
     GLFWwindow* window();
 
+	// Framebuffer resize callback function
+    void resize_callback([[maybe_unused]] GLFWwindow* window, int w, int h);
+
 private:
     GLFWwindow* window_handle;
     WindowDim window_dimensions;
     bool window_is_open;
 
 	std::unique_ptr<Renderer> renderer = nullptr;
-
-    // Window callback functions
-    static void
-        resize_callback([[maybe_unused]] GLFWwindow* window, int w, int h);
 };
 
 } // namespace Saturn
