@@ -40,6 +40,9 @@ public:
         assert(index <= 1);
         return (index == 0) ? x : y;
     }
+
+    constexpr T* ptr() { return &x; }
+    constexpr T const* ptr() const { return &x; }
 };
 
 template<typename T>
@@ -64,7 +67,7 @@ constexpr Vec2<T> operator*(Vec2<T> const& lhs, T scalar) {
 
 template<typename T>
 constexpr Vec2<T> operator/(Vec2<T> const& lhs, T scalar) {
-    return Vec2<T>{lhs.x / scalar, lhs.y * scalar};
+    return Vec2<T>{lhs.x / scalar, lhs.y / scalar};
 }
 
 // Comparison operators

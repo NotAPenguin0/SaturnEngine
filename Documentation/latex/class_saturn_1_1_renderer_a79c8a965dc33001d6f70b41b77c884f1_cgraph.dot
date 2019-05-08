@@ -1,0 +1,21 @@
+digraph "Saturn::Renderer::debug_log_viewport"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node14 [label="Saturn::Renderer::debug\l_log_viewport",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node14 -> Node15 [color="midnightblue",fontsize="10",style="solid"];
+  Node15 [label="Saturn::Viewport::current",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_saturn_1_1_viewport.html#ae1d00a96641eb4f3c945c74402157f6d"];
+  Node15 -> Node16 [color="midnightblue",fontsize="10",style="solid"];
+  Node16 [label="Saturn::Viewport::Viewport",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_saturn_1_1_viewport.html#a4b10eda1f925d596a3b7fcc3c79b3342"];
+  Node14 -> Node17 [color="midnightblue",fontsize="10",style="solid"];
+  Node17 [label="Saturn::LogSystem::\lwrite",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_saturn_1_1_log_system.html#a81bd1711a0ed95e64bd345aa7681217e"];
+  Node17 -> Node18 [color="midnightblue",fontsize="10",style="solid"];
+  Node18 [label="Saturn::LogSystem::\lwrite_colored",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_saturn_1_1_log_system.html#a477ee92097499a28744de407fb12c0dd"];
+  Node18 -> Node19 [color="midnightblue",fontsize="10",style="solid"];
+  Node19 [label="Saturn::LogSystem::\lwrite_raw",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_saturn_1_1_log_system.html#a9d333bbbee49a558628d431b7d4121e9"];
+  Node14 -> Node20 [color="midnightblue",fontsize="10",style="solid"];
+  Node20 [label="Saturn::Viewport::position",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_saturn_1_1_viewport.html#ae430a90f83a57f04e75e6e8be9a97cfb"];
+  Node14 -> Node21 [color="midnightblue",fontsize="10",style="solid"];
+  Node21 [label="Saturn::Viewport::dimensions",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_saturn_1_1_viewport.html#a37810a2ffacf7d4698e900865559a1a9"];
+}

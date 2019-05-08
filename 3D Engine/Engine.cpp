@@ -9,14 +9,14 @@ namespace {
 struct framebuffer_resize_callback {
     static Application* app;
 
-	static void callback(GLFWwindow* win, int w, int h) {
-		app->resize_callback(win, w, h);
-	}
+    static void callback(GLFWwindow* win, int w, int h) {
+        app->resize_callback(win, w, h);
+    }
 };
 
 Application* framebuffer_resize_callback::app = nullptr;
 
-}
+} // namespace
 
 Application Engine::initialize(CreateInfo create_info) {
     // Initialize logging system
@@ -66,19 +66,20 @@ Application Engine::initialize(CreateInfo create_info) {
         safe_terminate();
     }
     // Register window callbacks
-	// Using a workaround because capturing lambdas do not convert to function pointers
+    // Using a workaround because capturing lambdas do not convert to function
+    // pointers
     framebuffer_resize_callback::app = &app;
     glfwSetFramebufferSizeCallback(app.window_handle,
                                    framebuffer_resize_callback::callback);
 
     // Enable some OpenGL functionality we're going to need
-    glEnable(GL_CULL_FACE);
+    //    glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //    glEnable(GL_BLEND);
+    //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Enable debug output if specified
-	if (create_info.enable_debug_output) {
+    if (create_info.enable_debug_output) {
         GLint flags;
         glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
         if (flags & GL_CONTEXT_FLAG_DEBUG_BIT) {
@@ -88,9 +89,10 @@ Application Engine::initialize(CreateInfo create_info) {
             glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0,
                                   nullptr, GL_TRUE);
         } else {
-			LogSystem::write(LogSystem::Severity::Error, "Couldn't make GL Debug Output");
-		}
-	}
+            LogSystem::write(LogSystem::Severity::Error,
+                             "Couldn't make GL Debug Output");
+        }
+    }
 
     // Initialize subsystems. This process is multithreaded for all subsystems.
     std::thread input_init([&app]() {

@@ -5,9 +5,7 @@
 
 namespace Saturn {
 
-void GLErrorHandler::initialize() {
-   
-}
+void GLErrorHandler::initialize() {}
 
 void GLErrorHandler::glfw_error_callback(int code, const char* msg) {
     LogSystem::write(LogSystem::Severity::Warning,
@@ -16,28 +14,28 @@ void GLErrorHandler::glfw_error_callback(int code, const char* msg) {
 }
 
 void GLErrorHandler::gl_error_callback([[maybe_unused]] GLenum source,
-	GLenum type,
-    [[maybe_unused]] GLuint id,
-	GLenum severity,
-    [[maybe_unused]] GLsizei length,
-	const GLchar* message,
-    [[maybe_unused]] const void* userParam) {
+                                       GLenum type,
+                                       [[maybe_unused]] GLuint id,
+                                       GLenum severity,
+                                       [[maybe_unused]] GLsizei length,
+                                       const GLchar* message,
+                                       [[maybe_unused]] const void* userParam) {
 
-	using namespace std::literals::string_literals;
+    using namespace std::literals::string_literals;
 
-	// Set severity
+    // Set severity
     LogSystem::Severity sev = LogSystem::Severity::Info;
-	if (severity == GL_DEBUG_SEVERITY_HIGH) {
+    if (severity == GL_DEBUG_SEVERITY_HIGH) {
         sev = LogSystem::Severity::Error;
     } else if (severity == GL_DEBUG_SEVERITY_MEDIUM) {
         sev = LogSystem::Severity::Warning;
     } else if (severity == GL_DEBUG_SEVERITY_LOW) {
         sev = LogSystem::Severity::Info;
-	}
-	// Set error type
+    }
+    // Set error type
     std::string errtype = "Unknown error";
-    if (type == GL_DEBUG_TYPE_ERROR) { 
-		errtype = "Error";
+    if (type == GL_DEBUG_TYPE_ERROR) {
+        errtype = "Error";
     } else if (type == GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR) {
         errtype = "Deprecated behavior";
     } else if (type == GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR) {
@@ -50,11 +48,15 @@ void GLErrorHandler::gl_error_callback([[maybe_unused]] GLenum source,
         errtype = "Command stream annotation";
     } else if (type == GL_DEBUG_TYPE_OTHER) {
         errtype = "Other error";
-	}
+    }
 
-	// Print the error message
+#ifdef NO_PERFORMANCE_LOG
+    if (type == GL_DEBUG_TYPE_PERFORMANCE) return;
+#endif
+
+    // Print the error message
     LogSystem::write(sev, "OpenGL Debug Output: ");
-	LogSystem::write(sev, "Error type: "s + errtype);
+    LogSystem::write(sev, "Error type: "s + errtype);
     LogSystem::write(sev, "Message: "s + message);
 }
 
@@ -86,7 +88,7 @@ void GLErrorHandler::callback(const char* name,
                              errtype + ")");
         LogSystem::write(fatal ? LogSystem::Severity::FatalError
                                : LogSystem::Severity::Error,
-                         "In function: "s + name);        
+                         "In function: "s + name);
     }
 }*/
 

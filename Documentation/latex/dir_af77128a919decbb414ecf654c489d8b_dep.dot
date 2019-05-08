@@ -1,0 +1,11 @@
+digraph "glad/include/glad" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_98ed8c9d31ea74e915031ecd8c9a6bc9 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="include" fontname="Helvetica", fontsize="10", URL="dir_98ed8c9d31ea74e915031ecd8c9a6bc9.html"]
+  dir_af77128a919decbb414ecf654c489d8b [shape=box, label="glad", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_af77128a919decbb414ecf654c489d8b.html"];
+  }
+  dir_6ce42f94086d85042678791e3938dcb2 [shape=box label="KHR" URL="dir_6ce42f94086d85042678791e3938dcb2.html"];
+  dir_af77128a919decbb414ecf654c489d8b->dir_6ce42f94086d85042678791e3938dcb2 [headlabel="1", labeldistance=1.5 headhref="dir_000002_000003.html"];
+}

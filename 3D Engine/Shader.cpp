@@ -8,6 +8,8 @@
 #include "LogSystem.hpp"
 #include "OpenGL.hpp"
 
+#include "bind_guard.hpp"
+
 namespace Saturn {
 
 static unsigned int create_shader(const char* vtx_path, const char* frag_path) {
@@ -110,54 +112,60 @@ static unsigned int create_shader(const char* vtx_path, const char* frag_path) {
     return shaderProgram;
 }
 
-Shader Shader::create(CreateInfo create_info) {
-	Shader s;
-    s.program = create_shader(create_info.vtx_path.data(), create_info.frag_path.data());
-    return s;
+Shader::Shader(CreateInfo create_info) {
+    program = create_shader(create_info.vtx_path.data(),
+                            create_info.frag_path.data());
 }
 
-Shader::Shader(Shader&& rhs) {
-    program = rhs.program;
-    rhs.program = 0;
-}
-
-Shader& Shader::operator=(Shader&& rhs) {
-    program = rhs.program;
-    rhs.program = 0;
-
-    return *this;
+void Shader::assign(CreateInfo create_info) {
+    if (program != 0) { glDeleteProgram(program); }
+    program = create_shader(create_info.vtx_path.data(),
+                            create_info.frag_path.data());
 }
 
 unsigned int Shader::handle() { return program; }
 
 void Shader::set_int(std::string_view name, int value) {
+    bind_guard<Shader> guard(*this);
     glUniform1i(location(name), value);
 }
 
 void Shader::set_float(std::string_view name, float value) {
+    bind_guard<Shader> guard(*this);
     glUniform1f(location(name), value);
 }
-/*
 
-void Shader::set_vec3(std::string_view name, glm::vec3 value) {
-    glUniform3fv(location(name), 1, glm::value_ptr(value));
+void Shader::set_vec3(std::string_view name, Math::Vec3<float> const& value) {
+    bind_guard<Shader> guard(*this);
+    glUniform3fv(location(name), 1, value.ptr());
 }
 
-void Shader::set_vec4(std::string_view name, glm::vec4 value) {
-    glUniform4fv(location(name), 1, glm::value_ptr(value));
+void Shader::set_vec4(std::string_view name, Math::Vec4<float> const& value) {
+    bind_guard<Shader> guard(*this);
+    glUniform4fv(location(name), 1, value.ptr());
 }
 
-void Shader::set_mat4(std::string_view name, glm::mat4 value) {
-    glUniformMatrix4fv(location(name), 1, GL_FALSE, glm::value_ptr(value));
-}*/
+void Shader::set_mat4(std::string_view name,
+                      Math::Matrix4x4<float> const& value) {
+    bind_guard<Shader> guard(*this);
+    glUniformMatrix4fv(location(name), 1, GL_FALSE, value.ptr());
+}
 
 int Shader::location(std::string_view name) {
-    Shader::use(*this); // Make sure the shader is in use
+
+    // Check the cache
+    auto it = uniform_cache.find(name);
+    if (it != uniform_cache.end()) { return it->second; }
+
     auto loc = glGetUniformLocation(program, name.data());
     assert(loc != -1);
+    // Store uniform location in cache
+    uniform_cache[name] = loc;
+
     return loc;
 }
 
-void Shader::use(Shader& shader) { glUseProgram(shader.program); }
+void Shader::bind(Shader& shader) { glUseProgram(shader.program); }
+void Shader::unbind() { glUseProgram(0); }
 
 } // namespace Saturn

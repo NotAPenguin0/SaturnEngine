@@ -1,0 +1,122 @@
+\hypertarget{rang_8hpp}{}\section{rang.\+hpp File Reference}
+\label{rang_8hpp}\index{rang.\+hpp@{rang.\+hpp}}
+{\ttfamily \#include $<$algorithm$>$}\newline
+{\ttfamily \#include $<$atomic$>$}\newline
+{\ttfamily \#include $<$cstdlib$>$}\newline
+{\ttfamily \#include $<$cstring$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+Include dependency graph for rang.\+hpp\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacerang}{rang}}
+\item 
+ \mbox{\hyperlink{namespacerang_1_1rang__implementation}{rang\+::rang\+\_\+implementation}}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\using \mbox{\hyperlink{namespacerang_1_1rang__implementation_a769f245caecc8bdf2d741f39a48052ac}{rang\+::rang\+\_\+implementation\+::enable\+Std}} = typename std\+::enable\+\_\+if$<$ std\+::is\+\_\+same$<$ T, \mbox{\hyperlink{namespacerang_add4e682fec2856474978ff76efcc8b4e}{rang\+::style}} $>$\+::\mbox{\hyperlink{glad_8h_a7ab00df62abe96de01795dc0d15959db}{value}}$\vert$$\vert$std\+::is\+\_\+same$<$ T, \mbox{\hyperlink{namespacerang_a41a68f6ed991b29fa720fcfbcd319ef9}{rang\+::fg}} $>$\+::\mbox{\hyperlink{glad_8h_a7ab00df62abe96de01795dc0d15959db}{value}}$\vert$$\vert$std\+::is\+\_\+same$<$ T, \mbox{\hyperlink{namespacerang_ad33ed681a0b63f07283bbb55d19da7d2}{rang\+::bg}} $>$\+::\mbox{\hyperlink{glad_8h_a7ab00df62abe96de01795dc0d15959db}{value}}$\vert$$\vert$std\+::is\+\_\+same$<$ T, \mbox{\hyperlink{namespacerang_a3b83d0d73d49b5a75c3b92031f2c77ee}{rang\+::fgB}} $>$\+::\mbox{\hyperlink{glad_8h_a7ab00df62abe96de01795dc0d15959db}{value}}$\vert$$\vert$std\+::is\+\_\+same$<$ T, \mbox{\hyperlink{namespacerang_a42edf1c1b0d8e843ceb1208259177f08}{rang\+::bgB}} $>$\+::\mbox{\hyperlink{glad_8h_a7ab00df62abe96de01795dc0d15959db}{value}}, std\+::ostream \& $>$\+::\mbox{\hyperlink{glad_8h_a890efa53b3d7deeeced6f3a0d6653ed3}{type}}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{namespacerang_add4e682fec2856474978ff76efcc8b4e}{rang\+::style}} \{ \newline
+\mbox{\hyperlink{namespacerang_add4e682fec2856474978ff76efcc8b4ea86266ee937d97f812a8e57d22b62ee29}{rang\+::style\+::reset}} = 0, 
+\mbox{\hyperlink{namespacerang_add4e682fec2856474978ff76efcc8b4ea69dcab4a73aeec2113f69b61e6263da8}{rang\+::style\+::bold}} = 1, 
+\mbox{\hyperlink{namespacerang_add4e682fec2856474978ff76efcc8b4ea563728df0fdd90631ac1e51258e2857d}{rang\+::style\+::dim}} = 2, 
+\mbox{\hyperlink{namespacerang_add4e682fec2856474978ff76efcc8b4ea030c5b6d1e5715105943ac111d9671bf}{rang\+::style\+::italic}} = 3, 
+\newline
+\mbox{\hyperlink{namespacerang_add4e682fec2856474978ff76efcc8b4ea6dc7b4483f8c2c701a48e42db552806d}{rang\+::style\+::underline}} = 4, 
+\mbox{\hyperlink{namespacerang_add4e682fec2856474978ff76efcc8b4ea40652ee9ae143f1c1c830f01a5449ecb}{rang\+::style\+::blink}} = 5, 
+\mbox{\hyperlink{namespacerang_add4e682fec2856474978ff76efcc8b4ea32667a345a6024368c82454639c9830c}{rang\+::style\+::rblink}} = 6, 
+\mbox{\hyperlink{namespacerang_add4e682fec2856474978ff76efcc8b4ea943c52935ea927b80f63243a41a3980b}{rang\+::style\+::reversed}} = 7, 
+\newline
+\mbox{\hyperlink{namespacerang_add4e682fec2856474978ff76efcc8b4eaa27efeecfcdb7794476cafb0b362835e}{rang\+::style\+::conceal}} = 8, 
+\mbox{\hyperlink{namespacerang_add4e682fec2856474978ff76efcc8b4eafade7e5041fdebd013b445486161c31c}{rang\+::style\+::crossed}} = 9
+ \}
+\item 
+enum \mbox{\hyperlink{namespacerang_a41a68f6ed991b29fa720fcfbcd319ef9}{rang\+::fg}} \{ \newline
+\mbox{\hyperlink{namespacerang_a41a68f6ed991b29fa720fcfbcd319ef9a1ffd9e753c8054cc61456ac7fac1ac89}{rang\+::fg\+::black}} = 30, 
+\mbox{\hyperlink{namespacerang_a41a68f6ed991b29fa720fcfbcd319ef9abda9643ac6601722a28f238714274da4}{rang\+::fg\+::red}} = 31, 
+\mbox{\hyperlink{namespacerang_a41a68f6ed991b29fa720fcfbcd319ef9a9f27410725ab8cc8854a2769c7a516b8}{rang\+::fg\+::green}} = 32, 
+\mbox{\hyperlink{namespacerang_a41a68f6ed991b29fa720fcfbcd319ef9ad487dd0b55dfcacdd920ccbdaeafa351}{rang\+::fg\+::yellow}} = 33, 
+\newline
+\mbox{\hyperlink{namespacerang_a41a68f6ed991b29fa720fcfbcd319ef9a48d6215903dff56238e52e8891380c8f}{rang\+::fg\+::blue}} = 34, 
+\mbox{\hyperlink{namespacerang_a41a68f6ed991b29fa720fcfbcd319ef9a4c2a4a7078da0ac6733464eacfd00f86}{rang\+::fg\+::magenta}} = 35, 
+\mbox{\hyperlink{namespacerang_a41a68f6ed991b29fa720fcfbcd319ef9a6411532ba4971f378391776a9db629d3}{rang\+::fg\+::cyan}} = 36, 
+\mbox{\hyperlink{namespacerang_a41a68f6ed991b29fa720fcfbcd319ef9acda7a650c5856cf2f6738072447d7825}{rang\+::fg\+::gray}} = 37, 
+\newline
+\mbox{\hyperlink{namespacerang_a41a68f6ed991b29fa720fcfbcd319ef9a86266ee937d97f812a8e57d22b62ee29}{rang\+::fg\+::reset}} = 39
+ \}
+\item 
+enum \mbox{\hyperlink{namespacerang_ad33ed681a0b63f07283bbb55d19da7d2}{rang\+::bg}} \{ \newline
+\mbox{\hyperlink{namespacerang_ad33ed681a0b63f07283bbb55d19da7d2a1ffd9e753c8054cc61456ac7fac1ac89}{rang\+::bg\+::black}} = 40, 
+\mbox{\hyperlink{namespacerang_ad33ed681a0b63f07283bbb55d19da7d2abda9643ac6601722a28f238714274da4}{rang\+::bg\+::red}} = 41, 
+\mbox{\hyperlink{namespacerang_ad33ed681a0b63f07283bbb55d19da7d2a9f27410725ab8cc8854a2769c7a516b8}{rang\+::bg\+::green}} = 42, 
+\mbox{\hyperlink{namespacerang_ad33ed681a0b63f07283bbb55d19da7d2ad487dd0b55dfcacdd920ccbdaeafa351}{rang\+::bg\+::yellow}} = 43, 
+\newline
+\mbox{\hyperlink{namespacerang_ad33ed681a0b63f07283bbb55d19da7d2a48d6215903dff56238e52e8891380c8f}{rang\+::bg\+::blue}} = 44, 
+\mbox{\hyperlink{namespacerang_ad33ed681a0b63f07283bbb55d19da7d2a4c2a4a7078da0ac6733464eacfd00f86}{rang\+::bg\+::magenta}} = 45, 
+\mbox{\hyperlink{namespacerang_ad33ed681a0b63f07283bbb55d19da7d2a6411532ba4971f378391776a9db629d3}{rang\+::bg\+::cyan}} = 46, 
+\mbox{\hyperlink{namespacerang_ad33ed681a0b63f07283bbb55d19da7d2acda7a650c5856cf2f6738072447d7825}{rang\+::bg\+::gray}} = 47, 
+\newline
+\mbox{\hyperlink{namespacerang_ad33ed681a0b63f07283bbb55d19da7d2a86266ee937d97f812a8e57d22b62ee29}{rang\+::bg\+::reset}} = 49
+ \}
+\item 
+enum \mbox{\hyperlink{namespacerang_a3b83d0d73d49b5a75c3b92031f2c77ee}{rang\+::fgB}} \{ \newline
+\mbox{\hyperlink{namespacerang_a3b83d0d73d49b5a75c3b92031f2c77eea1ffd9e753c8054cc61456ac7fac1ac89}{rang\+::fg\+B\+::black}} = 90, 
+\mbox{\hyperlink{namespacerang_a3b83d0d73d49b5a75c3b92031f2c77eeabda9643ac6601722a28f238714274da4}{rang\+::fg\+B\+::red}} = 91, 
+\mbox{\hyperlink{namespacerang_a3b83d0d73d49b5a75c3b92031f2c77eea9f27410725ab8cc8854a2769c7a516b8}{rang\+::fg\+B\+::green}} = 92, 
+\mbox{\hyperlink{namespacerang_a3b83d0d73d49b5a75c3b92031f2c77eead487dd0b55dfcacdd920ccbdaeafa351}{rang\+::fg\+B\+::yellow}} = 93, 
+\newline
+\mbox{\hyperlink{namespacerang_a3b83d0d73d49b5a75c3b92031f2c77eea48d6215903dff56238e52e8891380c8f}{rang\+::fg\+B\+::blue}} = 94, 
+\mbox{\hyperlink{namespacerang_a3b83d0d73d49b5a75c3b92031f2c77eea4c2a4a7078da0ac6733464eacfd00f86}{rang\+::fg\+B\+::magenta}} = 95, 
+\mbox{\hyperlink{namespacerang_a3b83d0d73d49b5a75c3b92031f2c77eea6411532ba4971f378391776a9db629d3}{rang\+::fg\+B\+::cyan}} = 96, 
+\mbox{\hyperlink{namespacerang_a3b83d0d73d49b5a75c3b92031f2c77eeacda7a650c5856cf2f6738072447d7825}{rang\+::fg\+B\+::gray}} = 97
+ \}
+\item 
+enum \mbox{\hyperlink{namespacerang_a42edf1c1b0d8e843ceb1208259177f08}{rang\+::bgB}} \{ \newline
+\mbox{\hyperlink{namespacerang_a42edf1c1b0d8e843ceb1208259177f08a1ffd9e753c8054cc61456ac7fac1ac89}{rang\+::bg\+B\+::black}} = 100, 
+\mbox{\hyperlink{namespacerang_a42edf1c1b0d8e843ceb1208259177f08abda9643ac6601722a28f238714274da4}{rang\+::bg\+B\+::red}} = 101, 
+\mbox{\hyperlink{namespacerang_a42edf1c1b0d8e843ceb1208259177f08a9f27410725ab8cc8854a2769c7a516b8}{rang\+::bg\+B\+::green}} = 102, 
+\mbox{\hyperlink{namespacerang_a42edf1c1b0d8e843ceb1208259177f08ad487dd0b55dfcacdd920ccbdaeafa351}{rang\+::bg\+B\+::yellow}} = 103, 
+\newline
+\mbox{\hyperlink{namespacerang_a42edf1c1b0d8e843ceb1208259177f08a48d6215903dff56238e52e8891380c8f}{rang\+::bg\+B\+::blue}} = 104, 
+\mbox{\hyperlink{namespacerang_a42edf1c1b0d8e843ceb1208259177f08a4c2a4a7078da0ac6733464eacfd00f86}{rang\+::bg\+B\+::magenta}} = 105, 
+\mbox{\hyperlink{namespacerang_a42edf1c1b0d8e843ceb1208259177f08a6411532ba4971f378391776a9db629d3}{rang\+::bg\+B\+::cyan}} = 106, 
+\mbox{\hyperlink{namespacerang_a42edf1c1b0d8e843ceb1208259177f08acda7a650c5856cf2f6738072447d7825}{rang\+::bg\+B\+::gray}} = 107
+ \}
+\item 
+enum \mbox{\hyperlink{namespacerang_a9a0ad8048ed47f032f5bdb687ba64164}{rang\+::control}} \{ \mbox{\hyperlink{namespacerang_a9a0ad8048ed47f032f5bdb687ba64164ad15305d7a4e34e02489c74a5ef542f36}{rang\+::control\+::\+Off}} = 0, 
+\mbox{\hyperlink{namespacerang_a9a0ad8048ed47f032f5bdb687ba64164a06b9281e396db002010bde1de57262eb}{rang\+::control\+::\+Auto}} = 1, 
+\mbox{\hyperlink{namespacerang_a9a0ad8048ed47f032f5bdb687ba64164a9eb6b78a99cdb6ffd3d40d18621d9f80}{rang\+::control\+::\+Force}} = 2
+ \}
+\item 
+enum \mbox{\hyperlink{namespacerang_af70222b38ecff8fc5aef0958d052b433}{rang\+::win\+Term}} \{ \mbox{\hyperlink{namespacerang_af70222b38ecff8fc5aef0958d052b433a06b9281e396db002010bde1de57262eb}{rang\+::win\+Term\+::\+Auto}} = 0, 
+\mbox{\hyperlink{namespacerang_af70222b38ecff8fc5aef0958d052b433a0f94b628f89319fb787e49e325d8bac8}{rang\+::win\+Term\+::\+Ansi}} = 1, 
+\mbox{\hyperlink{namespacerang_af70222b38ecff8fc5aef0958d052b433a925641e0b76c28cc940e8f3ca178d826}{rang\+::win\+Term\+::\+Native}} = 2
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::atomic$<$ control $>$ \& \mbox{\hyperlink{namespacerang_1_1rang__implementation_a99f6a7aceb4c73be5583199d7c4bf608}{rang\+::rang\+\_\+implementation\+::control\+Mode}} () noexcept
+\item 
+std\+::atomic$<$ win\+Term $>$ \& \mbox{\hyperlink{namespacerang_1_1rang__implementation_a7aeef192943a09050fcb8b635b277c7a}{rang\+::rang\+\_\+implementation\+::win\+Term\+Mode}} () noexcept
+\item 
+bool \mbox{\hyperlink{namespacerang_1_1rang__implementation_a536a3edd1809b7bcda844161c1cb1a05}{rang\+::rang\+\_\+implementation\+::supports\+Color}} () noexcept
+\item 
+bool \mbox{\hyperlink{namespacerang_1_1rang__implementation_af195c8344db945b8027c500cdf835964}{rang\+::rang\+\_\+implementation\+::is\+Terminal}} (const std\+::streambuf $\ast$osbuf) noexcept
+\item 
+{\footnotesize template$<$typename T $>$ }\\enable\+Std$<$ T $>$ \mbox{\hyperlink{namespacerang_1_1rang__implementation_adb095d5412fc21b48d0193dfaf29786e}{rang\+::rang\+\_\+implementation\+::set\+Color}} (std\+::ostream \&os, T const \mbox{\hyperlink{glad_8h_a7ab00df62abe96de01795dc0d15959db}{value}})
+\item 
+{\footnotesize template$<$typename T $>$ }\\rang\+\_\+implementation\+::enable\+Std$<$ T $>$ \mbox{\hyperlink{namespacerang_a201ef75295a5330197a374ac999a9e8a}{rang\+::operator$<$$<$}} (std\+::ostream \&os, const T \mbox{\hyperlink{glad_8h_a7ab00df62abe96de01795dc0d15959db}{value}})
+\item 
+\mbox{\hyperlink{glad_8h_a950fc91edb4504f62f1c577bf4727c29}{void}} \mbox{\hyperlink{namespacerang_a34533a6f3dc063a47816a626f8f4d6c0}{rang\+::set\+Win\+Term\+Mode}} (const \mbox{\hyperlink{namespacerang_af70222b38ecff8fc5aef0958d052b433}{rang\+::win\+Term}} \mbox{\hyperlink{glad_8h_a7ab00df62abe96de01795dc0d15959db}{value}}) noexcept
+\item 
+\mbox{\hyperlink{glad_8h_a950fc91edb4504f62f1c577bf4727c29}{void}} \mbox{\hyperlink{namespacerang_ae72965d5fd9f42ddf3bc7101d3e2f423}{rang\+::set\+Control\+Mode}} (const control \mbox{\hyperlink{glad_8h_a7ab00df62abe96de01795dc0d15959db}{value}}) noexcept
+\end{DoxyCompactItemize}

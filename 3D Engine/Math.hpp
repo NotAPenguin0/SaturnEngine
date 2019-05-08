@@ -3,8 +3,15 @@
 
 // Header that includes all other math headers
 
+#include "ConstexprMath.hpp"
 #include "RandomEngine.hpp"
-#include "Vector.hpp"
 #include "VecMath.hpp"
+#include "Vector.hpp"
+
+#include "Matrix.hpp"
+
+#include "LinearTransform.hpp"
+
+#include "Trig.hpp"
 
 #endif

@@ -1,0 +1,15 @@
+digraph "Saturn::Shader::use"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node24 [label="Saturn::Shader::use",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node24 -> Node25 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node25 [label="Saturn::Renderer::update\l_screen",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_saturn_1_1_renderer.html#a6332346e6ceb8802a98387d9c7c41515"];
+  Node24 -> Node26 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node26 [label="Saturn::Shader::location",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_saturn_1_1_shader.html#a63d7efc6ec1283109db058770df501f7"];
+  Node26 -> Node27 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node27 [label="Saturn::Shader::set_int",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_saturn_1_1_shader.html#a581b02afaa31dd07ed65e530fd742979"];
+  Node26 -> Node28 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node28 [label="Saturn::Shader::set\l_float",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_saturn_1_1_shader.html#a5fe55e96741b63bca10105f492a3d735"];
+}

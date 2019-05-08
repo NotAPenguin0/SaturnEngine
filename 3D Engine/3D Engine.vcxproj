@@ -30,6 +30,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>llvm</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -37,12 +38,14 @@
     <PlatformToolset>llvm</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>llvm</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -50,6 +53,7 @@
     <PlatformToolset>llvm</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -104,8 +108,9 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <PreprocessorDefinitions>ENGINE_DEBUG_BUILD;_MBCS;__clang__%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NO_PERFORMANCE_LOG;ENGINE_DEBUG_BUILD;_MBCS;__clang__%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SupportJustMyCode>false</SupportJustMyCode>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opengl32.lib;C:\assimp-bin\assimp.lib;C:\Libs\lib\glfw3.lib;%(AdditionalDependencies);kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -119,8 +124,9 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <PreprocessorDefinitions>ENGINE_DEBUG_BUILD;_MBCS;__clang__%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NO_PERFORMANCE_LOG;ENGINE_DEBUG_BUILD;_MBCS;__clang__%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SupportJustMyCode>false</SupportJustMyCode>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opengl32.lib;C:\assimp-bin\assimp.lib;C:\Libs\lib\glfw3.lib;%(AdditionalDependencies);kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -136,7 +142,8 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <PreprocessorDefinitions>_MBCS;__clang__%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;__clang__%(PreprocessorDefinitions) NO_PERFORMANCE_LOG</PreprocessorDefinitions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -154,7 +161,8 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <PreprocessorDefinitions>_MBCS;__clang__%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;__clang__%(PreprocessorDefinitions) NO_PERFORMANCE_LOG</PreprocessorDefinitions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -187,15 +195,23 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="LogSystem.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OpenGL.cpp" />
     <ClCompile Include="RandomEngine.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Utility.cpp" />
-    <ClCompile Include="VertexBuffer.cpp" />
+    <ClCompile Include="VertexArray.cpp" />
     <ClCompile Include="Viewport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp" />
+    <ClInclude Include="bind_guard.hpp" />
+    <ClInclude Include="bind_tracker.hpp" />
+    <ClInclude Include="component_container.hpp" />
+    <ClInclude Include="component_index.hpp" />
+    <ClInclude Include="ConstexprMath.hpp" />
     <ClInclude Include="Engine.hpp" />
     <ClInclude Include="ErrorHandler.hpp" />
     <ClInclude Include="Exceptions.hpp" />
@@ -203,11 +219,19 @@
     <ClInclude Include="Input.hpp" />
     <ClInclude Include="LogSystem.hpp" />
     <ClInclude Include="Math.hpp" />
+    <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="OpenGL.hpp" />
+    <ClInclude Include="math_traits.hpp" />
     <ClInclude Include="RandomEngine.hpp" />
     <ClInclude Include="rang.hpp" />
     <ClInclude Include="Renderer.hpp" />
+    <ClInclude Include="Scene.hpp" />
+    <ClInclude Include="SceneGraph.hpp" />
+    <ClInclude Include="SceneObject.hpp" />
     <ClInclude Include="Shader.hpp" />
+    <ClInclude Include="LinearTransform.hpp" />
+    <ClInclude Include="Trig.hpp" />
+    <ClInclude Include="type_erased.hpp" />
     <ClInclude Include="Utility.hpp" />
     <ClInclude Include="Vec1.hpp" />
     <ClInclude Include="Vec2.hpp" />
@@ -216,7 +240,7 @@
     <ClInclude Include="VecBase.hpp" />
     <ClInclude Include="VecMath.hpp" />
     <ClInclude Include="Vector.hpp" />
-    <ClInclude Include="VertexBuffer.hpp" />
+    <ClInclude Include="VertexArray.hpp" />
     <ClInclude Include="Viewport.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

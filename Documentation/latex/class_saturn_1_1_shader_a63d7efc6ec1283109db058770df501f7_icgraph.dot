@@ -1,0 +1,11 @@
+digraph "Saturn::Shader::location"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node10 [label="Saturn::Shader::location",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node10 -> Node11 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node11 [label="Saturn::Shader::set_int",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_saturn_1_1_shader.html#a581b02afaa31dd07ed65e530fd742979"];
+  Node10 -> Node12 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node12 [label="Saturn::Shader::set\l_float",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_saturn_1_1_shader.html#a5fe55e96741b63bca10105f492a3d735"];
+}

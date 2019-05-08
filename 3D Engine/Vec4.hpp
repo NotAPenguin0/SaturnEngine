@@ -60,6 +60,9 @@ public:
         if (index == 2) return z;
         return (index == 0) ? x : y;
     }
+
+    constexpr T* ptr() { return &x; }
+    constexpr T const* ptr() const { return &x; }
 };
 
 template<typename T>

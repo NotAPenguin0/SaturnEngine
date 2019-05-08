@@ -3,39 +3,23 @@
 #include "LogSystem.hpp"
 #include "OpenGL.hpp"
 
+#include "bind_guard.hpp"
+
 namespace Saturn {
 
 Framebuffer::Framebuffer(CreateInfo create_info) : size(create_info.size) {
 
     // Create the framebuffer and bind it
     create_fbo();
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-    create_texture();
-    // Attach the texture to the framebuffer
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                           texture, 0);
-    create_rbo();
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
 
-Framebuffer::Framebuffer(Framebuffer&& other) :
-    fbo(other.fbo), rbo(other.rbo), texture(other.texture), size(other.size) {
-    other.fbo = 0;
-    other.rbo = 0;
-    other.texture = 0;
-}
-
-Framebuffer& Framebuffer::operator=(Framebuffer&& other) {
-    fbo = other.fbo;
-    rbo = other.rbo;
-    texture = other.texture;
-    size = other.size;
-
-    other.fbo = 0;
-    other.rbo = 0;
-    other.texture = 0;
-
-    return *this;
+    bind_guard<Framebuffer> guard(*this);
+    {
+        create_texture();
+        // Attach the texture to the framebuffer
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                               GL_TEXTURE_2D, texture, 0);
+        create_rbo();
+    }
 }
 
 Framebuffer::~Framebuffer() {
@@ -44,23 +28,34 @@ Framebuffer::~Framebuffer() {
     glDeleteTextures(1, &texture);
 }
 
-void Framebuffer::bind(Framebuffer const& buf) {
-	if (currently_bound != buf.fbo) {
-        glBindFramebuffer(GL_FRAMEBUFFER, buf.fbo);
-        currently_bound = buf.fbo;
+void Framebuffer::assign(CreateInfo create_info) {
+    // Cleanup old framebuffer
+    if (fbo != 0 && rbo != 0 && texture != 0) {
+        glDeleteFramebuffers(1, &fbo);
+        glDeleteRenderbuffers(1, &rbo);
+        glDeleteTextures(1, &texture);
+    }
+
+    size = create_info.size;
+
+    // Create the framebuffer and bind it
+    create_fbo();
+
+    bind_guard<Framebuffer> guard(*this);
+    {
+        create_texture();
+        // Attach the texture to the framebuffer
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                               GL_TEXTURE_2D, texture, 0);
+        create_rbo();
     }
 }
 
-void Framebuffer::unbind() {
-	if (currently_bound != 0) {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        currently_bound = 0;
-    }
+void Framebuffer::bind(Framebuffer& buf) {
+    glBindFramebuffer(GL_FRAMEBUFFER, buf.fbo);
 }
 
-void Framebuffer::unbind(Framebuffer const&) {
-    unbind();
-}
+void Framebuffer::unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
 ImgDim Framebuffer::dimensions() const { return size; }
 
@@ -95,7 +90,7 @@ void Framebuffer::create_texture() {
 }
 
 void Framebuffer::check_complete() {
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    bind_guard<Framebuffer> guard(*this);
     auto framebuffer_status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if (framebuffer_status == GL_FRAMEBUFFER_COMPLETE) {
         return;
@@ -134,7 +129,6 @@ void Framebuffer::check_complete() {
                              "GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS");
         }
     }
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 } // namespace Saturn

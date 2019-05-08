@@ -3,124 +3,149 @@
 #include "Application.hpp"
 #include "Exceptions.hpp"
 
+#include "bind_guard.hpp"
+
+#include "LinearTransform.hpp"
+#include "Trig.hpp"
+
 #include <sstream>
 
 namespace Saturn {
 
-static constexpr float screen_vertices[] = {
+static std::vector<float> screen_vertices = {
     // Vertices	        Texture coords
     -1.0f, 1.0f,  0.0f, 0.0f, 1.0f, // TL
     -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, // BL
     1.0f,  -1.0f, 0.0f, 1.0f, 0.0f, // BR
-    -1.0f, 1.0f,  0.0f, 0.0f, 1.0f, // Second triangle TL
-    1.0f,  1.0f,  0.0f, 1.0f, 1.0f, // Second triangle TR
-    1.0f,  -1.0f, 0.0f, 1.0f, 0.0f, // Second triangle BR
+    1.0f,  1.0f,  0.0f, 1.0f, 1.0f, // TR
 };
+
+static std::vector<float> cube_vertices = {
+    -0.5f, -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, 0.5f,  0.5f,  -0.5f,
+    0.5f,  0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, -0.5f, -0.5f,
+
+    -0.5f, -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  0.5f,  0.5f,
+    0.5f,  0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  -0.5f, -0.5f, 0.5f,
+
+    -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,  -0.5f, -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, 0.5f,  -0.5f, 0.5f,  0.5f,
+
+    0.5f,  0.5f,  0.5f,  0.5f,  0.5f,  -0.5f, 0.5f,  -0.5f, -0.5f,
+    0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, 0.5f,  0.5f,  0.5f,  0.5f,
+
+    -0.5f, -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, 0.5f,
+    0.5f,  -0.5f, 0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, -0.5f,
+
+    -0.5f, 0.5f,  -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  0.5f,
+    0.5f,  0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,  -0.5f};
+
+// TODO
+static std::vector<GLuint> cube_indices = {};
 
 Renderer::Renderer(CreateInfo create_info) :
     app(create_info.app), screen_size(create_info.screen_size) {
 
-	// Setup the framebuffer
+    // Setup the framebuffer
     Framebuffer::CreateInfo framebuffer_create_info;
     framebuffer_create_info.size = screen_size;
-    framebuf = Framebuffer(framebuffer_create_info);
+    framebuf.assign(framebuffer_create_info);
 
-	// Create default viewport
-	add_viewport(Viewport(0, 0, screen_size.x, screen_size.y));
-	// Set it as the active viewport
-	Viewport::set_active(get_viewport(0));
+    // Create default viewport
+    add_viewport(Viewport(0, 0, screen_size.x, screen_size.y));
+    // Set it as the active viewport
+    Viewport::set_active(get_viewport(0));
 
-    // Create buffers
-    glGenVertexArrays(1, &screen_vao);
-    glGenBuffers(1, &screen_vbo);
-    glBindVertexArray(screen_vao);
-    glBindBuffer(GL_ARRAY_BUFFER, screen_vbo);
-    // Fill the buffer. GL_STATIC_DRAW because this data will never change
-    glBufferData(GL_ARRAY_BUFFER, sizeof(screen_vertices), screen_vertices,
-                 GL_STATIC_DRAW);
-    // Setup vertex attributes
+    std::vector<VertexAttribute> screen_attributes;
+    screen_attributes.push_back({0, 3}); // Position is a vec3
+    screen_attributes.push_back({1, 2}); // TexCoords is a vec2
 
-    // Attribute 0: Position.		Type: vec3<float>	Offset: 0
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
-                          (void*)0);
-    // Attribute 1: Texture coords. Type: vec2<float>	Offset: 3 floats
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), //FIRST PARAM HAS TO BE 1, 0 FOR TESTING DEBUG OUTPUT
-                          (void*)(3 * sizeof(float)));
-    // Unbind vertex array
-    glBindVertexArray(0);
+    screen.assign({screen_attributes, screen_vertices, {0, 1, 2, 0, 3, 2}});
 
-	// Setup shaders
+    // Setup shaders
     Shader::CreateInfo default_shader_create_info;
     default_shader_create_info.vtx_path =
         "resources/shaders/postprocessing/default_v.glsl";
     default_shader_create_info.frag_path =
         "resources/shaders/postprocessing/default_f.glsl";
-    default_shader = Shader::create(default_shader_create_info);
+    default_shader.assign(default_shader_create_info);
     LogSystem::write(LogSystem::Severity::Info, "Renderer created.");
     LogSystem::write(LogSystem::Severity::Warning,
                      "No postprocessing shader system in place. Default shader "
                      "will be used");
+
+    // Debug:
+    Shader::CreateInfo debug_create_info{"resources/shaders/default_v.glsl",
+                                         "resources/shaders/default_f.glsl"};
+    debug.default_shader.assign(debug_create_info);
+    std::vector<VertexAttribute> attributes;
+    attributes.push_back({0, 3}); // Position
+    debug.cube.assign({attributes, cube_vertices, cube_indices});
 }
 
-Renderer::Renderer(Renderer&& other) :
-    app(std::move(other.app)), screen_size(std::move(other.screen_size)),
-    framebuf(std::move(other.framebuf)), screen_vao(other.screen_vao),
-    screen_vbo(other.screen_vbo) {
-
-    other.screen_vao = 0;
-    other.screen_vbo = 0;
-}
-
-Renderer& Renderer::operator=(Renderer&& other) {
-    app = std::move(other.app);
-    screen_size = std::move(other.screen_size);
-    framebuf = std::move(other.framebuf);
-    screen_vao = other.screen_vao;
-    screen_vbo = other.screen_vbo;
-
-    other.screen_vao = 0;
-    other.screen_vbo = 0;
-
-    return *this;
-}
-
-Renderer::~Renderer() {
-    glDeleteVertexArrays(1, &screen_vao);
-    glDeleteBuffers(1, &screen_vbo);
-}
+Renderer::~Renderer() {}
 
 void Renderer::clear(
     Color clear_color,
     GLenum flags /*= GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT*/) {
-    Framebuffer::bind(framebuf);
+
+    bind_guard<Framebuffer> framebuf_guard(framebuf);
+
     glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
     glClear(flags);
-    Framebuffer::unbind(framebuf);
+}
+
+void Renderer::render_scene_graph(SceneGraph const& scene) {
+    // Temporary
+
+    (void)scene;
+
+    bind_guard<Framebuffer> framebuf_guard(framebuf);
+    bind_guard<VertexArray> vao_guard(debug.cube);
+    bind_guard<Shader> shader_guard(debug.default_shader);
+
+    auto model = Math::Matrix4x4<float>::identity();
+    auto translate = Math::Transform::translate(0.0f, 0.0f, -10.0f);
+    auto rot = Math::Transform::rotate(0.0f, 1.0f, 0.0f, Math::radians(45.0f));
+    auto scale = Math::Transform::scale(1.0f, 1.0f, 1.0f);
+    auto projection = Math::Transform::perspective(
+        Math::radians(45.0f), (float)screen_size.x / (float)screen_size.y, 0.1f,
+        100.0f);
+    auto view = Math::Matrix4x4<float>::identity();
+    view *= Math::Transform::translate(0.0f, -3.0f, 0.0f);
+    Math::Transform::add_rotation(view, 1.0f, 0.0f, 0.0f,
+                                  Math::radians(20.0f));
+    model = scale * translate * model;
+    debug.default_shader.set_mat4("model", model);
+    debug.default_shader.set_mat4("projection", projection);
+    debug.default_shader.set_mat4("view", view);
+    glDrawElements(GL_TRIANGLES, debug.cube.index_size(), GL_UNSIGNED_INT,
+                   nullptr);
 }
 
 void Renderer::update_screen() {
-    // Bind screen. This is equivalent to unbinding the current framebuffer
-    Framebuffer::unbind();
-    glBindVertexArray(screen_vao);
+    bind_guard<Framebuffer> framebuf_guard(screen_framebuf);
+
+    // Bind VAO
+    bind_guard<VertexArray> screen_guard(screen);
+    bind_guard<Ebo> ebo_guard(screen.ebo);
+
     // Temporarily disable some GL functionality
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
 
     // Set (postprocessing) shader
-    Shader::use(default_shader);
+    bind_guard<Shader> shader_guard(default_shader);
 
     // Render framebuffer texture to the screen
     glBindTexture(GL_TEXTURE_2D, framebuf.texture);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    // Re enable functionality
+    glDrawElements(GL_TRIANGLES, screen.index_size(), GL_UNSIGNED_INT, nullptr);
+    //	  Re enable functionality
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    //    glEnable(GL_CULL_FACE); //#Optimize Enable later when 3D works
 }
 
 void Renderer::debug_log_viewport() const {
-	Viewport vp = Viewport::current();
+    Viewport vp = Viewport::current();
     LogSystem::write(LogSystem::Severity::Info, "Viewport info: ");
     std::ostringstream oss;
     oss << "x: " << vp.position().x << " y: " << vp.position().y << "\n";
@@ -129,15 +154,15 @@ void Renderer::debug_log_viewport() const {
 }
 
 Viewport& Renderer::get_viewport(std::size_t index) {
-	if (index >= viewports.size()) {
+    if (index >= viewports.size()) {
         throw InvalidViewportException("Invalid viewport with index " +
                                        std::to_string(index) + " requested.");
-	}
+    }
     return viewports[index];
 }
 
-std::size_t Renderer::add_viewport(Viewport vp) { 
-	viewports.push_back(vp);
+std::size_t Renderer::add_viewport(Viewport vp) {
+    viewports.push_back(vp);
     return viewports.size() - 1;
 }
 

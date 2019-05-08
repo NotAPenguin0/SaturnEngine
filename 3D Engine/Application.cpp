@@ -3,6 +3,9 @@
 #include "Input.hpp"
 #include "LogSystem.hpp"
 
+#include "Scene.hpp"
+#include "SceneObject.hpp"
+
 namespace Saturn {
 
 Application::Application(CreateInfo create_info) :
@@ -57,10 +60,15 @@ Application::~Application() {
 void Application::initialize_keybinds() {}
 
 void Application::run() {
+	Scene scene;
+
     while (!glfwWindowShouldClose(window_handle)) {
         Input::update();
 
-        renderer->clear(Color{0.1f, 0.1f, 0.1f, 1.0f});
+        renderer->clear(Color{0.24f, 0.0f, 0.0f, 1.0f});
+
+		auto graph = scene.build_scene_graph();
+		renderer->render_scene_graph(graph);
 
         // Copy framebuffer to screen
         renderer->update_screen();
@@ -80,7 +88,8 @@ void Application::resize_callback([[maybe_unused]] GLFWwindow* window,
                                   int w,
                                   int h) {
     // Set the viewport correctly
-    Viewport::set_active(Viewport(0u, 0u, static_cast<unsigned int>(w), static_cast<unsigned int>(h)));
+    Viewport::set_active(Viewport(0u, 0u, static_cast<unsigned int>(w),
+                                  static_cast<unsigned int>(h)));
 }
 
 GLFWwindow* Application::window() { return window_handle; }

@@ -1,16 +1,24 @@
 #include "Engine.hpp"
+#include "VertexArray.hpp"
+#include "bind_guard.hpp"
 
+#include "Math.hpp"
+
+#include <cassert>
 #include <iostream>
 
-constexpr int cexpr() {
-    Saturn::vec4f v(1.0f);
-    Saturn::vec4f f(2.0f);
-    return static_cast<int>(Saturn::Math::dot(v, f));
-}
+/*
+ *NOTES:
+ *
+ * Blending, face culling and depth testing is disabled right now because 2D
+ * testing without camera To renenable: Enable in Renderer::update_screen and in
+ * Engine::initialize
+ *
+ **/
 
 // Function try block because I'm cool
 int main() try {
-    int arr[cexpr()];
+
     Saturn::Engine::CreateInfo engine_create_info;
     engine_create_info.app_create_info.fullscreen = false;
     engine_create_info.app_create_info.window_caption = "Saturn Engine";

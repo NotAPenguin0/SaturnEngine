@@ -14,36 +14,36 @@ public:
 
 	Framebuffer() = default;
     Framebuffer(CreateInfo create_info);
-    Framebuffer(Framebuffer&& other);
+    Framebuffer(Framebuffer&& other) = delete;
 
-    Framebuffer& operator=(Framebuffer&& other);
+    Framebuffer& operator=(Framebuffer&& other) = delete;
 
     ~Framebuffer();
 
-    static void bind(Framebuffer const& buf);
+	void assign(CreateInfo create_info);
+
+    static void bind(Framebuffer& buf);
     static void unbind();
-	//Overload with unused Framebuffer argument. Equivalent to calling unbind()
-	static void unbind(Framebuffer const&);
 
     ImgDim dimensions() const;
+
+	void check_complete();
 
 private:
 	friend class Renderer;
 
     // OpenGL Framebuffer object
-    unsigned int fbo;
+    unsigned int fbo = 0;
     // OpenGL Renderbuffer object
-    unsigned int rbo;
+    unsigned int rbo = 0;
     // OpenGL Texture handle. This is the target we render to.
-    unsigned int texture;
+    unsigned int texture = 0;
 
     ImgDim size;
 
     void create_fbo();
     void create_rbo();
     void create_texture();
-
-    void check_complete();
 
 	static inline unsigned int currently_bound = 0;
 };

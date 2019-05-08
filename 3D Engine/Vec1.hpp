@@ -37,6 +37,9 @@ public:
         assert(index == 0);
         return x;
     }
+
+    constexpr T* ptr() { return &x; }
+    constexpr T const* ptr() const { return &x; }
 };
 
 template<typename T>

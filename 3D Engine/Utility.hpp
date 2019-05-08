@@ -22,11 +22,6 @@ struct Dimensions {
 using WindowDim = Dimensions<std::size_t>;
 using ImgDim = Dimensions<std::size_t>;
 
-// Vertex Array Object type
-using Vao = unsigned int;
-// Vertex Buffer Object type
-using Vbo = unsigned int;
-
 // Basic color class. Needs expanding
 class Color {
 public:

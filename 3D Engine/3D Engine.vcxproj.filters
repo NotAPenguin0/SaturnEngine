@@ -55,6 +55,27 @@
     <Filter Include="Header Files\Subsystems\Math\Vector">
       <UniqueIdentifier>{d64ba0c4-10f0-41e8-9891-b61187168aa6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Subsystems\Math\Matrix">
+      <UniqueIdentifier>{27542c3c-9223-4f09-b9ce-32cbec6f3d21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subsystems\Scene">
+      <UniqueIdentifier>{94ceef18-9a93-462a-a964-7d3ae1f7f748}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Subsystems\Scene">
+      <UniqueIdentifier>{e28645f4-2103-4304-b871-19a57a5e7930}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subsystems\Math\3D Transform">
+      <UniqueIdentifier>{a6091881-73e1-4ce6-8a5f-ebb869a2c2ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subsystems\ECS">
+      <UniqueIdentifier>{3c98a4ff-3743-4a7d-9744-1200031fef92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility">
+      <UniqueIdentifier>{9560db39-2aa9-4099-99df-6f109bb98d67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{cb56c684-bc7a-4025-8a39-56d0374a9653}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -81,9 +102,6 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Source Files\Subsystems\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Utility.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Framebuffer.cpp">
       <Filter>Source Files\Subsystems\Renderer</Filter>
     </ClCompile>
@@ -94,10 +112,22 @@
       <Filter>Source Files\Subsystems\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Viewport.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexBuffer.cpp">
       <Filter>Source Files\Subsystems\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexArray.cpp">
+      <Filter>Source Files\Subsystems\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files\Subsystems\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneObject.cpp">
+      <Filter>Source Files\Subsystems\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL.cpp">
+      <Filter>Source Files\Subsystems\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility.cpp">
+      <Filter>Source Files\Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -112,9 +142,6 @@
     </ClInclude>
     <ClInclude Include="rang.hpp">
       <Filter>Header Files\Subsystems\Logging</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility.hpp">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ErrorHandler.hpp">
       <Filter>Header Files\Core</Filter>
@@ -143,12 +170,6 @@
     <ClInclude Include="Viewport.hpp">
       <Filter>Header Files\Subsystems\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Exceptions.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexBuffer.hpp">
-      <Filter>Header Files\Subsystems\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Vector.hpp">
       <Filter>Header Files\Subsystems\Math\Vector</Filter>
     </ClInclude>
@@ -169,6 +190,54 @@
     </ClInclude>
     <ClInclude Include="VecMath.hpp">
       <Filter>Header Files\Subsystems\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstexprMath.hpp">
+      <Filter>Header Files\Subsystems\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.hpp">
+      <Filter>Header Files\Subsystems\Math\Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexArray.hpp">
+      <Filter>Header Files\Subsystems\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.hpp">
+      <Filter>Header Files\Subsystems\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneObject.hpp">
+      <Filter>Header Files\Subsystems\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGraph.hpp">
+      <Filter>Header Files\Subsystems\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="bind_guard.hpp">
+      <Filter>Header Files\Subsystems\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="bind_tracker.hpp">
+      <Filter>Header Files\Subsystems\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="LinearTransform.hpp">
+      <Filter>Header Files\Subsystems\Math\3D Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Trig.hpp">
+      <Filter>Header Files\Subsystems\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="math_traits.hpp">
+      <Filter>Header Files\Subsystems\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Exceptions.hpp">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.hpp">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="type_erased.hpp">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="component_container.hpp">
+      <Filter>Header Files\Subsystems\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="component_index.hpp">
+      <Filter>Header Files\Subsystems\ECS</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -38,8 +38,11 @@ void Viewport::set_active(Viewport const& viewport) {
 #pragma clang diagnostic ignored "-Wc++11-narrowing"
 
 Viewport Viewport::current() {
+
+    // #TODO: Store active viewport manually instead of using glGetIntegerv
+
     int viewport[4];
-	// Query OpenGL for current viewport information
+    // Query OpenGL for current viewport information
     glGetIntegerv(GL_VIEWPORT, viewport);
     return Viewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 }

@@ -1,0 +1,101 @@
+\hypertarget{class_saturn_1_1_log_system}{}\section{Saturn\+:\+:Log\+System Class Reference}
+\label{class_saturn_1_1_log_system}\index{Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}}
+
+
+{\ttfamily \#include $<$Log\+System.\+hpp$>$}
+
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_saturn_1_1_log_system_ab10c0f79f5466d3e47d56b857d09bdde}{Severity}} \{ \mbox{\hyperlink{class_saturn_1_1_log_system_ab10c0f79f5466d3e47d56b857d09bddea4059b0251f66a18cb56f544728796875}{Severity\+::\+Info}}, 
+\mbox{\hyperlink{class_saturn_1_1_log_system_ab10c0f79f5466d3e47d56b857d09bddea0eaadb4fcb48a0a0ed7bc9868be9fbaa}{Severity\+::\+Warning}}, 
+\mbox{\hyperlink{class_saturn_1_1_log_system_ab10c0f79f5466d3e47d56b857d09bddea902b0d55fddef6f8d651fe1035b7d4bd}{Severity\+::\+Error}}, 
+\mbox{\hyperlink{class_saturn_1_1_log_system_ab10c0f79f5466d3e47d56b857d09bddeaf245a0dc66dc8cd7d835771034eb4b86}{Severity\+::\+Fatal\+Error}}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{glad_8h_a950fc91edb4504f62f1c577bf4727c29}{void}} \mbox{\hyperlink{class_saturn_1_1_log_system_a9c1ccf4dfe4ab6803134267c8a2b969b}{initialize}} (std\+::ostream \&\mbox{\hyperlink{glad_8h_af9d0cbbbeb7414e786c41899e5a856d7}{target}})
+\item 
+{\footnotesize template$<$typename T $>$ }\\static \mbox{\hyperlink{glad_8h_a950fc91edb4504f62f1c577bf4727c29}{void}} \mbox{\hyperlink{class_saturn_1_1_log_system_a9d333bbbee49a558628d431b7d4121e9}{write\+\_\+raw}} (T const \&\mbox{\hyperlink{glad_8h_a1848da31b3e095a7152c7cba8375936d}{data}})
+\item 
+{\footnotesize template$<$typename T $>$ }\\static \mbox{\hyperlink{glad_8h_a950fc91edb4504f62f1c577bf4727c29}{void}} \mbox{\hyperlink{class_saturn_1_1_log_system_a477ee92097499a28744de407fb12c0dd}{write\+\_\+colored}} (T const \&\mbox{\hyperlink{glad_8h_a1848da31b3e095a7152c7cba8375936d}{data}}, \mbox{\hyperlink{namespacerang_a3b83d0d73d49b5a75c3b92031f2c77ee}{rang\+::fgB}} \mbox{\hyperlink{glad_8h_a69995a929d818b8b467d4593c24d98bc}{color}}=\mbox{\hyperlink{namespacerang_a41a68f6ed991b29fa720fcfbcd319ef9acda7a650c5856cf2f6738072447d7825}{rang\+::fg\+B\+::gray}})
+\item 
+{\footnotesize template$<$typename T $>$ }\\static \mbox{\hyperlink{glad_8h_a950fc91edb4504f62f1c577bf4727c29}{void}} \mbox{\hyperlink{class_saturn_1_1_log_system_a81bd1711a0ed95e64bd345aa7681217e}{write}} (\mbox{\hyperlink{class_saturn_1_1_log_system_ab10c0f79f5466d3e47d56b857d09bdde}{Severity}} sev, T const \&\mbox{\hyperlink{glad_8h_a1848da31b3e095a7152c7cba8375936d}{data}})
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_saturn_1_1_log_system_ab10c0f79f5466d3e47d56b857d09bdde}\label{class_saturn_1_1_log_system_ab10c0f79f5466d3e47d56b857d09bdde}} 
+\index{Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}!Severity@{Severity}}
+\index{Severity@{Severity}!Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}}
+\subsubsection{\texorpdfstring{Severity}{Severity}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_saturn_1_1_log_system_ab10c0f79f5466d3e47d56b857d09bdde}{Saturn\+::\+Log\+System\+::\+Severity}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Info@{Info}!Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}}\index{Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}!Info@{Info}}}\mbox{\Hypertarget{class_saturn_1_1_log_system_ab10c0f79f5466d3e47d56b857d09bddea4059b0251f66a18cb56f544728796875}\label{class_saturn_1_1_log_system_ab10c0f79f5466d3e47d56b857d09bddea4059b0251f66a18cb56f544728796875}} 
+Info&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Warning@{Warning}!Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}}\index{Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}!Warning@{Warning}}}\mbox{\Hypertarget{class_saturn_1_1_log_system_ab10c0f79f5466d3e47d56b857d09bddea0eaadb4fcb48a0a0ed7bc9868be9fbaa}\label{class_saturn_1_1_log_system_ab10c0f79f5466d3e47d56b857d09bddea0eaadb4fcb48a0a0ed7bc9868be9fbaa}} 
+Warning&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Error@{Error}!Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}}\index{Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}!Error@{Error}}}\mbox{\Hypertarget{class_saturn_1_1_log_system_ab10c0f79f5466d3e47d56b857d09bddea902b0d55fddef6f8d651fe1035b7d4bd}\label{class_saturn_1_1_log_system_ab10c0f79f5466d3e47d56b857d09bddea902b0d55fddef6f8d651fe1035b7d4bd}} 
+Error&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Fatal\+Error@{Fatal\+Error}!Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}}\index{Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}!Fatal\+Error@{Fatal\+Error}}}\mbox{\Hypertarget{class_saturn_1_1_log_system_ab10c0f79f5466d3e47d56b857d09bddeaf245a0dc66dc8cd7d835771034eb4b86}\label{class_saturn_1_1_log_system_ab10c0f79f5466d3e47d56b857d09bddeaf245a0dc66dc8cd7d835771034eb4b86}} 
+Fatal\+Error&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_saturn_1_1_log_system_a9c1ccf4dfe4ab6803134267c8a2b969b}\label{class_saturn_1_1_log_system_a9c1ccf4dfe4ab6803134267c8a2b969b}} 
+\index{Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}!initialize@{initialize}}
+\index{initialize@{initialize}!Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}}
+\subsubsection{\texorpdfstring{initialize()}{initialize()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{glad_8h_a950fc91edb4504f62f1c577bf4727c29}{void}} Saturn\+::\+Log\+System\+::initialize (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{target }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Here is the caller graph for this function\+:
+% FIG 0
+\mbox{\Hypertarget{class_saturn_1_1_log_system_a81bd1711a0ed95e64bd345aa7681217e}\label{class_saturn_1_1_log_system_a81bd1711a0ed95e64bd345aa7681217e}} 
+\index{Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}!write@{write}}
+\index{write@{write}!Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}}
+\subsubsection{\texorpdfstring{write()}{write()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+static \mbox{\hyperlink{glad_8h_a950fc91edb4504f62f1c577bf4727c29}{void}} Saturn\+::\+Log\+System\+::write (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_saturn_1_1_log_system_ab10c0f79f5466d3e47d56b857d09bdde}{Severity}}}]{sev,  }\item[{T const \&}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+Here is the call graph for this function\+:
+% FIG 1
+Here is the caller graph for this function\+:
+% FIG 2
+\mbox{\Hypertarget{class_saturn_1_1_log_system_a477ee92097499a28744de407fb12c0dd}\label{class_saturn_1_1_log_system_a477ee92097499a28744de407fb12c0dd}} 
+\index{Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}!write\+\_\+colored@{write\+\_\+colored}}
+\index{write\+\_\+colored@{write\+\_\+colored}!Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}}
+\subsubsection{\texorpdfstring{write\+\_\+colored()}{write\_colored()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+static \mbox{\hyperlink{glad_8h_a950fc91edb4504f62f1c577bf4727c29}{void}} Saturn\+::\+Log\+System\+::write\+\_\+colored (\begin{DoxyParamCaption}\item[{T const \&}]{data,  }\item[{\mbox{\hyperlink{namespacerang_a3b83d0d73d49b5a75c3b92031f2c77ee}{rang\+::fgB}}}]{color = {\ttfamily \mbox{\hyperlink{namespacerang_a41a68f6ed991b29fa720fcfbcd319ef9acda7a650c5856cf2f6738072447d7825}{rang\+::fg\+B\+::gray}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+Here is the call graph for this function\+:
+% FIG 3
+Here is the caller graph for this function\+:
+% FIG 4
+\mbox{\Hypertarget{class_saturn_1_1_log_system_a9d333bbbee49a558628d431b7d4121e9}\label{class_saturn_1_1_log_system_a9d333bbbee49a558628d431b7d4121e9}} 
+\index{Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}!write\+\_\+raw@{write\+\_\+raw}}
+\index{write\+\_\+raw@{write\+\_\+raw}!Saturn\+::\+Log\+System@{Saturn\+::\+Log\+System}}
+\subsubsection{\texorpdfstring{write\+\_\+raw()}{write\_raw()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+static \mbox{\hyperlink{glad_8h_a950fc91edb4504f62f1c577bf4727c29}{void}} Saturn\+::\+Log\+System\+::write\+\_\+raw (\begin{DoxyParamCaption}\item[{T const \&}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+Here is the caller graph for this function\+:
+% FIG 5
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{_log_system_8hpp}{Log\+System.\+hpp}}\item 
+\mbox{\hyperlink{_log_system_8cpp}{Log\+System.\+cpp}}\end{DoxyCompactItemize}
