@@ -5,11 +5,11 @@
 #include <vector>
 
 #include "SceneGraph.hpp"
+#include "Transform.hpp"
 
-#include "component_container.hpp"
-#include "component_index.hpp"
+#include "ECS.hpp"
 
-#define COMPONENT_LIST /*All components must be listed here, comma separated*/
+#define COMPONENT_LIST ::Saturn::Components::Transform
 
 namespace Saturn {
 
@@ -23,9 +23,7 @@ public:
 
 private:
     std::vector<std::unique_ptr<SceneObject>> objects;
-    std::vector<any_component_container> components;
-
-    component_index_table<COMPONENT_LIST> component_indices;
+    ECS<COMPONENT_LIST> ecs;
 };
 
 } // namespace Saturn

@@ -59,11 +59,6 @@ private:
 
     VertexArray screen;
 
-    struct Debug {
-        VertexArray cube;
-        Shader default_shader;
-    } debug;
-
     Shader default_shader;
     std::vector<Viewport> viewports;
 };

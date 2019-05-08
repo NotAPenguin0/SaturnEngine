@@ -173,6 +173,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="component_container.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="ErrorHandler.cpp" />
     <ClCompile Include="Framebuffer.cpp" />
@@ -209,9 +210,12 @@
     <ClInclude Include="Application.hpp" />
     <ClInclude Include="bind_guard.hpp" />
     <ClInclude Include="bind_tracker.hpp" />
+    <ClInclude Include="ComponentBase.hpp" />
+    <ClInclude Include="Components.hpp" />
     <ClInclude Include="component_container.hpp" />
     <ClInclude Include="component_index.hpp" />
     <ClInclude Include="ConstexprMath.hpp" />
+    <ClInclude Include="ECS.hpp" />
     <ClInclude Include="Engine.hpp" />
     <ClInclude Include="ErrorHandler.hpp" />
     <ClInclude Include="Exceptions.hpp" />
@@ -230,6 +234,7 @@
     <ClInclude Include="SceneObject.hpp" />
     <ClInclude Include="Shader.hpp" />
     <ClInclude Include="LinearTransform.hpp" />
+    <ClInclude Include="Transform.hpp" />
     <ClInclude Include="Trig.hpp" />
     <ClInclude Include="type_erased.hpp" />
     <ClInclude Include="Utility.hpp" />

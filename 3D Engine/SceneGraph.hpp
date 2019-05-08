@@ -4,15 +4,17 @@
 #include "Shader.hpp"
 #include "VertexArray.hpp"
 
+#include "Components.hpp"
+
 #include <vector>
 
 namespace Saturn {
 
 struct SceneGraph {
-	// temporary
+    // temporary
     std::vector<VertexArray*> vtx_arrays;
-	Shader* shader;
-
+    std::vector<Components::Transform*> transforms; // temp
+    Shader* shader;
 };
 
 } // namespace Saturn

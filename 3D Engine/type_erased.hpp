@@ -34,6 +34,16 @@ public:
     auto get() { return val; }
     auto get() const { return val; }
 
+    template<typename T>
+    auto get_as() {
+        return static_cast<T*>(val.get());
+    }
+
+    template<typename T>
+    auto get_as() const {
+        return static_cast<T const*>(val.get());
+    }
+
 private:
     std::unique_ptr<Interface> val;
 };

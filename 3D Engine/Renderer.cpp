@@ -20,28 +20,6 @@ static std::vector<float> screen_vertices = {
     1.0f,  1.0f,  0.0f, 1.0f, 1.0f, // TR
 };
 
-static std::vector<float> cube_vertices = {
-    -0.5f, -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, 0.5f,  0.5f,  -0.5f,
-    0.5f,  0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, -0.5f, -0.5f,
-
-    -0.5f, -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  0.5f,  0.5f,
-    0.5f,  0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  -0.5f, -0.5f, 0.5f,
-
-    -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,  -0.5f, -0.5f, -0.5f, -0.5f,
-    -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, 0.5f,  -0.5f, 0.5f,  0.5f,
-
-    0.5f,  0.5f,  0.5f,  0.5f,  0.5f,  -0.5f, 0.5f,  -0.5f, -0.5f,
-    0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, 0.5f,  0.5f,  0.5f,  0.5f,
-
-    -0.5f, -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, 0.5f,
-    0.5f,  -0.5f, 0.5f,  -0.5f, -0.5f, 0.5f,  -0.5f, -0.5f, -0.5f,
-
-    -0.5f, 0.5f,  -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  0.5f,
-    0.5f,  0.5f,  0.5f,  -0.5f, 0.5f,  0.5f,  -0.5f, 0.5f,  -0.5f};
-
-// TODO
-static std::vector<GLuint> cube_indices = {};
-
 Renderer::Renderer(CreateInfo create_info) :
     app(create_info.app), screen_size(create_info.screen_size) {
 
@@ -72,14 +50,6 @@ Renderer::Renderer(CreateInfo create_info) :
     LogSystem::write(LogSystem::Severity::Warning,
                      "No postprocessing shader system in place. Default shader "
                      "will be used");
-
-    // Debug:
-    Shader::CreateInfo debug_create_info{"resources/shaders/default_v.glsl",
-                                         "resources/shaders/default_f.glsl"};
-    debug.default_shader.assign(debug_create_info);
-    std::vector<VertexAttribute> attributes;
-    attributes.push_back({0, 3}); // Position
-    debug.cube.assign({attributes, cube_vertices, cube_indices});
 }
 
 Renderer::~Renderer() {}
@@ -97,29 +67,38 @@ void Renderer::clear(
 void Renderer::render_scene_graph(SceneGraph const& scene) {
     // Temporary
 
-    (void)scene;
-
     bind_guard<Framebuffer> framebuf_guard(framebuf);
-    bind_guard<VertexArray> vao_guard(debug.cube);
-    bind_guard<Shader> shader_guard(debug.default_shader);
+    // All temporary obviously
+    for (std::size_t i = 0; i < scene.vtx_arrays.size(); ++i) {
+        auto& shader = *scene.shader;
+        auto& vtx_array = *scene.vtx_arrays[i];
+        auto& transform = *scene.transforms[i];
 
-    auto model = Math::Matrix4x4<float>::identity();
-    auto translate = Math::Transform::translate(0.0f, 0.0f, -10.0f);
-    auto rot = Math::Transform::rotate(0.0f, 1.0f, 0.0f, Math::radians(45.0f));
-    auto scale = Math::Transform::scale(1.0f, 1.0f, 1.0f);
-    auto projection = Math::Transform::perspective(
-        Math::radians(45.0f), (float)screen_size.x / (float)screen_size.y, 0.1f,
-        100.0f);
-    auto view = Math::Matrix4x4<float>::identity();
-    view *= Math::Transform::translate(0.0f, -3.0f, 0.0f);
-    Math::Transform::add_rotation(view, 1.0f, 0.0f, 0.0f,
-                                  Math::radians(20.0f));
-    model = scale * translate * model;
-    debug.default_shader.set_mat4("model", model);
-    debug.default_shader.set_mat4("projection", projection);
-    debug.default_shader.set_mat4("view", view);
-    glDrawElements(GL_TRIANGLES, debug.cube.index_size(), GL_UNSIGNED_INT,
-                   nullptr);
+        auto projection = Math::Transform::perspective(
+            Math::radians(45.0f), (float)screen_size.x / (float)screen_size.y,
+            0.1f, 100.0f);
+        auto view = Math::Matrix4x4<float>::identity();
+        Math::Transform::add_translation(view, 0.0f, -1.0f, 0.0f);
+        Math::Transform::add_rotation(view, 1.0f, 0.0f, 0.0f,
+                                      Math::radians(15.0f));
+
+        auto model = Math::Matrix4x4<float>::identity();
+        // Apply transformations
+        Math::Transform::add_translation(model, transform.position);
+        Math::Transform::add_rotation(model, transform.rotation.axis,
+                                      transform.rotation.angle_in_radians);
+        Math::Transform::add_scale(model, transform.scale);
+
+        bind_guard<Shader> shader_guard(shader);
+        bind_guard<VertexArray> vao_guard(vtx_array);
+
+        shader.set_mat4("model", model);
+        shader.set_mat4("view", view);
+        shader.set_mat4("projection", projection);
+
+        glDrawElements(GL_TRIANGLES, vtx_array.index_size(), GL_UNSIGNED_INT,
+                       nullptr);
+    }
 }
 
 void Renderer::update_screen() {

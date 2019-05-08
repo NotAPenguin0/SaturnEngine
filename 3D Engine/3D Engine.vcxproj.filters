@@ -76,6 +76,12 @@
     <Filter Include="Source Files\Utility">
       <UniqueIdentifier>{cb56c684-bc7a-4025-8a39-56d0374a9653}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Subsystems\ECS\Components">
+      <UniqueIdentifier>{3b5aa8a7-2d37-42c1-bd2d-005016539cd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Subsystems\ECS">
+      <UniqueIdentifier>{85aad485-625a-4e35-a977-b2e24d70a2b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -128,6 +134,9 @@
     </ClCompile>
     <ClCompile Include="Utility.cpp">
       <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="component_container.cpp">
+      <Filter>Source Files\Subsystems\ECS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,6 +247,18 @@
     </ClInclude>
     <ClInclude Include="component_index.hpp">
       <Filter>Header Files\Subsystems\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.hpp">
+      <Filter>Header Files\Subsystems\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS.hpp">
+      <Filter>Header Files\Subsystems\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentBase.hpp">
+      <Filter>Header Files\Subsystems\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.hpp">
+      <Filter>Header Files\Subsystems\ECS\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
