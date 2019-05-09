@@ -26,7 +26,7 @@ static std::vector<float> cube_vertices = {
 static std::vector<GLuint> cube_indices = {};
 
 
-SceneObject::SceneObject() {
+SceneObject::SceneObject(Scene* s) : scene(s) {
     // Debug:
     Shader::CreateInfo debug_create_info{"resources/shaders/default_v.glsl",
                                          "resources/shaders/default_f.glsl"};

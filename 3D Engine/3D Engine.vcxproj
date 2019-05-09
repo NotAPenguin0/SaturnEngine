@@ -210,6 +210,8 @@
     <ClInclude Include="Application.hpp" />
     <ClInclude Include="bind_guard.hpp" />
     <ClInclude Include="bind_tracker.hpp" />
+    <ClInclude Include="Camera.hpp" />
+    <ClInclude Include="CameraTransform.hpp" />
     <ClInclude Include="ComponentBase.hpp" />
     <ClInclude Include="Components.hpp" />
     <ClInclude Include="component_container.hpp" />

@@ -260,5 +260,11 @@
     <ClInclude Include="Components.hpp">
       <Filter>Header Files\Subsystems\ECS\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.hpp">
+      <Filter>Header Files\Subsystems\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraTransform.hpp">
+      <Filter>Header Files\Subsystems\Math\3D Transform</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

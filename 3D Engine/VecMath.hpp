@@ -104,7 +104,7 @@ constexpr T magnitude(Vec<T, 4> const& vec) {
 template<typename T, std::size_t N>
 constexpr Vec<T, N> normalize(Vec<T, N> vec) {
     auto mag = magnitude(vec);
-    if (mag == 0) return vec;
+    if (::Saturn::Math::approx(mag, (T)0.0)) return vec;
     return vec / mag;
 }
 

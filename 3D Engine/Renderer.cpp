@@ -5,7 +5,9 @@
 
 #include "bind_guard.hpp"
 
+#include "CameraTransform.hpp"
 #include "LinearTransform.hpp"
+
 #include "Trig.hpp"
 
 #include <sstream>
@@ -77,10 +79,12 @@ void Renderer::render_scene_graph(SceneGraph const& scene) {
         auto projection = Math::Transform::perspective(
             Math::radians(45.0f), (float)screen_size.x / (float)screen_size.y,
             0.1f, 100.0f);
-        auto view = Math::Matrix4x4<float>::identity();
-        Math::Transform::add_translation(view, 0.0f, -1.0f, 0.0f);
-        Math::Transform::add_rotation(view, 1.0f, 0.0f, 0.0f,
-                                      Math::radians(15.0f));
+        float radius = 10.0f;
+        float camX = sin((float)glfwGetTime()) * radius;
+        float camZ = cos((float)glfwGetTime()) * radius;
+        Math::Matrix4x4<float> view;
+        view = Math::Transform::look_at(Math::Vec3<float>(camX, 0.0, camZ),
+                                        Math::Vec3<float>(0.0f, 0.0f, 0.0f));
 
         auto model = Math::Matrix4x4<float>::identity();
         // Apply transformations

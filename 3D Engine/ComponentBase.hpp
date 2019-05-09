@@ -11,7 +11,7 @@ namespace Saturn::Components {
 // Base struct for components. Does nothing more than storing a pointer to the
 // owning entity
 struct ComponentBase {
-    SceneObject* object;
+    SceneObject* entity;
 };
 
 } // namespace Saturn::Components

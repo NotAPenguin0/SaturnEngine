@@ -10,6 +10,7 @@
 
 #include "Matrix.hpp"
 
+#include "CameraTransform.hpp"
 #include "LinearTransform.hpp"
 
 #include "Trig.hpp"

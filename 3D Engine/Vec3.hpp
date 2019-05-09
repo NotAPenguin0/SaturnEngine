@@ -55,12 +55,15 @@ public:
         return (index == 0) ? x : y;
     }
 
-	constexpr T* ptr() { return &x; }
+    constexpr T* ptr() { return &x; }
     constexpr T const* ptr() const { return &x; }
 };
 
 template<typename T>
 using Vec3 = Vec<T, 3>;
+
+template<typename T>
+static const Vec3<T> UpVec3 = Vec3<T>(0.0, 1.0, 0.0);
 
 // Basic operator overloads
 

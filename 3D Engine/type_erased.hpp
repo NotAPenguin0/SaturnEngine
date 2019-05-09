@@ -10,22 +10,22 @@ class type_erased {
 public:
     type_erased() = default;
 
-    template<typename T>
-    type_erased(T&& t) : val(std::make_unique<Impl<T>>(std::forward<T>(t))) {}
+    template<typename ImplT>
+    type_erased(ImplT&& t) : val(std::make_unique<ImplT>(std::forward<ImplT>(t))) {}
 
-    template<typename T, typename... Args>
+    template<typename ImplT, typename... Args>
     type_erased(Args&&... args) :
-        val(std::make_unique<Impl<T>>(std::forward<Args>(args)...)) {}
+        val(std::make_unique<ImplT>(std::forward<Args>(args)...)) {}
 
-    template<typename T>
-    type_erased& operator=(T&& t) {
-        val = std::make_unique<Impl<T>>(std::forward<T>(t));
+    template<typename ImplT>
+    type_erased& operator=(ImplT&& t) {
+        val = std::make_unique<ImplT>(std::forward<T>(t));
         return *this;
     }
 
-    template<typename T, typename... Args>
+    template<typename ImplT, typename... Args>
     void emplace(Args&&... args) {
-        val = std::make_unique<Impl<T>>(std::forward<Args>(args)...);
+        val = std::make_unique<ImplT>(std::forward<Args>(args)...);
     }
 
     auto operator-> () { return val; }
@@ -34,14 +34,14 @@ public:
     auto get() { return val; }
     auto get() const { return val; }
 
-    template<typename T>
+    template<typename ImplT>
     auto get_as() {
-        return static_cast<T*>(val.get());
+        return static_cast<ImplT*>(val.get());
     }
 
-    template<typename T>
+    template<typename ImplT>
     auto get_as() const {
-        return static_cast<T const*>(val.get());
+        return static_cast<ImplT const*>(val.get());
     }
 
 private:

@@ -6,6 +6,8 @@
 #include "Scene.hpp"
 #include "SceneObject.hpp"
 
+#include "Trig.hpp"
+
 namespace Saturn {
 
 Application::Application(CreateInfo create_info) :
@@ -60,7 +62,14 @@ Application::~Application() {
 void Application::initialize_keybinds() {}
 
 void Application::run() {
-	Scene scene;
+    Scene scene;
+    auto& obj = scene.create_object();
+	auto& transform = obj.add_component<Components::Transform>();
+	transform.position = Math::Vec3<float>(0.0f, -2.0f, -10.0f);
+	transform.rotation.axis = Math::Vec3<float>(1.0f, 1.0f, 1.0f);
+	transform.rotation.angle_in_radians = Math::radians(45.0f);
+    transform.scale = Math::Vec3<float>(1.2f, 1.2f, 0.7f);
+	
 
     while (!glfwWindowShouldClose(window_handle)) {
         Input::update();

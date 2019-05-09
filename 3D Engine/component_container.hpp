@@ -35,7 +35,12 @@ public:
 
     component_container& operator=(component_container const&) = default;
     component_container& operator=(component_container&&) = default;
-    ~component_container() override = default;
+    ~component_container() override {
+        if (components.empty()) {
+            int x = 0;
+            x = x + 1;
+        }
+    }
 
     // #TODO: Add functionality here (nonvirtual, use cast to access)
 
