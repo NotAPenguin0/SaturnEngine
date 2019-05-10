@@ -1,5 +1,5 @@
-#ifndef MVG_COMPONENT_HPP_
-#define MVG_COMPONENT_HPP_
+#ifndef MVG_COMPONENT_CONTAINER_HPP_
+#define MVG_COMPONENT_CONTAINER_HPP_
 
 #include "IDGenerator.hpp"
 #include "type_erased.hpp"
