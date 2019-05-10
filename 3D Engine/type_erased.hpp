@@ -19,7 +19,7 @@ public:
 
     template<typename ImplT>
     type_erased& operator=(ImplT&& t) {
-        val = std::make_unique<ImplT>(std::forward<T>(t));
+        val = std::make_unique<ImplT>(std::forward<ImplT>(t));
         return *this;
     }
 
