@@ -216,12 +216,14 @@
     <ClInclude Include="Components.hpp" />
     <ClInclude Include="component_container.hpp" />
     <ClInclude Include="component_index.hpp" />
+    <ClInclude Include="component_view.hpp" />
     <ClInclude Include="ConstexprMath.hpp" />
     <ClInclude Include="ECS.hpp" />
     <ClInclude Include="Engine.hpp" />
     <ClInclude Include="ErrorHandler.hpp" />
     <ClInclude Include="Exceptions.hpp" />
     <ClInclude Include="Framebuffer.hpp" />
+    <ClInclude Include="IDGenerator.hpp" />
     <ClInclude Include="Input.hpp" />
     <ClInclude Include="LogSystem.hpp" />
     <ClInclude Include="Math.hpp" />

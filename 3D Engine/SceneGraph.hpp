@@ -10,11 +10,14 @@
 
 namespace Saturn {
 
+class Scene;
+
 struct SceneGraph {
     // temporary
     std::vector<VertexArray*> vtx_arrays;
     std::vector<Components::Transform*> transforms; // temp
     Shader* shader;
+    Scene* scene;
 };
 
 } // namespace Saturn

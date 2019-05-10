@@ -1,9 +1,10 @@
 #ifndef MVG_COMPONENT_BASE_HPP_
 #define MVG_COMPONENT_BASE_HPP_
 
+#include <cstddef>
+
 namespace Saturn {
 class SceneObject;
-
 }
 
 namespace Saturn::Components {
@@ -12,6 +13,7 @@ namespace Saturn::Components {
 // owning entity
 struct ComponentBase {
     SceneObject* entity;
+    std::size_t id;
 };
 
 } // namespace Saturn::Components

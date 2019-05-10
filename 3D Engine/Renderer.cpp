@@ -1,14 +1,12 @@
 #include "Renderer.hpp"
 
 #include "Application.hpp"
-#include "Exceptions.hpp"
-
-#include "bind_guard.hpp"
-
 #include "CameraTransform.hpp"
+#include "Exceptions.hpp"
 #include "LinearTransform.hpp"
-
+#include "Scene.hpp"
 #include "Trig.hpp"
+#include "bind_guard.hpp"
 
 #include <sstream>
 
@@ -79,12 +77,23 @@ void Renderer::render_scene_graph(SceneGraph const& scene) {
         auto projection = Math::Transform::perspective(
             Math::radians(45.0f), (float)screen_size.x / (float)screen_size.y,
             0.1f, 100.0f);
-        float radius = 10.0f;
-        float camX = sin((float)glfwGetTime()) * radius;
-        float camZ = cos((float)glfwGetTime()) * radius;
+
         Math::Matrix4x4<float> view;
-        view = Math::Transform::look_at(Math::Vec3<float>(camX, 0.0, camZ),
-                                        Math::Vec3<float>(0.0f, 0.0f, 0.0f));
+        //        view = Math::Transform::look_at(Math::Vec3<float>(camX, 0.0,
+        //        camZ),
+        //                                        Math::Vec3<float>(0.0f, 0.0f,
+        //                                        0.0f));
+
+        // temp (TODO: Add viewport-camera link to allow multiple cameras)
+        for (auto components :
+             scene.scene->ecs
+                 .select<Components::Camera, Components::Transform>()) {
+
+            auto& cam = std::get<Components::Camera&>(components);
+            auto& trans = std::get<Components::Transform&>(components);
+
+            view = Math::Transform::look_at(trans.position, cam.target);
+        }
 
         auto model = Math::Matrix4x4<float>::identity();
         // Apply transformations

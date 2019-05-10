@@ -1,9 +1,12 @@
 #ifndef MVG_COMPONENT_HPP_
 #define MVG_COMPONENT_HPP_
 
+#include "IDGenerator.hpp"
 #include "type_erased.hpp"
 
+#include <algorithm>
 #include <typeinfo>
+#include <unordered_map>
 #include <vector>
 
 namespace Saturn {
@@ -35,12 +38,7 @@ public:
 
     component_container& operator=(component_container const&) = default;
     component_container& operator=(component_container&&) = default;
-    ~component_container() override {
-        if (components.empty()) {
-            int x = 0;
-            x = x + 1;
-        }
-    }
+    ~component_container() override = default;
 
     // #TODO: Add functionality here (nonvirtual, use cast to access)
 
@@ -50,22 +48,37 @@ public:
 
     iterator push_back(C const& c) {
         components.push_back(c);
+        auto id = IDGenerator<C>::next();
+        components.back().id = id;                // Assign correct id
+        id_index_map[id] = components.size() - 1; // Update index map
         return components.end() - 1;
     }
 
-    iterator erase_component(iterator it) { return components.erase(it); }
+    iterator erase_component(std::size_t id) {
+        // Algorithm for erasing and updating indices:
+        /*
+        1. Swap element to erase with last element
+        2. Update index for swapped elements
+        3. Erase
+        */
+
+        auto id_to_update = components.back().id;
+        auto erased_idx = id_index_map.at(id);
+        std::swap(components[erased_idx], components.back());
+        id_index_map[id_to_update] = erased_idx;
+        return components.erase(components.end() - 1);
+    }
+
+    reference get_with_id(std::size_t id) {
+        return (*this)[id_index_map.at(id)];
+    }
+
+    const_reference get_with_id(std::size_t id) const {
+        return (*this)[id_index_map.at(id)];
+    }
 
     std::size_t size() const { return components.size(); }
     bool empty() const { return components.empty(); }
-
-    reference operator[](std::size_t index) { return components[index]; }
-
-    const_reference operator[](std::size_t index) const {
-        return components[index];
-    }
-
-    reference at(std::size_t index) { return components.at(index); }
-    const_reference at(std::size_t index) const { return components.at(index); }
 
     iterator begin() { return components.begin(); }
     const_iterator begin() const { return components.begin(); }
@@ -76,7 +89,17 @@ public:
     const_iterator cend() const { return components.cend(); }
 
 private:
+    reference operator[](std::size_t index) { return components[index]; }
+
+    const_reference operator[](std::size_t index) const {
+        return components[index];
+    }
+
+    reference at(std::size_t index) { return components.at(index); }
+    const_reference at(std::size_t index) const { return components.at(index); }
+
     std::vector<C> components;
+    std::unordered_map<std::size_t, std::size_t> id_index_map;
 };
 
 // Scene will store a vector<mvg::type_erased<container_iterface,

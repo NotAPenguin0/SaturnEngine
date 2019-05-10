@@ -266,5 +266,11 @@
     <ClInclude Include="CameraTransform.hpp">
       <Filter>Header Files\Subsystems\Math\3D Transform</Filter>
     </ClInclude>
+    <ClInclude Include="component_view.hpp">
+      <Filter>Header Files\Subsystems\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="IDGenerator.hpp">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

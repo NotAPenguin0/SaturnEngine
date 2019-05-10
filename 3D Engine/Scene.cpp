@@ -5,17 +5,14 @@
 
 namespace Saturn {
 
-Scene::Scene() {
-    
-}
+Scene::Scene() : ecs(this) {}
 
-Scene::~Scene() {
-
-}
+Scene::~Scene() {}
 
 SceneGraph Scene::build_scene_graph() {
     // Temporary
     SceneGraph graph;
+    graph.scene = this;
     auto& transforms = ecs.get_components<Components::Transform>();
     for (auto& t : transforms) {
         auto& entity = t.entity;

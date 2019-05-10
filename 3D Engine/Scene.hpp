@@ -19,9 +19,11 @@ class SceneObject;
 class Scene {
 public:
     friend class SceneObject;
+    friend class ECS<COMPONENT_LIST>;
+	friend class Renderer;
 
     Scene();
-	~Scene();
+    ~Scene();
 
     SceneGraph build_scene_graph();
 

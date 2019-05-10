@@ -1,17 +1,23 @@
 #ifndef MVG_ECS_HPP_
 #define MVG_ECS_HPP_
 
+#include <tuple>
 #include <vector>
 
 #include "component_container.hpp"
 #include "component_index.hpp"
+#include "component_view.hpp"
+
+#include "SceneObject.hpp"
 
 namespace Saturn {
+
+class Scene;
 
 template<typename... Cs>
 class ECS {
 public:
-    ECS() { create_component_containers<Cs...>(); }
+    ECS(Scene* s) : scene(s) { create_component_containers<Cs...>(); }
     ECS(ECS const&) = delete;
     ECS(ECS&&) = delete;
 
@@ -27,9 +33,11 @@ public:
         return *((*any_container).template get_as<component_container<C>>());
     }
 
+	// Grabs all component sets with a specified set of components
     template<typename... Cs>
-    void /*Figure out a container*/ select() {
-        // #TODO: Function to grab all entities with a set of components
+    component_view<Cs...> select() {
+        return component_view<Cs...>(scene->objects.begin(),
+                                     scene->objects.end());
     }
 
     template<typename C>
@@ -66,6 +74,7 @@ private:
 
     std::vector<any_component_container> components;
     component_index_table<Cs...> component_indices;
+    Scene* scene;
 };
 
 } // namespace Saturn

@@ -64,20 +64,34 @@ void Application::initialize_keybinds() {}
 void Application::run() {
     Scene scene;
     auto& obj = scene.create_object();
-	auto& transform = obj.add_component<Components::Transform>();
-	transform.position = Math::Vec3<float>(0.0f, -2.0f, -10.0f);
-	transform.rotation.axis = Math::Vec3<float>(1.0f, 1.0f, 1.0f);
-	transform.rotation.angle_in_radians = Math::radians(45.0f);
+    auto& transform = obj.add_component<Components::Transform>();
+    transform.position = Math::Vec3<float>(0.0f, -2.0f, -10.0f);
+    transform.rotation.axis = Math::Vec3<float>(1.0f, 1.0f, 1.0f);
+    transform.rotation.angle_in_radians = Math::radians(45.0f);
     transform.scale = Math::Vec3<float>(1.2f, 1.2f, 0.7f);
-	
+
+    auto& camera = scene.create_object();
+    auto& cam_transform = camera.add_component<Components::Transform>();
+    auto& cam = camera.add_component<Components::Camera>();
+
+
+    cam_transform.scale = {0.0f, 0.0f,
+                           0.0f}; // Temporary disable the model in SceneObject,
+                                  // by scaling it with a factor 0
 
     while (!glfwWindowShouldClose(window_handle)) {
         Input::update();
 
         renderer->clear(Color{0.24f, 0.0f, 0.0f, 1.0f});
 
-		auto graph = scene.build_scene_graph();
-		renderer->render_scene_graph(graph);
+        float radius = 10.0f;
+        cam_transform.position.x = sin((float)glfwGetTime()) * radius;
+        cam_transform.position.y = 0.0f;
+        cam_transform.position.z = cos((float)glfwGetTime()) * radius;
+        cam.target = {0.0f, 0.0f, 0.0f};
+
+        auto graph = scene.build_scene_graph();
+        renderer->render_scene_graph(graph);
 
         // Copy framebuffer to screen
         renderer->update_screen();
