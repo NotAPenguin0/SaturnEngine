@@ -8,10 +8,8 @@
 #include "SceneGraph.hpp"
 
 #include "ECS.hpp"
+#include "ComponentList.hpp"
 
-#define COMPONENT_LIST                                                         \
-    ::Saturn::Components::Transform, ::Saturn::Components::Camera,             \
-        ::Saturn::Components::FPSCameraController
 
 namespace Saturn {
 
@@ -23,13 +21,17 @@ public:
     friend class ECS<COMPONENT_LIST>;
     friend class Renderer;
     friend class Application;
+    friend class Systems::SystemBase;
 
     Scene();
     ~Scene();
 
+	void update_systems();
     SceneGraph build_scene_graph();
 
     SceneObject& create_object();
+
+	ECS<COMPONENT_LIST>& get_ecs();
 
 private:
     std::vector<std::unique_ptr<SceneObject>> objects;

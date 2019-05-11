@@ -1,9 +1,0 @@
-digraph "Saturn::Viewport::current"
-{
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  rankdir="LR";
-  Node8 [label="Saturn::Viewport::current",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node8 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node9 [label="Saturn::Renderer::debug\l_log_viewport",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_saturn_1_1_renderer.html#a79c8a965dc33001d6f70b41b77c884f1"];
-}

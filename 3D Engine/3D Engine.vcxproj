@@ -176,6 +176,7 @@
     <ClCompile Include="component_container.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="ErrorHandler.cpp" />
+    <ClCompile Include="FPSCameraControllerSystem.cpp" />
     <ClCompile Include="Framebuffer.cpp" />
     <ClCompile Include="glad\src\glad.c">
       <SupportJustMyCode Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</SupportJustMyCode>
@@ -202,6 +203,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="SystemBase.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="VertexArray.cpp" />
     <ClCompile Include="Viewport.cpp" />
@@ -213,6 +215,7 @@
     <ClInclude Include="Camera.hpp" />
     <ClInclude Include="CameraTransform.hpp" />
     <ClInclude Include="ComponentBase.hpp" />
+    <ClInclude Include="ComponentList.hpp" />
     <ClInclude Include="Components.hpp" />
     <ClInclude Include="component_container.hpp" />
     <ClInclude Include="component_index.hpp" />
@@ -223,6 +226,7 @@
     <ClInclude Include="ErrorHandler.hpp" />
     <ClInclude Include="Exceptions.hpp" />
     <ClInclude Include="FPSCameraController.hpp" />
+    <ClInclude Include="FPSCameraControllerSystem.hpp" />
     <ClInclude Include="Framebuffer.hpp" />
     <ClInclude Include="IDGenerator.hpp" />
     <ClInclude Include="Input.hpp" />

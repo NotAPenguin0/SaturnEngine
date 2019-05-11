@@ -9,6 +9,8 @@ Scene::Scene() : ecs(this) {}
 
 Scene::~Scene() {}
 
+void Scene::update_systems() { ecs.update_systems(); }
+
 SceneGraph Scene::build_scene_graph() {
     // Temporary
     SceneGraph graph;
@@ -28,5 +30,7 @@ SceneObject& Scene::create_object() {
     objects.push_back(std::make_unique<SceneObject>(this));
     return *objects.back();
 }
+
+ECS<COMPONENT_LIST>& Scene::get_ecs() { return ecs; }
 
 } // namespace Saturn

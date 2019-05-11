@@ -50,12 +50,17 @@ public:
         iterator& operator++() {
             if (stop) { return *this; }
 
-            if (it == last) {
+            if (it == last) { //#MaybeOptimize Is this check redundant?
                 stop = true;
                 return *this;
             }
 
             ++it;
+
+            if (it == last) {
+                stop = true;
+                return *this;
+            }
             if (!((*it)->template has_component<Cs>() && ...)) { ++(*this); }
             return *this;
         }

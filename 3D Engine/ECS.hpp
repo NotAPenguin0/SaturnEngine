@@ -10,6 +10,8 @@
 
 #include "SceneObject.hpp"
 
+#include "SystemBase.hpp"
+
 namespace Saturn {
 
 class Scene;
@@ -24,6 +26,21 @@ public:
     ECS& operator=(ECS const&) = delete;
     ECS& operator=(ECS&&) = delete;
 
+    template<typename S>
+    void register_system() {
+        systems.push_back(std::make_unique<S>());
+    }
+
+    template<typename Head, typename... Tail>
+    void register_systems() {
+        register_system<Head>();
+        if constexpr (sizeof...(Tail) != 0) register_systems<Tail...>();
+    }
+
+    void update_systems() {
+        for (auto& system : systems) { system->on_update(*scene); }
+    }
+
     // Assumes that ptr is a valid pointer returned from
     // find_component_container. C is the COMPONENT TYPE
     template<typename C>
@@ -33,18 +50,18 @@ public:
         return *((*any_container).template get_as<component_container<C>>());
     }
 
-	// Grabs all component sets with a specified set of components
+    // Grabs all component sets with a specified set of components
     template<typename... Cs>
     component_view<Cs...> select() {
         return component_view<Cs...>(scene->objects.begin(),
                                      scene->objects.end());
     }
 
-	template<typename C>
-	C& get_with_id(std::size_t id) {
-		auto& container = get_components<C>();
+    template<typename C>
+    C& get_with_id(std::size_t id) {
+        auto& container = get_components<C>();
         return container.get_with_id(id);
-	}
+    }
 
     template<typename C>
     any_component_container* find_component_container() {
@@ -79,6 +96,7 @@ private:
     }
 
     std::vector<any_component_container> components;
+    std::vector<std::unique_ptr<Systems::SystemBase>> systems;
     component_index_table<Cs...> component_indices;
     Scene* scene;
 };

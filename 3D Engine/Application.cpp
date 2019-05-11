@@ -4,6 +4,7 @@
 #include "LogSystem.hpp"
 #include "Scene.hpp"
 #include "SceneObject.hpp"
+#include "Systems.hpp"
 #include "Trig.hpp"
 #include "VecMath.hpp"
 #include "Vector.hpp"
@@ -62,30 +63,12 @@ Application::~Application() {
 
 void Application::initialize_keybinds() {}
 
-enum Direction { Forward, Backwards, Left, Right };
-
-static void move_camera(ECS<COMPONENT_LIST>& ecs,
-                        std::size_t camera,
-                        Direction dir,
-                        float speed) {
-    auto& cam = ecs.get_with_id<Components::Camera>(camera);
-    auto& transform = cam.entity->get_component<Components::Transform>();
-    switch (dir) {
-        case Forward: transform.position += speed * cam.front; break;
-        case Backwards: transform.position -= speed * cam.front; break;
-        case Left:
-            transform.position -=
-                speed * Math::normalize(Math::cross(cam.front, cam.up));
-            break;
-        case Right:
-            transform.position +=
-                speed * Math::normalize(Math::cross(cam.front, cam.up));
-            break;
-    }
-}
-
 void Application::run() {
     Scene scene;
+
+    // Add systems
+    scene.ecs.register_system<Systems::FPSCameraControllerSystem>();
+
     auto& obj = scene.create_object();
     auto transform_id = obj.add_component<Components::Transform>();
     {
@@ -151,27 +134,17 @@ void Application::run() {
             main_cam.add_component<Components::Transform>());
         auto& camera = scene.ecs.get_with_id<Components::Camera>(
             main_cam.add_component<Components::Camera>());
+        auto& fps = scene.ecs.get_with_id<Components::FPSCameraController>(
+            main_cam.add_component<Components::FPSCameraController>());
         transform.position = {0.0f, 3.0f, 0.0f};
         transform.scale = {0.0f, 0.0f, 0.0f};
 
         camera.front = {0.0f, 0.0f, -1.0f};
         camera.up = {0.0f, 1.0f, 0.0f};
 
-        renderer->get_viewport(0).set_camera(camera.id);
+		fps.speed = 0.03f;
 
-		auto id = camera.id;
-        auto& ecs = scene.ecs;
-		float speed = 0.03f;
-		Input::bind(GLFW_KEY_W, [id, &ecs, speed]() {move_camera(ecs, id, Forward, speed);});
-        Input::bind(GLFW_KEY_S, [id, &ecs, speed]() {
-            move_camera(ecs, id, Backwards, speed);
-        });
-        Input::bind(GLFW_KEY_A, [id, &ecs, speed]() {
-            move_camera(ecs, id, Left, speed);
-        });
-        Input::bind(GLFW_KEY_D, [id, &ecs, speed]() {
-            move_camera(ecs, id, Right, speed);
-        });
+        renderer->get_viewport(0).set_camera(camera.id);
     }
 
     while (!glfwWindowShouldClose(window_handle)) {
@@ -179,6 +152,7 @@ void Application::run() {
 
         renderer->clear(Color{0.24f, 0.0f, 0.0f, 1.0f});
 
+		scene.update_systems();
         auto graph = scene.build_scene_graph();
         renderer->render_scene_graph(graph);
 
