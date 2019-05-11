@@ -40,6 +40,12 @@ public:
                                      scene->objects.end());
     }
 
+	template<typename C>
+	C& get_with_id(std::size_t id) {
+		auto& container = get_components<C>();
+        return container.get_with_id(id);
+	}
+
     template<typename C>
     any_component_container* find_component_container() {
         auto idx = component_indices.template get<C>();

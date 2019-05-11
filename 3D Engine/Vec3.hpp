@@ -83,8 +83,13 @@ constexpr Vec3<T> operator*(Vec3<T> const& lhs, T scalar) {
 }
 
 template<typename T>
+constexpr Vec3<T> operator*(T scalar, Vec3<T> const& lhs) {
+    return Vec3<T>{lhs.x * scalar, lhs.y * scalar, lhs.z * scalar};
+}
+
+template<typename T>
 constexpr Vec3<T> operator/(Vec3<T> const& lhs, T scalar) {
-    return Vec3<T>{lhs.x / scalar, lhs.y * scalar, lhs.z / scalar};
+    return Vec3<T>{lhs.x / scalar, lhs.y / scalar, lhs.z / scalar};
 }
 
 // Comparison operators

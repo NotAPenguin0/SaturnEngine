@@ -7,7 +7,8 @@
 namespace Saturn::Components {
 
 struct Camera : public ComponentBase {
-    Math::Vec3<float> target;
+    Math::Vec3<float> front;
+    Math::Vec3<float> up;
 };
 
 } // namespace Saturn::Components

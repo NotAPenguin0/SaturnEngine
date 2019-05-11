@@ -4,7 +4,6 @@
 #include "SceneObject.hpp"
 #include "component_index.hpp"
 
-#include <set>
 #include <tuple>
 
 namespace Saturn {

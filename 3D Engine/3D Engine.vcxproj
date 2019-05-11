@@ -222,6 +222,7 @@
     <ClInclude Include="Engine.hpp" />
     <ClInclude Include="ErrorHandler.hpp" />
     <ClInclude Include="Exceptions.hpp" />
+    <ClInclude Include="FPSCameraController.hpp" />
     <ClInclude Include="Framebuffer.hpp" />
     <ClInclude Include="IDGenerator.hpp" />
     <ClInclude Include="Input.hpp" />
@@ -238,6 +239,8 @@
     <ClInclude Include="SceneObject.hpp" />
     <ClInclude Include="Shader.hpp" />
     <ClInclude Include="LinearTransform.hpp" />
+    <ClInclude Include="SystemBase.hpp" />
+    <ClInclude Include="Systems.hpp" />
     <ClInclude Include="Transform.hpp" />
     <ClInclude Include="Trig.hpp" />
     <ClInclude Include="type_erased.hpp" />

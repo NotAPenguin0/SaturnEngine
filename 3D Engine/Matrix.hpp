@@ -236,16 +236,6 @@ constexpr Matrix<T, W1, H2> operator*(Matrix<T, W1, H1> const& lhs,
     return result;
 }
 
-template<typename T,
-         std::size_t W1,
-         std::size_t H1,
-         std::size_t W2,
-         std::size_t H2>
-constexpr Matrix<T, W1, H2>& operator*=(Matrix<T, W1, H1>& lhs,
-                                        Matrix<T, W2, H2> const& rhs) {
-    lhs = lhs * rhs;
-    return lhs;
-}
 
 } // namespace Saturn::Math
 

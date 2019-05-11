@@ -10,7 +10,8 @@
 #include "ECS.hpp"
 
 #define COMPONENT_LIST                                                         \
-    ::Saturn::Components::Transform, ::Saturn::Components::Camera
+    ::Saturn::Components::Transform, ::Saturn::Components::Camera,             \
+        ::Saturn::Components::FPSCameraController
 
 namespace Saturn {
 
@@ -20,7 +21,8 @@ class Scene {
 public:
     friend class SceneObject;
     friend class ECS<COMPONENT_LIST>;
-	friend class Renderer;
+    friend class Renderer;
+    friend class Application;
 
     Scene();
     ~Scene();

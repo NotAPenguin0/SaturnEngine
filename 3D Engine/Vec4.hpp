@@ -88,7 +88,7 @@ constexpr Vec4<T> operator*(Vec4<T> const& lhs, T scalar) {
 
 template<typename T>
 constexpr Vec4<T> operator/(Vec4<T> const& lhs, T scalar) {
-    return Vec4<T>{lhs.x / scalar, lhs.y * scalar, lhs.z / scalar,
+    return Vec4<T>{lhs.x / scalar, lhs.y / scalar, lhs.z / scalar,
                    lhs.w * scalar};
 }
 

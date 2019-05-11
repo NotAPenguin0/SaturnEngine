@@ -34,12 +34,12 @@ constexpr Matrix4x4<T> translate(Vec3<T> const& input) {
 
 template<typename T>
 constexpr void add_translation(Matrix4x4<T>& mat, T x, T y, T z) {
-    mat *= translate(x, y, z);
+    mat = translate(x, y, z) * mat;
 }
 
 template<typename T>
 constexpr void add_translation(Matrix4x4<T>& mat, Vec3<T> const& input) {
-    mat *= translate(input.x, input.y, input.z);
+    mat = translate(input.x, input.y, input.z) * mat;
 }
 
 template<typename T>
@@ -81,13 +81,13 @@ constexpr Matrix4x4<T> rotate(Vec3<T> const& axis, T angle_in_radians) {
 template<typename T>
 constexpr void
 add_rotation(Matrix4x4<T>& mat, T x, T y, T z, T angle_in_radians) {
-    mat *= rotate(x, y, z, angle_in_radians);
+    mat = rotate(x, y, z, angle_in_radians) * mat;
 }
 
 template<typename T>
 constexpr void
 add_rotation(Matrix4x4<T>& mat, Vec3<T> const& input, T angle_in_radians) {
-    mat *= rotate(input.x, input.y, input.z, angle_in_radians);
+    mat = rotate(input.x, input.y, input.z, angle_in_radians) * mat;
 }
 
 template<typename T>
@@ -108,12 +108,12 @@ constexpr Matrix4x4<T> scale(Vec3<T> const& input) {
 
 template<typename T>
 constexpr void add_scale(Matrix4x4<T>& mat, T x, T y, T z) {
-    mat *= scale(x, y, z);
+    mat = scale(x, y, z) * mat;
 }
 
 template<typename T>
 constexpr void add_scale(Matrix4x4<T>& mat, Vec3<T> const& input) {
-    mat *= scale(input.x, input.y, input.z);
+    mat = scale(input.x, input.y, input.z) * mat;
 }
 
 template<typename T>

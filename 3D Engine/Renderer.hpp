@@ -38,8 +38,6 @@ public:
 
     void update_screen();
 
-    void debug_log_viewport() const;
-
     // \brief Returns a reference to the viewport with specified index.
     // \param index: The index of the viewport to return. Viewport 0 is
     // initialized to be the full window

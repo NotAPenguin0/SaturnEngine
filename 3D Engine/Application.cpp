@@ -2,11 +2,12 @@
 
 #include "Input.hpp"
 #include "LogSystem.hpp"
-
 #include "Scene.hpp"
 #include "SceneObject.hpp"
-
 #include "Trig.hpp"
+#include "VecMath.hpp"
+#include "Vector.hpp"
+#include "Viewport.hpp"
 
 namespace Saturn {
 
@@ -61,34 +62,122 @@ Application::~Application() {
 
 void Application::initialize_keybinds() {}
 
+enum Direction { Forward, Backwards, Left, Right };
+
+static void move_camera(ECS<COMPONENT_LIST>& ecs,
+                        std::size_t camera,
+                        Direction dir,
+                        float speed) {
+    auto& cam = ecs.get_with_id<Components::Camera>(camera);
+    auto& transform = cam.entity->get_component<Components::Transform>();
+    switch (dir) {
+        case Forward: transform.position += speed * cam.front; break;
+        case Backwards: transform.position -= speed * cam.front; break;
+        case Left:
+            transform.position -=
+                speed * Math::normalize(Math::cross(cam.front, cam.up));
+            break;
+        case Right:
+            transform.position +=
+                speed * Math::normalize(Math::cross(cam.front, cam.up));
+            break;
+    }
+}
+
 void Application::run() {
     Scene scene;
     auto& obj = scene.create_object();
-    auto& transform = obj.add_component<Components::Transform>();
-    transform.position = Math::Vec3<float>(0.0f, -2.0f, -10.0f);
-    transform.rotation.axis = Math::Vec3<float>(1.0f, 1.0f, 1.0f);
-    transform.rotation.angle_in_radians = Math::radians(45.0f);
-    transform.scale = Math::Vec3<float>(1.2f, 1.2f, 0.7f);
+    auto transform_id = obj.add_component<Components::Transform>();
+    {
+        auto& transform =
+            scene.ecs.get_with_id<Components::Transform>(transform_id);
+        transform.position = Math::Vec3<float>(0.0f, 0.0f, -10.0f);
+        transform.rotation.axis = Math::Vec3<float>(1.0f, 0.0f, 0.0f);
+        transform.rotation.angle_in_radians = Math::radians(0.0f);
+        transform.scale = Math::Vec3<float>(1.0f, 1.0f, 1.0f);
+    }
 
-    auto& camera = scene.create_object();
-    auto& cam_transform = camera.add_component<Components::Transform>();
-    auto& cam = camera.add_component<Components::Camera>();
+    // Double viewport
+    /*
+    auto& left_camera = scene.create_object();
+    auto lcam_transform_id = left_camera.add_component<Components::Transform>();
+    auto lcam_id = left_camera.add_component<Components::Camera>();
+    {
+        auto& lcam_transform =
+            scene.ecs.get_with_id<Components::Transform>(lcam_transform_id);
+        auto& lcam = scene.ecs.get_with_id<Components::Camera>(lcam_id);
+        lcam_transform.position.x = 0.0f;
+        lcam_transform.position.y = 0.0f;
+        lcam_transform.position.z = 0.0f;
+        lcam.target = {0.0f, 0.0f, -10.0f};
 
+        lcam_transform.scale = {
+            0.0f, 0.0f, 0.0f}; // Temporary disable the model in
+                               // SceneObject, by scaling it with a factor 0
+    }
 
-    cam_transform.scale = {0.0f, 0.0f,
-                           0.0f}; // Temporary disable the model in SceneObject,
-                                  // by scaling it with a factor 0
+    auto& right_camera = scene.create_object();
+    auto rcam_transform_id =
+    right_camera.add_component<Components::Transform>(); auto rcam_id =
+    right_camera.add_component<Components::Camera>();
+    {
+        auto& rcam_transform =
+            scene.ecs.get_with_id<Components::Transform>(rcam_transform_id);
+        auto& rcam = scene.ecs.get_with_id<Components::Camera>(rcam_id);
+        rcam_transform.position.x = 0.0f;
+        rcam_transform.position.y = 0.0f;
+        rcam_transform.position.z = 0.0f;
+        rcam.target = {0.0f, 0.0f, -10.0f};
+
+        rcam_transform.scale = {0.0f, 0.0f, 0.0f};
+    }
+
+    auto left_vp = renderer->add_viewport(Viewport(0, 0, window_dimensions.x /
+    2, window_dimensions.y));
+    renderer->get_viewport(left_vp).set_camera(lcam_id);
+
+    auto right_vp = renderer->add_viewport(Viewport(window_dimensions.x / 2, 0,
+                                                    window_dimensions.x / 2,
+                                                    window_dimensions.y));
+    renderer->get_viewport(right_vp).move(0, 0);
+    renderer->get_viewport(right_vp).resize(window_dimensions.x,
+                                            window_dimensions.y);
+    renderer->get_viewport(right_vp).set_camera(rcam_id);
+    */
+
+    auto& main_cam = scene.create_object();
+    {
+        auto& transform = scene.ecs.get_with_id<Components::Transform>(
+            main_cam.add_component<Components::Transform>());
+        auto& camera = scene.ecs.get_with_id<Components::Camera>(
+            main_cam.add_component<Components::Camera>());
+        transform.position = {0.0f, 3.0f, 0.0f};
+        transform.scale = {0.0f, 0.0f, 0.0f};
+
+        camera.front = {0.0f, 0.0f, -1.0f};
+        camera.up = {0.0f, 1.0f, 0.0f};
+
+        renderer->get_viewport(0).set_camera(camera.id);
+
+		auto id = camera.id;
+        auto& ecs = scene.ecs;
+		float speed = 0.03f;
+		Input::bind(GLFW_KEY_W, [id, &ecs, speed]() {move_camera(ecs, id, Forward, speed);});
+        Input::bind(GLFW_KEY_S, [id, &ecs, speed]() {
+            move_camera(ecs, id, Backwards, speed);
+        });
+        Input::bind(GLFW_KEY_A, [id, &ecs, speed]() {
+            move_camera(ecs, id, Left, speed);
+        });
+        Input::bind(GLFW_KEY_D, [id, &ecs, speed]() {
+            move_camera(ecs, id, Right, speed);
+        });
+    }
 
     while (!glfwWindowShouldClose(window_handle)) {
         Input::update();
 
         renderer->clear(Color{0.24f, 0.0f, 0.0f, 1.0f});
-
-        float radius = 10.0f;
-        cam_transform.position.x = sin((float)glfwGetTime()) * radius;
-        cam_transform.position.y = 0.0f;
-        cam_transform.position.z = cos((float)glfwGetTime()) * radius;
-        cam.target = {0.0f, 0.0f, 0.0f};
 
         auto graph = scene.build_scene_graph();
         renderer->render_scene_graph(graph);

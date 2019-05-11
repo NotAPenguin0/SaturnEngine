@@ -24,7 +24,7 @@ public:
     } debug;
 
     template<typename C, typename... Args>
-    C& add_component(Args&&... args) {
+    std::size_t add_component(Args&&... args) {
         auto& ecs = scene->ecs;
         auto& container = ecs.get_components<C>();
 
@@ -34,7 +34,7 @@ public:
         it->entity = this;
         component_ids[typeid(C)] = it->id;
 
-        return *it;
+        return it->id;
     }
 
     template<typename C>

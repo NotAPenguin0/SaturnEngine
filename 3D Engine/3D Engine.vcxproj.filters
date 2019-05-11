@@ -82,6 +82,9 @@
     <Filter Include="Source Files\Subsystems\ECS">
       <UniqueIdentifier>{85aad485-625a-4e35-a977-b2e24d70a2b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Subsystems\ECS\Systems">
+      <UniqueIdentifier>{e76bdb4d-6c96-4f44-b4e3-7094daa87c89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -271,6 +274,15 @@
     </ClInclude>
     <ClInclude Include="IDGenerator.hpp">
       <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="FPSCameraController.hpp">
+      <Filter>Header Files\Subsystems\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemBase.hpp">
+      <Filter>Header Files\Subsystems\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems.hpp">
+      <Filter>Header Files\Subsystems\ECS\Systems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

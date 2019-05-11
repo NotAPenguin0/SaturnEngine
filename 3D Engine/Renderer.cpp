@@ -10,6 +10,9 @@
 
 #include <sstream>
 
+#include <GLM/gtc/matrix_transform.hpp>
+#include <GLM/gtc/type_ptr.hpp>
+
 namespace Saturn {
 
 static std::vector<float> screen_vertices = {
@@ -64,58 +67,61 @@ void Renderer::clear(
     glClear(flags);
 }
 
+
 void Renderer::render_scene_graph(SceneGraph const& scene) {
     // Temporary
 
     bind_guard<Framebuffer> framebuf_guard(framebuf);
     // All temporary obviously
-    for (std::size_t i = 0; i < scene.vtx_arrays.size(); ++i) {
-        auto& shader = *scene.shader;
-        auto& vtx_array = *scene.vtx_arrays[i];
-        auto& transform = *scene.transforms[i];
 
-        auto projection = Math::Transform::perspective(
-            Math::radians(45.0f), (float)screen_size.x / (float)screen_size.y,
-            0.1f, 100.0f);
+    // Render every viewport
+    for (auto& vp : viewports) {
+        if (!vp.has_camera()) continue;
+        Viewport::set_active(vp);
+        for (std::size_t i = 0; i < scene.vtx_arrays.size(); ++i) {
+            auto& shader = *scene.shader;
+            auto& vtx_array = *scene.vtx_arrays[i];
+            auto& transform = *scene.transforms[i];
 
-        Math::Matrix4x4<float> view;
-        //        view = Math::Transform::look_at(Math::Vec3<float>(camX, 0.0,
-        //        camZ),
-        //                                        Math::Vec3<float>(0.0f, 0.0f,
-        //                                        0.0f));
+            auto projection = Math::Transform::perspective(
+                Math::radians(45.0f),
+                (float)vp.dimensions().x / (float)vp.dimensions().y, 0.1f,
+                100.0f);
 
-        // temp (TODO: Add viewport-camera link to allow multiple cameras)
-        for (auto components :
-             scene.scene->ecs
-                 .select<Components::Camera, Components::Transform>()) {
+            auto cam_id = vp.get_camera();
+            auto& cam =
+                scene.scene->ecs.get_with_id<Components::Camera>(cam_id);
+            auto& cam_trans =
+                cam.entity->get_component<Components::Transform>();
+            auto view = Math::Transform::look_at(
+                cam_trans.position, cam_trans.position + cam.front, cam.up);
 
-            auto& cam = std::get<Components::Camera&>(components);
-            auto& trans = std::get<Components::Transform&>(components);
+            auto model = Math::Matrix4x4<float>::identity();
+            // Apply transformations
 
-            view = Math::Transform::look_at(trans.position, cam.target);
+            Math::Transform::add_scale(model, transform.scale);
+            Math::Transform::add_rotation(model, transform.rotation.axis,
+                                          transform.rotation.angle_in_radians);
+            Math::Transform::add_translation(model, transform.position);
+
+            bind_guard<Shader> shader_guard(shader);
+            bind_guard<VertexArray> vao_guard(vtx_array);
+
+            shader.set_mat4("model", model);
+//			glUniformMatrix4fv(shader.location("view"), 1, GL_FALSE, glm::value_ptr(view));
+            shader.set_mat4("view", view);
+            shader.set_mat4("projection", projection);
+
+            glDrawElements(GL_TRIANGLES, vtx_array.index_size(),
+                           GL_UNSIGNED_INT, nullptr);
         }
-
-        auto model = Math::Matrix4x4<float>::identity();
-        // Apply transformations
-        Math::Transform::add_translation(model, transform.position);
-        Math::Transform::add_rotation(model, transform.rotation.axis,
-                                      transform.rotation.angle_in_radians);
-        Math::Transform::add_scale(model, transform.scale);
-
-        bind_guard<Shader> shader_guard(shader);
-        bind_guard<VertexArray> vao_guard(vtx_array);
-
-        shader.set_mat4("model", model);
-        shader.set_mat4("view", view);
-        shader.set_mat4("projection", projection);
-
-        glDrawElements(GL_TRIANGLES, vtx_array.index_size(), GL_UNSIGNED_INT,
-                       nullptr);
     }
 }
 
 void Renderer::update_screen() {
     bind_guard<Framebuffer> framebuf_guard(screen_framebuf);
+
+    Viewport::set_active(get_viewport(0));
 
     // Bind VAO
     bind_guard<VertexArray> screen_guard(screen);
@@ -134,15 +140,6 @@ void Renderer::update_screen() {
     //	  Re enable functionality
     glEnable(GL_DEPTH_TEST);
     //    glEnable(GL_CULL_FACE); //#Optimize Enable later when 3D works
-}
-
-void Renderer::debug_log_viewport() const {
-    Viewport vp = Viewport::current();
-    LogSystem::write(LogSystem::Severity::Info, "Viewport info: ");
-    std::ostringstream oss;
-    oss << "x: " << vp.position().x << " y: " << vp.position().y << "\n";
-    oss << "w: " << vp.dimensions().x << " h: " << vp.dimensions().y << "\n";
-    LogSystem::write(LogSystem::Severity::Info, oss.str());
 }
 
 Viewport& Renderer::get_viewport(std::size_t index) {

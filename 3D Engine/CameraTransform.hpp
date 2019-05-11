@@ -14,12 +14,12 @@ Matrix4x4<T> look_at(Vec3<T> const& position,
                      Vec3<T> const& target,
                      Vec3<T> const& up = UpVec3<float>) {
     Vec3<T> direction = normalize(position - target);
-    Vec3<T> right = normalize(cross(position, up));
+    Vec3<T> left = normalize(cross(up, direction));
     Matrix4x4<T> result;
 
-    result(0, 0) = right.x;
-    result(1, 0) = right.y;
-    result(2, 0) = right.z;
+    result(0, 0) = left.x;
+    result(1, 0) = left.y;
+    result(2, 0) = left.z;
     result(0, 1) = up.x;
     result(1, 1) = up.y;
     result(2, 1) = up.z;

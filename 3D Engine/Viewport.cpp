@@ -14,6 +14,15 @@ Viewport::Viewport(unsigned int x,
     x(x),
     y(y), w(w), h(h) {}
 
+Viewport::Viewport(std::size_t cam,
+                   unsigned int x,
+                   unsigned int y,
+                   unsigned int w,
+                   unsigned int h) :
+
+    x(x),
+    y(y), w(w), h(h), camera(cam) {}
+
 #pragma clang diagnostic pop
 
 WindowDim Viewport::dimensions() const { return {w, h}; }
@@ -37,14 +46,11 @@ void Viewport::set_active(Viewport const& viewport) {
 #pragma clang diagnostic ignored "-Wsign-conversion"
 #pragma clang diagnostic ignored "-Wc++11-narrowing"
 
-Viewport Viewport::current() {
+std::size_t Viewport::get_camera() const { return camera; }
+void Viewport::set_camera(std::size_t cam_id) { camera = cam_id; }
 
-    // #TODO: Store active viewport manually instead of using glGetIntegerv
-
-    int viewport[4];
-    // Query OpenGL for current viewport information
-    glGetIntegerv(GL_VIEWPORT, viewport);
-    return Viewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+bool Viewport::has_camera() const {
+    return camera != static_cast<std::size_t>(-1);
 }
 
 #pragma clang diagnostic pop
