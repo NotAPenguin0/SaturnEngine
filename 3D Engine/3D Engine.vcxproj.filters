@@ -13,273 +13,279 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\glad">
-      <UniqueIdentifier>{ae8027bd-49bb-4dbd-8cb2-73f265be410f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Core">
-      <UniqueIdentifier>{cd8c5fa4-9fd6-4fed-b3dc-eae9c9b55821}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core">
-      <UniqueIdentifier>{dcdaf431-c83f-44f4-bc01-56a2a44b9cce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Subsystems">
-      <UniqueIdentifier>{8f09908d-84c0-4f4a-946d-45b30bc0110c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Subsystems\Logging">
-      <UniqueIdentifier>{17f6053b-8887-4d46-ad37-fb6b50d62950}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Subsystems">
-      <UniqueIdentifier>{24d86a75-306b-4948-a147-4b3ae45809c6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Subsystems\Logging">
-      <UniqueIdentifier>{2c26891e-a59b-42a0-bc31-3cab940546f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Subsystems\Input">
-      <UniqueIdentifier>{3dfcb8a2-e48b-4c67-890c-eb1dc8b28bfb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Subsystems\Input">
-      <UniqueIdentifier>{fc516dc8-3917-4ddb-aca5-48356651fd84}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Subsystems\Renderer">
-      <UniqueIdentifier>{a3fbdd00-2ca5-49d5-829f-6483ad138807}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Subsystems\Renderer">
-      <UniqueIdentifier>{9de445f4-10b6-4a35-b991-8c9bb101787d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Subsystems\Math">
-      <UniqueIdentifier>{fce44ea3-927f-486f-976c-c0764f480c3c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Subsystems\Math">
-      <UniqueIdentifier>{944a9d4e-0846-41bf-bd6f-0a48a70c4233}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Subsystems\Scene">
-      <UniqueIdentifier>{94ceef18-9a93-462a-a964-7d3ae1f7f748}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Subsystems\Scene">
-      <UniqueIdentifier>{e28645f4-2103-4304-b871-19a57a5e7930}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Subsystems\ECS">
-      <UniqueIdentifier>{3c98a4ff-3743-4a7d-9744-1200031fef92}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Utility">
-      <UniqueIdentifier>{9560db39-2aa9-4099-99df-6f109bb98d67}</UniqueIdentifier>
+      <UniqueIdentifier>{acfdbda6-b023-412f-a86b-d54d0f98c50c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Utility">
-      <UniqueIdentifier>{cb56c684-bc7a-4025-8a39-56d0374a9653}</UniqueIdentifier>
+      <UniqueIdentifier>{3bb2aadd-8d8c-4259-8280-77da73e85586}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Subsystems\ECS\Components">
-      <UniqueIdentifier>{3b5aa8a7-2d37-42c1-bd2d-005016539cd7}</UniqueIdentifier>
+    <Filter Include="Source Files\glad">
+      <UniqueIdentifier>{112f1775-fa49-4b7c-8bf6-2cf44e7972ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Subsystems">
+      <UniqueIdentifier>{7d3c4e0e-b424-4158-9074-ed5bbb0b012d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Subsystems\ECS">
-      <UniqueIdentifier>{85aad485-625a-4e35-a977-b2e24d70a2b4}</UniqueIdentifier>
+      <UniqueIdentifier>{a08c48c1-4520-44cc-93ee-d137abefd015}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Subsystems\ECS\Systems">
-      <UniqueIdentifier>{e76bdb4d-6c96-4f44-b4e3-7094daa87c89}</UniqueIdentifier>
+    <Filter Include="Source Files\Subsystems\Input">
+      <UniqueIdentifier>{7ffe08d9-398a-4d6e-917c-6e5e8d02e479}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Subsystems\Logging">
+      <UniqueIdentifier>{3071a5c2-6454-4403-b3cb-26d95cc9cb29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Subsystems\Math">
+      <UniqueIdentifier>{2d89e86f-07ce-4a8d-b772-4d537427f26c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Subsystems\Renderer">
+      <UniqueIdentifier>{50c1f078-7b14-45d7-bdb0-8b8be967e78d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Subsystems\Scene">
+      <UniqueIdentifier>{01958094-3573-4540-8835-f1cb3c1dc304}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Subsystems\Time">
+      <UniqueIdentifier>{54f192ca-3aa6-45fb-8612-4957eda358f8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Subsystems\ECS\Systems">
-      <UniqueIdentifier>{c6be83e5-0619-4387-b3f7-868c602c0d69}</UniqueIdentifier>
+      <UniqueIdentifier>{1d54eaca-9024-4ad6-9b09-d6043118ad23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{561e8cd5-0b86-4cdd-979f-21d64adc08de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subsystems">
+      <UniqueIdentifier>{12c7b062-f1f5-46b9-abaa-a87c40ade1ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility">
+      <UniqueIdentifier>{362c7b0e-31f3-4e48-9ef2-df16a82ac281}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subsystems\ECS">
+      <UniqueIdentifier>{32fe629b-c520-4d7e-a94f-60a13051e373}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subsystems\Input">
+      <UniqueIdentifier>{86e1973a-da59-4c85-aff1-800e1a7af93f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subsystems\Logging">
+      <UniqueIdentifier>{b2a82b35-a04c-44d6-b8e1-d6c0e1b5839d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subsystems\Math">
+      <UniqueIdentifier>{499bf911-f2b4-4803-97d2-dc5f1d7367f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subsystems\Time">
+      <UniqueIdentifier>{26c3832e-3646-4a09-a5f7-b03ae167f347}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subsystems\Scene">
+      <UniqueIdentifier>{637c5d38-20e4-4232-aa61-fc178ff72a41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subsystems\Renderer">
+      <UniqueIdentifier>{86cc916d-bbd4-41d3-9a80-ac73aaf286fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subsystems\ECS\Components">
+      <UniqueIdentifier>{18fe05da-9f1a-441c-bd79-eb9bd63ec238}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subsystems\ECS\Systems">
+      <UniqueIdentifier>{499e7743-8476-4da4-adc5-100cf9b69e20}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application.cpp">
+    <ClCompile Include="src\Core\Application.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Engine.cpp">
+    <ClCompile Include="src\Core\Engine.cpp">
       <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="LogSystem.cpp">
-      <Filter>Source Files\Subsystems\Logging</Filter>
     </ClCompile>
     <ClCompile Include="glad\src\glad.c">
       <Filter>Source Files\glad</Filter>
     </ClCompile>
-    <ClCompile Include="ErrorHandler.cpp">
+    <ClCompile Include="src\Core\ErrorHandler.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>Source Files\Subsystems\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Source Files\Subsystems\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Framebuffer.cpp">
-      <Filter>Source Files\Subsystems\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="RandomEngine.cpp">
-      <Filter>Source Files\Subsystems\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Source Files\Subsystems\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Viewport.cpp">
-      <Filter>Source Files\Subsystems\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexArray.cpp">
-      <Filter>Source Files\Subsystems\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files\Subsystems\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneObject.cpp">
-      <Filter>Source Files\Subsystems\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="OpenGL.cpp">
-      <Filter>Source Files\Subsystems\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Utility.cpp">
+    <ClCompile Include="src\Utility\Utility.cpp">
       <Filter>Source Files\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="component_container.cpp">
+    <ClCompile Include="src\Subsystems\ECS\Systems\CameraZoomControllerSystem.cpp">
+      <Filter>Source Files\Subsystems\ECS\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Subsystems\ECS\component_container.cpp">
       <Filter>Source Files\Subsystems\ECS</Filter>
     </ClCompile>
-    <ClCompile Include="SystemBase.cpp">
+    <ClCompile Include="src\Subsystems\Renderer\Framebuffer.cpp">
+      <Filter>Source Files\Subsystems\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Subsystems\ECS\Systems\FPSCameraControllerSystem.cpp">
       <Filter>Source Files\Subsystems\ECS\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="FPSCameraControllerSystem.cpp">
+    <ClCompile Include="src\Subsystems\ECS\Systems\FreeLookControllerSystem.cpp">
       <Filter>Source Files\Subsystems\ECS\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="Time.cpp">
-      <Filter>Source Files\Core</Filter>
+    <ClCompile Include="src\Subsystems\Input\Input.cpp">
+      <Filter>Source Files\Subsystems\Input</Filter>
     </ClCompile>
-    <ClCompile Include="CameraZoomControllerSystem.cpp">
+    <ClCompile Include="src\Subsystems\Logging\LogSystem.cpp">
+      <Filter>Source Files\Subsystems\Logging</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Subsystems\Renderer\OpenGL.cpp">
+      <Filter>Source Files\Subsystems\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Subsystems\Math\RandomEngine.cpp">
+      <Filter>Source Files\Subsystems\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Subsystems\Renderer\Renderer.cpp">
+      <Filter>Source Files\Subsystems\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Subsystems\Scene\Scene.cpp">
+      <Filter>Source Files\Subsystems\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Subsystems\Scene\SceneObject.cpp">
+      <Filter>Source Files\Subsystems\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Subsystems\Renderer\Shader.cpp">
+      <Filter>Source Files\Subsystems\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Subsystems\ECS\Systems\SystemBase.cpp">
       <Filter>Source Files\Subsystems\ECS\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="FreeLookControllerSystem.cpp">
-      <Filter>Source Files\Subsystems\ECS\Systems</Filter>
+    <ClCompile Include="src\Subsystems\Time\Time.cpp">
+      <Filter>Source Files\Subsystems\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Subsystems\Renderer\VertexArray.cpp">
+      <Filter>Source Files\Subsystems\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Subsystems\Renderer\Viewport.cpp">
+      <Filter>Source Files\Subsystems\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Application.hpp">
+    <ClInclude Include="include\Core\Application.hpp">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Engine.hpp">
+    <ClInclude Include="include\Utility\bind_guard.hpp">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\bind_tracker.hpp">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\Components\Camera.hpp">
+      <Filter>Header Files\Subsystems\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\Components\CameraZoomController.hpp">
+      <Filter>Header Files\Subsystems\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\Systems\CameraZoomControllerSystem.hpp">
+      <Filter>Header Files\Subsystems\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\component_container.hpp">
+      <Filter>Header Files\Subsystems\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\component_index.hpp">
+      <Filter>Header Files\Subsystems\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\component_view.hpp">
+      <Filter>Header Files\Subsystems\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\ComponentList.hpp">
+      <Filter>Header Files\Subsystems\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\Components\ComponentBase.hpp">
+      <Filter>Header Files\Subsystems\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\Components.hpp">
+      <Filter>Header Files\Subsystems\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Math\ConstexprMath.hpp">
+      <Filter>Header Files\Subsystems\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\ECS.hpp">
+      <Filter>Header Files\Subsystems\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Engine.hpp">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="LogSystem.hpp">
-      <Filter>Header Files\Subsystems\Logging</Filter>
-    </ClInclude>
-    <ClInclude Include="rang.hpp">
-      <Filter>Header Files\Subsystems\Logging</Filter>
-    </ClInclude>
-    <ClInclude Include="ErrorHandler.hpp">
+    <ClInclude Include="include\Core\ErrorHandler.hpp">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Input.hpp">
+    <ClInclude Include="include\Utility\Exceptions.hpp">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\Components\FPSCameraController.hpp">
+      <Filter>Header Files\Subsystems\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\Systems\FPSCameraControllerSystem.hpp">
+      <Filter>Header Files\Subsystems\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Renderer\Framebuffer.hpp">
+      <Filter>Header Files\Subsystems\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\Components\FreeLookController.hpp">
+      <Filter>Header Files\Subsystems\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\Components\Transform.hpp">
+      <Filter>Header Files\Subsystems\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\Systems\FreeLookControllerSystem.hpp">
+      <Filter>Header Files\Subsystems\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\IDGenerator.hpp">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Input\Input.hpp">
       <Filter>Header Files\Subsystems\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.hpp">
-      <Filter>Header Files\Subsystems\Renderer</Filter>
+    <ClInclude Include="include\Subsystems\Logging\LogSystem.hpp">
+      <Filter>Header Files\Subsystems\Logging</Filter>
     </ClInclude>
-    <ClInclude Include="Framebuffer.hpp">
-      <Filter>Header Files\Subsystems\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="OpenGL.hpp">
-      <Filter>Header Files\Subsystems\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="RandomEngine.hpp">
+    <ClInclude Include="include\Subsystems\Math\Math.hpp">
       <Filter>Header Files\Subsystems\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.hpp">
-      <Filter>Header Files\Subsystems\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Viewport.hpp">
-      <Filter>Header Files\Subsystems\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="ConstexprMath.hpp">
+    <ClInclude Include="include\Subsystems\Math\math_traits.hpp">
       <Filter>Header Files\Subsystems\Math</Filter>
     </ClInclude>
-    <ClInclude Include="VertexArray.hpp">
+    <ClInclude Include="include\Subsystems\Renderer\OpenGL.hpp">
       <Filter>Header Files\Subsystems\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.hpp">
+    <ClInclude Include="include\Subsystems\Math\RandomEngine.hpp">
+      <Filter>Header Files\Subsystems\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Logging\rang.hpp">
+      <Filter>Header Files\Subsystems\Logging</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Renderer\Renderer.hpp">
+      <Filter>Header Files\Subsystems\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Scene\Scene.hpp">
       <Filter>Header Files\Subsystems\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="SceneObject.hpp">
+    <ClInclude Include="include\Subsystems\Scene\SceneGraph.hpp">
       <Filter>Header Files\Subsystems\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="SceneGraph.hpp">
+    <ClInclude Include="include\Subsystems\Scene\SceneObject.hpp">
       <Filter>Header Files\Subsystems\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="bind_guard.hpp">
+    <ClInclude Include="include\Subsystems\Renderer\Shader.hpp">
       <Filter>Header Files\Subsystems\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="bind_tracker.hpp">
+    <ClInclude Include="include\Subsystems\ECS\Systems\SystemBase.hpp">
+      <Filter>Header Files\Subsystems\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\Systems.hpp">
+      <Filter>Header Files\Subsystems\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Time\Time.hpp">
+      <Filter>Header Files\Subsystems\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\type_erased.hpp">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\Utility.hpp">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Renderer\VertexArray.hpp">
       <Filter>Header Files\Subsystems\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="math_traits.hpp">
-      <Filter>Header Files\Subsystems\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Exceptions.hpp">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility.hpp">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="type_erased.hpp">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="component_container.hpp">
-      <Filter>Header Files\Subsystems\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="component_index.hpp">
-      <Filter>Header Files\Subsystems\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.hpp">
-      <Filter>Header Files\Subsystems\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ECS.hpp">
-      <Filter>Header Files\Subsystems\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentBase.hpp">
-      <Filter>Header Files\Subsystems\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components.hpp">
-      <Filter>Header Files\Subsystems\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.hpp">
-      <Filter>Header Files\Subsystems\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="component_view.hpp">
-      <Filter>Header Files\Subsystems\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="IDGenerator.hpp">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="FPSCameraController.hpp">
-      <Filter>Header Files\Subsystems\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="SystemBase.hpp">
-      <Filter>Header Files\Subsystems\ECS\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems.hpp">
-      <Filter>Header Files\Subsystems\ECS\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentList.hpp">
-      <Filter>Header Files\Subsystems\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="FPSCameraControllerSystem.hpp">
-      <Filter>Header Files\Subsystems\ECS\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Time.hpp">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Math.hpp">
-      <Filter>Header Files\Subsystems\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="FreeLookController.hpp">
-      <Filter>Header Files\Subsystems\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraZoomController.hpp">
-      <Filter>Header Files\Subsystems\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraZoomControllerSystem.hpp">
-      <Filter>Header Files\Subsystems\ECS\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="FreeLookControllerSystem.hpp">
-      <Filter>Header Files\Subsystems\ECS\Systems</Filter>
+    <ClInclude Include="include\Subsystems\Renderer\Viewport.hpp">
+      <Filter>Header Files\Subsystems\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

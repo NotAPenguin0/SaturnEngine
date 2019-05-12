@@ -1,8 +1,6 @@
-#include "Engine.hpp"
-#include "VertexArray.hpp"
-#include "bind_guard.hpp"
+#include "Core/Engine.hpp"
 
-#include "Math.hpp"
+#include "Utility/Utility.hpp"
 
 #include <cassert>
 #include <iostream>

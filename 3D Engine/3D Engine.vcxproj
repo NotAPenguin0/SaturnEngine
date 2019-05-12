@@ -74,16 +74,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Libs\;C:\Users\michi_000\Desktop\C++\3D Engine\3D Engine\glad\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Libs;$(SolutionDir)3D Engine\include;\C:\Libs\;C:\Users\michi_000\Desktop\C++\3D Engine\3D Engine\glad\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Libs\;C:\Users\michi_000\Desktop\C++\3D Engine\3D Engine\glad\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Libs;$(SolutionDir)3D Engine\include;\C:\Libs\;C:\Users\michi_000\Desktop\C++\3D Engine\3D Engine\glad\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Libs\;C:\Users\michi_000\Desktop\C++\3D Engine\3D Engine\glad\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Libs;$(SolutionDir)3D Engine\include;\C:\Libs\;C:\Users\michi_000\Desktop\C++\3D Engine\3D Engine\glad\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Libs\;C:\Users\michi_000\Desktop\C++\3D Engine\3D Engine\glad\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Libs;$(SolutionDir)3D Engine\include;\C:\Libs\;C:\Users\michi_000\Desktop\C++\3D Engine\3D Engine\glad\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Label="LLVM" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClangClAdditionalOptions>-Wall -Wno-missing-noreturn -Wno-zero-as-null-pointer-constant -Wno-old-style-cast -Wno-unused-private-field -Wno-exit-time-destructors -Wno-double-promotion -Wno-missing-prototypes -Wextra -Wno-newline-eof -Wno-unused-command-line-argument -Wno-c++98-compat-pedantic -Wno-unused-variable -Wno-global-constructors -Werror -Wno-shorten-64-to-32 -Wno-c++98-compat -Wno-reserved-id-macro</ClangClAdditionalOptions>
@@ -172,89 +172,74 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Application.cpp" />
-    <ClCompile Include="CameraZoomControllerSystem.cpp" />
-    <ClCompile Include="component_container.cpp" />
-    <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="ErrorHandler.cpp" />
-    <ClCompile Include="FPSCameraControllerSystem.cpp" />
-    <ClCompile Include="Framebuffer.cpp" />
-    <ClCompile Include="FreeLookControllerSystem.cpp" />
-    <ClCompile Include="glad\src\glad.c">
-      <SupportJustMyCode Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</SupportJustMyCode>
-      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Level4</WarningLevel>
-      <TreatWarningAsError Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</TreatWarningAsError>
-      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Level4</WarningLevel>
-      <TreatWarningAsError Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</TreatWarningAsError>
-      <SupportJustMyCode Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</SupportJustMyCode>
-      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Level4</WarningLevel>
-      <TreatWarningAsError Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatWarningAsError>
-      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Level4</WarningLevel>
-      <TreatWarningAsError Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</TreatWarningAsError>
-      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdcpp17</LanguageStandard>
-      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">stdcpp17</LanguageStandard>
-      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp17</LanguageStandard>
-      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdcpp17</LanguageStandard>
-    </ClCompile>
-    <ClCompile Include="Input.cpp" />
-    <ClCompile Include="LogSystem.cpp" />
+    <ClCompile Include="glad\src\glad.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="OpenGL.cpp" />
-    <ClCompile Include="RandomEngine.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneObject.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="SystemBase.cpp" />
-    <ClCompile Include="Time.cpp" />
-    <ClCompile Include="Utility.cpp" />
-    <ClCompile Include="VertexArray.cpp" />
-    <ClCompile Include="Viewport.cpp" />
+    <ClCompile Include="src\Core\Application.cpp" />
+    <ClCompile Include="src\Core\Engine.cpp" />
+    <ClCompile Include="src\Core\ErrorHandler.cpp" />
+    <ClCompile Include="src\Subsystems\ECS\component_container.cpp" />
+    <ClCompile Include="src\Subsystems\ECS\Systems\CameraZoomControllerSystem.cpp" />
+    <ClCompile Include="src\Subsystems\ECS\Systems\FPSCameraControllerSystem.cpp" />
+    <ClCompile Include="src\Subsystems\ECS\Systems\FreeLookControllerSystem.cpp" />
+    <ClCompile Include="src\Subsystems\ECS\Systems\SystemBase.cpp" />
+    <ClCompile Include="src\Subsystems\Input\Input.cpp" />
+    <ClCompile Include="src\Subsystems\Logging\LogSystem.cpp" />
+    <ClCompile Include="src\Subsystems\Math\RandomEngine.cpp" />
+    <ClCompile Include="src\Subsystems\Renderer\Framebuffer.cpp" />
+    <ClCompile Include="src\Subsystems\Renderer\OpenGL.cpp" />
+    <ClCompile Include="src\Subsystems\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Subsystems\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Subsystems\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\Subsystems\Renderer\Viewport.cpp" />
+    <ClCompile Include="src\Subsystems\Scene\Scene.cpp" />
+    <ClCompile Include="src\Subsystems\Scene\SceneObject.cpp" />
+    <ClCompile Include="src\Subsystems\Time\Time.cpp" />
+    <ClCompile Include="src\Utility\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Application.hpp" />
-    <ClInclude Include="bind_guard.hpp" />
-    <ClInclude Include="bind_tracker.hpp" />
-    <ClInclude Include="Camera.hpp" />
-    <ClInclude Include="CameraZoomController.hpp" />
-    <ClInclude Include="CameraZoomControllerSystem.hpp" />
-    <ClInclude Include="ComponentBase.hpp" />
-    <ClInclude Include="ComponentList.hpp" />
-    <ClInclude Include="Components.hpp" />
-    <ClInclude Include="component_container.hpp" />
-    <ClInclude Include="component_index.hpp" />
-    <ClInclude Include="component_view.hpp" />
-    <ClInclude Include="ConstexprMath.hpp" />
-    <ClInclude Include="ECS.hpp" />
-    <ClInclude Include="Engine.hpp" />
-    <ClInclude Include="ErrorHandler.hpp" />
-    <ClInclude Include="Exceptions.hpp" />
-    <ClInclude Include="FPSCameraController.hpp" />
-    <ClInclude Include="FPSCameraControllerSystem.hpp" />
-    <ClInclude Include="Framebuffer.hpp" />
-    <ClInclude Include="FreeLookController.hpp" />
-    <ClInclude Include="FreeLookControllerSystem.hpp" />
-    <ClInclude Include="IDGenerator.hpp" />
-    <ClInclude Include="Input.hpp" />
-    <ClInclude Include="LogSystem.hpp" />
-    <ClInclude Include="Math.hpp" />
-    <ClInclude Include="OpenGL.hpp" />
-    <ClInclude Include="math_traits.hpp" />
-    <ClInclude Include="RandomEngine.hpp" />
-    <ClInclude Include="rang.hpp" />
-    <ClInclude Include="Renderer.hpp" />
-    <ClInclude Include="Scene.hpp" />
-    <ClInclude Include="SceneGraph.hpp" />
-    <ClInclude Include="SceneObject.hpp" />
-    <ClInclude Include="Shader.hpp" />
-    <ClInclude Include="SystemBase.hpp" />
-    <ClInclude Include="Systems.hpp" />
-    <ClInclude Include="Time.hpp" />
-    <ClInclude Include="Transform.hpp" />
-    <ClInclude Include="type_erased.hpp" />
-    <ClInclude Include="Utility.hpp" />
-    <ClInclude Include="VertexArray.hpp" />
-    <ClInclude Include="Viewport.hpp" />
+    <ClInclude Include="include\Core\Application.hpp" />
+    <ClInclude Include="include\Core\Engine.hpp" />
+    <ClInclude Include="include\Core\ErrorHandler.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\ComponentList.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\Components.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\Components\Camera.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\Components\CameraZoomController.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\Components\ComponentBase.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\Components\FPSCameraController.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\Components\FreeLookController.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\Components\Transform.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\component_container.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\component_index.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\component_view.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\ECS.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\Systems.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\Systems\CameraZoomControllerSystem.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\Systems\FPSCameraControllerSystem.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\Systems\FreeLookControllerSystem.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\Systems\SystemBase.hpp" />
+    <ClInclude Include="include\Subsystems\Input\Input.hpp" />
+    <ClInclude Include="include\Subsystems\Logging\LogSystem.hpp" />
+    <ClInclude Include="include\Subsystems\Logging\rang.hpp" />
+    <ClInclude Include="include\Subsystems\Math\ConstexprMath.hpp" />
+    <ClInclude Include="include\Subsystems\Math\Math.hpp" />
+    <ClInclude Include="include\Subsystems\Math\math_traits.hpp" />
+    <ClInclude Include="include\Subsystems\Math\RandomEngine.hpp" />
+    <ClInclude Include="include\Subsystems\Renderer\Framebuffer.hpp" />
+    <ClInclude Include="include\Subsystems\Renderer\OpenGL.hpp" />
+    <ClInclude Include="include\Subsystems\Renderer\Renderer.hpp" />
+    <ClInclude Include="include\Subsystems\Renderer\Shader.hpp" />
+    <ClInclude Include="include\Subsystems\Renderer\VertexArray.hpp" />
+    <ClInclude Include="include\Subsystems\Renderer\Viewport.hpp" />
+    <ClInclude Include="include\Subsystems\Scene\Scene.hpp" />
+    <ClInclude Include="include\Subsystems\Scene\SceneGraph.hpp" />
+    <ClInclude Include="include\Subsystems\Scene\SceneObject.hpp" />
+    <ClInclude Include="include\Subsystems\Time\Time.hpp" />
+    <ClInclude Include="include\Utility\bind_guard.hpp" />
+    <ClInclude Include="include\Utility\bind_tracker.hpp" />
+    <ClInclude Include="include\Utility\Exceptions.hpp" />
+    <ClInclude Include="include\Utility\IDGenerator.hpp" />
+    <ClInclude Include="include\Utility\type_erased.hpp" />
+    <ClInclude Include="include\Utility\Utility.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
