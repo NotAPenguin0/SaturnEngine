@@ -6,8 +6,8 @@
 #include <cassert>
 #include <type_traits>
 
-namespace Saturn::Math {
-
+namespace Saturn {
+namespace Math {
 template<typename T>
 class Vec<T, 1> {
 public:
@@ -74,6 +74,6 @@ constexpr bool operator==(Vec1<T> const& lhs, Vec1<T> const& rhs) {
     return lhs.x == rhs.x;
 }
 
-} // namespace Saturn::Math
-
+} // namespace Math
+} // namespace Saturn
 #endif

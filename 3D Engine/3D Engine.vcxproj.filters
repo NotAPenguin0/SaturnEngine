@@ -52,20 +52,11 @@
     <Filter Include="Source Files\Subsystems\Math">
       <UniqueIdentifier>{944a9d4e-0846-41bf-bd6f-0a48a70c4233}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Subsystems\Math\Vector">
-      <UniqueIdentifier>{d64ba0c4-10f0-41e8-9891-b61187168aa6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Subsystems\Math\Matrix">
-      <UniqueIdentifier>{27542c3c-9223-4f09-b9ce-32cbec6f3d21}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Subsystems\Scene">
       <UniqueIdentifier>{94ceef18-9a93-462a-a964-7d3ae1f7f748}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Subsystems\Scene">
       <UniqueIdentifier>{e28645f4-2103-4304-b871-19a57a5e7930}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Subsystems\Math\3D Transform">
-      <UniqueIdentifier>{a6091881-73e1-4ce6-8a5f-ebb869a2c2ec}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Subsystems\ECS">
       <UniqueIdentifier>{3c98a4ff-3743-4a7d-9744-1200031fef92}</UniqueIdentifier>
@@ -150,6 +141,15 @@
     <ClCompile Include="FPSCameraControllerSystem.cpp">
       <Filter>Source Files\Subsystems\ECS\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraZoomControllerSystem.cpp">
+      <Filter>Source Files\Subsystems\ECS\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeLookControllerSystem.cpp">
+      <Filter>Source Files\Subsystems\ECS\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp">
@@ -182,41 +182,14 @@
     <ClInclude Include="RandomEngine.hpp">
       <Filter>Header Files\Subsystems\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Math.hpp">
-      <Filter>Header Files\Subsystems\Math</Filter>
-    </ClInclude>
     <ClInclude Include="Shader.hpp">
       <Filter>Header Files\Subsystems\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Viewport.hpp">
       <Filter>Header Files\Subsystems\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Vector.hpp">
-      <Filter>Header Files\Subsystems\Math\Vector</Filter>
-    </ClInclude>
-    <ClInclude Include="VecBase.hpp">
-      <Filter>Header Files\Subsystems\Math\Vector</Filter>
-    </ClInclude>
-    <ClInclude Include="Vec1.hpp">
-      <Filter>Header Files\Subsystems\Math\Vector</Filter>
-    </ClInclude>
-    <ClInclude Include="Vec2.hpp">
-      <Filter>Header Files\Subsystems\Math\Vector</Filter>
-    </ClInclude>
-    <ClInclude Include="Vec3.hpp">
-      <Filter>Header Files\Subsystems\Math\Vector</Filter>
-    </ClInclude>
-    <ClInclude Include="Vec4.hpp">
-      <Filter>Header Files\Subsystems\Math\Vector</Filter>
-    </ClInclude>
-    <ClInclude Include="VecMath.hpp">
-      <Filter>Header Files\Subsystems\Math\Vector</Filter>
-    </ClInclude>
     <ClInclude Include="ConstexprMath.hpp">
       <Filter>Header Files\Subsystems\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix.hpp">
-      <Filter>Header Files\Subsystems\Math\Matrix</Filter>
     </ClInclude>
     <ClInclude Include="VertexArray.hpp">
       <Filter>Header Files\Subsystems\Renderer</Filter>
@@ -235,12 +208,6 @@
     </ClInclude>
     <ClInclude Include="bind_tracker.hpp">
       <Filter>Header Files\Subsystems\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="LinearTransform.hpp">
-      <Filter>Header Files\Subsystems\Math\3D Transform</Filter>
-    </ClInclude>
-    <ClInclude Include="Trig.hpp">
-      <Filter>Header Files\Subsystems\Math</Filter>
     </ClInclude>
     <ClInclude Include="math_traits.hpp">
       <Filter>Header Files\Subsystems\Math</Filter>
@@ -275,9 +242,6 @@
     <ClInclude Include="Camera.hpp">
       <Filter>Header Files\Subsystems\ECS\Components</Filter>
     </ClInclude>
-    <ClInclude Include="CameraTransform.hpp">
-      <Filter>Header Files\Subsystems\Math\3D Transform</Filter>
-    </ClInclude>
     <ClInclude Include="component_view.hpp">
       <Filter>Header Files\Subsystems\ECS</Filter>
     </ClInclude>
@@ -297,6 +261,24 @@
       <Filter>Header Files\Subsystems\ECS</Filter>
     </ClInclude>
     <ClInclude Include="FPSCameraControllerSystem.hpp">
+      <Filter>Header Files\Subsystems\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.hpp">
+      <Filter>Header Files\Subsystems\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeLookController.hpp">
+      <Filter>Header Files\Subsystems\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraZoomController.hpp">
+      <Filter>Header Files\Subsystems\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraZoomControllerSystem.hpp">
+      <Filter>Header Files\Subsystems\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeLookControllerSystem.hpp">
       <Filter>Header Files\Subsystems\ECS\Systems</Filter>
     </ClInclude>
   </ItemGroup>

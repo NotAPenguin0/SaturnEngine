@@ -2,15 +2,22 @@
 #define MVG_COMPONENT_CAMERA_HPP_
 
 #include "ComponentBase.hpp"
-#include "Vector.hpp"
 
-namespace Saturn::Components {
+#include <GLM\glm.hpp>
+
+namespace Saturn {
+
+namespace Components {
 
 struct Camera : public ComponentBase {
-    Math::Vec3<float> front;
-    Math::Vec3<float> up;
+    glm::vec3 front;
+    glm::vec3 up;
+
+	float fov;
 };
 
-} // namespace Saturn::Components
+} // namespace Components
+
+} // namespace Saturn
 
 #endif

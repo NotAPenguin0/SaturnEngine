@@ -1,17 +1,10 @@
 #include "Renderer.hpp"
 
 #include "Application.hpp"
-#include "CameraTransform.hpp"
 #include "Exceptions.hpp"
-#include "LinearTransform.hpp"
+#include "Math.hpp"
 #include "Scene.hpp"
-#include "Trig.hpp"
 #include "bind_guard.hpp"
-
-#include <sstream>
-
-#include <GLM/gtc/matrix_transform.hpp>
-#include <GLM/gtc/type_ptr.hpp>
 
 namespace Saturn {
 
@@ -67,7 +60,6 @@ void Renderer::clear(
     glClear(flags);
 }
 
-
 void Renderer::render_scene_graph(SceneGraph const& scene) {
     // Temporary
 
@@ -83,32 +75,34 @@ void Renderer::render_scene_graph(SceneGraph const& scene) {
             auto& vtx_array = *scene.vtx_arrays[i];
             auto& transform = *scene.transforms[i];
 
-            auto projection = Math::Transform::perspective(
-                Math::radians(45.0f),
-                (float)vp.dimensions().x / (float)vp.dimensions().y, 0.1f,
-                100.0f);
-
             auto cam_id = vp.get_camera();
             auto& cam =
                 scene.scene->ecs.get_with_id<Components::Camera>(cam_id);
             auto& cam_trans =
                 cam.entity->get_component<Components::Transform>();
-            auto view = Math::Transform::look_at(
-                cam_trans.position, cam_trans.position + cam.front, cam.up);
 
-            auto model = Math::Matrix4x4<float>::identity();
+            auto projection = glm::perspective(glm::radians(cam.fov),
+                                               (float)vp.dimensions().x /
+                                                   (float)vp.dimensions().y,
+                                               0.1f, 100.0f);
+
+            auto view = glm::lookAt(cam_trans.position,
+                                    cam_trans.position + cam.front, cam.up);
+
+            auto model = glm::mat4(1.0f);
             // Apply transformations
 
-            Math::Transform::add_scale(model, transform.scale);
-            Math::Transform::add_rotation(model, transform.rotation.axis,
-                                          transform.rotation.angle_in_radians);
-            Math::Transform::add_translation(model, transform.position);
+            model = glm::translate(model, transform.position);
+            model = glm::rotate(model, {glm::radians(transform.rotation.x),
+                                        glm::radians(transform.rotation.y),
+                                        glm::radians(transform.rotation.z)});
+
+            model = glm::scale(model, transform.scale);
 
             bind_guard<Shader> shader_guard(shader);
             bind_guard<VertexArray> vao_guard(vtx_array);
 
             shader.set_mat4("model", model);
-//			glUniformMatrix4fv(shader.location("view"), 1, GL_FALSE, glm::value_ptr(view));
             shader.set_mat4("view", view);
             shader.set_mat4("projection", projection);
 
@@ -137,9 +131,10 @@ void Renderer::update_screen() {
     // Render framebuffer texture to the screen
     glBindTexture(GL_TEXTURE_2D, framebuf.texture);
     glDrawElements(GL_TRIANGLES, screen.index_size(), GL_UNSIGNED_INT, nullptr);
+
     //	  Re enable functionality
     glEnable(GL_DEPTH_TEST);
-    //    glEnable(GL_CULL_FACE); //#Optimize Enable later when 3D works
+    glEnable(GL_CULL_FACE);
 }
 
 Viewport& Renderer::get_viewport(std::size_t index) {

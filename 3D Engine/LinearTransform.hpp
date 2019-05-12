@@ -6,15 +6,23 @@
 
 #include <cmath>
 
+#ifdef ENGINE_USE_GLM_MATH
+#    include <glm/gtc/matrix_transform.hpp>
+#endif
+
 namespace Saturn {
 
 namespace Math {
 
 namespace Transform {
 
+enum class Axis { X, Y, Z };
+
 #define ENSURE_FLOATING_POINT(T)                                               \
     static_assert(std::is_floating_point_v<T>,                                 \
                   "Saturn::Math: Template type must be floating point type")
+
+#ifndef ENGINE_USE_GLM_MATH
 
 template<typename T>
 constexpr Matrix4x4<T> translate(T x, T y, T z) {
@@ -54,7 +62,7 @@ constexpr Matrix4x4<T> rotate(T x, T y, T z, T angle_in_radians) {
     // First row
     auto ct = std::cos(theta);
     auto st = std::sin(theta);
-	
+
     result(0, 0) = ct + x * x * (1 - ct);
     result(1, 0) = x * y * (1 - ct) - z * st;
     result(2, 0) = x * z * (1 - ct) + y * st;
@@ -79,6 +87,13 @@ constexpr Matrix4x4<T> rotate(Vec3<T> const& axis, T angle_in_radians) {
 }
 
 template<typename T>
+constexpr Matrix4x4<T> rotate(Vec3<T> euler_angles) {
+    return rotate(Vec3<T>{0.0, 0.0, 1.0}, euler_angles.z) *
+           rotate(Vec3<T>{0.0, 1.0, 0.0}, euler_angles.y) *
+           rotate(Vec3<T>{1.0, 0.0, 0.0}, euler_angles.x);
+}
+
+template<typename T>
 constexpr void
 add_rotation(Matrix4x4<T>& mat, T x, T y, T z, T angle_in_radians) {
     mat = rotate(x, y, z, angle_in_radians) * mat;
@@ -88,6 +103,11 @@ template<typename T>
 constexpr void
 add_rotation(Matrix4x4<T>& mat, Vec3<T> const& input, T angle_in_radians) {
     mat = rotate(input.x, input.y, input.z, angle_in_radians) * mat;
+}
+
+template<typename T>
+constexpr void add_rotation(Matrix4x4<T>& mat, Vec3<T> const& euler_angles) {
+    mat = rotate(euler_angles) * mat;
 }
 
 template<typename T>
@@ -142,8 +162,8 @@ template<typename T>
 constexpr Matrix4x4<T>
 perspective(T fov_in_radians, T aspect_ratio, T near_z, T far_z) {
     ENSURE_FLOATING_POINT(T);
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wconversion"
+#    pragma clang diagnostic push
+#    pragma clang diagnostic ignored "-Wconversion"
     Matrix4x4<T> result;
     T inv_tan = 1.0 / std::tan(fov_in_radians / 2);
     result(0, 0) = inv_tan / aspect_ratio;
@@ -151,11 +171,26 @@ perspective(T fov_in_radians, T aspect_ratio, T near_z, T far_z) {
     result(2, 2) = -(far_z + near_z) / (far_z - near_z);
     result(3, 2) = (-2 * far_z * near_z) / (far_z - near_z);
     result(2, 3) = -1;
-#pragma clang diagnostic pop
+#    pragma clang diagnostic pop
     return result;
 }
 
-#undef ENSURE_FLOATING_POINT
+#    undef ENSURE_FLOATING_POINT
+
+#endif // ifndef ENGINE_USE_GLM_MATH
+
+#ifdef ENGINE_USE_GLM_MATH
+
+glm::mat4 add_rotation(Matrix4x4<T>& mat, Vec3<T> const& euler_angles) {
+	return 
+}
+
+glm::mat4 perspective(T fov_in_radians, T aspect_ratio, T near_z, T far_z) {
+    return glm::infinitePerspective(fov_in_radians, aspect_ratio, near_z,
+                                    far_z);
+}
+
+#endif
 
 } // namespace Transform
 

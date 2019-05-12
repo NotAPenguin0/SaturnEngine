@@ -4,7 +4,9 @@
 #include "ConstexprMath.hpp"
 #include "Vector.hpp"
 
-namespace Saturn::Math {
+namespace Saturn {
+
+namespace Math {
 
 // Generated arithmetic operations based on definitions for operator+, -, *, /
 
@@ -108,6 +110,7 @@ constexpr Vec<T, N> normalize(Vec<T, N> vec) {
     return vec / mag;
 }
 
-} // namespace Saturn::Math
+} // namespace Math
+} // namespace Saturn
 
 #endif

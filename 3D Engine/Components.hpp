@@ -4,7 +4,9 @@
 #define MVG_COMPONENTS_HPP_
 
 #include "Camera.hpp"
+#include "CameraZoomController.hpp"
 #include "FPSCameraController.hpp"
+#include "FreeLookController.hpp"
 #include "Transform.hpp"
 
 #endif

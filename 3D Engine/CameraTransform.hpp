@@ -5,8 +5,8 @@
 #include "VecMath.hpp"
 #include "Vector.hpp"
 
-namespace Saturn::Math {
-
+namespace Saturn {
+namespace Math {
 namespace Transform {
 
 template<typename T>
@@ -37,7 +37,7 @@ Matrix4x4<T> look_at(Vec3<T> const& position,
 }
 
 } // namespace Transform
-
-} // namespace Saturn::Math
+} // namespace Math
+} // namespace Saturn
 
 #endif

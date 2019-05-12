@@ -10,6 +10,7 @@ Scene::Scene() : ecs(this) {}
 Scene::~Scene() {}
 
 void Scene::update_systems() { ecs.update_systems(); }
+void Scene::on_start() { ecs.on_start(); }
 
 SceneGraph Scene::build_scene_graph() {
     // Temporary

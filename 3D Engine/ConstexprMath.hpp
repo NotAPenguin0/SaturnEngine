@@ -4,8 +4,8 @@
 #include <cassert>
 #include <cstddef>
 
-namespace Saturn::Math {
-
+namespace Saturn {
+namespace Math {
 template<typename T>
 constexpr T abs(T val) {
     if (val < 0) return -val;
@@ -32,6 +32,7 @@ constexpr T sqrt(T value) {
     return guess;
 }
 
-} // namespace Saturn::Math
+} // namespace Math
+} // namespace Saturn
 
 #endif

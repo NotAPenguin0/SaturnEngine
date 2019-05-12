@@ -3,11 +3,13 @@
 
 #include <cstddef>
 
-namespace Saturn::Math {
+namespace Saturn {
+namespace Math {
 
 template<typename T, std::size_t N>
 class Vec;
-
 }
+
+} // namespace Saturn
 
 #endif

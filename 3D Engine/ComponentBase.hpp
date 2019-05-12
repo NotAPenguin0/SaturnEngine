@@ -7,22 +7,18 @@ namespace Saturn {
 class SceneObject;
 }
 
-namespace Saturn::Components {
+namespace Saturn {
+
+namespace Components {
 
 // Base struct for components. Does nothing more than storing a pointer to the
-// owning entity
+// owning entity and an id referring to itself
 struct ComponentBase {
-
-	ComponentBase() = default;
-	ComponentBase(ComponentBase const&) = default;
-	ComponentBase(ComponentBase&&) = default;
-	
-	ComponentBase& operator=(ComponentBase const&) = default;
-	ComponentBase& operator=(ComponentBase&&) = default;
-
     SceneObject* entity;
     std::size_t id;
 };
 
-} // namespace Saturn::Components
+} // namespace Components
+
+} // namespace Saturn
 #endif

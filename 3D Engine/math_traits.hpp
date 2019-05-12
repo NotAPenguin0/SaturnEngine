@@ -1,7 +1,8 @@
 #ifndef MVG_PI_HPP_
 #define MVG_PI_HPP_
 
-namespace Saturn::Math {
+namespace Saturn {
+namespace Math {
 
 template<typename T>
 struct math_traits;
@@ -16,6 +17,8 @@ struct math_traits<double> {
     static constexpr double pi = 3.14159265358979323846;
 };
 
-} // namespace Saturn::Math
+} // namespace Math
+
+} // namespace Saturn
 
 #endif

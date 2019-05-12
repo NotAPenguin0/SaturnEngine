@@ -5,6 +5,8 @@
 
 #define COMPONENT_LIST                                                         \
     ::Saturn::Components::Transform, ::Saturn::Components::Camera,             \
-        ::Saturn::Components::FPSCameraController
+        ::Saturn::Components::FPSCameraController,                             \
+        ::Saturn::Components::FreeLookController,                              \
+        ::Saturn::Components::CameraZoomController
 
 #endif

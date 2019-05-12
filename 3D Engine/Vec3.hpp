@@ -6,7 +6,8 @@
 #include <cassert>
 #include <type_traits>
 
-namespace Saturn::Math {
+namespace Saturn {
+namespace Math {
 
 template<typename T>
 class Vec<T, 3> {
@@ -59,9 +60,18 @@ public:
     constexpr T const* ptr() const { return &x; }
 };
 
+#ifndef ENGINE_USE_GLM_MATH
+
 template<typename T>
 using Vec3 = Vec<T, 3>;
 
+#else
+#    include <glm/glm.hpp>
+
+template<typename T>
+using Vec3 = glm::vec3;
+
+#endif
 template<typename T>
 static const Vec3<T> UpVec3 = Vec3<T>(0.0, 1.0, 0.0);
 
@@ -99,6 +109,6 @@ constexpr bool operator==(Vec3<T> const& lhs, Vec3<T> const& rhs) {
     return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
 }
 
-} // namespace Saturn::Math
-
+} // namespace Math
+} // namespace Saturn
 #endif

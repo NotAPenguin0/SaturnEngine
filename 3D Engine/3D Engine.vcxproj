@@ -173,11 +173,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="CameraZoomControllerSystem.cpp" />
     <ClCompile Include="component_container.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="ErrorHandler.cpp" />
     <ClCompile Include="FPSCameraControllerSystem.cpp" />
     <ClCompile Include="Framebuffer.cpp" />
+    <ClCompile Include="FreeLookControllerSystem.cpp" />
     <ClCompile Include="glad\src\glad.c">
       <SupportJustMyCode Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</SupportJustMyCode>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Level4</WarningLevel>
@@ -204,6 +206,7 @@
     <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SystemBase.cpp" />
+    <ClCompile Include="Time.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="VertexArray.cpp" />
     <ClCompile Include="Viewport.cpp" />
@@ -213,7 +216,8 @@
     <ClInclude Include="bind_guard.hpp" />
     <ClInclude Include="bind_tracker.hpp" />
     <ClInclude Include="Camera.hpp" />
-    <ClInclude Include="CameraTransform.hpp" />
+    <ClInclude Include="CameraZoomController.hpp" />
+    <ClInclude Include="CameraZoomControllerSystem.hpp" />
     <ClInclude Include="ComponentBase.hpp" />
     <ClInclude Include="ComponentList.hpp" />
     <ClInclude Include="Components.hpp" />
@@ -228,11 +232,12 @@
     <ClInclude Include="FPSCameraController.hpp" />
     <ClInclude Include="FPSCameraControllerSystem.hpp" />
     <ClInclude Include="Framebuffer.hpp" />
+    <ClInclude Include="FreeLookController.hpp" />
+    <ClInclude Include="FreeLookControllerSystem.hpp" />
     <ClInclude Include="IDGenerator.hpp" />
     <ClInclude Include="Input.hpp" />
     <ClInclude Include="LogSystem.hpp" />
     <ClInclude Include="Math.hpp" />
-    <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="OpenGL.hpp" />
     <ClInclude Include="math_traits.hpp" />
     <ClInclude Include="RandomEngine.hpp" />
@@ -242,20 +247,12 @@
     <ClInclude Include="SceneGraph.hpp" />
     <ClInclude Include="SceneObject.hpp" />
     <ClInclude Include="Shader.hpp" />
-    <ClInclude Include="LinearTransform.hpp" />
     <ClInclude Include="SystemBase.hpp" />
     <ClInclude Include="Systems.hpp" />
+    <ClInclude Include="Time.hpp" />
     <ClInclude Include="Transform.hpp" />
-    <ClInclude Include="Trig.hpp" />
     <ClInclude Include="type_erased.hpp" />
     <ClInclude Include="Utility.hpp" />
-    <ClInclude Include="Vec1.hpp" />
-    <ClInclude Include="Vec2.hpp" />
-    <ClInclude Include="Vec3.hpp" />
-    <ClInclude Include="Vec4.hpp" />
-    <ClInclude Include="VecBase.hpp" />
-    <ClInclude Include="VecMath.hpp" />
-    <ClInclude Include="Vector.hpp" />
     <ClInclude Include="VertexArray.hpp" />
     <ClInclude Include="Viewport.hpp" />
   </ItemGroup>

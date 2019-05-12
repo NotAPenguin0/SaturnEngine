@@ -2,12 +2,11 @@
 
 #include "Input.hpp"
 #include "LogSystem.hpp"
+#include "Math.hpp"
 #include "Scene.hpp"
 #include "SceneObject.hpp"
 #include "Systems.hpp"
-#include "Trig.hpp"
-#include "VecMath.hpp"
-#include "Vector.hpp"
+#include "Time.hpp"
 #include "Viewport.hpp"
 
 namespace Saturn {
@@ -68,65 +67,23 @@ void Application::run() {
 
     // Add systems
     scene.ecs.register_system<Systems::FPSCameraControllerSystem>();
+    scene.ecs.register_system<Systems::CameraZoomControllerSystem>();
+    scene.ecs.register_system<Systems::FreeLookControllerSystem>();
 
     auto& obj = scene.create_object();
     auto transform_id = obj.add_component<Components::Transform>();
     {
         auto& transform =
             scene.ecs.get_with_id<Components::Transform>(transform_id);
-        transform.position = Math::Vec3<float>(0.0f, 0.0f, -10.0f);
-        transform.rotation.axis = Math::Vec3<float>(1.0f, 0.0f, 0.0f);
-        transform.rotation.angle_in_radians = Math::radians(0.0f);
-        transform.scale = Math::Vec3<float>(1.0f, 1.0f, 1.0f);
+        transform.position = glm::vec3(5.0f, 0.0f, 0.0f);
+        transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
     }
 
-    // Double viewport
-    /*
-    auto& left_camera = scene.create_object();
-    auto lcam_transform_id = left_camera.add_component<Components::Transform>();
-    auto lcam_id = left_camera.add_component<Components::Camera>();
-    {
-        auto& lcam_transform =
-            scene.ecs.get_with_id<Components::Transform>(lcam_transform_id);
-        auto& lcam = scene.ecs.get_with_id<Components::Camera>(lcam_id);
-        lcam_transform.position.x = 0.0f;
-        lcam_transform.position.y = 0.0f;
-        lcam_transform.position.z = 0.0f;
-        lcam.target = {0.0f, 0.0f, -10.0f};
-
-        lcam_transform.scale = {
-            0.0f, 0.0f, 0.0f}; // Temporary disable the model in
-                               // SceneObject, by scaling it with a factor 0
-    }
-
-    auto& right_camera = scene.create_object();
-    auto rcam_transform_id =
-    right_camera.add_component<Components::Transform>(); auto rcam_id =
-    right_camera.add_component<Components::Camera>();
-    {
-        auto& rcam_transform =
-            scene.ecs.get_with_id<Components::Transform>(rcam_transform_id);
-        auto& rcam = scene.ecs.get_with_id<Components::Camera>(rcam_id);
-        rcam_transform.position.x = 0.0f;
-        rcam_transform.position.y = 0.0f;
-        rcam_transform.position.z = 0.0f;
-        rcam.target = {0.0f, 0.0f, -10.0f};
-
-        rcam_transform.scale = {0.0f, 0.0f, 0.0f};
-    }
-
-    auto left_vp = renderer->add_viewport(Viewport(0, 0, window_dimensions.x /
-    2, window_dimensions.y));
-    renderer->get_viewport(left_vp).set_camera(lcam_id);
-
-    auto right_vp = renderer->add_viewport(Viewport(window_dimensions.x / 2, 0,
-                                                    window_dimensions.x / 2,
-                                                    window_dimensions.y));
-    renderer->get_viewport(right_vp).move(0, 0);
-    renderer->get_viewport(right_vp).resize(window_dimensions.x,
-                                            window_dimensions.y);
-    renderer->get_viewport(right_vp).set_camera(rcam_id);
-    */
+    Input::bind(GLFW_KEY_ENTER, [transform_id, &scene]() {
+        auto& transform =
+            scene.get_ecs().get_with_id<Components::Transform>(transform_id);
+        transform.position.x += 2.0f * Time::deltaTime;
+    });
 
     auto& main_cam = scene.create_object();
     {
@@ -136,28 +93,41 @@ void Application::run() {
             main_cam.add_component<Components::Camera>());
         auto& fps = scene.ecs.get_with_id<Components::FPSCameraController>(
             main_cam.add_component<Components::FPSCameraController>());
-        transform.position = {0.0f, 3.0f, 0.0f};
+        auto& freelook = scene.ecs.get_with_id<Components::FreeLookController>(
+            main_cam.add_component<Components::FreeLookController>());
+        auto& zoom = scene.ecs.get_with_id<Components::CameraZoomController>(
+            main_cam.add_component<Components::CameraZoomController>());
+
+        transform.position = {0.0f, 0.0f, 0.0f};
         transform.scale = {0.0f, 0.0f, 0.0f};
 
-        camera.front = {0.0f, 0.0f, -1.0f};
+        camera.front = {1.0f, 0.0f, 0.0f};
         camera.up = {0.0f, 1.0f, 0.0f};
+        camera.fov = 45.0f;
 
-		fps.speed = 0.03f;
+        fps.speed = 2.5f;
+        freelook.mouse_sensitivity = 15.0f;
+        zoom.zoom_speed = 100.0f;
 
         renderer->get_viewport(0).set_camera(camera.id);
     }
 
+    scene.on_start();
     while (!glfwWindowShouldClose(window_handle)) {
+        Time::update();
         Input::update();
 
         renderer->clear(Color{0.24f, 0.0f, 0.0f, 1.0f});
 
-		scene.update_systems();
+        scene.update_systems();
         auto graph = scene.build_scene_graph();
         renderer->render_scene_graph(graph);
 
         // Copy framebuffer to screen
         renderer->update_screen();
+
+        Input::tick_end();
+
         glfwSwapBuffers(window_handle);
         glfwPollEvents();
     }
@@ -179,5 +149,7 @@ void Application::resize_callback([[maybe_unused]] GLFWwindow* window,
 }
 
 GLFWwindow* Application::window() { return window_handle; }
+
+WindowDim Application::size() const { return window_dimensions; }
 
 } // namespace Saturn

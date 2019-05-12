@@ -10,6 +10,8 @@
 
 #include "bind_guard.hpp"
 
+#include <GLM\gtc\type_ptr.hpp>
+
 namespace Saturn {
 
 static unsigned int create_shader(const char* vtx_path, const char* frag_path) {
@@ -135,20 +137,20 @@ void Shader::set_float(std::string_view name, float value) {
     glUniform1f(location(name), value);
 }
 
-void Shader::set_vec3(std::string_view name, Math::Vec3<float> const& value) {
+void Shader::set_vec3(std::string_view name, glm::vec3 const& value) {
     bind_guard<Shader> guard(*this);
-    glUniform3fv(location(name), 1, value.ptr());
+    glUniform3fv(location(name), 1, glm::value_ptr(value));
 }
 
-void Shader::set_vec4(std::string_view name, Math::Vec4<float> const& value) {
+void Shader::set_vec4(std::string_view name, glm::vec4 const& value) {
     bind_guard<Shader> guard(*this);
-    glUniform4fv(location(name), 1, value.ptr());
+    glUniform4fv(location(name), 1, glm::value_ptr(value));
 }
 
 void Shader::set_mat4(std::string_view name,
-                      Math::Matrix4x4<float> const& value) {
+                      glm::mat4 const& value) {
     bind_guard<Shader> guard(*this);
-    glUniformMatrix4fv(location(name), 1, GL_FALSE, value.ptr());
+    glUniformMatrix4fv(location(name), 1, GL_FALSE, glm::value_ptr(value));
 }
 
 int Shader::location(std::string_view name) {

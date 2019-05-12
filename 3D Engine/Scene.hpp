@@ -26,6 +26,7 @@ public:
     Scene();
     ~Scene();
 
+	void on_start();
 	void update_systems();
     SceneGraph build_scene_graph();
 

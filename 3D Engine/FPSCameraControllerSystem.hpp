@@ -3,14 +3,19 @@
 
 #include "SystemBase.hpp"
 
+namespace Saturn {
 
-namespace Saturn::Systems {
+namespace Systems {
 
 class FPSCameraControllerSystem : public SystemBase {
 public:
+    void on_start(Scene&) override;
     void on_update(Scene& scene) override;
+
 };
 
-} // namespace Saturn::Systems
+} // namespace Systems
+
+} // namespace Saturn
 
 #endif

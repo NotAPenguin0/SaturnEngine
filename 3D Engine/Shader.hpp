@@ -4,8 +4,7 @@
 #include <string_view>
 #include <unordered_map>
 
-#include "Matrix.hpp"
-#include "Vector.hpp"
+#include "Math.hpp"
 
 namespace Saturn {
 
@@ -31,9 +30,9 @@ public:
     void set_int(std::string_view name, int value);
     void set_float(std::string_view name, float value);
 
-    void set_vec3(std::string_view name, Math::Vec3<float> const& value);
-    void set_vec4(std::string_view name, Math::Vec4<float> const& value);
-    void set_mat4(std::string_view name, Math::Matrix4x4<float> const& value);
+    void set_vec3(std::string_view name, glm::vec3 const& value);
+    void set_vec4(std::string_view name, glm::vec4 const& value);
+    void set_mat4(std::string_view name, glm::mat4 const& value);
 
     // #TODO: Uniform location caching
     int location(std::string_view name);

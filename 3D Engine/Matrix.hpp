@@ -6,8 +6,8 @@
 #include <type_traits>
 #include <utility>
 
-namespace Saturn::Math {
-
+namespace Saturn {
+namespace Math {
 template<typename T, std::size_t R, std::size_t C>
 class Matrix;
 
@@ -21,7 +21,7 @@ public:
         std::is_floating_point<T>::value,
         "Saturn::Math: Matrix value type must be floating point type");
 
-    constexpr Matrix() : data_() {}
+    constexpr Matrix() : data_{} {}
     constexpr Matrix(std::array<std::array<T, Height>, Width> const& data) :
         data_(data) {}
     constexpr Matrix(Matrix const& rhs) : data_(rhs.data_) {}
@@ -112,7 +112,7 @@ public:
         std::is_floating_point<T>::value,
         "Saturn::Math: Matrix value type must be floating point type");
 
-    constexpr Matrix() : data_() {}
+    constexpr Matrix() : data_{} {}
     constexpr Matrix(std::array<std::array<T, Height>, Width> const& data) :
         data_(data) {}
     constexpr Matrix(Matrix const& rhs) : data_(rhs.data_) {}
@@ -209,11 +209,23 @@ private:
 
 }; // namespace Saturn::Math
 
+#ifndef ENGINE_USE_GLM_MATH
+
 template<typename T>
 using Matrix3x3 = Matrix<T, 3, 3>;
 
 template<typename T>
 using Matrix4x4 = Matrix<T, 4, 4>;
+
+#else
+#    include <GLM/glm.hpp>
+
+template<typename T>
+using Matrix3x3 = glm::mat3;
+
+template<typename T>
+using Matrix4x4 = glm::mat4;
+#endif
 
 template<typename T,
          std::size_t W1,
@@ -228,15 +240,15 @@ constexpr Matrix<T, W1, H2> operator*(Matrix<T, W1, H1> const& lhs,
     for (size_t x = 0; x < W2; x++) {
         for (size_t y = 0; y < H1; y++) {
             T dot{};
-            for (size_t i = 0; i < H1; i++)
-                dot += lhs(i, y) * rhs(x, i);
+            for (size_t i = 0; i < H1; i++) dot += lhs(i, y) * rhs(x, i);
             result(x, y) = dot;
         }
     }
     return result;
 }
 
+} // namespace Math
 
-} // namespace Saturn::Math
+} // namespace Saturn
 
 #endif

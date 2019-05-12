@@ -90,6 +90,8 @@ public:
      */
     void resize_callback([[maybe_unused]] GLFWwindow* window, int w, int h);
 
+    WindowDim size() const;
+
 private:
     GLFWwindow* window_handle;   ///< Handle to the GLFW window
     WindowDim window_dimensions; ///< Size of the window

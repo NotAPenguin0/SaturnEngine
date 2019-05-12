@@ -26,6 +26,10 @@ public:
     ECS& operator=(ECS const&) = delete;
     ECS& operator=(ECS&&) = delete;
 
+    void on_start() {
+        for (auto& system : systems) { system->on_start(*scene); }
+    }
+
     template<typename S>
     void register_system() {
         systems.push_back(std::make_unique<S>());

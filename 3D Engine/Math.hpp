@@ -5,14 +5,19 @@
 
 #include "ConstexprMath.hpp"
 #include "RandomEngine.hpp"
-#include "VecMath.hpp"
-#include "Vector.hpp"
 
-#include "Matrix.hpp"
+#include <GLM\glm.hpp>
+#include <GLM\gtc\matrix_transform.hpp>
 
-#include "CameraTransform.hpp"
-#include "LinearTransform.hpp"
+namespace glm {
 
-#include "Trig.hpp"
+inline mat4 rotate(mat4 const& mat, vec3 euler) {
+	mat4 result;
+    result = rotate(mat, euler.z, vec3{0, 0, 1});
+    result = rotate(result, euler.y, vec3{0, 1, 0});
+    result = rotate(result, euler.x, vec3{1, 0, 0});
+    return result;
+}
 
+} // namespace glm
 #endif
