@@ -79,12 +79,6 @@ void Application::run() {
         transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
     }
 
-    Input::bind(GLFW_KEY_ENTER, [transform_id, &scene]() {
-        auto& transform =
-            scene.get_ecs().get_with_id<Components::Transform>(transform_id);
-        transform.position.x += 2.0f * Time::deltaTime;
-    });
-
     auto& main_cam = scene.create_object();
     {
         auto& transform = scene.ecs.get_with_id<Components::Transform>(

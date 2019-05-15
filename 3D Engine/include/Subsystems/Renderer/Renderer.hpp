@@ -2,8 +2,8 @@
 #define MVG_RENDERER_HPP_
 
 #include "Framebuffer.hpp"
+#include "Subsystems\AssetManager\AssetManager.hpp"
 #include "Subsystems\Scene\SceneGraph.hpp"
-#include "Shader.hpp"
 #include "Utility\Utility.hpp"
 #include "VertexArray.hpp"
 #include "Viewport.hpp"
@@ -34,7 +34,7 @@ public:
     void clear(Color clear_color,
                GLenum flags = GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-    void render_scene_graph(SceneGraph const& scene);
+    void render_scene_graph(SceneGraph& scene);
 
     void update_screen();
 
@@ -57,7 +57,7 @@ private:
 
     VertexArray screen;
 
-    Shader default_shader;
+    Resource<Shader> default_shader;
     std::vector<Viewport> viewports;
 };
 

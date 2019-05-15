@@ -1,6 +1,8 @@
 #include "Subsystems\Scene\SceneObject.hpp"
 #include "Subsystems\Scene\Scene.hpp"
 
+#include "Subsystems\AssetManager\AssetManager.hpp"
+
 #include <vector>
 
 namespace Saturn {
@@ -28,9 +30,9 @@ static std::vector<unsigned int> cube_indices = {};
 
 SceneObject::SceneObject(Scene* s) : scene(s) {
     // Debug:
-    Shader::CreateInfo debug_create_info{"resources/shaders/default_v.glsl",
-                                         "resources/shaders/default_f.glsl"};
-    debug.shader.assign(debug_create_info);
+
+    debug.shader =
+        AssetManager<Shader>::get_resource("resources/shaders/default.sh");
     std::vector<VertexAttribute> attributes;
     attributes.push_back({0, 3}); // Position
     debug.cube.assign({attributes, cube_vertices, cube_indices});

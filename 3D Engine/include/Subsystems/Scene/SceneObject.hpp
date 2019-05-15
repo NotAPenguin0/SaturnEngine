@@ -1,9 +1,10 @@
 #ifndef MVG_SCENE_OBJECT_HPP_
 #define MVG_SCENE_OBJECT_HPP_
 
-#include "Utility\IDGenerator.hpp"
+#include "Subsystems\AssetManager\Resource.hpp"
 #include "Subsystems\Renderer\Shader.hpp"
 #include "Subsystems\Renderer\VertexArray.hpp" // Temporary
+#include "Utility\IDGenerator.hpp"
 
 #include <typeindex>
 #include <typeinfo>
@@ -20,7 +21,7 @@ public:
 
     struct Debug {
         VertexArray cube;
-        Shader shader;
+        Resource<Shader> shader;
     } debug;
 
     template<typename C, typename... Args>

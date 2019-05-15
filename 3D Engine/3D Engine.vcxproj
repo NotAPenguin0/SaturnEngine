@@ -177,6 +177,7 @@
     <ClCompile Include="src\Core\Application.cpp" />
     <ClCompile Include="src\Core\Engine.cpp" />
     <ClCompile Include="src\Core\ErrorHandler.cpp" />
+    <ClCompile Include="src\Subsystems\AssetManager\ResourceLoaders.cpp" />
     <ClCompile Include="src\Subsystems\ECS\component_container.cpp" />
     <ClCompile Include="src\Subsystems\ECS\Systems\CameraZoomControllerSystem.cpp" />
     <ClCompile Include="src\Subsystems\ECS\Systems\FPSCameraControllerSystem.cpp" />
@@ -200,6 +201,9 @@
     <ClInclude Include="include\Core\Application.hpp" />
     <ClInclude Include="include\Core\Engine.hpp" />
     <ClInclude Include="include\Core\ErrorHandler.hpp" />
+    <ClInclude Include="include\Subsystems\AssetManager\AssetManager.hpp" />
+    <ClInclude Include="include\Subsystems\AssetManager\Resource.hpp" />
+    <ClInclude Include="include\Subsystems\AssetManager\ResourceLoaders.hpp" />
     <ClInclude Include="include\Subsystems\ECS\ComponentList.hpp" />
     <ClInclude Include="include\Subsystems\ECS\Components.hpp" />
     <ClInclude Include="include\Subsystems\ECS\Components\Camera.hpp" />
@@ -225,6 +229,7 @@
     <ClInclude Include="include\Subsystems\Math\math_traits.hpp" />
     <ClInclude Include="include\Subsystems\Math\RandomEngine.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\Framebuffer.hpp" />
+    <ClInclude Include="include\Subsystems\Renderer\Mesh.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\OpenGL.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\Renderer.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\Shader.hpp" />

@@ -85,6 +85,12 @@
     <Filter Include="Header Files\Subsystems\ECS\Systems">
       <UniqueIdentifier>{499e7743-8476-4da4-adc5-100cf9b69e20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Subsystems\AssetManager">
+      <UniqueIdentifier>{7f02a9a8-b2e1-4a16-8410-baed16fc74f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Subsystems\AssetManager">
+      <UniqueIdentifier>{404a3b8b-f316-48cf-bad1-e534ab1e86ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -155,6 +161,9 @@
     </ClCompile>
     <ClCompile Include="src\Subsystems\Renderer\Viewport.cpp">
       <Filter>Source Files\Subsystems\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Subsystems\AssetManager\ResourceLoaders.cpp">
+      <Filter>Source Files\Subsystems\AssetManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -285,6 +294,18 @@
       <Filter>Header Files\Subsystems\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="include\Subsystems\Renderer\Viewport.hpp">
+      <Filter>Header Files\Subsystems\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\AssetManager\AssetManager.hpp">
+      <Filter>Header Files\Subsystems\AssetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\AssetManager\Resource.hpp">
+      <Filter>Header Files\Subsystems\AssetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\AssetManager\ResourceLoaders.hpp">
+      <Filter>Header Files\Subsystems\AssetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Renderer\Mesh.hpp">
       <Filter>Header Files\Subsystems\Renderer</Filter>
     </ClInclude>
   </ItemGroup>

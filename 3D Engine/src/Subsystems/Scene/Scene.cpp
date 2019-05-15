@@ -20,7 +20,7 @@ SceneGraph Scene::build_scene_graph() {
         auto& entity = t.entity;
         graph.transforms.push_back(&t);
         graph.vtx_arrays.push_back(&entity->debug.cube);
-        graph.shader = &entity->debug.shader;
+        graph.shader = entity->debug.shader;
     }
 
     return graph;

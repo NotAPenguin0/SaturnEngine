@@ -1,7 +1,8 @@
 #ifndef MVG_SCENE_GRAPH_HPP_
 #define MVG_SCENE_GRAPH_HPP_
 
-#include "Subsystems\Renderer\Shader.hpp"
+#include "Subsystems\AssetManager\Resource.hpp"
+#include "SubSystems\Renderer\Shader.hpp"
 #include "Subsystems\Renderer\VertexArray.hpp"
 
 #include "Subsystems\ECS\Components.hpp"
@@ -16,7 +17,7 @@ struct SceneGraph {
     // temporary
     std::vector<VertexArray*> vtx_arrays;
     std::vector<Components::Transform*> transforms; // temp
-    Shader* shader;
+    Resource<Shader> shader;
     Scene* scene;
 };
 

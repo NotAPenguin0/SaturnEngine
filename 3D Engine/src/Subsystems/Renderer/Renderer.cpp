@@ -1,11 +1,11 @@
 #include "Subsystems\Renderer\Renderer.hpp"
 
 #include "Core\Application.hpp"
+#include "Subsystems\Logging\LogSystem.hpp"
 #include "Subsystems\Math\Math.hpp"
 #include "Subsystems\Scene\Scene.hpp"
 #include "Utility\Exceptions.hpp"
 #include "Utility\bind_guard.hpp"
-#include "Subsystems\Logging\LogSystem.hpp"
 
 namespace Saturn {
 
@@ -36,13 +36,13 @@ Renderer::Renderer(CreateInfo create_info) :
 
     screen.assign({screen_attributes, screen_vertices, {0, 1, 2, 0, 3, 2}});
 
-    // Setup shaders
-    Shader::CreateInfo default_shader_create_info;
-    default_shader_create_info.vtx_path =
-        "resources/shaders/postprocessing/default_v.glsl";
-    default_shader_create_info.frag_path =
-        "resources/shaders/postprocessing/default_f.glsl";
-    default_shader.assign(default_shader_create_info);
+    default_shader =
+        AssetManager<Shader>::get_resource("resources/shaders/postprocessing/default.sh");
+    if (!default_shader.is_loaded()) {
+        LogSystem::write(LogSystem::Severity::Error,
+                         "Failed to load default shader");
+    }
+
     LogSystem::write(LogSystem::Severity::Info, "Renderer created.");
     LogSystem::write(LogSystem::Severity::Warning,
                      "No postprocessing shader system in place. Default shader "
@@ -61,7 +61,7 @@ void Renderer::clear(
     glClear(flags);
 }
 
-void Renderer::render_scene_graph(SceneGraph const& scene) {
+void Renderer::render_scene_graph(SceneGraph& scene) {
     // Temporary
 
     bind_guard<Framebuffer> framebuf_guard(framebuf);
@@ -72,7 +72,7 @@ void Renderer::render_scene_graph(SceneGraph const& scene) {
         if (!vp.has_camera()) continue;
         Viewport::set_active(vp);
         for (std::size_t i = 0; i < scene.vtx_arrays.size(); ++i) {
-            auto& shader = *scene.shader;
+            auto& shader = scene.shader.get();
             auto& vtx_array = *scene.vtx_arrays[i];
             auto& transform = *scene.transforms[i];
 
@@ -127,7 +127,7 @@ void Renderer::update_screen() {
     glDisable(GL_CULL_FACE);
 
     // Set (postprocessing) shader
-    bind_guard<Shader> shader_guard(default_shader);
+    bind_guard<Shader> shader_guard(default_shader.get());
 
     // Render framebuffer texture to the screen
     glBindTexture(GL_TEXTURE_2D, framebuf.texture);
