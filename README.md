@@ -16,10 +16,10 @@ Currently, I am working on this project alone.
 
 # Planned 
 
-- Better shader system
 - Input system overhaul
 - Terrain Engine
 - Physics Engine
 - Particle system
 - Editor
+- Sound Engine
 - ... and much more
