@@ -3,7 +3,7 @@
 
 #include "Framebuffer.hpp"
 #include "Subsystems/AssetManager/AssetManager.hpp"
-#include "Subsystems/Scene/SceneGraph.hpp"
+#include "Subsystems/Scene/Scene.hpp"
 #include "Utility/Utility.hpp"
 #include "VertexArray.hpp"
 #include "Viewport.hpp"
@@ -34,7 +34,7 @@ public:
     void clear(Color clear_color,
                GLenum flags = GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-    void render_scene_graph(SceneGraph& scene);
+    void render_scene(Scene& scene);
 
     void update_screen();
 

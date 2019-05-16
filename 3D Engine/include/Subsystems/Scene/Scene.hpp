@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "Subsystems/ECS/Components.hpp"
-#include "Subsystems/Scene/SceneGraph.hpp"
 
 #include "Subsystems/ECS/ECS.hpp"
 #include "Subsystems/ECS/ComponentList.hpp"
@@ -28,7 +27,6 @@ public:
 
 	void on_start();
 	void update_systems();
-    SceneGraph build_scene_graph();
 
     SceneObject& create_object(SceneObject* parent = nullptr);
 

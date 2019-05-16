@@ -6,6 +6,7 @@
 
 #include "Subsystems/Renderer/Mesh.hpp"
 #include "Subsystems/Renderer/Shader.hpp"
+#include "Subsystems/Renderer/Texture.hpp"
 
 namespace Saturn {
 
@@ -26,7 +27,13 @@ public:
 template<>
 class ResourceLoader<Mesh> {
 public:
-	static std::unique_ptr<Mesh> load(std::string const& path);
+    static std::unique_ptr<Mesh> load(std::string const& path);
+};
+
+template<>
+class ResourceLoader<Texture> {
+public:
+    static std::unique_ptr<Texture> load(std::string const& path);
 };
 
 } // namespace Saturn

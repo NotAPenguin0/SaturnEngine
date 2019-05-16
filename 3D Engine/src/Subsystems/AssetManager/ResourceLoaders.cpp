@@ -48,7 +48,7 @@ std::unique_ptr<Mesh> ResourceLoader<Mesh>::load(std::string const& path) {
      *[List of comma separated indices, N indices]
      **/
 
-	// PUT A COMMA AT THE END OF THE LIST AS WELL OR PARSING FAILS
+    // PUT A COMMA AT THE END OF THE LIST AS WELL OR PARSING FAILS
 
     Mesh::CreateInfo info;
 
@@ -103,6 +103,137 @@ std::unique_ptr<Mesh> ResourceLoader<Mesh>::load(std::string const& path) {
     info.vertices.dynamic = false;
 
     return std::make_unique<Mesh>(info);
+}
+
+static GLenum format_from_string(std::string const& str) {
+    if (str == "RGB") return GL_RGB;
+    if (str == "RGBA") return GL_RGBA;
+
+    throw std::runtime_error("Invalid texture format!");
+}
+
+static TextureTarget target_from_string(std::string const& str) {
+    if (str == "Texture1D") return TextureTarget::Texture1D;
+    if (str == "Texture1DArray") return TextureTarget::Texture1DArray;
+    if (str == "Texture2D;") return TextureTarget::Texture2D;
+    if (str == "Texture2DArray;") return TextureTarget::Texture2DArray;
+    if (str == "Texture2DMultiSample;")
+        return TextureTarget::Texture2DMultiSample;
+    if (str == "Texture2DMultiSampleArray;")
+        return TextureTarget::Texture2DMultiSampleArray;
+    if (str == "Texture3D;") return TextureTarget::Texture3D;
+    if (str == "CubeMap;") return TextureTarget::CubeMap;
+    if (str == "CubeMapArray;") return TextureTarget::CubeMapArray;
+    if (str == "TextureRectangle;") return TextureTarget::TextureRectangle;
+
+    throw std::runtime_error("Invalid texture target!");
+}
+
+static TextureParameter param_from_string(std::string const& str) {
+    if (str == "DepthStencilMode") return TextureParameter::DepthStencilMode;
+    if (str == "BaseLevel") return TextureParameter::BaseLevel;
+    if (str == "CompareFunc") return TextureParameter::CompareFunc;
+    if (str == "CompareMode") return TextureParameter::CompareMode;
+    if (str == "LodBias") return TextureParameter::LodBias;
+    if (str == "MinFilter") return TextureParameter::MinFilter;
+    if (str == "MagFilter") return TextureParameter::MagFilter;
+    if (str == "MinLod") return TextureParameter::MinLod;
+    if (str == "MaxLod") return TextureParameter::MaxLod;
+    if (str == "MaxLevel") return TextureParameter::MaxLevel;
+    if (str == "SwizzleR") return TextureParameter::SwizzleR;
+    if (str == "SwizzleG") return TextureParameter::SwizzleG;
+    if (str == "SwizzleB") return TextureParameter::SwizzleB;
+    if (str == "SwizzleA") return TextureParameter::SwizzleA;
+    if (str == "WrapS") TextureParameter::WrapS;
+    if (str == "WrapT") TextureParameter::WrapT;
+    if (str == "WrapR") TextureParameter::WrapR;
+
+    throw std::runtime_error("Invalid texture parameter!");
+}
+
+static TextureParameterValue value_from_string(std::string const& str) {
+    if (str == "DepthComponent") return TextureParameterValue::DepthComponent;
+    if (str == "Nearest") return TextureParameterValue::Nearest;
+    if (str == "Linear") return TextureParameterValue::Linear;
+    if (str == "NearestMipmapNearest")
+        return TextureParameterValue::NearestMipmapNearest;
+    if (str == "LinearMipmapLinear")
+        return TextureParameterValue::LinearMipmapLinear;
+    if (str == "LinearMipmapNearest")
+        return TextureParameterValue::LinearMipmapNearest;
+    if (str == "NearestMipmapLinear")
+        return TextureParameterValue::NearestMipmapLinear;
+    if (str == "ClampToEdge") return TextureParameterValue::ClampToEdge;
+    if (str == "ClampToBorder") return TextureParameterValue::ClampToBorder;
+    if (str == "MirroredRepeat") return TextureParameterValue::MirroredRepeat;
+    if (str == "Repeat") return TextureParameterValue::Repeat;
+
+    throw std::runtime_error("Invalid texture parameter value!");
+}
+
+std::unique_ptr<Texture>
+ResourceLoader<Texture>::load(std::string const& path) {
+    std::ifstream file(path);
+    if (!file.good()) {
+        LogSystem::write(LogSystem::Severity::Error,
+                         "Failed to load texture file at path: " + path);
+        return nullptr;
+    }
+
+    /*
+     *A texture file looks like this:
+     *texture_target
+     *path_to_file
+     *texture_unit
+     *texture_format
+     *flip_y (bool, true/false)
+     *paramter_count
+     *param1 = value
+     *param2 = value
+     *...
+     *paramN = value
+     **/
+
+    // Read texture target
+    std::string str;
+    file >> str;
+    auto target = target_from_string(str);
+    // Read path to image file
+    file >> str;
+    std::string path_to_file = std::move(str);
+    // Read texture unit
+    int unit;
+    file >> unit;
+    GLenum unit = GL_TEXTURE0 + unit;
+    // Read texture format
+    file >> str;
+    auto format = format_from_string(str);
+    // Read flip
+    file >> str;
+    bool flip_y = (str == "true");
+    // Read param count
+    int param_count;
+    file >> param_count;
+    // Read parameters
+    std::vector<Texture::ParameterInfo> params(param_count);
+    for (auto param : params) {
+        file >> str;
+        param.parameter = param_from_string(str);
+        char dummy;
+        file >> dummy; // read '=' sign
+        file >> str;
+        param.value = value_from_string(str);
+    }
+
+    Texture::CreateInfo info;
+    info.flip_y = flip_y;
+    info.format = format;
+    info.image_path = path_to_file;
+    info.parameters = std::move(params);
+    info.texture_unit = unit;
+    info.target = target;
+
+    return std::make_unique<Texture>(info);
 }
 
 } // namespace Saturn

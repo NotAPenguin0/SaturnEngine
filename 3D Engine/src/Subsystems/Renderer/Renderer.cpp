@@ -61,7 +61,6 @@ void Renderer::clear(
     glClear(flags);
 }
 
-
 static Components::Transform
 make_absolute_transform(Components::Transform const& old_transform) {
     auto* object = old_transform.entity;
@@ -81,7 +80,7 @@ make_absolute_transform(Components::Transform const& old_transform) {
     }
 }
 
-void Renderer::render_scene_graph(SceneGraph& scene) {
+void Renderer::render_scene(Scene& scene) {
     // Temporary
 
     bind_guard<Framebuffer> framebuf_guard(framebuf);
@@ -91,17 +90,18 @@ void Renderer::render_scene_graph(SceneGraph& scene) {
     for (auto& vp : viewports) {
         if (!vp.has_camera()) continue;
         Viewport::set_active(vp);
-        for (auto [relative_transform, mesh] :
-             scene.scene->ecs
-                 .select<Components::Transform, Components::StaticMesh>()) {
-            auto& shader = scene.shader.get();
+        for (auto [relative_transform, mesh, material] :
+             scene.ecs
+                 .select<Components::Transform, Components::StaticMesh,
+                         Components::Material>()) {
+            auto& shader = material.shader.get();
             auto& vtx_array = mesh.mesh->get_vertices();
 
-			auto transform = make_absolute_transform(relative_transform);
+            auto transform = make_absolute_transform(relative_transform);
 
             auto cam_id = vp.get_camera();
             auto& cam =
-                scene.scene->ecs.get_with_id<Components::Camera>(cam_id);
+                scene.ecs.get_with_id<Components::Camera>(cam_id);
             auto& cam_trans =
                 cam.entity->get_component<Components::Transform>();
 

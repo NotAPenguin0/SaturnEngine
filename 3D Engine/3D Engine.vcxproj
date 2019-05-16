@@ -191,6 +191,8 @@
     <ClCompile Include="src\Subsystems\Renderer\OpenGL.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Subsystems\Renderer\stbi_image.cpp" />
+    <ClCompile Include="src\Subsystems\Renderer\Texture.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\Viewport.cpp" />
     <ClCompile Include="src\Subsystems\Scene\Scene.cpp" />
@@ -212,6 +214,7 @@
     <ClInclude Include="include\Subsystems\ECS\Components\ComponentBase.hpp" />
     <ClInclude Include="include\Subsystems\ECS\Components\FPSCameraController.hpp" />
     <ClInclude Include="include\Subsystems\ECS\Components\FreeLookController.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\Components\Material.hpp" />
     <ClInclude Include="include\Subsystems\ECS\Components\StaticMesh.hpp" />
     <ClInclude Include="include\Subsystems\ECS\Components\Transform.hpp" />
     <ClInclude Include="include\Subsystems\ECS\component_container.hpp" />
@@ -235,10 +238,11 @@
     <ClInclude Include="include\Subsystems\Renderer\OpenGL.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\Renderer.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\Shader.hpp" />
+    <ClInclude Include="include\Subsystems\Renderer\stb_image.h" />
+    <ClInclude Include="include\Subsystems\Renderer\Texture.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\VertexArray.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\Viewport.hpp" />
     <ClInclude Include="include\Subsystems\Scene\Scene.hpp" />
-    <ClInclude Include="include\Subsystems\Scene\SceneGraph.hpp" />
     <ClInclude Include="include\Subsystems\Scene\SceneObject.hpp" />
     <ClInclude Include="include\Subsystems\Time\Time.hpp" />
     <ClInclude Include="include\Utility\bind_guard.hpp" />

@@ -2,8 +2,9 @@
 #define MVG_COMPONENTS_TRANSFORM_HPP_
 
 #include "ComponentBase.hpp"
-
 #include "Subsystems/Math/Math.hpp"
+
+#include <GLM/glm.hpp>
 
 namespace Saturn {
 

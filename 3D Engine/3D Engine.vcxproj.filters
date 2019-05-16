@@ -168,6 +168,12 @@
     <ClCompile Include="src\Subsystems\Renderer\Mesh.cpp">
       <Filter>Source Files\Subsystems\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Subsystems\Renderer\Texture.cpp">
+      <Filter>Source Files\Subsystems\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Subsystems\Renderer\stbi_image.cpp">
+      <Filter>Source Files\Subsystems\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Application.hpp">
@@ -269,9 +275,6 @@
     <ClInclude Include="include\Subsystems\Scene\Scene.hpp">
       <Filter>Header Files\Subsystems\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="include\Subsystems\Scene\SceneGraph.hpp">
-      <Filter>Header Files\Subsystems\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="include\Subsystems\Scene\SceneObject.hpp">
       <Filter>Header Files\Subsystems\Scene</Filter>
     </ClInclude>
@@ -313,6 +316,15 @@
     </ClInclude>
     <ClInclude Include="include\Subsystems\ECS\Components\StaticMesh.hpp">
       <Filter>Header Files\Subsystems\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\Components\Material.hpp">
+      <Filter>Header Files\Subsystems\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Renderer\Texture.hpp">
+      <Filter>Header Files\Subsystems\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Renderer\stb_image.h">
+      <Filter>Header Files\Subsystems\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

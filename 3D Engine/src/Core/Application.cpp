@@ -71,7 +71,7 @@ void Application::run() {
     scene.ecs.register_system<Systems::CameraZoomControllerSystem>();
     scene.ecs.register_system<Systems::FreeLookControllerSystem>();
 
-    auto& obj = scene.create_object(); 
+    auto& obj = scene.create_object();
     auto transform_id = obj.add_component<Components::Transform>();
     {
         auto& transform =
@@ -82,6 +82,10 @@ void Application::run() {
             obj.add_component<Components::StaticMesh>());
         mesh.mesh =
             AssetManager<Mesh>::get_resource("resources/meshes/my_cube.mesh");
+        auto& material = scene.ecs.get_with_id<Components::Material>(
+            obj.add_component<Components::Material>());
+        material.shader =
+            AssetManager<Shader>::get_resource("resources/shaders/default.sh");
     }
 
     auto& main_cam = scene.create_object();
@@ -118,8 +122,7 @@ void Application::run() {
         renderer->clear(Color{0.24f, 0.0f, 0.0f, 1.0f});
 
         scene.update_systems();
-        auto graph = scene.build_scene_graph();
-        renderer->render_scene_graph(graph);
+        renderer->render_scene(scene);
 
         // Copy framebuffer to screen
         renderer->update_screen();

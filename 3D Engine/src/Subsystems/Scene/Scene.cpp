@@ -4,7 +4,6 @@
 
 namespace Saturn {
 
-
 Scene::Scene() : ecs(this) {}
 
 Scene::~Scene() {}
@@ -12,14 +11,6 @@ Scene::~Scene() {}
 void Scene::update_systems() { ecs.update_systems(); }
 void Scene::on_start() { ecs.on_start(); }
 
-SceneGraph Scene::build_scene_graph() {
-    // Temporary
-    SceneGraph graph;
-    graph.scene = this;
-    auto& obj = objects.front(); // TEMPORARY
-    graph.shader = obj->debug.shader; // TEMPORARY
-    return graph;
-}
 
 SceneObject& Scene::create_object(SceneObject* parent /* = nullptr*/) {
     objects.push_back(std::make_unique<SceneObject>(this, parent));
