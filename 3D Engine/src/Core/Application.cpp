@@ -1,13 +1,14 @@
 #include "Core/Application.hpp"
 
+#include "Subsystems/ECS/Components.hpp"
+#include "Subsystems/ECS/Systems.hpp"
 #include "Subsystems/Input/Input.hpp"
 #include "Subsystems/Logging/LogSystem.hpp"
 #include "Subsystems/Math/Math.hpp"
+#include "Subsystems/Renderer/Viewport.hpp"
 #include "Subsystems/Scene/Scene.hpp"
 #include "Subsystems/Scene/SceneObject.hpp"
-#include "Subsystems/ECS/Systems.hpp"
 #include "Subsystems/Time/Time.hpp"
-#include "Subsystems/Renderer/Viewport.hpp"
 
 namespace Saturn {
 
@@ -77,6 +78,10 @@ void Application::run() {
             scene.ecs.get_with_id<Components::Transform>(transform_id);
         transform.position = glm::vec3(5.0f, 0.0f, 0.0f);
         transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
+        auto& mesh = scene.ecs.get_with_id<Components::StaticMesh>(
+            obj.add_component<Components::StaticMesh>());
+        mesh.mesh =
+            AssetManager<Mesh>::get_resource("resources/meshes/my_cube.mesh");
     }
 
     auto& main_cam = scene.create_object();
@@ -93,7 +98,6 @@ void Application::run() {
             main_cam.add_component<Components::CameraZoomController>());
 
         transform.position = {0.0f, 0.0f, 0.0f};
-        transform.scale = {0.0f, 0.0f, 0.0f};
 
         camera.front = {1.0f, 0.0f, 0.0f};
         camera.up = {0.0f, 1.0f, 0.0f};

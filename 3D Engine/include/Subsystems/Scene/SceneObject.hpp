@@ -3,7 +3,6 @@
 
 #include "Subsystems\AssetManager\Resource.hpp"
 #include "Subsystems\Renderer\Shader.hpp"
-#include "Subsystems\Renderer\VertexArray.hpp" // Temporary
 #include "Utility\IDGenerator.hpp"
 
 #include <typeindex>
@@ -20,7 +19,6 @@ public:
     SceneObject(Scene* s);
 
     struct Debug {
-        VertexArray cube;
         Resource<Shader> shader;
     } debug;
 

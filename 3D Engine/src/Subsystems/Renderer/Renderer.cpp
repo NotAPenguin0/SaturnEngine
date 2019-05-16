@@ -36,8 +36,8 @@ Renderer::Renderer(CreateInfo create_info) :
 
     screen.assign({screen_attributes, screen_vertices, {0, 1, 2, 0, 3, 2}});
 
-    default_shader =
-        AssetManager<Shader>::get_resource("resources/shaders/postprocessing/default.sh");
+    default_shader = AssetManager<Shader>::get_resource(
+        "resources/shaders/postprocessing/default.sh");
     if (!default_shader.is_loaded()) {
         LogSystem::write(LogSystem::Severity::Error,
                          "Failed to load default shader");
@@ -71,9 +71,9 @@ void Renderer::render_scene_graph(SceneGraph& scene) {
     for (auto& vp : viewports) {
         if (!vp.has_camera()) continue;
         Viewport::set_active(vp);
-        for (std::size_t i = 0; i < scene.vtx_arrays.size(); ++i) {
+        for (std::size_t i = 0; i < scene.meshes.size(); ++i) {
             auto& shader = scene.shader.get();
-            auto& vtx_array = *scene.vtx_arrays[i];
+            auto& vtx_array = scene.meshes[i]->get_vertices();
             auto& transform = *scene.transforms[i];
 
             auto cam_id = vp.get_camera();

@@ -15,12 +15,10 @@ SceneGraph Scene::build_scene_graph() {
     // Temporary
     SceneGraph graph;
     graph.scene = this;
-    auto& transforms = ecs.get_components<Components::Transform>();
-    for (auto& t : transforms) {
-        auto& entity = t.entity;
-        graph.transforms.push_back(&t);
-        graph.vtx_arrays.push_back(&entity->debug.cube);
-        graph.shader = entity->debug.shader;
+    for (auto[transform, mesh] : ecs.select<Components::Transform, Components::StaticMesh>()) {
+        graph.transforms.push_back(&transform);
+        graph.meshes.push_back(mesh.mesh);
+        graph.shader = transform.entity->debug.shader;
     }
 
     return graph;

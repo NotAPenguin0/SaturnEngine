@@ -20,14 +20,18 @@ public:
         id = rhs.id;
         loaded = rhs.loaded;
 
-		return *this;
+        return *this;
     }
 
     R& get() { return *ptr; }
     R const& get() const { return *ptr; }
 
     std::size_t get_id() const { return id; }
-    bool is_loaded() const { return loaded;}
+    bool is_loaded() const { return loaded; }
+
+    R* operator->() { return ptr; }
+
+    R const* operator->() const { return ptr; }
 
 private:
     R* ptr;

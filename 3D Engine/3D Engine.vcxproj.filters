@@ -165,6 +165,9 @@
     <ClCompile Include="src\Subsystems\AssetManager\ResourceLoaders.cpp">
       <Filter>Source Files\Subsystems\AssetManager</Filter>
     </ClCompile>
+    <ClCompile Include="src\Subsystems\Renderer\Mesh.cpp">
+      <Filter>Source Files\Subsystems\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Application.hpp">
@@ -307,6 +310,9 @@
     </ClInclude>
     <ClInclude Include="include\Subsystems\Renderer\Mesh.hpp">
       <Filter>Header Files\Subsystems\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\Components\StaticMesh.hpp">
+      <Filter>Header Files\Subsystems\ECS\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

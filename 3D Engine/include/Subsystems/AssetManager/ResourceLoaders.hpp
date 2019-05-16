@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 
+#include "Subsystems\Renderer\Mesh.hpp"
 #include "Subsystems\Renderer\Shader.hpp"
 
 namespace Saturn {
@@ -20,6 +21,12 @@ template<>
 class ResourceLoader<Shader> {
 public:
     static std::unique_ptr<Shader> load(std::string const& path);
+};
+
+template<>
+class ResourceLoader<Mesh> {
+public:
+	static std::unique_ptr<Mesh> load(std::string const& path);
 };
 
 } // namespace Saturn

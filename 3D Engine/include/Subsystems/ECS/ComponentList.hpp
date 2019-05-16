@@ -7,6 +7,7 @@
     ::Saturn::Components::Transform, ::Saturn::Components::Camera,             \
         ::Saturn::Components::FPSCameraController,                             \
         ::Saturn::Components::FreeLookController,                              \
-        ::Saturn::Components::CameraZoomController
+        ::Saturn::Components::CameraZoomController,                            \
+        ::Saturn::Components::StaticMesh
 
 #endif

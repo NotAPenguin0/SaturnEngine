@@ -187,6 +187,7 @@
     <ClCompile Include="src\Subsystems\Logging\LogSystem.cpp" />
     <ClCompile Include="src\Subsystems\Math\RandomEngine.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\Framebuffer.cpp" />
+    <ClCompile Include="src\Subsystems\Renderer\Mesh.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\OpenGL.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\Shader.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="include\Subsystems\ECS\Components\ComponentBase.hpp" />
     <ClInclude Include="include\Subsystems\ECS\Components\FPSCameraController.hpp" />
     <ClInclude Include="include\Subsystems\ECS\Components\FreeLookController.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\Components\StaticMesh.hpp" />
     <ClInclude Include="include\Subsystems\ECS\Components\Transform.hpp" />
     <ClInclude Include="include\Subsystems\ECS\component_container.hpp" />
     <ClInclude Include="include\Subsystems\ECS\component_index.hpp" />
