@@ -16,7 +16,7 @@ class Scene;
 struct SceneGraph {
     // temporary
     std::vector<Resource<Mesh>> meshes;
-    std::vector<Components::Transform*> transforms; // temp
+    std::vector<Components::Transform> transforms; // temp
     Resource<Shader> shader;
     Scene* scene;
 };

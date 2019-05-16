@@ -34,7 +34,6 @@ public:
     void set_vec4(std::string_view name, glm::vec4 const& value);
     void set_mat4(std::string_view name, glm::mat4 const& value);
 
-    // #TODO: Uniform location caching
     int location(std::string_view name);
 
 private:

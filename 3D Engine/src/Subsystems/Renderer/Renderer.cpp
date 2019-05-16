@@ -74,7 +74,7 @@ void Renderer::render_scene_graph(SceneGraph& scene) {
         for (std::size_t i = 0; i < scene.meshes.size(); ++i) {
             auto& shader = scene.shader.get();
             auto& vtx_array = scene.meshes[i]->get_vertices();
-            auto& transform = *scene.transforms[i];
+            auto& transform = scene.transforms[i];
 
             auto cam_id = vp.get_camera();
             auto& cam =

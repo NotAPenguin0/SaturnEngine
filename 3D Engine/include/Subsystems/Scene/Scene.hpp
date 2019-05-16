@@ -30,7 +30,7 @@ public:
 	void update_systems();
     SceneGraph build_scene_graph();
 
-    SceneObject& create_object();
+    SceneObject& create_object(SceneObject* parent = nullptr);
 
 	ECS<COMPONENT_LIST>& get_ecs();
 

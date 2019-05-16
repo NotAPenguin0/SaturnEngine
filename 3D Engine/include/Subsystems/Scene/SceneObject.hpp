@@ -16,7 +16,7 @@ class SceneObject {
 public:
     friend class Scene;
 
-    SceneObject(Scene* s);
+    SceneObject(Scene* s, SceneObject* parent = nullptr);
 
     struct Debug {
         Resource<Shader> shader;
@@ -58,8 +58,13 @@ public:
         component_ids.erase(ti);
     }
 
+	bool has_parent() const;
+	SceneObject* parent();
+    SceneObject const* parent() const;
+
 private:
     Scene* scene;
+	SceneObject* parent_obj;
     // Maps a component type to a component id. The id will be translated in an
     // index in the ECS class
     std::unordered_map<std::type_index, std::size_t> component_ids;
