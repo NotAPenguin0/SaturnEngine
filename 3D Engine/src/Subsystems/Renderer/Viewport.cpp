@@ -1,6 +1,6 @@
-#include "Subsystems\Renderer\Viewport.hpp"
+#include "Subsystems/Renderer/Viewport.hpp"
 
-#include "Subsystems\Renderer\OpenGL.hpp"
+#include "Subsystems/Renderer/OpenGL.hpp"
 
 #include <cstddef>
 

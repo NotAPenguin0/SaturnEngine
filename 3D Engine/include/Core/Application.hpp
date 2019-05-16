@@ -1,18 +1,18 @@
 #ifndef MVG_APPLICATION_HPP_
 #define MVG_APPLICATION_HPP_
 
-#include "Subsystems\Renderer\Renderer.hpp"
-#include "Utility\Utility.hpp"
+#include "Subsystems/Renderer/Renderer.hpp"
+#include "Utility/Utility.hpp"
 
-#include "glad\glad.h"
-#include <GLFW\glfw3.h>
+#include "glad/glad.h"
+#include <GLFW/glfw3.h>
 #include <memory>
 #include <string_view>
 
 namespace Saturn {
 
 /**
- * \brief Manages the application.
+ * /brief Manages the application.
  *
  * This class manages the main application of your game. It also owns a window
  * with an associated context to render to.
@@ -22,7 +22,7 @@ public:
     friend class Engine;
 
     /**
-     * \brief Creation info for the application.
+     * /brief Creation info for the application.
      *
      * This struct contains all the data needed to initialize the application
      */
@@ -34,7 +34,7 @@ public:
     };
 
     /**
-     * \brief Constructor accepting a CreateInfo struct
+     * /brief Constructor accepting a CreateInfo struct
      */
     Application(CreateInfo create_info);
 
@@ -42,46 +42,46 @@ public:
     Application& operator=(Application const&) = delete;
 
     /**
-     * \brief Move constructor
+     * /brief Move constructor
      */
     Application(Application&&);
 
     /**
-     * \brief Move assignment operator
+     * /brief Move assignment operator
      */
     Application& operator=(Application&&);
 
     /**
-     * \brief Default destructor destroying the window
+     * /brief Default destructor destroying the window
      */
     ~Application();
 
     /**
-     * \brief Initializes the keybinds used in the application
+     * /brief Initializes the keybinds used in the application
      */
     void initialize_keybinds();
 
     /**
-     * \brief Runs the application.
+     * /brief Runs the application.
      *
      * Runs the application by running the main loop. Blocks the calling thread.
      */
     void run();
 
     /**
-     * \brief Exits the application
+     * /brief Exits the application
      */
     void quit();
 
     /**
-     * \brief Obtains a handle to the native window
+     * /brief Obtains a handle to the native window
      *
      * @return  A pointer to a GLFWwindow, used as a handle in the GLFW API.
      */
     GLFWwindow* window();
 
     /**
-     * \brief Framebuffer resize callback function used by GLFW.
+     * /brief Framebuffer resize callback function used by GLFW.
      *
      * @param window [unused] A handle to the window of which the framebuffer
      * was resized

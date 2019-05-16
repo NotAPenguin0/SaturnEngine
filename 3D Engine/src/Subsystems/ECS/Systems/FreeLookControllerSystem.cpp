@@ -1,16 +1,16 @@
-#include "Subsystems\ECS\Systems\FreeLookControllerSystem.hpp"
+#include "Subsystems/ECS/Systems/FreeLookControllerSystem.hpp"
 
 // Engine subsystems
 
-#include "Subsystems\Scene\Scene.hpp"
-#include "Subsystems\Input\Input.hpp"
-#include "Subsystems\Time\Time.hpp"
+#include "Subsystems/Input/Input.hpp"
+#include "Subsystems/Scene/Scene.hpp"
+#include "Subsystems/Time/Time.hpp"
 
 // Components
 
-#include "Subsystems\ECS\Components\Camera.hpp"
-#include "Subsystems\ECS\Components\FreeLookController.hpp"
-#include "Subsystems\ECS\Components\Transform.hpp"
+#include "Subsystems/ECS/Components/Camera.hpp"
+#include "Subsystems/ECS/Components/FreeLookController.hpp"
+#include "Subsystems/ECS/Components/Transform.hpp"
 
 namespace Saturn::Systems {
 
@@ -28,8 +28,13 @@ void FreeLookControllerSystem::on_update(Scene& scene) {
         // reversed since y coords go bottom to top
         float yoffset = prev_mouse.ypos - mouse.ypos;
 
-        xoffset *= controller.mouse_sensitivity * Time::deltaTime;
-        yoffset *= controller.mouse_sensitivity * Time::deltaTime;
+        if (Input::key_pressed(GLFW_KEY_LEFT)) { xoffset = -2.0f; }
+        if (Input::key_pressed(GLFW_KEY_RIGHT)) { xoffset = 2.0f; }
+        if (Input::key_pressed(GLFW_KEY_UP)) { yoffset = 2.0f; }
+        if (Input::key_pressed(GLFW_KEY_DOWN)) { yoffset = -2.0f; }
+
+        xoffset *= controller.mouse_sensitivity; //* Time::deltaTime;
+        yoffset *= controller.mouse_sensitivity; //* Time::deltaTime;
 
         // x and y flipped. This is not a bug, since rotation around y means
         // looking around left/right, which is controlled by moving the mouse

@@ -71,14 +71,7 @@ void Application::run() {
     scene.ecs.register_system<Systems::CameraZoomControllerSystem>();
     scene.ecs.register_system<Systems::FreeLookControllerSystem>();
 
-    auto& root = scene.create_object();
-    {
-        auto& root_trans = scene.ecs.get_with_id<Components::Transform>(
-            root.add_component<Components::Transform>());
-        root_trans.position = glm::vec3(5.0f, 0.0f, 0.0f);
-    }
-
-    auto& obj = scene.create_object(&root); // root is the parent object
+    auto& obj = scene.create_object(); 
     auto transform_id = obj.add_component<Components::Transform>();
     {
         auto& transform =
@@ -87,17 +80,6 @@ void Application::run() {
         transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
         auto& mesh = scene.ecs.get_with_id<Components::StaticMesh>(
             obj.add_component<Components::StaticMesh>());
-        mesh.mesh =
-            AssetManager<Mesh>::get_resource("resources/meshes/my_cube.mesh");
-    }
-
-    auto& obj2 = scene.create_object(&obj);
-    {
-        auto& transform = scene.ecs.get_with_id<Components::Transform>(
-            obj2.add_component<Components::Transform>());
-        transform.position = glm::vec3(0.0f, 0.0f, -3.0f);
-        auto& mesh = scene.ecs.get_with_id<Components::StaticMesh>(
-            obj2.add_component<Components::StaticMesh>());
         mesh.mesh =
             AssetManager<Mesh>::get_resource("resources/meshes/my_cube.mesh");
     }
@@ -122,7 +104,7 @@ void Application::run() {
         camera.fov = 45.0f;
 
         fps.speed = 2.5f;
-        freelook.mouse_sensitivity = 15.0f;
+        freelook.mouse_sensitivity = 0.08f;
         zoom.zoom_speed = 100.0f;
 
         renderer->get_viewport(0).set_camera(camera.id);

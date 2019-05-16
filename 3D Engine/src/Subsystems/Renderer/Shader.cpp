@@ -1,16 +1,16 @@
-#include "Subsystems\Renderer\Shader.hpp"
+#include "Subsystems/Renderer/Shader.hpp"
 
 #include <cassert>
 #include <fstream>
 #include <sstream>
 #include <string>
 
-#include "Subsystems\Logging\LogSystem.hpp"
-#include "Subsystems\Renderer\OpenGL.hpp"
+#include "Subsystems/Logging/LogSystem.hpp"
+#include "Subsystems/Renderer/OpenGL.hpp"
 
-#include "Utility\bind_guard.hpp"
+#include "Utility/bind_guard.hpp"
 
-#include <GLM\gtc\type_ptr.hpp>
+#include <GLM/gtc/type_ptr.hpp>
 
 namespace Saturn {
 

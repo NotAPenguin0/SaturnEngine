@@ -1,9 +1,9 @@
-#include "Subsystems\Renderer\Framebuffer.hpp"
+#include "Subsystems/Renderer/Framebuffer.hpp"
 
-#include "Subsystems\Logging\LogSystem.hpp"
-#include "Subsystems\Renderer\OpenGL.hpp"
+#include "Subsystems/Logging/LogSystem.hpp"
+#include "Subsystems/Renderer/OpenGL.hpp"
 
-#include "Utility\bind_guard.hpp"
+#include "Utility/bind_guard.hpp"
 
 namespace Saturn {
 

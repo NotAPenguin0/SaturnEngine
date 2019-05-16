@@ -4,14 +4,14 @@
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 
-#include "Core\Application.hpp"
-#include "Core\ErrorHandler.hpp"
-#include "Subsystems\Input\Input.hpp"
-#include "Subsystems\Logging\LogSystem.hpp"
-#include "Utility\Utility.hpp"
-#include "Subsystems\Math\Math.hpp"
+#include "Core/Application.hpp"
+#include "Core/ErrorHandler.hpp"
+#include "Subsystems/Input/Input.hpp"
+#include "Subsystems/Logging/LogSystem.hpp"
+#include "Utility/Utility.hpp"
+#include "Subsystems/Math/Math.hpp"
 
-#include "Subsystems\Renderer\Renderer.hpp"
+#include "Subsystems/Renderer/Renderer.hpp"
 
 namespace Saturn {
 
@@ -36,8 +36,8 @@ public:
 		bool enable_debug_output = false;
     };
 
-    // \brief Initializes the complete Engine.
-    // \return An instance of Saturn::Application, which is used to run the
+    // /brief Initializes the complete Engine.
+    // /return An instance of Saturn::Application, which is used to run the
     // program
     static Application initialize(CreateInfo create_info);
 

@@ -6,8 +6,8 @@
 #include "ConstexprMath.hpp"
 #include "RandomEngine.hpp"
 
-#include <GLM\glm.hpp>
-#include <GLM\gtc\matrix_transform.hpp>
+#include <GLM/glm.hpp>
+#include <GLM/gtc/matrix_transform.hpp>
 
 namespace glm {
 

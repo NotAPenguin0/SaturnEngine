@@ -4,11 +4,11 @@
 #include <memory>
 #include <vector>
 
-#include "Subsystems\ECS\Components.hpp"
-#include "Subsystems\Scene\SceneGraph.hpp"
+#include "Subsystems/ECS/Components.hpp"
+#include "Subsystems/Scene/SceneGraph.hpp"
 
-#include "Subsystems\ECS\ECS.hpp"
-#include "Subsystems\ECS\ComponentList.hpp"
+#include "Subsystems/ECS/ECS.hpp"
+#include "Subsystems/ECS/ComponentList.hpp"
 
 
 namespace Saturn {

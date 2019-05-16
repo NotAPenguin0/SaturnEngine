@@ -3,7 +3,7 @@
 
 #include "ComponentBase.hpp"
 
-#include "Subsystems\Math\Math.hpp"
+#include "Subsystems/Math/Math.hpp"
 
 namespace Saturn {
 

@@ -1,14 +1,14 @@
-#include "Subsystems\ECS\Systems\FPSCameraControllerSystem.hpp"
+#include "Subsystems/ECS/Systems/FPSCameraControllerSystem.hpp"
 
-#include "Subsystems\ECS\Components\Camera.hpp"
-#include "Subsystems\ECS\Components\FPSCameraController.hpp"
-#include "Subsystems\ECS\Components\Transform.hpp"
+#include "Subsystems/ECS/Components/Camera.hpp"
+#include "Subsystems/ECS/Components/FPSCameraController.hpp"
+#include "Subsystems/ECS/Components/Transform.hpp"
 
-#include "Subsystems\Input\Input.hpp"
-#include "Subsystems\Scene\Scene.hpp"
-#include "Subsystems\Time\Time.hpp"
+#include "Subsystems/Input/Input.hpp"
+#include "Subsystems/Scene/Scene.hpp"
+#include "Subsystems/Time/Time.hpp"
 
-#include "Subsystems\Renderer\OpenGL.hpp"
+#include "Subsystems/Renderer/OpenGL.hpp"
 
 namespace Saturn {
 

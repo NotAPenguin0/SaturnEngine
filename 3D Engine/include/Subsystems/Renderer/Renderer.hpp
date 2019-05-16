@@ -2,9 +2,9 @@
 #define MVG_RENDERER_HPP_
 
 #include "Framebuffer.hpp"
-#include "Subsystems\AssetManager\AssetManager.hpp"
-#include "Subsystems\Scene\SceneGraph.hpp"
-#include "Utility\Utility.hpp"
+#include "Subsystems/AssetManager/AssetManager.hpp"
+#include "Subsystems/Scene/SceneGraph.hpp"
+#include "Utility/Utility.hpp"
 #include "VertexArray.hpp"
 #include "Viewport.hpp"
 #include "glad/glad.h"
@@ -38,14 +38,14 @@ public:
 
     void update_screen();
 
-    // \brief Returns a reference to the viewport with specified index.
-    // \param index: The index of the viewport to return. Viewport 0 is
+    // /brief Returns a reference to the viewport with specified index.
+    // /param index: The index of the viewport to return. Viewport 0 is
     // initialized to be the full window
     Viewport& get_viewport(std::size_t index);
 
-    // \brief Adds a viewport to the renderer
-    // \param vp: The viewport to add
-    // \return The index of the newly added viewport
+    // /brief Adds a viewport to the renderer
+    // /param vp: The viewport to add
+    // /return The index of the newly added viewport
     std::size_t add_viewport(Viewport vp);
 
 private:

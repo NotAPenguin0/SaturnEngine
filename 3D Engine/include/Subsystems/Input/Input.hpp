@@ -7,7 +7,7 @@
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 
-#include "Core\Application.hpp"
+#include "Core/Application.hpp"
 
 namespace Saturn {
 
@@ -28,7 +28,7 @@ public:
         float yscroll;
     };
 
-    // \brief Initializes the Input system. Stores a pointer to the program
+    // /brief Initializes the Input system. Stores a pointer to the program
     // passed in
     static void initialize(Application& program);
 

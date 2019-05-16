@@ -1,6 +1,6 @@
-#include "Subsystems\AssetManager\ResourceLoaders.hpp"
+#include "Subsystems/AssetManager/ResourceLoaders.hpp"
 
-#include "Subsystems\Logging\LogSystem.hpp"
+#include "Subsystems/Logging/LogSystem.hpp"
 
 #include <fstream>
 
@@ -54,7 +54,7 @@ std::unique_ptr<Mesh> ResourceLoader<Mesh>::load(std::string const& path) {
 
     std::string dummy;
     file >> dummy;
-    assert(dummy == "attributes:" && "Syntax error: Expected \'attributs:\'");
+    assert(dummy == "attributes:" && "Syntax error: Expected /'attributs:/'");
     std::size_t num_attributes;
     file >> num_attributes;
 
@@ -77,7 +77,7 @@ std::unique_ptr<Mesh> ResourceLoader<Mesh>::load(std::string const& path) {
 
     // Read vertex data
     file >> dummy;
-    assert(dummy == "vertices:" && "Syntax error: Expected \'vertices:\'");
+    assert(dummy == "vertices:" && "Syntax error: Expected /'vertices:/'");
     std::size_t num_vertices;
     file >> num_vertices;
     info.vertices.vertices.resize(num_vertices * total_vertex_components);
@@ -88,7 +88,7 @@ std::unique_ptr<Mesh> ResourceLoader<Mesh>::load(std::string const& path) {
     }
 
     file >> dummy;
-    assert(dummy == "indices:" && "Syntax error: Expected \'indices:\'");
+    assert(dummy == "indices:" && "Syntax error: Expected /'indices:/'");
     std::size_t num_indices;
     file >> num_indices;
     if (num_indices != 0) {

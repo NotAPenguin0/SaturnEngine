@@ -1,7 +1,7 @@
 #ifndef MVG_UTILITY_HPP_
 #define MVG_UTILITY_HPP_
 
-#include "Subsystems\Logging\LogSystem.hpp"
+#include "Subsystems/Logging/LogSystem.hpp"
 #include <cstddef>
 
 namespace Saturn {

@@ -1,11 +1,11 @@
-#include "Subsystems\Renderer\Renderer.hpp"
+#include "Subsystems/Renderer/Renderer.hpp"
 
-#include "Core\Application.hpp"
-#include "Subsystems\Logging\LogSystem.hpp"
-#include "Subsystems\Math\Math.hpp"
-#include "Subsystems\Scene\Scene.hpp"
-#include "Utility\Exceptions.hpp"
-#include "Utility\bind_guard.hpp"
+#include "Core/Application.hpp"
+#include "Subsystems/Logging/LogSystem.hpp"
+#include "Subsystems/Math/Math.hpp"
+#include "Subsystems/Scene/Scene.hpp"
+#include "Utility/Exceptions.hpp"
+#include "Utility/bind_guard.hpp"
 
 namespace Saturn {
 
@@ -61,6 +61,26 @@ void Renderer::clear(
     glClear(flags);
 }
 
+
+static Components::Transform
+make_absolute_transform(Components::Transform const& old_transform) {
+    auto* object = old_transform.entity;
+    if (!object->has_parent()) {
+        return old_transform;
+    } else {
+        auto parent = object->parent();
+        auto parent_trans = make_absolute_transform(
+            parent->get_component<Components::Transform>());
+
+        Components::Transform new_trans = old_transform;
+        new_trans.position += parent_trans.position;
+        new_trans.rotation += parent_trans.rotation;
+        new_trans.scale *= parent_trans.scale;
+
+        return new_trans;
+    }
+}
+
 void Renderer::render_scene_graph(SceneGraph& scene) {
     // Temporary
 
@@ -71,10 +91,13 @@ void Renderer::render_scene_graph(SceneGraph& scene) {
     for (auto& vp : viewports) {
         if (!vp.has_camera()) continue;
         Viewport::set_active(vp);
-        for (std::size_t i = 0; i < scene.meshes.size(); ++i) {
+        for (auto [relative_transform, mesh] :
+             scene.scene->ecs
+                 .select<Components::Transform, Components::StaticMesh>()) {
             auto& shader = scene.shader.get();
-            auto& vtx_array = scene.meshes[i]->get_vertices();
-            auto& transform = scene.transforms[i];
+            auto& vtx_array = mesh.mesh->get_vertices();
+
+			auto transform = make_absolute_transform(relative_transform);
 
             auto cam_id = vp.get_camera();
             auto& cam =

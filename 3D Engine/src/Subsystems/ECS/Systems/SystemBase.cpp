@@ -1,6 +1,6 @@
-#include "Subsystems\ECS\Systems\SystemBase.hpp"
+#include "Subsystems/ECS/Systems/SystemBase.hpp"
 
-#include "Subsystems\Scene\Scene.hpp"
+#include "Subsystems/Scene/Scene.hpp"
 
 namespace Saturn::Systems {
 

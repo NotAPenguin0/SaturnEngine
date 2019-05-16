@@ -1,11 +1,11 @@
-#include "Subsystems\ECS\Systems\CameraZoomControllerSystem.hpp"
+#include "Subsystems/ECS/Systems/CameraZoomControllerSystem.hpp"
 
-#include "Subsystems\Input\Input.hpp"
-#include "Subsystems\Scene\Scene.hpp"
-#include "Subsystems\Time\Time.hpp"
+#include "Subsystems/Input/Input.hpp"
+#include "Subsystems/Scene/Scene.hpp"
+#include "Subsystems/Time/Time.hpp"
 
-#include "Subsystems\ECS\Components\Camera.hpp"
-#include "Subsystems\ECS\Components\CameraZoomController.hpp"
+#include "Subsystems/ECS/Components/Camera.hpp"
+#include "Subsystems/ECS/Components/CameraZoomController.hpp"
 
 namespace Saturn::Systems {
 

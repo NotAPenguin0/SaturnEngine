@@ -3,11 +3,11 @@
 #ifndef MVG_COMPONENTS_HPP_
 #define MVG_COMPONENTS_HPP_
 
-#include "Components\Camera.hpp"
-#include "Components\CameraZoomController.hpp"
-#include "Components\FPSCameraController.hpp"
-#include "Components\FreeLookController.hpp"
-#include "Components\StaticMesh.hpp"
-#include "Components\Transform.hpp"
+#include "Components/Camera.hpp"
+#include "Components/CameraZoomController.hpp"
+#include "Components/FPSCameraController.hpp"
+#include "Components/FreeLookController.hpp"
+#include "Components/StaticMesh.hpp"
+#include "Components/Transform.hpp"
 
 #endif

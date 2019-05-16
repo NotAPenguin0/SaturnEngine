@@ -4,8 +4,8 @@
 #include <memory>
 #include <string>
 
-#include "Subsystems\Renderer\Mesh.hpp"
-#include "Subsystems\Renderer\Shader.hpp"
+#include "Subsystems/Renderer/Mesh.hpp"
+#include "Subsystems/Renderer/Shader.hpp"
 
 namespace Saturn {
 

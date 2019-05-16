@@ -1,8 +1,8 @@
-#include "Subsystems\Renderer\VertexArray.hpp"
+#include "Subsystems/Renderer/VertexArray.hpp"
 
-#include "Subsystems\Logging\LogSystem.hpp"
-#include "Subsystems\Renderer\OpenGL.hpp"
-#include "Utility\bind_guard.hpp"
+#include "Subsystems/Logging/LogSystem.hpp"
+#include "Subsystems/Renderer/OpenGL.hpp"
+#include "Utility/bind_guard.hpp"
 
 #include <cassert>
 #include <numeric>

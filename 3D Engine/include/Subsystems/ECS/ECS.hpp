@@ -8,9 +8,9 @@
 #include "component_index.hpp"
 #include "component_view.hpp"
 
-#include "Subsystems\Scene\SceneObject.hpp"
+#include "Subsystems/Scene/SceneObject.hpp"
 
-#include "Systems\SystemBase.hpp"
+#include "Systems/SystemBase.hpp"
 
 namespace Saturn {
 

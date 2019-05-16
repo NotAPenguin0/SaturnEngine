@@ -1,7 +1,7 @@
-#include "Subsystems\Scene\SceneObject.hpp"
-#include "Subsystems\Scene\Scene.hpp"
+#include "Subsystems/Scene/SceneObject.hpp"
+#include "Subsystems/Scene/Scene.hpp"
 
-#include "Subsystems\AssetManager\AssetManager.hpp"
+#include "Subsystems/AssetManager/AssetManager.hpp"
 
 #include <vector>
 

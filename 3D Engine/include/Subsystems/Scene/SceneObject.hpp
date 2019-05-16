@@ -1,9 +1,9 @@
 #ifndef MVG_SCENE_OBJECT_HPP_
 #define MVG_SCENE_OBJECT_HPP_
 
-#include "Subsystems\AssetManager\Resource.hpp"
-#include "Subsystems\Renderer\Shader.hpp"
-#include "Utility\IDGenerator.hpp"
+#include "Subsystems/AssetManager/Resource.hpp"
+#include "Subsystems/Renderer/Shader.hpp"
+#include "Utility/IDGenerator.hpp"
 
 #include <typeindex>
 #include <typeinfo>
