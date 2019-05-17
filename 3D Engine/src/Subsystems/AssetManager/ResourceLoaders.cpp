@@ -115,16 +115,16 @@ static GLenum format_from_string(std::string const& str) {
 static TextureTarget target_from_string(std::string const& str) {
     if (str == "Texture1D") return TextureTarget::Texture1D;
     if (str == "Texture1DArray") return TextureTarget::Texture1DArray;
-    if (str == "Texture2D;") return TextureTarget::Texture2D;
-    if (str == "Texture2DArray;") return TextureTarget::Texture2DArray;
-    if (str == "Texture2DMultiSample;")
+    if (str == "Texture2D") return TextureTarget::Texture2D;
+    if (str == "Texture2DArray") return TextureTarget::Texture2DArray;
+    if (str == "Texture2DMultiSample")
         return TextureTarget::Texture2DMultiSample;
-    if (str == "Texture2DMultiSampleArray;")
+    if (str == "Texture2DMultiSampleArray")
         return TextureTarget::Texture2DMultiSampleArray;
-    if (str == "Texture3D;") return TextureTarget::Texture3D;
-    if (str == "CubeMap;") return TextureTarget::CubeMap;
-    if (str == "CubeMapArray;") return TextureTarget::CubeMapArray;
-    if (str == "TextureRectangle;") return TextureTarget::TextureRectangle;
+    if (str == "Texture3D") return TextureTarget::Texture3D;
+    if (str == "CubeMap") return TextureTarget::CubeMap;
+    if (str == "CubeMapArray") return TextureTarget::CubeMapArray;
+    if (str == "TextureRectangle") return TextureTarget::TextureRectangle;
 
     throw std::runtime_error("Invalid texture target!");
 }
@@ -144,9 +144,9 @@ static TextureParameter param_from_string(std::string const& str) {
     if (str == "SwizzleG") return TextureParameter::SwizzleG;
     if (str == "SwizzleB") return TextureParameter::SwizzleB;
     if (str == "SwizzleA") return TextureParameter::SwizzleA;
-    if (str == "WrapS") TextureParameter::WrapS;
-    if (str == "WrapT") TextureParameter::WrapT;
-    if (str == "WrapR") TextureParameter::WrapR;
+    if (str == "WrapS") return TextureParameter::WrapS;
+    if (str == "WrapT") return TextureParameter::WrapT;
+    if (str == "WrapR") return TextureParameter::WrapR;
 
     throw std::runtime_error("Invalid texture parameter!");
 }
@@ -202,9 +202,9 @@ ResourceLoader<Texture>::load(std::string const& path) {
     file >> str;
     std::string path_to_file = std::move(str);
     // Read texture unit
-    int unit;
-    file >> unit;
-    GLenum unit = GL_TEXTURE0 + unit;
+    int unit_n;
+    file >> unit_n;
+    GLenum unit = (GLenum)(GL_TEXTURE0 + unit_n);
     // Read texture format
     file >> str;
     auto format = format_from_string(str);
@@ -212,7 +212,7 @@ ResourceLoader<Texture>::load(std::string const& path) {
     file >> str;
     bool flip_y = (str == "true");
     // Read param count
-    int param_count;
+    std::size_t param_count;
     file >> param_count;
     // Read parameters
     std::vector<Texture::ParameterInfo> params(param_count);

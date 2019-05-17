@@ -75,9 +75,9 @@ public:
         std::string_view image_path;
         TextureTarget target;
         std::vector<ParameterInfo> parameters;
-        int texture_unit;
-        int format = GL_RGB; // #TODO: Maybe make this an enum
-        bool flip_y = false; // Whether to flip the y axis on loading or not
+        GLenum texture_unit;
+        GLenum format = GL_RGB; // #TODO: Maybe make this an enum
+        bool flip_y = false;    // Whether to flip the y axis on loading or not
     };
 
     Texture();
@@ -91,7 +91,7 @@ public:
     Texture& operator=(Texture&&) = delete;
 
     static void bind(Texture& tex);
-    static void unbind(TextureTarget target = TextureTarget::Texture2D);
+    static void unbind(Texture& tex);
 
     void assign(CreateInfo const& create_info);
 
@@ -104,7 +104,7 @@ public:
 
 private:
     GLuint texture_handle;
-    int texture_unit;
+    GLenum texture_unit;
     int w, h;
 
     TextureTarget target;

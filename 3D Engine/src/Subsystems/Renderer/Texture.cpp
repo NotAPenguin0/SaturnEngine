@@ -5,14 +5,15 @@
 
 namespace Saturn {
 
-Texture::Texture() : texture_handle(0), texture_unit(-1), w(0), h(0) {}
+Texture::Texture() :
+    texture_handle(0), texture_unit(static_cast<GLenum>(-1)), w(0), h(0) {}
 
 Texture::Texture(CreateInfo const& create_info) { assign(create_info); }
 
 void Texture::assign(CreateInfo const& create_info) {
     if (texture_handle != 0) { glDeleteTextures(1, &texture_handle); }
 
-    texture_handle = -1;
+    texture_handle = 0;
     texture_unit = create_info.texture_unit;
     target = create_info.target;
 
@@ -45,7 +46,7 @@ void Texture::assign(CreateInfo const& create_info) {
     // Don't forget to change if we support more textures later
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    // memory is now on the gpu, we don't need it here anymore
+    // memory is now on the GPU, we don't need it here anymore
     stbi_image_free(image_data);
 }
 
@@ -54,25 +55,29 @@ Texture::~Texture() {
 }
 
 void Texture::bind(Texture& tex) {
+    glActiveTexture(tex.unit());
     glBindTexture(static_cast<GLenum>(tex.target), tex.texture_handle);
 }
 
-void Texture::unbind(TextureTarget target /* = TextureTarget::Texture2D*/) {
-    glBindTexture(static_cast<GLenum>(target), 0);
+void Texture::unbind(Texture& tex /* = TextureTarget::Texture2D*/) {
+    glActiveTexture(tex.unit());
+    glBindTexture(static_cast<GLenum>(tex.target), 0);
 }
 
 void Texture::set_parameter(ParameterInfo param) {
+    bind(*this);
     glTexParameteri(static_cast<GLenum>(target),
                     static_cast<GLenum>(param.parameter),
                     static_cast<int>(param.value));
+    unbind(*this);
 }
 
-int Texture::unit() const { return texture_unit; }
+int Texture::unit() const { return static_cast<int>(texture_unit); }
 
 ImgDim Texture::dimensions() const {
     ImgDim dim;
-    dim.x = w;
-    dim.y = h;
+    dim.x = (unsigned)w;
+    dim.y = (unsigned)h;
     return dim;
 }
 

@@ -4,11 +4,14 @@
 #include "ComponentBase.hpp"
 #include "Subsystems/AssetManager/Resource.hpp"
 #include "Subsystems/Renderer/Shader.hpp"
+#include "Subsystems/Renderer/Texture.hpp"
 
 namespace Saturn::Components {
 
 struct Material : public ComponentBase {
     Resource<Shader> shader;
+	// Optional
+	Resource<Texture> texture;
 };
 
 } // namespace Saturn::Components

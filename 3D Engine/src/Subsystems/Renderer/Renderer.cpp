@@ -91,17 +91,15 @@ void Renderer::render_scene(Scene& scene) {
         if (!vp.has_camera()) continue;
         Viewport::set_active(vp);
         for (auto [relative_transform, mesh, material] :
-             scene.ecs
-                 .select<Components::Transform, Components::StaticMesh,
-                         Components::Material>()) {
+             scene.ecs.select<Components::Transform, Components::StaticMesh,
+                              Components::Material>()) {
             auto& shader = material.shader.get();
             auto& vtx_array = mesh.mesh->get_vertices();
 
             auto transform = make_absolute_transform(relative_transform);
 
             auto cam_id = vp.get_camera();
-            auto& cam =
-                scene.ecs.get_with_id<Components::Camera>(cam_id);
+            auto& cam = scene.ecs.get_with_id<Components::Camera>(cam_id);
             auto& cam_trans =
                 cam.entity->get_component<Components::Transform>();
 
@@ -130,8 +128,18 @@ void Renderer::render_scene(Scene& scene) {
             shader.set_mat4("view", view);
             shader.set_mat4("projection", projection);
 
+            if (material.texture.is_loaded()) {
+                // If there is a texture
+                Texture::bind(material.texture.get());
+                shader.set_int("tex", material.texture->unit() - GL_TEXTURE0);
+            }
+
             glDrawElements(GL_TRIANGLES, vtx_array.index_size(),
                            GL_UNSIGNED_INT, nullptr);
+
+            if (material.texture.is_loaded()) {
+                Texture::unbind(material.texture.get());
+            }
         }
     }
 }
