@@ -63,6 +63,18 @@ Application::~Application() {
 
 void Application::initialize_keybinds() {}
 
+static const std::vector<float> particle_quad_vertices = {
+    -1.0f, 1.0f,  0.0f, 0.0f, 1.0f, // TL
+    1.0f,  1.0f,  0.0f, 1.0f, 1.0f, // TR
+    -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, // BL
+    1.0f,  -1.0f, 0.0f, 1.0f, 0.0f  // BR
+};
+
+static const std::vector<GLuint> particle_quad_indices = {
+    0, 1, 2, // First triangle
+    1, 2, 3  // Second triangle
+};
+
 void Application::run() {
     Scene scene;
 
@@ -70,6 +82,7 @@ void Application::run() {
     scene.ecs.register_system<Systems::FPSCameraControllerSystem>();
     scene.ecs.register_system<Systems::CameraZoomControllerSystem>();
     scene.ecs.register_system<Systems::FreeLookControllerSystem>();
+    scene.ecs.register_system<Systems::ParticleSystem>();
 
     auto& obj = scene.create_object();
     auto transform_id = obj.add_component<Components::Transform>();
@@ -88,6 +101,19 @@ void Application::run() {
             AssetManager<Shader>::get_resource("resources/shaders/texture.sh");
         material.texture =
             AssetManager<Texture>::get_resource("resources/textures/wood.tex");
+
+        auto& emitter = scene.ecs.get_with_id<Components::ParticleEmitter>(
+            obj.add_component<Components::ParticleEmitter>());
+        emitter.spawn_rate = 1.0f;
+        emitter.start_lifetime = 1000.0f;
+        emitter.start_velocity = {0.0f, 0.5f, 0.0f};
+        VertexArray::CreateInfo vao_info;
+        vao_info.attributes.push_back({0, 3}); // position
+        vao_info.attributes.push_back({1, 2}); // texture coordinates
+        vao_info.vertices = particle_quad_vertices;
+        vao_info.indices = particle_quad_indices;
+        emitter.particle_vao =
+            AssetManager<VertexArray>::get_resource(vao_info, "particle_vao");
     }
 
     auto& main_cam = scene.create_object();

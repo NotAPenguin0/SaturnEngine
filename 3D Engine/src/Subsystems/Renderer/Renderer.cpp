@@ -39,7 +39,7 @@ Renderer::Renderer(CreateInfo create_info) :
 
     PostProcessing::get_instance().load_shaders(
         "resources/shaders/postprocessing/postprocessing_effects.ppe");
-    PostProcessing::get_instance().set_active("jiggle");
+    PostProcessing::get_instance().set_active("none");
 
     UniformBuffer::CreateInfo matrix_info;
     matrix_info.binding_point = 0;
@@ -49,6 +49,8 @@ Renderer::Renderer(CreateInfo create_info) :
 
     no_shader_error =
         AssetManager<Shader>::get_resource("resources/shaders/default.sh");
+    particle_shader =
+        AssetManager<Shader>::get_resource("resources/shaders/particle.sh");
 }
 
 Renderer::~Renderer() {}
@@ -107,6 +109,10 @@ void Renderer::render_scene(Scene& scene) {
         matrix_buffer.set_mat4(projection, 0);
         matrix_buffer.set_mat4(view, sizeof(glm::mat4));
 
+        render_particles(scene); // #TODO: Check if it makes any difference if
+                                 // we render particles before or after the
+                                 // scene + figure out best option
+
         for (auto [relative_transform, mesh, material] :
              scene.ecs.select<Components::Transform, Components::StaticMesh,
                               Components::Material>()) {
@@ -145,6 +151,27 @@ void Renderer::render_scene(Scene& scene) {
             }
         }
     }
+}
+
+void Renderer::render_particles(Scene& scene) {
+    using namespace Components;
+    bind_guard<Shader> shader_guard(particle_shader.get());
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE); //#TODO: Add option for this in emitter
+    glDisable(GL_CULL_FACE);
+    for (auto [emitter] : scene.ecs.select<ParticleEmitter>()) {
+        // Bind VAO
+        bind_guard<VertexArray> vao_guard(emitter.particle_vao.get());
+        for (ParticleEmitter::Particle const& particle : emitter.particles) {
+            particle_shader->set_vec3("color", particle.color);
+            //#TODO: Rotation and scale
+            particle_shader->set_vec3("position", particle.position);
+			particle_shader->set_vec3("scale", {1.0f, 1.0f, 0.0f}); // TODO: particle::size
+            glDrawElements(GL_TRIANGLES, emitter.particle_vao->index_size(),
+                           GL_UNSIGNED_INT, nullptr);
+        }
+    }
+    glEnable(GL_CULL_FACE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Renderer::update_screen() {

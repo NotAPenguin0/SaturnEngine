@@ -51,6 +51,9 @@ public:
     std::size_t add_viewport(Viewport vp);
 
 private:
+    // #TODO: More of these functions to split up renderer functionality more
+    void render_particles(Scene& scene);
+
     std::reference_wrapper<Application> app;
     WindowDim screen_size;
     Framebuffer framebuf;
@@ -59,6 +62,8 @@ private:
     VertexArray screen;
     UniformBuffer matrix_buffer;
     Resource<Shader> no_shader_error;
+    // #MaybeTODO: Move this to ParticleEmitter?
+    Resource<Shader> particle_shader;
     std::vector<Viewport> viewports;
 };
 

@@ -8,6 +8,7 @@
 #include "Components/FPSCameraController.hpp"
 #include "Components/FreeLookController.hpp"
 #include "Components/Material.hpp"
+#include "Components/ParticleEmitter.hpp"
 #include "Components/StaticMesh.hpp"
 #include "Components/Transform.hpp"
 

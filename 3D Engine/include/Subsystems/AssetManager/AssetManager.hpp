@@ -29,6 +29,21 @@ public:
         if (res == nullptr) {
             return Resource<R>(nullptr, -1, false);
         } else {
+            id_map[path] = id;
+            R* raw = res.get();
+            resources[id] = std::move(res);
+            return Resource<R>(raw, id, true);
+        }
+    }
+
+    static Resource<R> get_resource(typename R::CreateInfo const& info,
+                                    std::string const& name) {
+        auto id = IDGenerator<R>::next();
+        std::unique_ptr<R> res = std::make_unique<R>(info);
+        if (res == nullptr) {
+            return Resource<R>(nullptr, -1, false);
+        } else {
+            id_map[name] = id;
             R* raw = res.get();
             resources[id] = std::move(res);
             return Resource<R>(raw, id, true);
@@ -40,7 +55,7 @@ public:
         return resources.at(id);
     }
 
-	//#TODO: Smart resource unloading (refcount in Resource<R>)
+    //#TODO: Smart resource unloading (refcount in Resource<R>)
 
     static void unload(std::size_t id) { resources.erase(resources.find(id)); }
 

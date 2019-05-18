@@ -91,6 +91,9 @@
     <Filter Include="Source Files\Subsystems\AssetManager">
       <UniqueIdentifier>{404a3b8b-f316-48cf-bad1-e534ab1e86ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Subsystems\ECS\Components">
+      <UniqueIdentifier>{5947194c-11fc-4371-82c2-90b98a10749a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -179,6 +182,9 @@
     </ClCompile>
     <ClCompile Include="src\Subsystems\Renderer\PostProcessing.cpp">
       <Filter>Source Files\Subsystems\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Subsystems\ECS\Systems\ParticleSystem.cpp">
+      <Filter>Source Files\Subsystems\ECS\Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -337,6 +343,12 @@
     </ClInclude>
     <ClInclude Include="include\Subsystems\Renderer\PostProcessing.hpp">
       <Filter>Header Files\Subsystems\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\Components\ParticleEmitter.hpp">
+      <Filter>Header Files\Subsystems\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\Systems\ParticleSystem.hpp">
+      <Filter>Header Files\Subsystems\ECS\Systems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

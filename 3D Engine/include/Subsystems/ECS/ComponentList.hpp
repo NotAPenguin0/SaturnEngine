@@ -8,6 +8,7 @@
         ::Saturn::Components::FPSCameraController,                             \
         ::Saturn::Components::FreeLookController,                              \
         ::Saturn::Components::CameraZoomController,                            \
-        ::Saturn::Components::StaticMesh, ::Saturn::Components::Material
+        ::Saturn::Components::StaticMesh, ::Saturn::Components::Material,      \
+        ::Saturn::Components::ParticleEmitter
 
 #endif
