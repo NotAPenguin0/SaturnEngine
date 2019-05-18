@@ -86,7 +86,8 @@ void Application::run() {
             obj.add_component<Components::Material>());
         material.shader =
             AssetManager<Shader>::get_resource("resources/shaders/texture.sh");
-		material.texture = AssetManager<Texture>::get_resource("resources/textures/wood.tex");
+        material.texture =
+            AssetManager<Texture>::get_resource("resources/textures/wood.tex");
     }
 
     auto& main_cam = scene.create_object();

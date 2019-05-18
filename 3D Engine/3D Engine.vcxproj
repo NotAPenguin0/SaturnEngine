@@ -193,6 +193,7 @@
     <ClCompile Include="src\Subsystems\Renderer\Shader.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\stbi_image.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\Texture.cpp" />
+    <ClCompile Include="src\Subsystems\Renderer\UniformBuffer.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\Viewport.cpp" />
     <ClCompile Include="src\Subsystems\Scene\Scene.cpp" />
@@ -240,6 +241,7 @@
     <ClInclude Include="include\Subsystems\Renderer\Shader.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\stb_image.h" />
     <ClInclude Include="include\Subsystems\Renderer\Texture.hpp" />
+    <ClInclude Include="include\Subsystems\Renderer\UniformBuffer.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\VertexArray.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\Viewport.hpp" />
     <ClInclude Include="include\Subsystems\Scene\Scene.hpp" />

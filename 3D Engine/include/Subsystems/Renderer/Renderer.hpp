@@ -4,9 +4,11 @@
 #include "Framebuffer.hpp"
 #include "Subsystems/AssetManager/AssetManager.hpp"
 #include "Subsystems/Scene/Scene.hpp"
+#include "UniformBuffer.hpp"
 #include "Utility/Utility.hpp"
 #include "VertexArray.hpp"
 #include "Viewport.hpp"
+
 #include "glad/glad.h"
 
 #include <functional>
@@ -54,10 +56,10 @@ private:
     Framebuffer framebuf;
     ///< default constructed framebuffer means screen
     Framebuffer screen_framebuf;
-
     VertexArray screen;
-
+    UniformBuffer matrix_buffer;
     Resource<Shader> default_shader;
+    Resource<Shader> no_shader_error;
     std::vector<Viewport> viewports;
 };
 

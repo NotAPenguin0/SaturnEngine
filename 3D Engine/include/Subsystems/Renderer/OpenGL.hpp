@@ -37,7 +37,7 @@ enum class BufferTarget {
     ShaderStorageBuffer = GL_SHADER_STORAGE_BUFFER,
     TextureBuffer = GL_TEXTURE_BUFFER,
     TransformFeedbackBuffer = GL_TRANSFORM_FEEDBACK_BUFFER,
-    UniformBuffer = GL_UNIFORM_BUFFER
+	// UniformBuffer -> use specialized class
 };
 
 template<BufferTarget Target>

@@ -2,13 +2,13 @@
 
 layout(location = 0) in vec3 iPos;
 
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+layout (std140, binding = 0) uniform Matrices {
+    mat4 projection;
+    mat4 view;
+};
 
-out vec3 Position;
+layout(location = 0) uniform mat4 model;
 
 void main() {
-    Position = iPos;
     gl_Position = projection * view * model * vec4(iPos, 1.0);
 }
