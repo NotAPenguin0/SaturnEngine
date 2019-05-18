@@ -177,6 +177,9 @@
     <ClCompile Include="src\Subsystems\Renderer\UniformBuffer.cpp">
       <Filter>Source Files\Subsystems\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Subsystems\Renderer\PostProcessing.cpp">
+      <Filter>Source Files\Subsystems\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Application.hpp">
@@ -330,6 +333,9 @@
       <Filter>Header Files\Subsystems\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="include\Subsystems\Renderer\UniformBuffer.hpp">
+      <Filter>Header Files\Subsystems\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Renderer\PostProcessing.hpp">
       <Filter>Header Files\Subsystems\Renderer</Filter>
     </ClInclude>
   </ItemGroup>

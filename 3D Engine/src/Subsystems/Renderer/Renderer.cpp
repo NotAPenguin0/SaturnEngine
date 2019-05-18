@@ -3,6 +3,7 @@
 #include "Core/Application.hpp"
 #include "Subsystems/Logging/LogSystem.hpp"
 #include "Subsystems/Math/Math.hpp"
+#include "Subsystems/Renderer/PostProcessing.hpp"
 #include "Subsystems/Scene/Scene.hpp"
 #include "Utility/Exceptions.hpp"
 #include "Utility/bind_guard.hpp"
@@ -36,17 +37,9 @@ Renderer::Renderer(CreateInfo create_info) :
 
     screen.assign({screen_attributes, screen_vertices, {0, 1, 2, 0, 3, 2}});
 
-    default_shader = AssetManager<Shader>::get_resource(
-        "resources/shaders/postprocessing/default.sh");
-    if (!default_shader.is_loaded()) {
-        LogSystem::write(LogSystem::Severity::Error,
-                         "Failed to load default shader");
-    }
-
-    LogSystem::write(LogSystem::Severity::Info, "Renderer created.");
-    LogSystem::write(LogSystem::Severity::Warning,
-                     "No postprocessing shader system in place. Default shader "
-                     "will be used");
+    PostProcessing::get_instance().load_shaders(
+        "resources/shaders/postprocessing/postprocessing_effects.ppe");
+    PostProcessing::get_instance().set_active("jiggle");
 
     UniformBuffer::CreateInfo matrix_info;
     matrix_info.binding_point = 0;
@@ -168,7 +161,8 @@ void Renderer::update_screen() {
     glDisable(GL_CULL_FACE);
 
     // Set (postprocessing) shader
-    bind_guard<Shader> shader_guard(default_shader.get());
+    bind_guard<Shader> shader_guard(
+        PostProcessing::get_instance().get_active().get());
 
     // Render framebuffer texture to the screen
     glBindTexture(GL_TEXTURE_2D, framebuf.texture);

@@ -58,7 +58,6 @@ private:
     Framebuffer screen_framebuf;
     VertexArray screen;
     UniformBuffer matrix_buffer;
-    Resource<Shader> default_shader;
     Resource<Shader> no_shader_error;
     std::vector<Viewport> viewports;
 };

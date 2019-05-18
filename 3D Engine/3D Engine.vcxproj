@@ -189,6 +189,7 @@
     <ClCompile Include="src\Subsystems\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\Mesh.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\OpenGL.cpp" />
+    <ClCompile Include="src\Subsystems\Renderer\PostProcessing.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\Shader.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\stbi_image.cpp" />
@@ -237,6 +238,7 @@
     <ClInclude Include="include\Subsystems\Renderer\Framebuffer.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\Mesh.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\OpenGL.hpp" />
+    <ClInclude Include="include\Subsystems\Renderer\PostProcessing.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\Renderer.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\Shader.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\stb_image.h" />

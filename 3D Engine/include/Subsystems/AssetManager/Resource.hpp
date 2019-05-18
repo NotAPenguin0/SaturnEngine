@@ -23,6 +23,8 @@ public:
         return *this;
     }
 
+    ~Resource() {}
+
     R& get() { return *ptr; }
     R const& get() const { return *ptr; }
 
