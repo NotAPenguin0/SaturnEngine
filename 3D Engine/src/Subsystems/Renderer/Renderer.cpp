@@ -162,12 +162,16 @@ void Renderer::render_particles(Scene& scene) {
         // Bind VAO
         bind_guard<VertexArray> vao_guard(emitter.particle_vao.get());
         for (ParticleEmitter::Particle const& particle : emitter.particles) {
-            particle_shader->set_vec3("color", particle.color);
+            particle_shader->set_vec4("color", particle.color);
             //#TODO: Rotation and scale
             particle_shader->set_vec3("position", particle.position);
-			particle_shader->set_vec3("scale", {1.0f, 1.0f, 0.0f}); // TODO: particle::size
+            particle_shader->set_vec3(
+                "scale", glm::vec3(particle.size.x, particle.size.y, 0.0f));
+			Texture::bind(emitter.texture.get());
+			particle_shader->set_int("tex", emitter.texture->unit() - GL_TEXTURE0);
             glDrawElements(GL_TRIANGLES, emitter.particle_vao->index_size(),
                            GL_UNSIGNED_INT, nullptr);
+			Texture::unbind(emitter.texture.get());
         }
     }
     glEnable(GL_CULL_FACE);

@@ -3,7 +3,8 @@
 
 #include "ComponentBase.hpp"
 #include "Subsystems/AssetManager/Resource.hpp"
-#include "Subsystems/Renderer/VertexArray.hpp"
+#include "Subsystems/Renderer/Texture.hpp"
+#include "Subsystems/Renderer/VertexArray.hpp".
 
 #include <GLM/glm.hpp>
 #include <vector>
@@ -14,9 +15,10 @@ struct ParticleEmitter : ComponentBase {
     struct Particle {
         // #TODO: Better duration type
         float life_left;
-        glm::vec3 color;
+        glm::vec4 color;
         glm::vec3 position;
         glm::vec3 velocity;
+        glm::vec2 size;
     };
 
     float spawn_rate;
@@ -24,12 +26,16 @@ struct ParticleEmitter : ComponentBase {
     float start_lifetime;
 
     glm::vec3 start_velocity;
+    glm::vec4 start_color;
+    glm::vec2 start_size;
 
-	std::size_t max_particles = 1000;
+    std::size_t max_particles = 1000;
 
-    // #Optimize Have a max_particles to limit reallocations
     std::vector<Particle> particles;
-	Resource<VertexArray> particle_vao;
+    Resource<VertexArray> particle_vao;
+	Resource<Texture> texture;
+
+    float time_since_last_spawn = 0.0f;
 };
 
 } // namespace Saturn::Components

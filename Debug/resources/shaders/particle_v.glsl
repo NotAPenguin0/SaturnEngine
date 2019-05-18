@@ -8,10 +8,14 @@ layout(std140, binding = 0) uniform Matrices {
     mat4 view;
 };
 
+out vec2 TexCoords;
+
 layout(location = 0) uniform vec3 position;
 layout(location = 2) uniform vec3 scale;
 
 void main() {   
+    TexCoords = iTexCoords;
+
     vec3 camright_world = vec3(view[0][0], view[1][0], view[2][0]);
     vec3 camup_world = vec3(view[0][1], view[1][1], view[2][1]);
 //    gl_Position = projection * view * model * vec4(iPos, 1.0);

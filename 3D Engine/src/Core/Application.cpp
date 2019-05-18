@@ -105,8 +105,14 @@ void Application::run() {
         auto& emitter = scene.ecs.get_with_id<Components::ParticleEmitter>(
             obj.add_component<Components::ParticleEmitter>());
         emitter.spawn_rate = 1.0f;
-        emitter.start_lifetime = 1000.0f;
+        emitter.start_color = {1.0f, 1.0f, 1.0f, 1.0f}; //#TODO: Fix alpha
+        emitter.start_lifetime = 10.0f;
         emitter.start_velocity = {0.0f, 0.5f, 0.0f};
+        emitter.max_particles = 30;
+        emitter.start_size = {0.1f, 0.1f};
+        emitter.particles.reserve(emitter.max_particles);
+        emitter.texture =
+            AssetManager<Texture>::get_resource("resources/textures/wood.tex");
         VertexArray::CreateInfo vao_info;
         vao_info.attributes.push_back({0, 3}); // position
         vao_info.attributes.push_back({1, 2}); // texture coordinates

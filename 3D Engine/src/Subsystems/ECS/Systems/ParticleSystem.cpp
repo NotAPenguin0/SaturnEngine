@@ -8,12 +8,27 @@
 
 namespace Saturn::Systems {
 
+std::size_t ParticleSystem::particles_to_spawn(
+    float& time_since_last_spawn,
+    float spawn_interval /* = 1/particles per second */,
+    float time_delta) {
+    time_since_last_spawn += time_delta;
+    float diff = time_since_last_spawn - spawn_interval;
+    if (diff >= 0.0f) {
+        time_since_last_spawn = 0.0f;
+        return (std::size_t)(diff / spawn_interval + 1.0f);
+    } else {
+        return 0;
+    }
+}
+
 void ParticleSystem::on_update(Scene& scene) {
     using namespace Components;
 
     for (auto [emitter] : scene.get_ecs().select<ParticleEmitter>()) {
         std::size_t new_particles =
-            static_cast<std::size_t>(emitter.spawn_rate / Time::deltaTime);
+            particles_to_spawn(emitter.time_since_last_spawn,
+                               1.0f / emitter.spawn_rate, Time::deltaTime);
         if (emitter.particles.size() + new_particles > emitter.max_particles) {
             new_particles = emitter.max_particles - emitter.particles.size();
         }
@@ -59,9 +74,10 @@ void ParticleSystem::spawn_particle(Components::ParticleEmitter& emitter) {
 
     ParticleEmitter::Particle particle;
     particle.life_left = emitter.start_lifetime;
-    particle.color = {1.0, 0.0, 1.0}; // #ParticleSystemTemp
+    particle.color = emitter.start_color;
     particle.position = transform.position;
     particle.velocity = emitter.start_velocity;
+    particle.size = emitter.start_size;
 
     // Put the particle in the emitter
     emitter.particles.push_back(std::move(particle));

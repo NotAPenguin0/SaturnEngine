@@ -11,6 +11,10 @@ public:
     void on_update(Scene& scene) override;
 
 private:
+    std::size_t particles_to_spawn(float& time_since_last_spawn,
+                                   float spawn_rate,
+                                   float time_delta);
+
     void remove_expired_particles(Components::ParticleEmitter& emitter);
     void spawn_particle(Components::ParticleEmitter& emitter);
     void update_particle(Components::ParticleEmitter::Particle& particle,
