@@ -156,9 +156,10 @@ void Renderer::render_scene(Scene& scene) {
 void Renderer::render_particles(Scene& scene) {
     using namespace Components;
     bind_guard<Shader> shader_guard(particle_shader.get());
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE); //#TODO: Add option for this in emitter
+
     glDisable(GL_CULL_FACE);
     for (auto [emitter] : scene.ecs.select<ParticleEmitter>()) {
+        if (emitter.glow) { glBlendFunc(GL_SRC_ALPHA, GL_ONE); }
         // Bind VAO
         bind_guard<VertexArray> vao_guard(emitter.particle_vao.get());
         for (ParticleEmitter::Particle const& particle : emitter.particles) {
@@ -167,15 +168,20 @@ void Renderer::render_particles(Scene& scene) {
             particle_shader->set_vec3("position", particle.position);
             particle_shader->set_vec3(
                 "scale", glm::vec3(particle.size.x, particle.size.y, 0.0f));
-			Texture::bind(emitter.texture.get());
-			particle_shader->set_int("tex", emitter.texture->unit() - GL_TEXTURE0);
+            Texture::bind(emitter.texture.get());
+            particle_shader->set_int("tex",
+                                     emitter.texture->unit() - GL_TEXTURE0);
             glDrawElements(GL_TRIANGLES, emitter.particle_vao->index_size(),
                            GL_UNSIGNED_INT, nullptr);
-			Texture::unbind(emitter.texture.get());
+            Texture::unbind(emitter.texture.get());
+        }
+
+        if (emitter.glow) {
+            // reset blend func
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         }
     }
     glEnable(GL_CULL_FACE);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Renderer::update_screen() {

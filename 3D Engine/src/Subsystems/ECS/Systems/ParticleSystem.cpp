@@ -1,6 +1,7 @@
 #include "Subsystems/ECS/Systems/ParticleSystem.hpp"
 
 #include "Subsystems/ECS/Components/ParticleEmitter.hpp"
+#include "Subsystems/Math/Math.hpp"
 #include "Subsystems/Scene/Scene.hpp"
 #include "Subsystems/Time/Time.hpp"
 
@@ -26,9 +27,22 @@ void ParticleSystem::on_update(Scene& scene) {
     using namespace Components;
 
     for (auto [emitter] : scene.get_ecs().select<ParticleEmitter>()) {
+
+        // Check if we need to continue spawning particles
+
         std::size_t new_particles =
             particles_to_spawn(emitter.time_since_last_spawn,
                                1.0f / emitter.spawn_rate, Time::deltaTime);
+
+        emitter.time_since_start += Time::deltaTime;
+        //#TODO: Move this to particles_to_spawn()? Especially second check
+        if (!emitter.loop) {
+            // Check if effect has stopped
+            if (emitter.time_since_start >= emitter.duration) {
+                new_particles = 0;
+            }
+        }
+
         if (emitter.particles.size() + new_particles > emitter.max_particles) {
             new_particles = emitter.max_particles - emitter.particles.size();
         }
@@ -87,11 +101,36 @@ void ParticleSystem::update_particle(
     Components::ParticleEmitter::Particle& particle,
     Components::ParticleEmitter& emitter) {
     using namespace Components;
-    (void)emitter;
+
+    // Update life left
     particle.life_left -= Time::deltaTime;
+    // If particle is still alive, update it
     if (particle.life_left > 0.0f) {
+        // Update position
         particle.position += particle.velocity * Time::deltaTime;
+        // Update scale
+        particle.size = emitter.start_size *
+                        glm::vec2(value_over_lifetime(
+                            emitter, particle, emitter.size_over_lifetime));
+		// Update velocity
+        particle.velocity = emitter.start_velocity *
+                            glm::vec3(value_over_lifetime(
+                                emitter, particle, emitter.velocity_over_lifetime));
     }
+}
+
+float ParticleSystem::value_over_lifetime(
+    Components::ParticleEmitter& emitter,
+    Components::ParticleEmitter::Particle& particle,
+    Math::Curve const& curve) {
+
+    float curve_val = curve.get(emitter.start_lifetime - particle.life_left,
+                                emitter.start_lifetime);
+
+    // Map from [0, start_lifetime] to [0, scale]
+    float new_val = Math::map_range(curve_val, 0.0f, emitter.start_lifetime,
+                                    0.0f, curve.scale);
+    return new_val;
 }
 
 } // namespace Saturn::Systems

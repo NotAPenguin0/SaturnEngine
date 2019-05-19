@@ -18,10 +18,6 @@ public:
 
     SceneObject(Scene* s, SceneObject* parent = nullptr);
 
-    struct Debug {
-        Resource<Shader> shader;
-    } debug;
-
     template<typename C, typename... Args>
     std::size_t add_component(Args&&... args) {
         auto& ecs = scene->ecs;

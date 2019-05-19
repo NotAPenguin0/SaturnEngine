@@ -186,6 +186,9 @@
     <ClCompile Include="src\Subsystems\ECS\Systems\ParticleSystem.cpp">
       <Filter>Source Files\Subsystems\ECS\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="src\Subsystems\Math\Curve.cpp">
+      <Filter>Source Files\Subsystems\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Application.hpp">
@@ -349,6 +352,9 @@
     </ClInclude>
     <ClInclude Include="include\Subsystems\ECS\Systems\ParticleSystem.hpp">
       <Filter>Header Files\Subsystems\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Math\Curve.hpp">
+      <Filter>Header Files\Subsystems\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

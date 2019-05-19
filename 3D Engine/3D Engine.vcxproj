@@ -186,6 +186,7 @@
     <ClCompile Include="src\Subsystems\ECS\Systems\SystemBase.cpp" />
     <ClCompile Include="src\Subsystems\Input\Input.cpp" />
     <ClCompile Include="src\Subsystems\Logging\LogSystem.cpp" />
+    <ClCompile Include="src\Subsystems\Math\Curve.cpp" />
     <ClCompile Include="src\Subsystems\Math\RandomEngine.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\Mesh.cpp" />
@@ -235,6 +236,7 @@
     <ClInclude Include="include\Subsystems\Logging\LogSystem.hpp" />
     <ClInclude Include="include\Subsystems\Logging\rang.hpp" />
     <ClInclude Include="include\Subsystems\Math\ConstexprMath.hpp" />
+    <ClInclude Include="include\Subsystems\Math\Curve.hpp" />
     <ClInclude Include="include\Subsystems\Math\Math.hpp" />
     <ClInclude Include="include\Subsystems\Math\math_traits.hpp" />
     <ClInclude Include="include\Subsystems\Math\RandomEngine.hpp" />

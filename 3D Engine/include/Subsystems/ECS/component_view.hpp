@@ -82,7 +82,7 @@ public:
     private:
         void ensure_valid_iterator() {
             if (stop || it == last) return;
-            while (!((*it)->template has_component<Cs>() && ...)) { ++(*this); }
+            while (it != last && !((*it)->template has_component<Cs>() && ...)) { ++(*this); }
         }
 
         entity_iterator it;

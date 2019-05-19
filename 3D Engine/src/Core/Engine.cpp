@@ -75,8 +75,8 @@ Application Engine::initialize(CreateInfo create_info) {
     // Enable some OpenGL functionality we're going to need
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
-    //    glEnable(GL_BLEND);
-    //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Enable debug output if specified
     if (create_info.enable_debug_output) {

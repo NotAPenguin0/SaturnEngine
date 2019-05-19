@@ -91,10 +91,10 @@ void Application::run() {
             scene.ecs.get_with_id<Components::Transform>(transform_id);
         transform.position = glm::vec3(5.0f, 0.0f, 0.0f);
         transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
-        auto& mesh = scene.ecs.get_with_id<Components::StaticMesh>(
+        /*auto& mesh = scene.ecs.get_with_id<Components::StaticMesh>(
             obj.add_component<Components::StaticMesh>());
         mesh.mesh =
-            AssetManager<Mesh>::get_resource("resources/meshes/my_cube.mesh");
+            AssetManager<Mesh>::get_resource("resources/meshes/my_cube.mesh");*/
         auto& material = scene.ecs.get_with_id<Components::Material>(
             obj.add_component<Components::Material>());
         material.shader =
@@ -104,13 +104,19 @@ void Application::run() {
 
         auto& emitter = scene.ecs.get_with_id<Components::ParticleEmitter>(
             obj.add_component<Components::ParticleEmitter>());
-        emitter.spawn_rate = 1.0f;
-        emitter.start_color = {1.0f, 1.0f, 1.0f, 1.0f}; //#TODO: Fix alpha
+        emitter.spawn_rate = 0.5f;
+        emitter.start_color = {1.0f, 1.0f, 1.0f, 1.0f};
         emitter.start_lifetime = 10.0f;
         emitter.start_velocity = {0.0f, 0.5f, 0.0f};
         emitter.max_particles = 30;
-        emitter.start_size = {0.1f, 0.1f};
+        emitter.start_size = {0.5f, 0.5f};
         emitter.particles.reserve(emitter.max_particles);
+        emitter.loop = true;
+        emitter.duration = 5.0f;
+        emitter.size_over_lifetime =
+            Math::Curve {Math::CurveShape::LinearDown, 1.0f};
+        emitter.velocity_over_lifetime =
+            Math::Curve {Math::CurveShape::Constant, 1.0f};
         emitter.texture =
             AssetManager<Texture>::get_resource("resources/textures/wood.tex");
         VertexArray::CreateInfo vao_info;

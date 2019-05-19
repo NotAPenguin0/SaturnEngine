@@ -19,6 +19,10 @@ private:
     void spawn_particle(Components::ParticleEmitter& emitter);
     void update_particle(Components::ParticleEmitter::Particle& particle,
                          Components::ParticleEmitter& emitter);
+
+    float value_over_lifetime(Components::ParticleEmitter& emitter,
+                              Components::ParticleEmitter::Particle& particle,
+                              Math::Curve const& curve);
 };
 
 } // namespace Saturn::Systems
