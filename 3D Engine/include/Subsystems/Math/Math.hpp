@@ -5,10 +5,14 @@
 
 #include "ConstexprMath.hpp"
 #include "Curve.hpp"
+#include "NumericRange.hpp"
 #include "RandomEngine.hpp"
+
+#define GLM_ENABLE_EXPERIMENTAL
 
 #include <GLM/glm.hpp>
 #include <GLM/gtc/matrix_transform.hpp>
+#include <GLM/gtx/quaternion.hpp>
 
 namespace glm {
 
@@ -30,6 +34,27 @@ T map_range(T input, T input_start, T input_end, T output_start, T output_end) {
     return output;
 }
 
-} // namespace Math
+inline glm::vec3 rotate_vector_by_quaternion(const glm::vec3& v,
+                                             const glm::quat& q) {
+    // Extract the vector part of the quaternion
+    glm::vec3 u(q.x, q.y, q.z);
+
+    // Extract the scalar part of the quaternion
+    float s = q.w;
+
+    // Do the math
+    return 2.0f * glm::dot(u, v) * u + (s * s - glm::dot(u, u)) * v +
+           2.0f * s * glm::cross(u, v);
+}
+
+inline glm::vec3 spherical_to_cartesian(glm::vec3 const& spherical) {
+    float const& r = spherical.x;
+    float const& th = spherical.y;
+    float const& ph = spherical.z;
+    return {r * std::sin(th) * std::cos(ph), r * std::cos(th),
+            r * std::sin(th) * std::sin(ph)};
+}
+
+} // namespace Saturn::Math
 
 #endif

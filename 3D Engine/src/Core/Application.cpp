@@ -104,21 +104,21 @@ void Application::run() {
 
         auto& emitter = scene.ecs.get_with_id<Components::ParticleEmitter>(
             obj.add_component<Components::ParticleEmitter>());
-        emitter.spawn_rate = 0.5f;
-        emitter.start_color = {1.0f, 1.0f, 1.0f, 1.0f};
-        emitter.start_lifetime = 10.0f;
-        emitter.start_velocity = {0.0f, 0.5f, 0.0f};
-        emitter.max_particles = 30;
-        emitter.start_size = {0.5f, 0.5f};
-        emitter.particles.reserve(emitter.max_particles);
-        emitter.loop = true;
-        emitter.duration = 5.0f;
-        emitter.size_over_lifetime =
-            Math::Curve {Math::CurveShape::LinearDown, 1.0f};
-        emitter.velocity_over_lifetime =
-            Math::Curve {Math::CurveShape::Constant, 1.0f};
-        emitter.texture =
-            AssetManager<Texture>::get_resource("resources/textures/wood.tex");
+        emitter.main.start_color = {1.0f, 1.0f, 1.0f, 1.0f};
+        emitter.main.start_lifetime = 10.0f;
+        emitter.emission.spawn_rate = 0.5f;
+        emitter.main.start_velocity = 1.0f;
+        emitter.main.max_particles = 30;
+        emitter.main.start_size = {0.5f, 0.5f};
+        emitter.particles.reserve(emitter.main.max_particles);
+        emitter.main.loop = true;
+        emitter.main.duration = 5.0f;
+        emitter.color_over_lifetime.enabled = true;
+        emitter.color_over_lifetime.gradient =
+            ColorGradient{{1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}};
+        emitter.shape.shape =
+            Components::ParticleEmitter::SpawnShape::Sphere;
+        emitter.shape.randomize_direction = 1.0f;
         VertexArray::CreateInfo vao_info;
         vao_info.attributes.push_back({0, 3}); // position
         vao_info.attributes.push_back({1, 2}); // texture coordinates

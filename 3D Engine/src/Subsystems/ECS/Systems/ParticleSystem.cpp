@@ -2,6 +2,7 @@
 
 #include "Subsystems/ECS/Components/ParticleEmitter.hpp"
 #include "Subsystems/Math/Math.hpp"
+#include "Subsystems/Math/math_traits.hpp"
 #include "Subsystems/Scene/Scene.hpp"
 #include "Subsystems/Time/Time.hpp"
 
@@ -30,21 +31,26 @@ void ParticleSystem::on_update(Scene& scene) {
 
         // Check if we need to continue spawning particles
 
-        std::size_t new_particles =
-            particles_to_spawn(emitter.time_since_last_spawn,
-                               1.0f / emitter.spawn_rate, Time::deltaTime);
+        std::size_t new_particles = particles_to_spawn(
+            emitter.time_since_last_spawn, 1.0f / emitter.emission.spawn_rate,
+            Time::deltaTime);
 
+        if (!emitter.emission.enabled) { new_particles = 0; }
         emitter.time_since_start += Time::deltaTime;
-        //#TODO: Move this to particles_to_spawn()? Especially second check
-        if (!emitter.loop) {
+        //#TODO: Move this to particles_to_spawn()?
+        if (!emitter.main.enabled) {
+            new_particles = 0;
+        } else if (!emitter.main.loop) {
             // Check if effect has stopped
-            if (emitter.time_since_start >= emitter.duration) {
+            if (emitter.time_since_start >= emitter.main.duration) {
                 new_particles = 0;
             }
         }
 
-        if (emitter.particles.size() + new_particles > emitter.max_particles) {
-            new_particles = emitter.max_particles - emitter.particles.size();
+        if (emitter.particles.size() + new_particles >
+            emitter.main.max_particles) {
+            new_particles =
+                emitter.main.max_particles - emitter.particles.size();
         }
 
         // #MaybeOptimize Insertion/deletion of particles (maybe switch to
@@ -87,11 +93,46 @@ void ParticleSystem::spawn_particle(Components::ParticleEmitter& emitter) {
     auto& transform = emitter.entity->get_component<Transform>();
 
     ParticleEmitter::Particle particle;
-    particle.life_left = emitter.start_lifetime;
-    particle.color = emitter.start_color;
+    particle.life_left = emitter.main.start_lifetime;
+    particle.color = emitter.main.start_color;
     particle.position = transform.position;
-    particle.velocity = emitter.start_velocity;
-    particle.size = emitter.start_size;
+
+    float randomness = emitter.shape.randomize_direction;
+
+    // Start direction in spherical coordinates
+    glm::vec3 start_direction;
+    if (emitter.shape.shape == ParticleEmitter::SpawnShape::Sphere) {
+        // Note that the radius is 1.0 since we want
+        // our direction normalized. We can do this because the shape's radius
+        // has no effect on the generated direction.
+        start_direction = {1.0f, 0.0f, 0.0f};
+    } else if (emitter.shape.shape ==
+               Components::ParticleEmitter::SpawnShape::Hemisphere) {
+        start_direction = {1.0f, 0.0f, 0.0f};
+        // Make sure randomness direction is always on the hemisphere
+        // #TODO: Split up all this logic in a function for each shape
+        randomness /= 4.0f;
+    }
+
+    // Get direction
+    glm::vec3 direction = Math::spherical_to_cartesian(start_direction);
+
+    float r1 = Math::RandomEngine::get(0.0f, 1.0f);
+    float r2 = Math::RandomEngine::get(0.0f, 1.0f);
+    static constexpr float pi = Math::math_traits<float>::pi;
+
+    float theta_max = pi * randomness;
+    float x = std::cos(2 * pi * r1) *
+              std::sqrt(1 - std::pow((1 - r2 * (1 - std::cos(theta_max))), 2));
+    float z = std::sin(2 * pi * r1) *
+              std::sqrt(1 - std::pow((1 - r2 * (1 - std::cos(theta_max))), 2));
+    float y = 1 - r2 * (1 - std::cos(theta_max));
+
+    glm::quat rotation = glm::rotation(direction, glm::vec3(x, y, z));
+
+    particle.direction = Math::rotate_vector_by_quaternion(direction, rotation);
+    particle.velocity = emitter.main.start_velocity;
+    particle.size = emitter.main.start_size;
 
     // Put the particle in the emitter
     emitter.particles.push_back(std::move(particle));
@@ -107,15 +148,30 @@ void ParticleSystem::update_particle(
     // If particle is still alive, update it
     if (particle.life_left > 0.0f) {
         // Update position
-        particle.position += particle.velocity * Time::deltaTime;
+        particle.position +=
+            particle.direction * particle.velocity * Time::deltaTime;
         // Update scale
-        particle.size = emitter.start_size *
-                        glm::vec2(value_over_lifetime(
-                            emitter, particle, emitter.size_over_lifetime));
-		// Update velocity
-        particle.velocity = emitter.start_velocity *
-                            glm::vec3(value_over_lifetime(
-                                emitter, particle, emitter.velocity_over_lifetime));
+        if (emitter.size_over_lifetime.enabled) {
+            particle.size =
+                emitter.main.start_size *
+                glm::vec2(value_over_lifetime(
+                    emitter, particle, emitter.size_over_lifetime.modifier));
+        }
+        // Update velocity
+        if (emitter.velocity_over_lifetime.enabled) {
+            particle.velocity =
+                emitter.main.start_velocity *
+                value_over_lifetime(emitter, particle,
+                                    emitter.velocity_over_lifetime.modifier);
+        }
+
+        // Update color
+        if (emitter.color_over_lifetime.enabled) {
+            particle.color = emitter.color_over_lifetime.gradient.interpolate(
+                Math::map_range(emitter.main.start_lifetime -
+                                    particle.life_left,
+                                0.0f, emitter.main.start_lifetime, 0.0f, 1.0f));
+        }
     }
 }
 
@@ -124,11 +180,14 @@ float ParticleSystem::value_over_lifetime(
     Components::ParticleEmitter::Particle& particle,
     Math::Curve const& curve) {
 
-    float curve_val = curve.get(emitter.start_lifetime - particle.life_left,
-                                emitter.start_lifetime);
+    float curve_val =
+        curve.get(emitter.main.start_lifetime - particle.life_left,
+                  emitter.main.start_lifetime);
+
+    auto curve_range = curve.output_range(emitter.main.start_lifetime);
 
     // Map from [0, start_lifetime] to [0, scale]
-    float new_val = Math::map_range(curve_val, 0.0f, emitter.start_lifetime,
+    float new_val = Math::map_range(curve_val, curve_range.min, curve_range.max,
                                     0.0f, curve.scale);
     return new_val;
 }

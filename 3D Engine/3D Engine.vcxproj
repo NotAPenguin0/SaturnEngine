@@ -202,6 +202,7 @@
     <ClCompile Include="src\Subsystems\Scene\Scene.cpp" />
     <ClCompile Include="src\Subsystems\Scene\SceneObject.cpp" />
     <ClCompile Include="src\Subsystems\Time\Time.cpp" />
+    <ClCompile Include="src\Utility\ColorGradient.cpp" />
     <ClCompile Include="src\Utility\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -239,6 +240,7 @@
     <ClInclude Include="include\Subsystems\Math\Curve.hpp" />
     <ClInclude Include="include\Subsystems\Math\Math.hpp" />
     <ClInclude Include="include\Subsystems\Math\math_traits.hpp" />
+    <ClInclude Include="include\Subsystems\Math\NumericRange.hpp" />
     <ClInclude Include="include\Subsystems\Math\RandomEngine.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\Framebuffer.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\Mesh.hpp" />
@@ -256,6 +258,7 @@
     <ClInclude Include="include\Subsystems\Time\Time.hpp" />
     <ClInclude Include="include\Utility\bind_guard.hpp" />
     <ClInclude Include="include\Utility\bind_tracker.hpp" />
+    <ClInclude Include="include\Utility\ColorGradient.hpp" />
     <ClInclude Include="include\Utility\Exceptions.hpp" />
     <ClInclude Include="include\Utility\IDGenerator.hpp" />
     <ClInclude Include="include\Utility\type_erased.hpp" />

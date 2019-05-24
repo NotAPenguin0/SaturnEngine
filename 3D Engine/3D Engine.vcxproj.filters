@@ -189,6 +189,9 @@
     <ClCompile Include="src\Subsystems\Math\Curve.cpp">
       <Filter>Source Files\Subsystems\Math</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utility\ColorGradient.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Application.hpp">
@@ -355,6 +358,12 @@
     </ClInclude>
     <ClInclude Include="include\Subsystems\Math\Curve.hpp">
       <Filter>Header Files\Subsystems\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Math\NumericRange.hpp">
+      <Filter>Header Files\Subsystems\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\ColorGradient.hpp">
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

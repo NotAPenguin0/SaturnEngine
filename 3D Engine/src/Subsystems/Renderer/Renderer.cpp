@@ -157,6 +157,9 @@ void Renderer::render_particles(Scene& scene) {
     using namespace Components;
     bind_guard<Shader> shader_guard(particle_shader.get());
 
+    Resource<Texture> default_texture =
+        AssetManager<Texture>::get_resource("resources/textures/white.tex");
+
     glDisable(GL_CULL_FACE);
     for (auto [emitter] : scene.ecs.select<ParticleEmitter>()) {
         if (emitter.glow) { glBlendFunc(GL_SRC_ALPHA, GL_ONE); }
@@ -164,20 +167,23 @@ void Renderer::render_particles(Scene& scene) {
         bind_guard<VertexArray> vao_guard(emitter.particle_vao.get());
         for (ParticleEmitter::Particle const& particle : emitter.particles) {
             particle_shader->set_vec4("color", particle.color);
-            //#TODO: Rotation and scale
             particle_shader->set_vec3("position", particle.position);
             particle_shader->set_vec3(
                 "scale", glm::vec3(particle.size.x, particle.size.y, 0.0f));
-            Texture::bind(emitter.texture.get());
-            particle_shader->set_int("tex",
-                                     emitter.texture->unit() - GL_TEXTURE0);
+            auto& texture = emitter.texture.is_loaded() ? emitter.texture.get()
+                                                        : default_texture.get();
+
+            Texture::bind(texture);
+            particle_shader->set_int("tex", texture.unit() - GL_TEXTURE0);
+
             glDrawElements(GL_TRIANGLES, emitter.particle_vao->index_size(),
                            GL_UNSIGNED_INT, nullptr);
-            Texture::unbind(emitter.texture.get());
+
+            Texture::unbind(texture);
         }
 
         if (emitter.glow) {
-            // reset blend func
+            // reset blend function to old one
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         }
     }

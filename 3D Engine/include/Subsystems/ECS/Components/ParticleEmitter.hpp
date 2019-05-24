@@ -4,11 +4,14 @@
 #include "ComponentBase.hpp"
 #include "Subsystems/AssetManager/Resource.hpp"
 #include "Subsystems/Math/Curve.hpp"
+#include "Subsystems/Math/math_traits.hpp"
 #include "Subsystems/Renderer/Texture.hpp"
 #include "Subsystems/Renderer/VertexArray.hpp"
+#include "Utility/ColorGradient.hpp"
 
 #include <GLM/glm.hpp>
 #include <vector>
+#include <optional>
 
 namespace Saturn {
 namespace Systems {
@@ -24,43 +27,74 @@ struct ParticleEmitter : ComponentBase {
         float life_left;
         glm::vec4 color;
         glm::vec3 position;
-        glm::vec3 velocity;
+        float velocity;
+        glm::vec3 direction;
         glm::vec2 size;
     };
 
-    /*Basic Information*/
+    struct MainModule {
+        // If disabled, no particles will spawn
+        bool enabled = true;
 
-    float spawn_rate;
-    // #TODO: Better duration type
-    float start_lifetime;
+        // #TODO: Better duration type
+        float start_lifetime;
 
-    glm::vec3 start_velocity;
-    glm::vec4 start_color;
-    glm::vec2 start_size;
+        float start_velocity;
+        glm::vec4 start_color;
+        glm::vec2 start_size;
 
-    // Total duration for which particles should spawn. In seconds
-    float duration = 5.0f;
-    bool loop = true;
+        // Total duration for which particles should spawn. In seconds
+        float duration = 5.0f;
+        bool loop = true;
 
-    // Curves
-    Math::Curve size_over_lifetime =
-        Math::Curve{Math::CurveShape::Constant, 1.0f};
-    Math::Curve velocity_over_lifetime =
-        Math::Curve{Math::CurveShape::Constant, 1.0f};
+        std::size_t max_particles = 1000;
+    };
+
+    struct EmissionModule {
+        // If disabled, no particles will spawn
+        bool enabled = true;
+        float spawn_rate = 1.0f;
+    };
+
+    struct VelocityOverTimeModule {
+        bool enabled = false;
+        Math::Curve modifier = {Math::CurveShape::Constant, 1.0f};
+    };
+
+    struct SizeOverTimeModule {
+        bool enabled = false;
+        Math::Curve modifier = {Math::CurveShape::Constant, 1.0f};
+    };
+
+    struct ColorOverTimeModule {
+        bool enabled = false;
+        ColorGradient gradient;
+    };
+
+    enum class SpawnShape { Sphere, Hemisphere };
+
+    struct ShapeModule {
+        bool enabled = true;
+
+        SpawnShape shape;
+
+		// Only present if shape is a Sphere or a Hemisphere
+        std::optional<float> radius = 1.0f;
+
+        // Must be in range [0, 1] //#Enforce
+        float randomize_direction = 0.0f;
+    };
 
     // Special effects
     bool glow = false; //#TODO: Find better name
 
-    std::size_t max_particles = 1000;
-
-    /*Spawn shape module*/
-
-    enum class SpawnShape { Box };
-
-    struct Shape {
-        SpawnShape shape;
-
-    } shape;
+    // Modules:
+    MainModule main;
+    EmissionModule emission;
+    VelocityOverTimeModule velocity_over_lifetime;
+    SizeOverTimeModule size_over_lifetime;
+    ColorOverTimeModule color_over_lifetime;
+    ShapeModule shape;
 
     std::vector<Particle> particles;
     Resource<VertexArray> particle_vao;

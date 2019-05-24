@@ -13,4 +13,12 @@ float Curve::get(float x, float x_max) const {
     }
 }
 
+numeric_range<float> Curve::output_range(float xmax) const {
+    switch (shape) {
+        case CurveShape::Constant: return {0.0f, scale};
+        case CurveShape::LinearUp: return {0.0f, xmax * scale};
+        case CurveShape::LinearDown: return {0.0f, xmax * scale};
+    }
+}
+
 } // namespace Saturn::Math
