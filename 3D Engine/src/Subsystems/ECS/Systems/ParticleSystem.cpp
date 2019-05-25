@@ -97,40 +97,17 @@ void ParticleSystem::spawn_particle(Components::ParticleEmitter& emitter) {
     particle.color = emitter.main.start_color;
     particle.position = transform.position;
 
-    float randomness = emitter.shape.randomize_direction;
+    // Direction
 
-    // Start direction in spherical coordinates
-    glm::vec3 start_direction;
+    float const& randomness = emitter.shape.randomize_direction;
+
+    // #TODO: make this a switch
     if (emitter.shape.shape == ParticleEmitter::SpawnShape::Sphere) {
-        // Note that the radius is 1.0 since we want
-        // our direction normalized. We can do this because the shape's radius
-        // has no effect on the generated direction.
-        start_direction = {1.0f, 0.0f, 0.0f};
-    } else if (emitter.shape.shape ==
-               Components::ParticleEmitter::SpawnShape::Hemisphere) {
-        start_direction = {1.0f, 0.0f, 0.0f};
-        // Make sure randomness direction is always on the hemisphere
-        // #TODO: Split up all this logic in a function for each shape
-        randomness /= 4.0f;
+        particle.direction = direction_in_sphere(randomness);
+    } else if (emitter.shape.shape == ParticleEmitter::SpawnShape::Hemisphere) {
+        particle.direction = direction_in_hemisphere(randomness);
     }
 
-    // Get direction
-    glm::vec3 direction = Math::spherical_to_cartesian(start_direction);
-
-    float r1 = Math::RandomEngine::get(0.0f, 1.0f);
-    float r2 = Math::RandomEngine::get(0.0f, 1.0f);
-    static constexpr float pi = Math::math_traits<float>::pi;
-
-    float theta_max = pi * randomness;
-    float x = std::cos(2 * pi * r1) *
-              std::sqrt(1 - std::pow((1 - r2 * (1 - std::cos(theta_max))), 2));
-    float z = std::sin(2 * pi * r1) *
-              std::sqrt(1 - std::pow((1 - r2 * (1 - std::cos(theta_max))), 2));
-    float y = 1 - r2 * (1 - std::cos(theta_max));
-
-    glm::quat rotation = glm::rotation(direction, glm::vec3(x, y, z));
-
-    particle.direction = Math::rotate_vector_by_quaternion(direction, rotation);
     particle.velocity = emitter.main.start_velocity;
     particle.size = emitter.main.start_size;
 
@@ -190,6 +167,38 @@ float ParticleSystem::value_over_lifetime(
     float new_val = Math::map_range(curve_val, curve_range.min, curve_range.max,
                                     0.0f, curve.scale);
     return new_val;
+}
+
+glm::vec3 ParticleSystem::random_direction(glm::vec3 const& base,
+                                           float randomness) {
+    glm::vec3 direction = Math::spherical_to_cartesian(base);
+
+    float r1 = Math::RandomEngine::get(0.0f, 1.0f);
+    float r2 = Math::RandomEngine::get(0.0f, 1.0f);
+    static constexpr float pi = Math::math_traits<float>::pi;
+
+    float theta_max = pi * randomness;
+    float x = std::cos(2 * pi * r1) *
+              std::sqrt(1 - std::pow((1 - r2 * (1 - std::cos(theta_max))), 2));
+    float z = std::sin(2 * pi * r1) *
+              std::sqrt(1 - std::pow((1 - r2 * (1 - std::cos(theta_max))), 2));
+    float y = 1 - r2 * (1 - std::cos(theta_max));
+
+    glm::quat rotation = glm::rotation(direction, glm::vec3(x, y, z));
+
+    return Math::rotate_vector_by_quaternion(direction, rotation);
+}
+
+glm::vec3 ParticleSystem::direction_in_sphere(float randomness) {
+    static constexpr glm::vec3 base = {1.0f, 0.0f, 0.0f};
+    return random_direction(base, randomness);
+}
+
+glm::vec3 ParticleSystem::direction_in_hemisphere(float randomness) {
+    static constexpr glm::vec3 base = {1.0f, 0.0f, 0.0f};
+    // Divide by 4 to transform given randomness for a full sphere to the
+    // hemisphere
+    return random_direction(base, randomness / 4.0f);
 }
 
 } // namespace Saturn::Systems

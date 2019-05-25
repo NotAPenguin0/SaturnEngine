@@ -6,6 +6,7 @@
 
 namespace Saturn::Systems {
 
+//#MaybeTODO: GPU particle system like UE4?
 class ParticleSystem : public SystemBase {
 public:
     void on_update(Scene& scene) override;
@@ -23,6 +24,10 @@ private:
     float value_over_lifetime(Components::ParticleEmitter& emitter,
                               Components::ParticleEmitter::Particle& particle,
                               Math::Curve const& curve);
+
+	glm::vec3 random_direction(glm::vec3 const& base, float randomness);
+	glm::vec3 direction_in_sphere(float randomness);
+    glm::vec3 direction_in_hemisphere(float randomness);
 };
 
 } // namespace Saturn::Systems

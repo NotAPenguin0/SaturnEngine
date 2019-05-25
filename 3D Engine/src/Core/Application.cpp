@@ -105,11 +105,11 @@ void Application::run() {
         auto& emitter = scene.ecs.get_with_id<Components::ParticleEmitter>(
             obj.add_component<Components::ParticleEmitter>());
         emitter.main.start_color = {1.0f, 1.0f, 1.0f, 1.0f};
-        emitter.main.start_lifetime = 10.0f;
-        emitter.emission.spawn_rate = 0.5f;
-        emitter.main.start_velocity = 1.0f;
-        emitter.main.max_particles = 30;
-        emitter.main.start_size = {0.5f, 0.5f};
+        emitter.main.start_lifetime = 5.0f;
+        emitter.emission.spawn_rate = 1000.0f;
+        emitter.main.start_velocity = 3.0f;
+        emitter.main.max_particles = 50000;
+        emitter.main.start_size = {0.1f, 0.1f};
         emitter.particles.reserve(emitter.main.max_particles);
         emitter.main.loop = true;
         emitter.main.duration = 5.0f;
