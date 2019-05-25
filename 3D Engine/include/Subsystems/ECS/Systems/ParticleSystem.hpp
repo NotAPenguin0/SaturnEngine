@@ -27,7 +27,11 @@ private:
 
 	glm::vec3 random_direction(glm::vec3 const& base, float randomness);
 	glm::vec3 direction_in_sphere(float randomness);
-    glm::vec3 direction_in_hemisphere(float randomness);
+    glm::vec3 direction_in_hemisphere(float randomness, glm::vec3 base = {0.0f, 1.0f, 0.0f});
+
+	glm::vec3 random_position(glm::vec3 const& base, float max_offset);
+	glm::vec3 position_on_sphere(float radius);
+	glm::vec3 position_on_hemisphere(float radius);
 };
 
 } // namespace Saturn::Systems

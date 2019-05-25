@@ -89,7 +89,7 @@ void Application::run() {
     {
         auto& transform =
             scene.ecs.get_with_id<Components::Transform>(transform_id);
-        transform.position = glm::vec3(5.0f, 0.0f, 0.0f);
+        transform.position = glm::vec3(8.0f, 0.0f, 0.0f);
         transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
         /*auto& mesh = scene.ecs.get_with_id<Components::StaticMesh>(
             obj.add_component<Components::StaticMesh>());
@@ -105,11 +105,11 @@ void Application::run() {
         auto& emitter = scene.ecs.get_with_id<Components::ParticleEmitter>(
             obj.add_component<Components::ParticleEmitter>());
         emitter.main.start_color = {1.0f, 1.0f, 1.0f, 1.0f};
-        emitter.main.start_lifetime = 5.0f;
-        emitter.emission.spawn_rate = 1000.0f;
-        emitter.main.start_velocity = 3.0f;
-        emitter.main.max_particles = 50000;
-        emitter.main.start_size = {0.1f, 0.1f};
+        emitter.main.start_lifetime = 0.1f;
+        emitter.emission.spawn_rate = 8000.0f;
+        emitter.main.start_velocity = 0.0f;
+        emitter.main.max_particles = 10000;
+        emitter.main.start_size = {0.05f, 0.05f};
         emitter.particles.reserve(emitter.main.max_particles);
         emitter.main.loop = true;
         emitter.main.duration = 5.0f;
@@ -117,7 +117,8 @@ void Application::run() {
         emitter.color_over_lifetime.gradient =
             ColorGradient{{1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}};
         emitter.shape.shape =
-            Components::ParticleEmitter::SpawnShape::Sphere;
+            Components::ParticleEmitter::SpawnShape::Hemisphere;
+		emitter.shape.radius = 3.0f;
         emitter.shape.randomize_direction = 1.0f;
         VertexArray::CreateInfo vao_info;
         vao_info.attributes.push_back({0, 3}); // position

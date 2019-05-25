@@ -153,6 +153,7 @@ void Renderer::render_scene(Scene& scene) {
     }
 }
 
+//#MaybeTODO: Render particles with GL_POINTS if they're not textured?
 void Renderer::render_particles(Scene& scene) {
     using namespace Components;
     bind_guard<Shader> shader_guard(particle_shader.get());
@@ -162,7 +163,7 @@ void Renderer::render_particles(Scene& scene) {
 
     glDisable(GL_CULL_FACE);
     for (auto [emitter] : scene.ecs.select<ParticleEmitter>()) {
-        if (emitter.glow) { glBlendFunc(GL_SRC_ALPHA, GL_ONE); }
+        if (emitter.additive) { glBlendFunc(GL_SRC_ALPHA, GL_ONE); }
         // Bind VAO
         bind_guard<VertexArray> vao_guard(emitter.particle_vao.get());
         for (ParticleEmitter::Particle const& particle : emitter.particles) {
@@ -182,7 +183,7 @@ void Renderer::render_particles(Scene& scene) {
             Texture::unbind(texture);
         }
 
-        if (emitter.glow) {
+        if (emitter.additive) {
             // reset blend function to old one
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         }

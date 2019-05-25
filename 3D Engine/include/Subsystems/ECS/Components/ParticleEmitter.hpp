@@ -10,8 +10,8 @@
 #include "Utility/ColorGradient.hpp"
 
 #include <GLM/glm.hpp>
-#include <vector>
 #include <optional>
+#include <vector>
 
 namespace Saturn {
 namespace Systems {
@@ -71,22 +71,33 @@ struct ParticleEmitter : ComponentBase {
         ColorGradient gradient;
     };
 
-    enum class SpawnShape { Sphere, Hemisphere };
+    enum class SpawnShape { Sphere, Hemisphere, Cone };
+    enum class SpawnMode { Random };
 
     struct ShapeModule {
         bool enabled = true;
 
         SpawnShape shape;
 
-		// Only present if shape is a Sphere or a Hemisphere
+        // Only present if shape is a Sphere or a Hemisphere
         std::optional<float> radius = 1.0f;
+        // Only present if shape is a Cone
+        std::optional<float> angle;
+        // Only present if shape is a Cone. Represents the area of the circle to
+        // use (in degrees)
+        std::optional<float> arc;
+		// Only present if shape is a Cone
+        std::optional<SpawnMode> mode;
+
 
         // Must be in range [0, 1] //#Enforce
         float randomize_direction = 0.0f;
+        //#MaybeTODO: Vector for x, y, z separate? (Optional)
+        float random_position_offset = 0.0f;
     };
 
     // Special effects
-    bool glow = false; //#TODO: Find better name
+    bool additive = false;
 
     // Modules:
     MainModule main;
