@@ -32,6 +32,8 @@ private:
 	glm::vec3 random_position(glm::vec3 const& base, float max_offset);
 	glm::vec3 position_on_sphere(float radius);
 	glm::vec3 position_on_hemisphere(float radius);
+
+	glm::vec3 position_on_circle(float radius, float arc);
 };
 
 } // namespace Saturn::Systems

@@ -105,7 +105,7 @@ void Application::run() {
         auto& emitter = scene.ecs.get_with_id<Components::ParticleEmitter>(
             obj.add_component<Components::ParticleEmitter>());
         emitter.main.start_color = {1.0f, 1.0f, 1.0f, 1.0f};
-        emitter.main.start_lifetime = 0.1f;
+        emitter.main.start_lifetime = 0.2f;
         emitter.emission.spawn_rate = 8000.0f;
         emitter.main.start_velocity = 0.0f;
         emitter.main.max_particles = 10000;
@@ -117,8 +117,9 @@ void Application::run() {
         emitter.color_over_lifetime.gradient =
             ColorGradient{{1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}};
         emitter.shape.shape =
-            Components::ParticleEmitter::SpawnShape::Hemisphere;
+            Components::ParticleEmitter::SpawnShape::Cone;
 		emitter.shape.radius = 3.0f;
+		emitter.shape.arc = 360.0f;
         emitter.shape.randomize_direction = 1.0f;
         VertexArray::CreateInfo vao_info;
         vao_info.attributes.push_back({0, 3}); // position

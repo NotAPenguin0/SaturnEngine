@@ -108,6 +108,10 @@ void ParticleSystem::spawn_particle(Components::ParticleEmitter& emitter) {
         particle.direction =
             direction_in_hemisphere(emitter.shape.randomize_direction);
         particle.position += position_on_hemisphere(*emitter.shape.radius);
+    } else if (emitter.shape.shape ==
+               Components::ParticleEmitter::SpawnShape::Cone) {
+        particle.position += position_on_circle(*emitter.shape.radius, *emitter.shape.arc);
+        particle.direction = {0.0f, 1.0f, 0.0f}; //#TEMP
     }
 
     // Randomize position
@@ -200,7 +204,8 @@ glm::vec3 ParticleSystem::direction_in_sphere(float randomness) {
     return random_direction(base, randomness);
 }
 
-glm::vec3 ParticleSystem::direction_in_hemisphere(float randomness, glm::vec3 base) {
+glm::vec3 ParticleSystem::direction_in_hemisphere(float randomness,
+                                                  glm::vec3 base) {
     // Divide by 4 to transform given randomness for a full sphere to the
     // hemisphere
     return random_direction(base, randomness / 4.0f);
@@ -228,9 +233,27 @@ glm::vec3 ParticleSystem::position_on_sphere(float radius) {
 glm::vec3 ParticleSystem::position_on_hemisphere(float radius) {
     // Trick the system by generating a direction on a unit hemisphere and then
     // projecting it onto our hemisphere
-	glm::vec3 dir = direction_in_hemisphere(2.0f, {1.0f, 0.0f, 0.0f}); //#TODO: rotations
+    glm::vec3 dir =
+        direction_in_hemisphere(2.0f, {1.0f, 0.0f, 0.0f}); //#TODO: rotations
 
     return dir * radius;
+}
+
+glm::vec3 ParticleSystem::position_on_circle(float radius, float arc) {
+    float r1 = Math::RandomEngine::get(0.0f, 1.0f);
+    float r2 = Math::RandomEngine::get(0.0f, 1.0f);
+    static constexpr float pi = Math::math_traits<float>::pi;
+
+    float a = r1 * glm::radians(arc);
+    float r = radius * std::sqrt(r2);
+
+    float x = r * std::cos(a);
+    float y = 0.0f;
+    float z = r * std::sin(a);
+
+    //#TODO: rotations
+
+    return glm::vec3(x, y, z);
 }
 
 } // namespace Saturn::Systems

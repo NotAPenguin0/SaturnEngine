@@ -79,16 +79,15 @@ struct ParticleEmitter : ComponentBase {
 
         SpawnShape shape;
 
-        // Only present if shape is a Sphere or a Hemisphere
+        // Only present if shape is a Sphere, Hemisphere or a Cone
         std::optional<float> radius = 1.0f;
         // Only present if shape is a Cone
         std::optional<float> angle;
         // Only present if shape is a Cone. Represents the area of the circle to
         // use (in degrees)
-        std::optional<float> arc;
-		// Only present if shape is a Cone
-        std::optional<SpawnMode> mode;
-
+        std::optional<float> arc = 360.0f;
+        // Only present if shape is a Cone
+        std::optional<SpawnMode> mode = SpawnMode::Random;
 
         // Must be in range [0, 1] //#Enforce
         float randomize_direction = 0.0f;
