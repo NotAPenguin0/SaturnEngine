@@ -47,12 +47,17 @@ inline glm::vec3 rotate_vector_by_quaternion(const glm::vec3& v,
            2.0f * s * glm::cross(u, v);
 }
 
+// spherical coords in the format of {r, theta, phi}
 inline glm::vec3 spherical_to_cartesian(glm::vec3 const& spherical) {
     float const& r = spherical.x;
     float const& th = spherical.y;
     float const& ph = spherical.z;
     return {r * std::sin(th) * std::cos(ph), r * std::cos(th),
             r * std::sin(th) * std::sin(ph)};
+}
+
+inline glm::vec3 spherical_to_cartesian(float r, float theta, float phi) {
+    return spherical_to_cartesian({r, theta, phi});
 }
 
 } // namespace Saturn::Math

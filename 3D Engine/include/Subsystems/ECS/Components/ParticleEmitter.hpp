@@ -81,7 +81,8 @@ struct ParticleEmitter : ComponentBase {
 
         // Only present if shape is a Sphere, Hemisphere or a Cone
         std::optional<float> radius = 1.0f;
-        // Only present if shape is a Cone
+        // Only present if shape is a Cone. Represents the angle of the Cone, in
+        // degrees
         std::optional<float> angle;
         // Only present if shape is a Cone. Represents the area of the circle to
         // use (in degrees)

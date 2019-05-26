@@ -34,6 +34,7 @@ private:
 	glm::vec3 position_on_hemisphere(float radius);
 
 	glm::vec3 position_on_circle(float radius, float arc);
+	glm::vec3 direction_in_cone(float arc, float angle);
 };
 
 } // namespace Saturn::Systems

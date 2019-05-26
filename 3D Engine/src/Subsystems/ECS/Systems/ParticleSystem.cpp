@@ -111,7 +111,7 @@ void ParticleSystem::spawn_particle(Components::ParticleEmitter& emitter) {
     } else if (emitter.shape.shape ==
                Components::ParticleEmitter::SpawnShape::Cone) {
         particle.position += position_on_circle(*emitter.shape.radius, *emitter.shape.arc);
-        particle.direction = {0.0f, 1.0f, 0.0f}; //#TEMP
+        particle.direction = direction_in_cone(*emitter.shape.arc, *emitter.shape.angle);
     }
 
     // Randomize position
@@ -254,6 +254,19 @@ glm::vec3 ParticleSystem::position_on_circle(float radius, float arc) {
     //#TODO: rotations
 
     return glm::vec3(x, y, z);
+}
+
+glm::vec3 ParticleSystem::direction_in_cone(float arc, float angle) {
+    float r1 = Math::RandomEngine::get(0.0f, 1.0f);
+    static constexpr float pi = Math::math_traits<float>::pi;
+
+	//#TODO: rotations
+
+	// fixed theta value because we're on a cone
+	float theta = glm::radians(angle);
+	// Random phi value on our defined arc
+    float phi = r1 * glm::radians(arc);
+	return Math::spherical_to_cartesian(1.0f, theta, phi);
 }
 
 } // namespace Saturn::Systems
