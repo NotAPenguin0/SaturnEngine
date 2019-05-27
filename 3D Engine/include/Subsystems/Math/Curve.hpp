@@ -9,11 +9,12 @@ enum class CurveShape { Constant, LinearUp, LinearDown };
 
 struct Curve {
     CurveShape shape = CurveShape::Constant;
-    float scale = 1.0f;
+    float min;
+    float max;
 
-    float get(float x, float x_max) const;
+    float get(float x) const;
 
-	numeric_range<float> output_range(float xmax) const;
+    numeric_range<float> output_range() const;
 };
 
 } // namespace Saturn::Math

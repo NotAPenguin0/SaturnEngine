@@ -118,7 +118,7 @@ void Application::run() {
             ColorGradient{{1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 0.0f}};
         emitter.size_over_lifetime.enabled = true;
         emitter.size_over_lifetime.modifier =
-            Math::Curve{Math::CurveShape::LinearDown, 1.0f};
+            Math::Curve{Math::CurveShape::LinearDown, 0.4f, 1.0f};
         emitter.shape.shape =
             Components::ParticleEmitter::SpawnShape::Cone;
 		emitter.shape.radius = 1.0f;

@@ -4,20 +4,19 @@
 
 namespace Saturn::Math {
 
-float Curve::get(float x, float x_max) const {
-    assert(x <= x_max);
+float Curve::get(float x) const {
     switch (shape) {
-        case CurveShape::Constant: return scale;
-        case CurveShape::LinearUp: return x * scale;
-        case CurveShape::LinearDown: return (x_max - x) * scale;
+        case CurveShape::Constant: return min;
+        case CurveShape::LinearUp: return x * (max - min) + min;
+        case CurveShape::LinearDown: return max - x * (max - min);
     }
 }
 
-numeric_range<float> Curve::output_range(float xmax) const {
+numeric_range<float> Curve::output_range() const {
     switch (shape) {
-        case CurveShape::Constant: return {0.0f, scale};
-        case CurveShape::LinearUp: return {0.0f, xmax * scale};
-        case CurveShape::LinearDown: return {0.0f, xmax * scale};
+        case CurveShape::Constant: return {min, min};
+        case CurveShape::LinearUp: return {min, max};
+        case CurveShape::LinearDown: return {min, max};
     }
 }
 

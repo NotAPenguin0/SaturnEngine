@@ -58,12 +58,12 @@ struct ParticleEmitter : ComponentBase {
 
     struct VelocityOverTimeModule {
         bool enabled = false;
-        Math::Curve modifier = {Math::CurveShape::Constant, 1.0f};
+        Math::Curve modifier = {Math::CurveShape::Constant, 1.0f, 1.0f};
     };
 
     struct SizeOverTimeModule {
         bool enabled = false;
-        Math::Curve modifier = {Math::CurveShape::Constant, 1.0f};
+        Math::Curve modifier = {Math::CurveShape::Constant, 1.0f, 1.0f};
     };
 
     struct ColorOverTimeModule {

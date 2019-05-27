@@ -110,8 +110,10 @@ void ParticleSystem::spawn_particle(Components::ParticleEmitter& emitter) {
         particle.position += position_on_hemisphere(*emitter.shape.radius);
     } else if (emitter.shape.shape ==
                Components::ParticleEmitter::SpawnShape::Cone) {
-        particle.position += position_on_circle(*emitter.shape.radius, *emitter.shape.arc);
-        particle.direction = direction_in_cone(*emitter.shape.arc, *emitter.shape.angle);
+        particle.position +=
+            position_on_circle(*emitter.shape.radius, *emitter.shape.arc);
+        particle.direction =
+            direction_in_cone(*emitter.shape.arc, *emitter.shape.angle);
     }
 
     // Randomize position
@@ -167,16 +169,12 @@ float ParticleSystem::value_over_lifetime(
     Components::ParticleEmitter::Particle& particle,
     Math::Curve const& curve) {
 
-    float curve_val =
-        curve.get(emitter.main.start_lifetime - particle.life_left,
-                  emitter.main.start_lifetime);
+    float life_pct =
+        Math::map_range(emitter.main.start_lifetime - particle.life_left, 0.0f,
+                        emitter.main.start_lifetime, 0.0f, 1.0f);
+    float curve_val = curve.get(life_pct);
 
-    auto curve_range = curve.output_range(emitter.main.start_lifetime);
-
-    // Map from [0, start_lifetime] to [0, scale]
-    float new_val = Math::map_range(curve_val, curve_range.min, curve_range.max,
-                                    0.0f, curve.scale);
-    return new_val;
+    return curve_val;
 }
 
 glm::vec3 ParticleSystem::random_direction(glm::vec3 const& base,
@@ -260,13 +258,13 @@ glm::vec3 ParticleSystem::direction_in_cone(float arc, float angle) {
     float r1 = Math::RandomEngine::get(0.0f, 1.0f);
     static constexpr float pi = Math::math_traits<float>::pi;
 
-	//#TODO: rotations
+    //#TODO: rotations
 
-	// fixed theta value because we're on a cone
-	float theta = glm::radians(angle);
-	// Random phi value on our defined arc
+    // fixed theta value because we're on a cone
+    float theta = glm::radians(angle);
+    // Random phi value on our defined arc
     float phi = r1 * glm::radians(arc);
-	return Math::spherical_to_cartesian(1.0f, theta, phi);
+    return Math::spherical_to_cartesian(1.0f, theta, phi);
 }
 
 } // namespace Saturn::Systems
