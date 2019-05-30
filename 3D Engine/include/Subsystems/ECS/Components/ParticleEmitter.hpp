@@ -71,7 +71,7 @@ struct ParticleEmitter : ComponentBase {
         ColorGradient gradient;
     };
 
-    enum class SpawnShape { Sphere, Hemisphere, Cone };
+    enum class SpawnShape { Sphere, Hemisphere, Cone, Box };
     enum class SpawnMode { Random };
 
     struct ShapeModule {
@@ -94,12 +94,16 @@ struct ParticleEmitter : ComponentBase {
         float randomize_direction = 0.0f;
         //#MaybeTODO: Vector for x, y, z separate? (Optional)
         float random_position_offset = 0.0f;
+
+		// Currently only used when shape is a Box
+        glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
     };
 
     // Special effects
     bool additive = false;
 
     // Modules:
+    // #TODO: module class that only allocates when the module is enabled
     MainModule main;
     EmissionModule emission;
     VelocityOverTimeModule velocity_over_lifetime;

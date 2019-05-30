@@ -183,6 +183,7 @@
     <ClCompile Include="src\Subsystems\ECS\Systems\FPSCameraControllerSystem.cpp" />
     <ClCompile Include="src\Subsystems\ECS\Systems\FreeLookControllerSystem.cpp" />
     <ClCompile Include="src\Subsystems\ECS\Systems\ParticleSystem.cpp" />
+    <ClCompile Include="src\Subsystems\ECS\Systems\RotatorSystem.cpp" />
     <ClCompile Include="src\Subsystems\ECS\Systems\SystemBase.cpp" />
     <ClCompile Include="src\Subsystems\Input\Input.cpp" />
     <ClCompile Include="src\Subsystems\Logging\LogSystem.cpp" />
@@ -221,6 +222,7 @@
     <ClInclude Include="include\Subsystems\ECS\Components\FreeLookController.hpp" />
     <ClInclude Include="include\Subsystems\ECS\Components\Material.hpp" />
     <ClInclude Include="include\Subsystems\ECS\Components\ParticleEmitter.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\Components\Rotator.hpp" />
     <ClInclude Include="include\Subsystems\ECS\Components\StaticMesh.hpp" />
     <ClInclude Include="include\Subsystems\ECS\Components\Transform.hpp" />
     <ClInclude Include="include\Subsystems\ECS\component_container.hpp" />
@@ -232,6 +234,7 @@
     <ClInclude Include="include\Subsystems\ECS\Systems\FPSCameraControllerSystem.hpp" />
     <ClInclude Include="include\Subsystems\ECS\Systems\FreeLookControllerSystem.hpp" />
     <ClInclude Include="include\Subsystems\ECS\Systems\ParticleSystem.hpp" />
+    <ClInclude Include="include\Subsystems\ECS\Systems\RotatorSystem.hpp" />
     <ClInclude Include="include\Subsystems\ECS\Systems\SystemBase.hpp" />
     <ClInclude Include="include\Subsystems\Input\Input.hpp" />
     <ClInclude Include="include\Subsystems\Logging\LogSystem.hpp" />

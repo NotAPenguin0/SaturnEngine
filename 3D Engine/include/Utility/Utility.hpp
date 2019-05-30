@@ -1,6 +1,7 @@
 #ifndef MVG_UTILITY_HPP_
 #define MVG_UTILITY_HPP_
 
+#include "Subsystems/ECS/Components/Transform.hpp"
 #include "Subsystems/Logging/LogSystem.hpp"
 #include <cstddef>
 
@@ -42,6 +43,8 @@ public:
     NonCopyable(NonCopyable const&) = delete;
     NonCopyable& operator=(NonCopyable const&) = delete;
 };
+
+Components::Transform make_absolute_transform(Components::Transform const& old_transform);
 
 } // namespace Saturn
 

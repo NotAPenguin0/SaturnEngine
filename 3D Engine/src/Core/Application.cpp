@@ -83,14 +83,23 @@ void Application::run() {
     scene.ecs.register_system<Systems::CameraZoomControllerSystem>();
     scene.ecs.register_system<Systems::FreeLookControllerSystem>();
     scene.ecs.register_system<Systems::ParticleSystem>();
+    scene.ecs.register_system<Systems::RotatorSystem>();
 
-    auto& obj = scene.create_object();
+    auto& x = scene.create_object();
+    {
+        auto id = x.add_component<Components::Transform>();
+        auto& transform = scene.ecs.get_with_id<Components::Transform>(id);
+        transform.position.y = -2.0f;
+    }
+
+    auto& obj = scene.create_object(&x);
     auto transform_id = obj.add_component<Components::Transform>();
     {
         auto& transform =
             scene.ecs.get_with_id<Components::Transform>(transform_id);
         transform.position = glm::vec3(8.0f, 0.0f, 0.0f);
         transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
+        transform.rotation = glm::vec3(glm::radians(90.0f), 0.0f, 0.0f);
         /*auto& mesh = scene.ecs.get_with_id<Components::StaticMesh>(
             obj.add_component<Components::StaticMesh>());
         mesh.mesh =
@@ -105,10 +114,10 @@ void Application::run() {
         auto& emitter = scene.ecs.get_with_id<Components::ParticleEmitter>(
             obj.add_component<Components::ParticleEmitter>());
         emitter.main.start_color = {1.0f, 1.0f, 1.0f, 1.0f};
-        emitter.main.start_lifetime = 5.0f;
-        emitter.emission.spawn_rate = 500.0f;
+        emitter.main.start_lifetime = 4.0f;
+        emitter.emission.spawn_rate = 5000.0f;
         emitter.main.start_velocity = 1.0f;
-        emitter.main.max_particles = 5000;
+        emitter.main.max_particles = 15000;
         emitter.main.start_size = {0.05f, 0.05f};
         emitter.particles.reserve(emitter.main.max_particles);
         emitter.main.loop = true;
@@ -119,12 +128,11 @@ void Application::run() {
         emitter.size_over_lifetime.enabled = true;
         emitter.size_over_lifetime.modifier =
             Math::Curve{Math::CurveShape::LinearDown, 0.4f, 1.0f};
-        emitter.shape.shape =
-            Components::ParticleEmitter::SpawnShape::Cone;
-		emitter.shape.radius = 1.0f;
-		emitter.shape.arc = 360.0f;
-		emitter.shape.angle = 45.0f;
-        emitter.shape.randomize_direction = 1.0f;
+        emitter.shape.shape = Components::ParticleEmitter::SpawnShape::Box;
+        emitter.shape.radius = 1.0f;
+        emitter.shape.arc = 360.0f;
+        emitter.shape.angle = 45.0f;
+        emitter.shape.randomize_direction = 0.0f;
         VertexArray::CreateInfo vao_info;
         vao_info.attributes.push_back({0, 3}); // position
         vao_info.attributes.push_back({1, 2}); // texture coordinates
@@ -132,6 +140,11 @@ void Application::run() {
         vao_info.indices = particle_quad_indices;
         emitter.particle_vao =
             AssetManager<VertexArray>::get_resource(vao_info, "particle_vao");
+
+        auto& rotator = scene.ecs.get_with_id<Components::Rotator>(
+            obj.add_component<Components::Rotator>());
+		rotator.euler_angles = glm::vec3(1.0f, 0.0f, 0.0f);
+        rotator.speed = 3.0f;
     }
 
     auto& main_cam = scene.create_object();

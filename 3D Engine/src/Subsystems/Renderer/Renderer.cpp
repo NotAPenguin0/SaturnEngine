@@ -6,6 +6,7 @@
 #include "Subsystems/Renderer/PostProcessing.hpp"
 #include "Subsystems/Scene/Scene.hpp"
 #include "Utility/Exceptions.hpp"
+#include "Utility/Utility.hpp"
 #include "Utility/bind_guard.hpp"
 
 namespace Saturn {
@@ -63,25 +64,6 @@ void Renderer::clear(
 
     glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
     glClear(flags);
-}
-
-static Components::Transform
-make_absolute_transform(Components::Transform const& old_transform) {
-    auto* object = old_transform.entity;
-    if (!object->has_parent()) {
-        return old_transform;
-    } else {
-        auto parent = object->parent();
-        auto parent_trans = make_absolute_transform(
-            parent->get_component<Components::Transform>());
-
-        Components::Transform new_trans = old_transform;
-        new_trans.position += parent_trans.position;
-        new_trans.rotation += parent_trans.rotation;
-        new_trans.scale *= parent_trans.scale;
-
-        return new_trans;
-    }
 }
 
 void Renderer::render_scene(Scene& scene) {

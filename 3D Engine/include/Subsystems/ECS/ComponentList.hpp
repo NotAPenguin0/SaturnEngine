@@ -9,6 +9,6 @@
         ::Saturn::Components::FreeLookController,                              \
         ::Saturn::Components::CameraZoomController,                            \
         ::Saturn::Components::StaticMesh, ::Saturn::Components::Material,      \
-        ::Saturn::Components::ParticleEmitter
+        ::Saturn::Components::ParticleEmitter, ::Saturn::Components::Rotator
 
 #endif

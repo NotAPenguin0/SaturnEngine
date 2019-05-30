@@ -192,6 +192,9 @@
     <ClCompile Include="src\Utility\ColorGradient.cpp">
       <Filter>Source Files\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="src\Subsystems\ECS\Systems\RotatorSystem.cpp">
+      <Filter>Source Files\Subsystems\ECS\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Application.hpp">
@@ -364,6 +367,12 @@
     </ClInclude>
     <ClInclude Include="include\Utility\ColorGradient.hpp">
       <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\Components\Rotator.hpp">
+      <Filter>Header Files\Subsystems\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\ECS\Systems\RotatorSystem.hpp">
+      <Filter>Header Files\Subsystems\ECS\Systems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

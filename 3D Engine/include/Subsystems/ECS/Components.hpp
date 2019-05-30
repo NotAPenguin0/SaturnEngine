@@ -9,6 +9,7 @@
 #include "Components/FreeLookController.hpp"
 #include "Components/Material.hpp"
 #include "Components/ParticleEmitter.hpp"
+#include "Components/Rotator.hpp"
 #include "Components/StaticMesh.hpp"
 #include "Components/Transform.hpp"
 

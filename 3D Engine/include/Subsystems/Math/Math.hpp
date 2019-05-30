@@ -60,6 +60,10 @@ inline glm::vec3 spherical_to_cartesian(float r, float theta, float phi) {
     return spherical_to_cartesian({r, theta, phi});
 }
 
+inline glm::vec3 euler_to_spherical(glm::vec3 const& euler) {
+	return glm::vec3(1.0f, euler.x, euler.y);
+}
+
 } // namespace Saturn::Math
 
 #endif
