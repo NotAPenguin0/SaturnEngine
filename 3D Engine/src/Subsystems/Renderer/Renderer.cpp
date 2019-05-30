@@ -114,7 +114,7 @@ void Renderer::render_scene(Scene& scene) {
 
             model = glm::scale(model, transform.scale);
 
-            shader.set_mat4("model", model);
+            shader.set_mat4(Shader::Uniforms::Model, model);
 
             bind_guard<Shader> shader_guard(shader);
             bind_guard<VertexArray> vao_guard(vtx_array);
@@ -149,15 +149,18 @@ void Renderer::render_particles(Scene& scene) {
         // Bind VAO
         bind_guard<VertexArray> vao_guard(emitter.particle_vao.get());
         for (ParticleEmitter::Particle const& particle : emitter.particles) {
-            particle_shader->set_vec4("color", particle.color);
-            particle_shader->set_vec3("position", particle.position);
+            
+            particle_shader->set_vec3(Shader::Uniforms::Position,
+                                      particle.position);
             particle_shader->set_vec3(
-                "scale", glm::vec3(particle.size.x, particle.size.y, 0.0f));
+                Shader::Uniforms::Scale,
+                glm::vec3(particle.size.x, particle.size.y, 0.0f));
             auto& texture = emitter.texture.is_loaded() ? emitter.texture.get()
                                                         : default_texture.get();
-
+            particle_shader->set_vec4(Shader::Uniforms::Color, particle.color);
             Texture::bind(texture);
-            particle_shader->set_int("tex", texture.unit() - GL_TEXTURE0);
+            particle_shader->set_int(Shader::Uniforms::Texture,
+                                     texture.unit() - GL_TEXTURE0);
 
             glDrawElements(GL_TRIANGLES, emitter.particle_vao->index_size(),
                            GL_UNSIGNED_INT, nullptr);

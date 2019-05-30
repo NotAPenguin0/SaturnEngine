@@ -78,12 +78,14 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>C:\Libs;$(SolutionDir)3D Engine\include;\C:\Libs\;C:\Users\michi_000\Desktop\C++\3D Engine\3D Engine\glad\include;$(IncludePath)</IncludePath>
+    <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Libs;$(SolutionDir)3D Engine\include;\C:\Libs\;C:\Users\michi_000\Desktop\C++\3D Engine\3D Engine\glad\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\Libs;$(SolutionDir)3D Engine\include;\C:\Libs\;C:\Users\michi_000\Desktop\C++\3D Engine\3D Engine\glad\include;$(IncludePath)</IncludePath>
+    <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Label="LLVM" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClangClAdditionalOptions>-Wall -Wno-missing-noreturn -Wno-zero-as-null-pointer-constant -Wno-old-style-cast -Wno-unused-private-field -Wno-exit-time-destructors -Wno-double-promotion -Wno-missing-prototypes -Wextra -Wno-newline-eof -Wno-unused-command-line-argument -Wno-c++98-compat-pedantic -Wno-unused-variable -Wno-global-constructors -Werror -Wno-shorten-64-to-32 -Wno-c++98-compat -Wno-reserved-id-macro</ClangClAdditionalOptions>
@@ -169,6 +171,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>opengl32.lib;C:\assimp-bin\assimp.lib;C:\Libs\lib\glfw3.lib;%(AdditionalDependencies);kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>false</GenerateDebugInformation>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

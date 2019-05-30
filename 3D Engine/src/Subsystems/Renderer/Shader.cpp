@@ -114,10 +114,7 @@ static unsigned int create_shader(const char* vtx_path, const char* frag_path) {
     return shaderProgram;
 }
 
-Shader::Shader(CreateInfo create_info) {
-    program = create_shader(create_info.vtx_path.data(),
-                            create_info.frag_path.data());
-}
+Shader::Shader(CreateInfo create_info) { assign(create_info); }
 
 void Shader::assign(CreateInfo create_info) {
     if (program != 0) { glDeleteProgram(program); }
@@ -152,18 +149,44 @@ void Shader::set_mat4(std::string_view name, glm::mat4 const& value) {
     glUniformMatrix4fv(location(name), 1, GL_FALSE, glm::value_ptr(value));
 }
 
-int Shader::location(std::string_view name) {
-
-    // Check the cache
-    auto it = uniform_cache.find(name);
-    if (it != uniform_cache.end()) { return it->second; }
-
-    auto loc = glGetUniformLocation(program, name.data());
+void Shader::set_int(int loc, int value) {
     assert(loc != -1);
-    // Store uniform location in cache
-    uniform_cache[name] = loc;
+    bind_guard<Shader> guard(*this);
+    glUniform1i(loc, value);
+}
 
-    return loc;
+void Shader::set_float(int loc, float value) {
+    assert(loc != -1);
+    bind_guard<Shader> guard(*this);
+    glUniform1f(loc, value);
+}
+
+void Shader::set_vec3(int loc, glm::vec3 const& value) {
+    assert(loc != -1);
+    bind_guard<Shader> guard(*this);
+    glUniform3fv(loc, 1, glm::value_ptr(value));
+}
+
+void Shader::set_vec4(int loc, glm::vec4 const& value) {
+    assert(loc != -1);
+    bind_guard<Shader> guard(*this);
+    glUniform4fv(loc, 1, glm::value_ptr(value));
+}
+
+void Shader::set_mat4(int loc, glm::mat4 const& value) {
+    assert(loc != -1);
+    bind_guard<Shader> guard(*this);
+    glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(value));
+}
+
+int Shader::location(std::string_view name) {
+    auto& loc_data = uniform_cache[name];
+    if (loc_data != -1) { return loc_data; }
+
+    loc_data = glGetUniformLocation(program, name.data());
+    assert(loc_data != -1);
+
+    return loc_data;
 }
 
 void Shader::bind(Shader& shader) { glUseProgram(shader.program); }

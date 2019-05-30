@@ -10,7 +10,7 @@ layout (std140, binding = 0) uniform Matrices {
     mat4 view;
 };
 
-layout(location = 0) uniform mat4 model;
+layout(location = 2) uniform mat4 model;
 
 void main() {
     TexCoords = iTexCoords;

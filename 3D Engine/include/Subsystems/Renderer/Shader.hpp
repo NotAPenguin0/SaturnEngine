@@ -34,11 +34,25 @@ public:
     void set_vec4(std::string_view name, glm::vec4 const& value);
     void set_mat4(std::string_view name, glm::mat4 const& value);
 
+	void set_int(int loc, int value);
+	void set_float(int loc, float value);
+
+	void set_vec3(int loc, glm::vec3 const& value);
+    void set_vec4(int loc, glm::vec4 const& value);
+    void set_mat4(int loc, glm::mat4 const& value);
+	
     int location(std::string_view name);
+
+	struct Uniforms {
+        static constexpr int Model = 2;
+        static constexpr int Color = 4;
+		static constexpr int Scale = 3;
+        static constexpr int Texture = 5;
+		static constexpr int Position = 2;
+	};
 
 private:
     unsigned int program = 0;
-
     std::unordered_map<std::string_view, int> uniform_cache;
 };
 
