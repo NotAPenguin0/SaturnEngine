@@ -195,6 +195,7 @@ void Renderer::update_screen() {
 
     // Render framebuffer texture to the screen
     glBindTexture(GL_TEXTURE_2D, framebuf.texture);
+	PostProcessing::get_instance().get_active()->set_int(Shader::Uniforms::Texture, 0);
     glDrawElements(GL_TRIANGLES, screen.index_size(), GL_UNSIGNED_INT, nullptr);
 
     // Re enable functionality

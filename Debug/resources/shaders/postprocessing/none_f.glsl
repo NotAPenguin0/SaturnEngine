@@ -1,6 +1,6 @@
-#version 330 core
+#version 430 core
 
-uniform sampler2D screenTexture;
+layout(location = 5) uniform sampler2D screenTexture;
 
 in vec2 TexCoords;
 
