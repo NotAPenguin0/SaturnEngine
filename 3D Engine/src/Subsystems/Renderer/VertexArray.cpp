@@ -26,15 +26,13 @@ VertexArray::VertexArray(CreateInfo const& create_info) {
 VertexArray::~VertexArray() {}
 
 void VertexArray::assign(CreateInfo const& create_info) {
-    if (vao.id != 0 && vbo.id != 0 && ebo.id != 0) {
+    if (vao.id != 0 && !buffers.empty() && ebo.id != 0) {
         glDeleteVertexArrays(1, &vao.id);
-        glDeleteBuffers(1, &vbo.id);
+        glDeleteBuffers(1, &buffers[0]->id);
         glDeleteBuffers(1, &ebo.id);
     }
 
-    glGenVertexArrays(1, &vao.id);
-    glGenBuffers(1, &vbo.id);
-    glGenBuffers(1, &ebo.id);
+    buffers.clear();
 
     do_create(create_info);
 }
@@ -53,11 +51,16 @@ void VertexArray::unbind() {
 }
 
 void VertexArray::do_create(CreateInfo const& create_info) {
+    buffers.emplace_back();
+    buffers[0] = std::make_unique<Vbo<BufferTarget::ArrayBuffer>>();
+    glGenVertexArrays(1, &vao.id);
+    glGenBuffers(1, &buffers[0]->id);
+    glGenBuffers(1, &ebo.id);
 
     if (vao.id == 0) {
         LogSystem::write(LogSystem::Severity::Error, "Failed to create VAO");
     }
-    if (vbo.id == 0) {
+    if (buffers.empty()) {
         LogSystem::write(LogSystem::Severity::Error, "Failed to create VBO");
     }
 
@@ -87,7 +90,7 @@ void VertexArray::do_create(CreateInfo const& create_info) {
     indices_size = indices.size();
 
     bind_guard vao_guard(vao);
-    bind_guard vbo_guard(vbo);
+    bind_guard vbo_guard(*buffers[0]);
     bind_guard ebo_guard(ebo);
 
     // Fill VBO
@@ -111,6 +114,39 @@ void VertexArray::do_create(CreateInfo const& create_info) {
         offset += attr.num_components; // move the offset pointer for the next
                                        // iteration
     }
+}
+
+std::size_t VertexArray::add_buffer(BufferInfo const& info) {
+    buffers.emplace_back();
+    buffers.back() = std::make_unique<Vbo<BufferTarget::ArrayBuffer>>();
+    glGenBuffers(1, &buffers.back()->id);
+
+    GLint mode;
+    switch (info.mode) {
+        case BufferMode::Static: mode = GL_STATIC_DRAW; break;
+        case BufferMode::Dynamic: mode = GL_DYNAMIC_DRAW; break;
+        case BufferMode::DataStream: mode = GL_DYNAMIC_DRAW; break;
+    }
+
+    bind_guard vao_guard(vao);
+    bind_guard vbo_guard(*buffers.back());
+
+    glBufferData(GL_ARRAY_BUFFER, info.data.size() * sizeof(float),
+                 info.data.data(), mode);
+
+    std::size_t vertex_size_in_bytes =
+        get_vertex_size_in_bytes(info.attributes);
+    std::size_t offset = 0;
+    for (auto& attr : info.attributes) {
+        assert(attr.num_components >= 1 && attr.num_components <= 4);
+        glVertexAttribPointer(attr.location_in_shader, attr.num_components,
+                              GL_FLOAT, GL_FALSE, vertex_size_in_bytes,
+                              (void*)(offset * sizeof(float)));
+        glEnableVertexAttribArray(attr.location_in_shader);
+        offset += attr.num_components;
+    }
+
+    return buffers.size() - 1;
 }
 
 } // namespace Saturn

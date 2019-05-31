@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <vector>
+#include <memory>
 
 #include "OpenGL.hpp"
 
@@ -14,6 +15,12 @@ struct VertexAttribute {
     std::size_t num_components;
 };
 
+enum class BufferMode {
+	Static,
+	Dynamic,
+	DataStream
+};
+
 class VertexArray {
 public:
     struct CreateInfo {
@@ -22,6 +29,12 @@ public:
         std::vector<GLuint> indices; ///< Index buffer. Leave empty to auto-generate
         bool dynamic = false; ///< Indicates whether the buffer data will change
     };
+
+	struct BufferInfo {
+        std::vector<VertexAttribute> attributes;
+        std::vector<float> data;
+		BufferMode mode = BufferMode::Static;
+	};
 
     VertexArray() = default;
     VertexArray(CreateInfo const& create_info);
@@ -45,13 +58,16 @@ public:
 	// Returns the amount of indices in the index buffer
 	std::size_t index_size() const;
 
+	// Returns the index of the added buffer
+	std::size_t add_buffer(BufferInfo const& info);
+
 private:
 	friend class Renderer;
 
     void do_create(CreateInfo const& create_info);
 
     Vao vao;
-    Vbo<BufferTarget::ArrayBuffer> vbo;
+    std::vector<std::unique_ptr<Vbo<BufferTarget::ArrayBuffer>>> buffers;
     Vbo<BufferTarget::ElementArrayBuffer> ebo;
 
 	std::size_t vertex_count;
