@@ -1,8 +1,8 @@
-#version 330 core
+#version 430 core
 
 in vec2 TexCoords;
 
-uniform sampler2D screenTexture;
+layout(location = 5) uniform sampler2D screenTexture;
 
 out vec4 FragColor;
 
