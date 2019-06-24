@@ -1,7 +1,7 @@
 #ifndef MVG_COLOR_GRADIENT_HPP_
 #define MVG_COLOR_GRADIENT_HPP_
 
-#include <GLM/glm.hpp>
+#include <glm/glm.hpp>
 
 namespace Saturn {
 

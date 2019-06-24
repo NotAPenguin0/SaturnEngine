@@ -3,7 +3,7 @@
 
 #include "Utility/bind_guard.hpp"
 
-#include <GLM/glm.hpp>
+#include <glm/glm.hpp>
 #include <cstddef>
 
 namespace Saturn {

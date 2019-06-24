@@ -2,7 +2,7 @@
 
 #include "Subsystems/Renderer/OpenGL.hpp"
 
-#include <GLM/gtc/type_ptr.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Saturn {
 
