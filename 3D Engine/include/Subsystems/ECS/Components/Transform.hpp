@@ -4,7 +4,7 @@
 #include "ComponentBase.hpp"
 #include "Subsystems/Math/Math.hpp"
 
-#include <GLM/glm.hpp>
+#include <glm/glm.hpp>
 
 namespace Saturn {
 

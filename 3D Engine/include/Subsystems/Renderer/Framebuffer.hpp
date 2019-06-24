@@ -1,7 +1,7 @@
 #ifndef MVG_FRAMEBUFFER_HPP_
 #define MVG_FRAMEBUFFER_HPP_
 
-#include "Utility\Utility.hpp"
+#include "Utility/Utility.hpp"
 
 namespace Saturn {
 

@@ -9,7 +9,7 @@
 #include "Subsystems/Renderer/VertexArray.hpp"
 #include "Utility/ColorGradient.hpp"
 
-#include <GLM/glm.hpp>
+#include <glm/glm.hpp>
 #include <optional>
 #include <vector>
 

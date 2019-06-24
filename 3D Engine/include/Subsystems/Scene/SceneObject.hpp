@@ -3,6 +3,7 @@
 
 #include "Subsystems/AssetManager/Resource.hpp"
 #include "Subsystems/Renderer/Shader.hpp"
+#include "Subsystems/Scene/Scene.hpp"
 #include "Utility/IDGenerator.hpp"
 
 #include <nlohmann/json.hpp>

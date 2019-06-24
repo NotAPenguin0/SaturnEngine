@@ -3,7 +3,7 @@
 
 #include "ComponentBase.hpp"
 
-#include <GLM/glm.hpp>
+#include <glm/glm.hpp>
 
 namespace Saturn {
 

@@ -9,7 +9,7 @@
 #include "Utility/Utility.hpp"
 
 #include <algorithm>
-#include <GLM/gtc/type_ptr.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Saturn::Systems {
 
