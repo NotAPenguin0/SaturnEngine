@@ -3,6 +3,7 @@
 
 #include "Subsystems/AssetManager/Resource.hpp"
 #include "Subsystems/Renderer/Shader.hpp"
+#include "Subsystems/Scene/Scene.hpp"
 #include "Utility/IDGenerator.hpp"
 
 #include <nlohmann/json.hpp>
@@ -18,7 +19,7 @@ class SceneObject {
 public:
     friend class Scene;
 
-	SceneObject() = default;
+    SceneObject() = default;
     SceneObject(Scene* s, SceneObject* parent = nullptr);
 
     template<typename C, typename... Args>
