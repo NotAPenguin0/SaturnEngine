@@ -195,6 +195,9 @@
     <ClCompile Include="src\Subsystems\ECS\Systems\RotatorSystem.cpp">
       <Filter>Source Files\Subsystems\ECS\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="src\Subsystems\Math\Math.cpp">
+      <Filter>Source Files\Subsystems\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Application.hpp">

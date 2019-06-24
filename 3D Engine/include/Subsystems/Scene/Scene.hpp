@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <string_view>
 
 #include "Subsystems/ECS/Components.hpp"
 
@@ -29,6 +30,7 @@ public:
 	void update_systems();
 
     SceneObject& create_object(SceneObject* parent = nullptr);
+    SceneObject& create_object_from_file(std::string_view file_path, SceneObject* parent = nullptr);
 
 	ECS<COMPONENT_LIST>& get_ecs();
 

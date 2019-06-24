@@ -5,6 +5,8 @@
 #include "Subsystems/Renderer/Shader.hpp"
 #include "Utility/IDGenerator.hpp"
 
+#include <nlohmann/json.hpp>
+
 #include <typeindex>
 #include <typeinfo>
 
@@ -16,6 +18,7 @@ class SceneObject {
 public:
     friend class Scene;
 
+	SceneObject() = default;
     SceneObject(Scene* s, SceneObject* parent = nullptr);
 
     template<typename C, typename... Args>
@@ -54,17 +57,22 @@ public:
         component_ids.erase(ti);
     }
 
-	bool has_parent() const;
-	SceneObject* parent();
+    bool has_parent() const;
+    SceneObject* parent();
     SceneObject const* parent() const;
+
+    inline Scene* get_scene() { return scene; }
 
 private:
     Scene* scene;
-	SceneObject* parent_obj;
+    SceneObject* parent_obj;
     // Maps a component type to a component id. The id will be translated in an
     // index in the ECS class
     std::unordered_map<std::type_index, std::size_t> component_ids;
 };
+
+void to_json(nlohmann::json& j, SceneObject const& obj);
+void from_json(nlohmann::json const& j, SceneObject& obj);
 
 } // namespace Saturn
 

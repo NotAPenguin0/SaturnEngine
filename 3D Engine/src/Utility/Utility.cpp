@@ -26,4 +26,27 @@ make_absolute_transform(Components::Transform const& old_transform) {
     }
 }
 
+std::vector<float> make_float_vec(std::vector<glm::vec3> const& v) {
+    std::vector<float> result;
+    result.reserve(v.size() * 3);
+    for (auto& elem : v) {
+        result.push_back(elem.x);
+        result.push_back(elem.y);
+        result.push_back(elem.z);
+    }
+    return result;
+}
+
+std::vector<float> make_float_vec(std::vector<glm::vec4> const& v) {
+    std::vector<float> result;
+    result.reserve(v.size() * 4);
+    for (auto& elem : v) {
+        result.push_back(elem.x);
+        result.push_back(elem.y);
+        result.push_back(elem.z);
+        result.push_back(elem.w);
+    }
+    return result;
+}
+
 } // namespace Saturn

@@ -9,6 +9,7 @@
 #include "Utility/Utility.hpp"
 
 #include <algorithm>
+#include <GLM/gtc/type_ptr.hpp>
 
 namespace Saturn::Systems {
 
@@ -67,25 +68,56 @@ void ParticleSystem::on_update(Scene& scene) {
         }
 
         // Second step: update particles
-        for (auto& particle : emitter.particles) {
-            update_particle(particle, emitter);
+        for (std::size_t i = 0; i < emitter.particles.size(); ++i) {
+            update_particle(i, emitter);
         }
 
         // Third step: delete 'dead' particles
         remove_expired_particles(emitter);
+
+        // Final step: Update buffer data
+        
+        if (!emitter.particles.empty()) {
+            emitter.particle_vao->update_buffer_data(
+                1, glm::value_ptr(emitter.particle_data.positions[0]),
+                3 * emitter.particle_data.positions.size());
+            // Sizes
+            emitter.particle_vao->update_buffer_data(
+                2, glm::value_ptr(emitter.particle_data.sizes[0]),
+                3 * emitter.particle_data.sizes.size());
+            // Colors
+            emitter.particle_vao->update_buffer_data(
+                3, glm::value_ptr(emitter.particle_data.colors[0]),
+                4 * emitter.particle_data.colors.size());
+
+        }
     }
 }
 
+//#CHECK: Make particle erase itself in update_particle() for better performance?
 void ParticleSystem::remove_expired_particles(
     Components::ParticleEmitter& emitter) {
     using namespace Components;
 
     auto& particles = emitter.particles;
-    particles.erase(std::remove_if(particles.begin(), particles.end(),
-                                   [](ParticleEmitter::Particle const& p) {
-                                       return p.life_left < 0.0f;
-                                   }),
-                    particles.end());
+    /*
+        particles.erase(std::remove_if(particles.begin(), particles.end(),
+                                       [](ParticleEmitter::Particle const& p) {
+                                           return p.life_left < 0.0f;
+                                       }),
+                        particles.end());*/
+    for (std::size_t i = 0; i < emitter.particles.size(); ++i) {
+        if (emitter.particles[i].life_left < 0.0f) {
+            emitter.particle_data.colors.erase(
+                emitter.particle_data.colors.begin() + (long long)i);
+            emitter.particle_data.positions.erase(
+                emitter.particle_data.positions.begin() + (long long)i);
+            emitter.particle_data.sizes.erase(
+                emitter.particle_data.sizes.begin() + (long long)i);
+            emitter.particles.erase(emitter.particles.begin() + (long long)i);
+            --i;
+        }
+    }
 }
 
 void ParticleSystem::spawn_particle(
@@ -95,14 +127,15 @@ void ParticleSystem::spawn_particle(
 
     // #ParticleSystemTODO: Dependency on transform? Probably needed but not
     // great ...
-    // #ParticleSystemTODO: Make this work with entity parenting (absolute
-    // transforms)
     auto& transform = emitter.entity->get_component<Transform>();
 
     ParticleEmitter::Particle particle;
     particle.life_left = emitter.main.start_lifetime;
-    particle.color = emitter.main.start_color;
-    particle.position = transform.position;
+    emitter.particle_data.colors.push_back(emitter.main.start_color);
+    emitter.particle_data.positions.push_back(transform.position);
+
+    auto& color = emitter.particle_data.colors.back();
+    auto& position = emitter.particle_data.positions.back();
 
     // Direction and Position
 
@@ -110,22 +143,21 @@ void ParticleSystem::spawn_particle(
     if (emitter.shape.shape == ParticleEmitter::SpawnShape::Sphere) {
         particle.direction = direction_in_sphere(
             emitter.shape.randomize_direction, abs_transform.rotation);
-        particle.position += position_on_sphere(*emitter.shape.radius);
+        position += position_on_sphere(*emitter.shape.radius);
     } else if (emitter.shape.shape == ParticleEmitter::SpawnShape::Hemisphere) {
         particle.direction = direction_in_hemisphere(
             emitter.shape.randomize_direction, abs_transform.rotation);
-        particle.position = position_on_hemisphere(*emitter.shape.radius,
-                                                   abs_transform.rotation);
+        position = position_on_hemisphere(*emitter.shape.radius,
+                                          abs_transform.rotation);
     } else if (emitter.shape.shape ==
                Components::ParticleEmitter::SpawnShape::Cone) {
-        particle.position = position_on_circle(
-            *emitter.shape.radius, *emitter.shape.arc, abs_transform.rotation);
+        position = position_on_circle(*emitter.shape.radius, *emitter.shape.arc,
+                                      abs_transform.rotation);
         particle.direction = direction_in_cone(
             *emitter.shape.arc, *emitter.shape.angle, abs_transform.rotation);
     } else if (emitter.shape.shape ==
                Components::ParticleEmitter::SpawnShape::Box) {
-        particle.position =
-            position_in_box(emitter.shape.scale, abs_transform.rotation);
+        position = position_in_box(emitter.shape.scale, abs_transform.rotation);
         particle.direction = direction_in_sphere(
             emitter.shape.randomize_direction, abs_transform.rotation);
     }
@@ -134,33 +166,36 @@ void ParticleSystem::spawn_particle(
     //     particle.position = random_position(particle.position,
     //                                         emitter.shape.random_position_offset);
 
-    particle.position += abs_transform.position;
+    position += abs_transform.position;
 
     particle.velocity = emitter.main.start_velocity;
-    particle.size = emitter.main.start_size;
+    emitter.particle_data.sizes.emplace_back(emitter.main.start_size, 1.0f);
 
     // Put the particle in the emitter
     emitter.particles.push_back(std::move(particle));
 }
 
-void ParticleSystem::update_particle(
-    Components::ParticleEmitter::Particle& particle,
-    Components::ParticleEmitter& emitter) {
+void ParticleSystem::update_particle(std::size_t index,
+                                     Components::ParticleEmitter& emitter) {
     using namespace Components;
+
+    auto& particle = emitter.particles[index];
 
     // Update life left
     particle.life_left -= Time::deltaTime;
     // If particle is still alive, update it
     if (particle.life_left > 0.0f) {
         // Update position
-        particle.position +=
+        emitter.particle_data.positions[index] +=
             particle.direction * particle.velocity * Time::deltaTime;
         // Update scale
         if (emitter.size_over_lifetime.enabled) {
-            particle.size =
-                emitter.main.start_size *
-                glm::vec2(value_over_lifetime(
-                    emitter, particle, emitter.size_over_lifetime.modifier));
+            emitter.particle_data.sizes[index] =
+                glm::vec3(emitter.main.start_size *
+                              glm::vec2(value_over_lifetime(
+                                  emitter, particle,
+                                  emitter.size_over_lifetime.modifier)),
+                          0.0f);
         }
         // Update velocity
         if (emitter.velocity_over_lifetime.enabled) {
@@ -172,10 +207,11 @@ void ParticleSystem::update_particle(
 
         // Update color
         if (emitter.color_over_lifetime.enabled) {
-            particle.color = emitter.color_over_lifetime.gradient.interpolate(
-                Math::map_range(emitter.main.start_lifetime -
-                                    particle.life_left,
-                                0.0f, emitter.main.start_lifetime, 0.0f, 1.0f));
+            emitter.particle_data.colors[index] =
+                emitter.color_over_lifetime.gradient.interpolate(
+                    Math::map_range(
+                        emitter.main.start_lifetime - particle.life_left, 0.0f,
+                        emitter.main.start_lifetime, 0.0f, 1.0f));
         }
     }
 }
@@ -294,7 +330,8 @@ glm::vec3 ParticleSystem::position_in_box(glm::vec3 const& scale,
     float x = Math::RandomEngine::get(min.x, max.x);
     float y = Math::RandomEngine::get(min.y, max.y);
     float z = Math::RandomEngine::get(min.z, max.z);
-    return Math::rotate_vector_by_quaternion(glm::vec3(x, y, z), glm::quat(rotation));
+    return Math::rotate_vector_by_quaternion(glm::vec3(x, y, z),
+                                             glm::quat(rotation));
 }
 
 } // namespace Saturn::Systems

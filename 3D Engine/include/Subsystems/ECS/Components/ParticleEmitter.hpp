@@ -13,6 +13,8 @@
 #include <optional>
 #include <vector>
 
+#include <nlohmann/json.hpp>
+
 namespace Saturn {
 namespace Systems {
 class ParticleSystem;
@@ -25,11 +27,8 @@ struct ParticleEmitter : ComponentBase {
     struct Particle {
         // #TODO: Better duration type
         float life_left;
-        glm::vec4 color;
-        glm::vec3 position;
         float velocity;
         glm::vec3 direction;
-        glm::vec2 size;
     };
 
     struct MainModule {
@@ -95,7 +94,7 @@ struct ParticleEmitter : ComponentBase {
         //#MaybeTODO: Vector for x, y, z separate? (Optional)
         float random_position_offset = 0.0f;
 
-		// Currently only used when shape is a Box
+        // Currently only used when shape is a Box
         glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
     };
 
@@ -115,12 +114,33 @@ struct ParticleEmitter : ComponentBase {
     Resource<VertexArray> particle_vao;
     Resource<Texture> texture;
 
+    struct ParticleData {
+        std::vector<glm::vec4> colors;
+        std::vector<glm::vec3> positions;
+        std::vector<glm::vec3> sizes;
+    };
+
+    ParticleData particle_data;
+
     friend class Systems::ParticleSystem;
+    friend class Renderer;
 
 private:
     float time_since_last_spawn = 0.0f;
     float time_since_start = 0.0f;
 };
+
+// clang-format off
+NLOHMANN_JSON_SERIALIZE_ENUM(ParticleEmitter::SpawnShape,
+    {{ParticleEmitter::SpawnShape::Box, "Box"},
+	{ParticleEmitter::SpawnShape::Cone, "Cone"},
+    {ParticleEmitter::SpawnShape::Hemisphere, "Hemisphere"},
+    {ParticleEmitter::SpawnShape::Sphere, "Sphere"},
+    })
+NLOHMANN_JSON_SERIALIZE_ENUM(ParticleEmitter::SpawnMode,
+	{{ParticleEmitter::SpawnMode::Random, "Random"},
+	})
+// clang-format on
 
 } // namespace Saturn::Components
 

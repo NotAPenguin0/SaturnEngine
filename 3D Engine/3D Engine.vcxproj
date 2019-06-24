@@ -88,7 +88,7 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Label="LLVM" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClangClAdditionalOptions>-Wall -Wno-missing-noreturn -Wno-zero-as-null-pointer-constant -Wno-old-style-cast -Wno-unused-private-field -Wno-exit-time-destructors -Wno-double-promotion -Wno-missing-prototypes -Wextra -Wno-newline-eof -Wno-unused-command-line-argument -Wno-c++98-compat-pedantic -Wno-unused-variable -Wno-global-constructors -Werror -Wno-shorten-64-to-32 -Wno-c++98-compat -Wno-reserved-id-macro</ClangClAdditionalOptions>
+    <ClangClAdditionalOptions>-ferror-limit=500 -Wall -Wno-missing-noreturn -Wno-zero-as-null-pointer-constant -Wno-old-style-cast -Wno-unused-private-field -Wno-exit-time-destructors -Wno-double-promotion -Wno-missing-prototypes -Wextra -Wno-newline-eof -Wno-unused-command-line-argument -Wno-c++98-compat-pedantic -Wno-unused-variable -Wno-global-constructors -Werror -Wno-shorten-64-to-32 -Wno-c++98-compat -Wno-reserved-id-macro</ClangClAdditionalOptions>
     <LldLinkAdditionalOptions>/debug:ghash /opt:noref</LldLinkAdditionalOptions>
   </PropertyGroup>
   <PropertyGroup Label="LLVM" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -96,7 +96,7 @@
     <LldLinkAdditionalOptions>/debug:ghash /opt:noref</LldLinkAdditionalOptions>
   </PropertyGroup>
   <PropertyGroup Label="LLVM" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClangClAdditionalOptions>-Wall -Wno-missing-noreturn -Wno-zero-as-null-pointer-constant -Wno-old-style-cast -Wno-unused-private-field -Wno-exit-time-destructors -Wno-double-promotion -Wno-missing-prototypes -Wextra -Wno-newline-eof -Wno-unused-command-line-argument -Wno-c++98-compat-pedantic -Wno-unused-variable -Wno-global-constructors -Werror -Wno-shorten-64-to-32 -Wno-c++98-compat -Wno-reserved-id-macro</ClangClAdditionalOptions>
+    <ClangClAdditionalOptions>-ferror-limit=500 -Wall -Wno-missing-noreturn -Wno-zero-as-null-pointer-constant -Wno-old-style-cast -Wno-unused-private-field -Wno-exit-time-destructors -Wno-double-promotion -Wno-missing-prototypes -Wextra -Wno-newline-eof -Wno-unused-command-line-argument -Wno-c++98-compat-pedantic -Wno-unused-variable -Wno-global-constructors -Werror -Wno-shorten-64-to-32 -Wno-c++98-compat -Wno-reserved-id-macro</ClangClAdditionalOptions>
     <LldLinkAdditionalOptions>/debug:ghash /opt:noref</LldLinkAdditionalOptions>
   </PropertyGroup>
   <PropertyGroup Label="LLVM" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -108,7 +108,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>NO_PERFORMANCE_LOG;ENGINE_DEBUG_BUILD;_MBCS;__clang__%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SupportJustMyCode>false</SupportJustMyCode>
@@ -124,7 +124,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>NO_PERFORMANCE_LOG;ENGINE_DEBUG_BUILD;_MBCS;__clang__%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SupportJustMyCode>false</SupportJustMyCode>
@@ -191,6 +191,7 @@
     <ClCompile Include="src\Subsystems\Input\Input.cpp" />
     <ClCompile Include="src\Subsystems\Logging\LogSystem.cpp" />
     <ClCompile Include="src\Subsystems\Math\Curve.cpp" />
+    <ClCompile Include="src\Subsystems\Math\Math.cpp" />
     <ClCompile Include="src\Subsystems\Math\RandomEngine.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\Mesh.cpp" />

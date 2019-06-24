@@ -20,4 +20,26 @@ numeric_range<float> Curve::output_range() const {
     }
 }
 
+
+void from_json(nlohmann::json const& j, Curve& curve) {
+    curve.min = j["Min"].get<float>();
+    curve.max = j["Max"].get<float>();
+    auto shape_str = j["CurveShape"].get<std::string>();
+    if (shape_str == "Constant") curve.shape = CurveShape::Constant;
+    if (shape_str == "LinearUp") curve.shape = CurveShape::LinearUp;
+    if (shape_str == "LinearDown") curve.shape = CurveShape::LinearDown;
+}
+
+void to_json(nlohmann::json& j, Curve const& curve) {
+    j["Min"] = curve.min;
+    j["Max"] = curve.max;
+    std::string shape;
+    switch (curve.shape) {
+        case CurveShape::Constant: shape = "Constant"; break;
+        case CurveShape::LinearUp: shape = "LinearUp"; break;
+        case CurveShape::LinearDown: shape = "LinearDown"; break;
+    }
+    j["CurveShape"] = shape;
+}
+
 } // namespace Saturn::Math

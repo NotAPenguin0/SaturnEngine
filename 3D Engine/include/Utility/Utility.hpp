@@ -46,6 +46,9 @@ public:
 
 Components::Transform make_absolute_transform(Components::Transform const& old_transform);
 
+std::vector<float> make_float_vec(std::vector<glm::vec4> const& v);
+std::vector<float> make_float_vec(std::vector<glm::vec3> const& v);
+
 } // namespace Saturn
 
 #endif

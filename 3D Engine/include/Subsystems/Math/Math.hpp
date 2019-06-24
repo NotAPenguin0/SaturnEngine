@@ -61,9 +61,24 @@ inline glm::vec3 spherical_to_cartesian(float r, float theta, float phi) {
 }
 
 inline glm::vec3 euler_to_spherical(glm::vec3 const& euler) {
-	return glm::vec3(1.0f, euler.x, euler.y);
+    return glm::vec3(1.0f, euler.x, euler.y);
 }
 
 } // namespace Saturn::Math
+
+#include <nlohmann/json.hpp>
+
+namespace glm {
+
+void to_json(::nlohmann::json& j, vec2 const& v);
+void to_json(::nlohmann::json& j, vec3 const& v);
+void to_json(::nlohmann::json& j, vec4 const& v);
+
+void from_json(::nlohmann::json const& j, vec2& v);
+void from_json(::nlohmann::json const& j, vec3& v);
+void from_json(::nlohmann::json const& j, vec4& v);
+
+} // namespace glm
+
 
 #endif

@@ -148,25 +148,25 @@ void Renderer::render_particles(Scene& scene) {
         if (emitter.additive) { glBlendFunc(GL_SRC_ALPHA, GL_ONE); }
         // Bind VAO
         bind_guard<VertexArray> vao_guard(emitter.particle_vao.get());
-        for (ParticleEmitter::Particle const& particle : emitter.particles) {
-            
-            particle_shader->set_vec3(Shader::Uniforms::Position,
-                                      particle.position);
-            particle_shader->set_vec3(
-                Shader::Uniforms::Scale,
-                glm::vec3(particle.size.x, particle.size.y, 0.0f));
-            auto& texture = emitter.texture.is_loaded() ? emitter.texture.get()
-                                                        : default_texture.get();
-            particle_shader->set_vec4(Shader::Uniforms::Color, particle.color);
-            Texture::bind(texture);
-            particle_shader->set_int(Shader::Uniforms::Texture,
-                                     texture.unit() - GL_TEXTURE0);
 
-            glDrawElements(GL_TRIANGLES, emitter.particle_vao->index_size(),
-                           GL_UNSIGNED_INT, nullptr);
+        //            particle_shader->set_vec3(Shader::Uniforms::Position,
+        //                                      particle.position);
+        //            particle_shader->set_vec3(
+        //                Shader::Uniforms::Scale,
+        //                glm::vec3(particle.size.x, particle.size.y, 0.0f));
+        auto& texture = emitter.texture.is_loaded() ? emitter.texture.get()
+                                                    : default_texture.get();
+        //            particle_shader->set_vec4(Shader::Uniforms::Color,
+        //            particle.color);
+        Texture::bind(texture);
+        particle_shader->set_int(Shader::Uniforms::Texture,
+                                 texture.unit() - GL_TEXTURE0);
 
-            Texture::unbind(texture);
-        }
+        glDrawElementsInstanced(
+            GL_TRIANGLES, emitter.particle_vao->index_size(), GL_UNSIGNED_INT,
+            nullptr, emitter.particles.size());
+
+        Texture::unbind(texture);
 
         if (emitter.additive) {
             // reset blend function to old one
@@ -195,7 +195,8 @@ void Renderer::update_screen() {
 
     // Render framebuffer texture to the screen
     glBindTexture(GL_TEXTURE_2D, framebuf.texture);
-	PostProcessing::get_instance().get_active()->set_int(Shader::Uniforms::Texture, 0);
+    PostProcessing::get_instance().get_active()->set_int(
+        Shader::Uniforms::Texture, 0);
     glDrawElements(GL_TRIANGLES, screen.index_size(), GL_UNSIGNED_INT, nullptr);
 
     // Re enable functionality

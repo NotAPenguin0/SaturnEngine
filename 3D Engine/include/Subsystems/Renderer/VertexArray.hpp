@@ -13,6 +13,7 @@ struct VertexAttribute {
     std::size_t location_in_shader;
     // The amount of components one element has. Must be 1, 2, 3 or 4
     std::size_t num_components;
+    std::size_t divisor = 0;
 };
 
 enum class BufferMode {
@@ -60,6 +61,8 @@ public:
 
 	// Returns the index of the added buffer
 	std::size_t add_buffer(BufferInfo const& info);
+
+	void update_buffer_data(std::size_t buffer_index, float* data, std::size_t count);
 
 private:
 	friend class Renderer;

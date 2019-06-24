@@ -9,6 +9,7 @@
 #include "Subsystems/Scene/Scene.hpp"
 #include "Subsystems/Scene/SceneObject.hpp"
 #include "Subsystems/Time/Time.hpp"
+#include "Utility/Utility.hpp"
 
 namespace Saturn {
 
@@ -92,47 +93,9 @@ void Application::run() {
         transform.position.y = -2.0f;
     }
 
-    auto& obj = scene.create_object(&x);
-    auto transform_id = obj.add_component<Components::Transform>();
+    auto& obj = scene.create_object_from_file("resources/entities/my_emitter.json", &x);
     {
-        auto& transform =
-            scene.ecs.get_with_id<Components::Transform>(transform_id);
-        transform.position = glm::vec3(8.0f, 0.0f, 0.0f);
-        transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
-        transform.rotation = glm::vec3(glm::radians(90.0f), 0.0f, 0.0f);
-        /*auto& mesh = scene.ecs.get_with_id<Components::StaticMesh>(
-            obj.add_component<Components::StaticMesh>());
-        mesh.mesh =
-            AssetManager<Mesh>::get_resource("resources/meshes/my_cube.mesh");*/
-        auto& material = scene.ecs.get_with_id<Components::Material>(
-            obj.add_component<Components::Material>());
-        material.shader =
-            AssetManager<Shader>::get_resource("resources/shaders/texture.sh");
-        material.texture =
-            AssetManager<Texture>::get_resource("resources/textures/wood.tex");
-
-        auto& emitter = scene.ecs.get_with_id<Components::ParticleEmitter>(
-            obj.add_component<Components::ParticleEmitter>());
-        emitter.main.start_color = {1.0f, 1.0f, 1.0f, 1.0f};
-        emitter.main.start_lifetime = 4.0f;
-        emitter.emission.spawn_rate = 5000.0f;
-        emitter.main.start_velocity = 1.0f;
-        emitter.main.max_particles = 15000;
-        emitter.main.start_size = {0.05f, 0.05f};
-        emitter.particles.reserve(emitter.main.max_particles);
-        emitter.main.loop = true;
-        emitter.main.duration = 5.0f;
-        emitter.color_over_lifetime.enabled = true;
-        emitter.color_over_lifetime.gradient =
-            ColorGradient{{1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 0.0f}};
-        emitter.size_over_lifetime.enabled = true;
-        emitter.size_over_lifetime.modifier =
-            Math::Curve{Math::CurveShape::LinearDown, 0.4f, 1.0f};
-        emitter.shape.shape = Components::ParticleEmitter::SpawnShape::Box;
-        emitter.shape.radius = 1.0f;
-        emitter.shape.arc = 360.0f;
-        emitter.shape.angle = 45.0f;
-        emitter.shape.randomize_direction = 0.0f;
+		auto& emitter = obj.get_component<Components::ParticleEmitter>();
         VertexArray::CreateInfo vao_info;
         vao_info.attributes.push_back({0, 3}); // position
         vao_info.attributes.push_back({1, 2}); // texture coordinates
@@ -140,11 +103,23 @@ void Application::run() {
         vao_info.indices = particle_quad_indices;
         emitter.particle_vao =
             AssetManager<VertexArray>::get_resource(vao_info, "particle_vao");
+        VertexArray::BufferInfo pos_buffer_info;
+        pos_buffer_info.attributes.push_back({2, 3, 1}); // position
+        pos_buffer_info.mode = BufferMode::DataStream;
+		//#TODO: Get rid of make_float_vec
+        pos_buffer_info.data = make_float_vec(emitter.particle_data.positions);
+        VertexArray::BufferInfo scale_buffer_info;
+        scale_buffer_info.attributes.push_back({3, 3, 1}); // scale
+        scale_buffer_info.mode = BufferMode::DataStream;
+        scale_buffer_info.data = make_float_vec(emitter.particle_data.sizes);
+        VertexArray::BufferInfo color_buffer_info;
+        color_buffer_info.attributes.push_back({4, 4, 1}); // color
+        color_buffer_info.mode = BufferMode::DataStream;
+        color_buffer_info.data = make_float_vec(emitter.particle_data.colors);
 
-        auto& rotator = scene.ecs.get_with_id<Components::Rotator>(
-            obj.add_component<Components::Rotator>());
-		rotator.euler_angles = glm::vec3(1.0f, 0.0f, 0.0f);
-        rotator.speed = 3.0f;
+        emitter.particle_vao->add_buffer(pos_buffer_info); 
+        emitter.particle_vao->add_buffer(scale_buffer_info);
+        emitter.particle_vao->add_buffer(color_buffer_info);
     }
 
     auto& main_cam = scene.create_object();

@@ -125,7 +125,7 @@ std::size_t VertexArray::add_buffer(BufferInfo const& info) {
     switch (info.mode) {
         case BufferMode::Static: mode = GL_STATIC_DRAW; break;
         case BufferMode::Dynamic: mode = GL_DYNAMIC_DRAW; break;
-        case BufferMode::DataStream: mode = GL_DYNAMIC_DRAW; break;
+        case BufferMode::DataStream: mode = GL_STREAM_DRAW; break;
     }
 
     bind_guard vao_guard(vao);
@@ -142,11 +142,21 @@ std::size_t VertexArray::add_buffer(BufferInfo const& info) {
         glVertexAttribPointer(attr.location_in_shader, attr.num_components,
                               GL_FLOAT, GL_FALSE, vertex_size_in_bytes,
                               (void*)(offset * sizeof(float)));
+		glVertexAttribDivisor(attr.location_in_shader, attr.divisor);
         glEnableVertexAttribArray(attr.location_in_shader);
         offset += attr.num_components;
     }
 
     return buffers.size() - 1;
+}
+
+void VertexArray::update_buffer_data(std::size_t buffer_index,
+	float* data,
+	std::size_t count) {
+	auto& buf = *buffers[buffer_index];
+    bind_guard vao_guard(vao);
+	bind_guard vbo_guard(buf);
+	glBufferData(GL_ARRAY_BUFFER, count * sizeof(float), data, GL_STREAM_DRAW);
 }
 
 } // namespace Saturn
