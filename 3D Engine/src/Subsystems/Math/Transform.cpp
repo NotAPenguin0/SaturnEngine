@@ -7,7 +7,7 @@
 
 namespace glm {
 
-inline mat4 rotate(mat4 const& mat, vec3 euler) {
+mat4 rotate(mat4 const& mat, vec3 euler) {
     mat4 result;
     result = rotate(mat, euler.z, vec3{0, 0, 1});
     result = rotate(result, euler.y, vec3{0, 1, 0});

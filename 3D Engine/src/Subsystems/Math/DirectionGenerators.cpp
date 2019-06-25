@@ -4,6 +4,7 @@
 #include "Subsystems/Math/Transform.hpp"
 #include "Subsystems/Math/math_traits.hpp"
 
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
 namespace Saturn::Math {
