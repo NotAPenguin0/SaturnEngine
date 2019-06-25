@@ -88,7 +88,7 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Label="LLVM" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClangClAdditionalOptions>-ferror-limit=500 -Wall -Wno-missing-noreturn -Wno-zero-as-null-pointer-constant -Wno-old-style-cast -Wno-unused-private-field -Wno-exit-time-destructors -Wno-double-promotion -Wno-missing-prototypes -Wextra -Wno-newline-eof -Wno-unused-command-line-argument -Wno-c++98-compat-pedantic -Wno-unused-variable -Wno-global-constructors -Werror -Wno-shorten-64-to-32 -Wno-c++98-compat -Wno-reserved-id-macro</ClangClAdditionalOptions>
+    <ClangClAdditionalOptions>-Wall -Wno-missing-noreturn -Wno-zero-as-null-pointer-constant -Wno-old-style-cast -Wno-unused-private-field -Wno-exit-time-destructors -Wno-double-promotion -Wno-missing-prototypes -Wextra -Wno-newline-eof -Wno-unused-command-line-argument -Wno-c++98-compat-pedantic -Wno-unused-variable -Wno-global-constructors -Werror -Wno-shorten-64-to-32 -Wno-c++98-compat -Wno-reserved-id-macro</ClangClAdditionalOptions>
     <LldLinkAdditionalOptions>/debug:ghash /opt:noref</LldLinkAdditionalOptions>
   </PropertyGroup>
   <PropertyGroup Label="LLVM" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -96,7 +96,7 @@
     <LldLinkAdditionalOptions>/debug:ghash /opt:noref</LldLinkAdditionalOptions>
   </PropertyGroup>
   <PropertyGroup Label="LLVM" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClangClAdditionalOptions>-ferror-limit=500 -Wall -Wno-missing-noreturn -Wno-zero-as-null-pointer-constant -Wno-old-style-cast -Wno-unused-private-field -Wno-exit-time-destructors -Wno-double-promotion -Wno-missing-prototypes -Wextra -Wno-newline-eof -Wno-unused-command-line-argument -Wno-c++98-compat-pedantic -Wno-unused-variable -Wno-global-constructors -Werror -Wno-shorten-64-to-32 -Wno-c++98-compat -Wno-reserved-id-macro</ClangClAdditionalOptions>
+    <ClangClAdditionalOptions>-Wall -Wno-missing-noreturn -Wno-zero-as-null-pointer-constant -Wno-old-style-cast -Wno-unused-private-field -Wno-exit-time-destructors -Wno-double-promotion -Wno-missing-prototypes -Wextra -Wno-newline-eof -Wno-unused-command-line-argument -Wno-c++98-compat-pedantic -Wno-unused-variable -Wno-global-constructors -Werror -Wno-shorten-64-to-32 -Wno-c++98-compat -Wno-reserved-id-macro</ClangClAdditionalOptions>
     <LldLinkAdditionalOptions>/debug:ghash /opt:noref</LldLinkAdditionalOptions>
   </PropertyGroup>
   <PropertyGroup Label="LLVM" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -190,9 +190,13 @@
     <ClCompile Include="src\Subsystems\ECS\Systems\SystemBase.cpp" />
     <ClCompile Include="src\Subsystems\Input\Input.cpp" />
     <ClCompile Include="src\Subsystems\Logging\LogSystem.cpp" />
+    <ClCompile Include="src\Subsystems\Math\CoordConversions.cpp" />
     <ClCompile Include="src\Subsystems\Math\Curve.cpp" />
+    <ClCompile Include="src\Subsystems\Math\DirectionGenerators.cpp" />
     <ClCompile Include="src\Subsystems\Math\Math.cpp" />
+    <ClCompile Include="src\Subsystems\Math\PositionGenerators.cpp" />
     <ClCompile Include="src\Subsystems\Math\RandomEngine.cpp" />
+    <ClCompile Include="src\Subsystems\Math\Transform.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\Mesh.cpp" />
     <ClCompile Include="src\Subsystems\Renderer\OpenGL.cpp" />
@@ -244,11 +248,16 @@
     <ClInclude Include="include\Subsystems\Logging\LogSystem.hpp" />
     <ClInclude Include="include\Subsystems\Logging\rang.hpp" />
     <ClInclude Include="include\Subsystems\Math\ConstexprMath.hpp" />
+    <ClInclude Include="include\Subsystems\Math\CoordConversions.hpp" />
     <ClInclude Include="include\Subsystems\Math\Curve.hpp" />
+    <ClInclude Include="include\Subsystems\Math\DirectionGenerators.hpp" />
     <ClInclude Include="include\Subsystems\Math\Math.hpp" />
     <ClInclude Include="include\Subsystems\Math\math_traits.hpp" />
+    <ClInclude Include="include\Subsystems\Math\Misc.hpp" />
     <ClInclude Include="include\Subsystems\Math\NumericRange.hpp" />
+    <ClInclude Include="include\Subsystems\Math\PositionGenerators.hpp" />
     <ClInclude Include="include\Subsystems\Math\RandomEngine.hpp" />
+    <ClInclude Include="include\Subsystems\Math\Transform.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\Framebuffer.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\Mesh.hpp" />
     <ClInclude Include="include\Subsystems\Renderer\OpenGL.hpp" />

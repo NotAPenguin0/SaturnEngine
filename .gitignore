@@ -260,3 +260,7 @@ __pycache__/
 
 # Natvis files
 *.natvis
+
+# Build crap
+*.tlog
+*.exe

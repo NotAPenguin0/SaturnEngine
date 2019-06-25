@@ -1,14 +1,11 @@
 #ifndef MVG_ECS_HPP_
 #define MVG_ECS_HPP_
 
-#include <tuple>
 #include <vector>
 
 #include "component_container.hpp"
 #include "component_index.hpp"
 #include "component_view.hpp"
-
-#include "Subsystems/Scene/SceneObject.hpp"
 
 #include "Systems/SystemBase.hpp"
 
@@ -55,9 +52,9 @@ public:
     }
 
     // Grabs all component sets with a specified set of components
-    template<typename... Cs>
-    component_view<Cs...> select() {
-        return component_view<Cs...>(scene->objects.begin(),
+    template<typename... Comps>
+    component_view<Comps...> select() {
+        return component_view<Comps...>(scene->objects.begin(),
                                      scene->objects.end());
     }
 

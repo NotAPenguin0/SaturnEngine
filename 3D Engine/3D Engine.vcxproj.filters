@@ -198,6 +198,18 @@
     <ClCompile Include="src\Subsystems\Math\Math.cpp">
       <Filter>Source Files\Subsystems\Math</Filter>
     </ClCompile>
+    <ClCompile Include="src\Subsystems\Math\DirectionGenerators.cpp">
+      <Filter>Source Files\Subsystems\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Subsystems\Math\CoordConversions.cpp">
+      <Filter>Source Files\Subsystems\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Subsystems\Math\Transform.cpp">
+      <Filter>Source Files\Subsystems\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Subsystems\Math\PositionGenerators.cpp">
+      <Filter>Source Files\Subsystems\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Application.hpp">
@@ -376,6 +388,21 @@
     </ClInclude>
     <ClInclude Include="include\Subsystems\ECS\Systems\RotatorSystem.hpp">
       <Filter>Header Files\Subsystems\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Math\DirectionGenerators.hpp">
+      <Filter>Header Files\Subsystems\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Math\CoordConversions.hpp">
+      <Filter>Header Files\Subsystems\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Math\Transform.hpp">
+      <Filter>Header Files\Subsystems\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Math\Misc.hpp">
+      <Filter>Header Files\Subsystems\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Math\PositionGenerators.hpp">
+      <Filter>Header Files\Subsystems\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
