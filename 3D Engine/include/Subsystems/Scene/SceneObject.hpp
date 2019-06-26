@@ -76,13 +76,7 @@ public:
     void serialize_component(nlohmann::json& j) const {
         // Assumes the object has this component
         nlohmann::json to_add = get_component<C>();
-        std::cout << to_add.dump(4);
-        std::cout << "\n\n";
-        std::cout << j.dump(4);
-        std::cout << "\n\n";
         j.update(to_add);
-        std::cout << j.dump(4);
-        std::cout << "\n\n";
     }
 
     template<typename C, typename... Cs>

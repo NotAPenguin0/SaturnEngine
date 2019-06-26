@@ -26,7 +26,7 @@ void SceneObject::serialize_to_file(std::string_view path) {
     nlohmann::json json;
 	json = *this;
     std::ofstream file(path.data());
-    file << json;
+    file << json.dump(4);
 }
 
 void to_json(nlohmann::json& j, SceneObject const& obj) {
