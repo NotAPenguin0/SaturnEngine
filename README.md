@@ -23,3 +23,8 @@ Currently, I am working on this project alone.
 - Editor
 - Sound Engine
 - ... and much more
+
+# Special thanks
+
+Piotr Koica (https://github.com/kociap) - Provided amazing help setting up CMake files
+Nils Petter Skålerud (https://github.com/Didgy74/) - Provided great help coding the engine when needed
