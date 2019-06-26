@@ -26,5 +26,5 @@ Currently, I am working on this project alone.
 
 # Special thanks
 
-- Piotr Koica (https://github.com/kociap)
+- Piotr Kocia (https://github.com/kociap)
 - Nils Petter Skålerud (https://github.com/Didgy74/)
