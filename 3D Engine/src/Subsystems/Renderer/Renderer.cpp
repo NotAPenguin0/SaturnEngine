@@ -23,37 +23,38 @@ static std::vector<float> screen_vertices = {
 
 Renderer::Renderer(CreateInfo create_info) :
     app(create_info.app), screen_size(create_info.screen_size) {
-
+    std::cout << "Before framebuffer\n";
     // Setup the framebuffer
     Framebuffer::CreateInfo framebuffer_create_info;
     framebuffer_create_info.size = screen_size;
     framebuf.assign(framebuffer_create_info);
-
+    std::cout << "After framebuffer";
     // Create default viewport
     add_viewport(Viewport(0, 0, screen_size.x, screen_size.y));
     // Set it as the active viewport
     Viewport::set_active(get_viewport(0));
-
+    std::cout << "Viewport initialized\n";
     std::vector<VertexAttribute> screen_attributes;
     screen_attributes.push_back({0, 3}); // Position is a vec3
     screen_attributes.push_back({1, 2}); // TexCoords is a vec2
 
     screen.assign({screen_attributes, screen_vertices, {0, 1, 2, 0, 3, 2}});
-
+    std::cout << "Screen VAO created\n";
     PostProcessing::get_instance().load_shaders(
         "resources/shaders/postprocessing/postprocessing_effects.ppe");
     PostProcessing::get_instance().set_active("none");
-
+    std::cout << "PostProcessing initialized\n";
     UniformBuffer::CreateInfo matrix_info;
     matrix_info.binding_point = 0;
     matrix_info.dynamic = true; // View/Projection matrices can change
     matrix_info.size_in_bytes = 2 * sizeof(glm::mat4);
     matrix_buffer.assign(matrix_info);
-
+    std::cout << "Uniform Buffer created\n";
     no_shader_error =
         AssetManager<Shader>::get_resource("resources/shaders/default.sh");
     particle_shader =
         AssetManager<Shader>::get_resource("resources/shaders/particle.sh");
+    std::cout << "Default shaders initialized\n";
 }
 
 Renderer::~Renderer() {}

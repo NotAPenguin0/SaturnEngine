@@ -34,6 +34,9 @@ public:
 
 	ECS<COMPONENT_LIST>& get_ecs();
 
+	void serialize_to_file(std::string_view folder);
+	void deserialize_from_file(std::string_view path);
+
 private:
     std::vector<std::unique_ptr<SceneObject>> objects;
     ECS<COMPONENT_LIST> ecs;

@@ -130,6 +130,9 @@ private:
     float time_since_start = 0.0f;
 };
 
+
+// Serializers for enums
+
 // clang-format off
 NLOHMANN_JSON_SERIALIZE_ENUM(ParticleEmitter::SpawnShape,
     {{ParticleEmitter::SpawnShape::Box, "Box"},

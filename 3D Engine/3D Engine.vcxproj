@@ -210,6 +210,7 @@
     <ClCompile Include="src\Subsystems\Renderer\Viewport.cpp" />
     <ClCompile Include="src\Subsystems\Scene\Scene.cpp" />
     <ClCompile Include="src\Subsystems\Scene\SceneObject.cpp" />
+    <ClCompile Include="src\Subsystems\Serialization\ComponentSerializers.cpp" />
     <ClCompile Include="src\Subsystems\Time\Time.cpp" />
     <ClCompile Include="src\Utility\ColorGradient.cpp" />
     <ClCompile Include="src\Utility\Utility.cpp" />
@@ -271,6 +272,7 @@
     <ClInclude Include="include\Subsystems\Renderer\Viewport.hpp" />
     <ClInclude Include="include\Subsystems\Scene\Scene.hpp" />
     <ClInclude Include="include\Subsystems\Scene\SceneObject.hpp" />
+    <ClInclude Include="include\Subsystems\Serialization\ComponentSerializers.hpp" />
     <ClInclude Include="include\Subsystems\Time\Time.hpp" />
     <ClInclude Include="include\Utility\bind_guard.hpp" />
     <ClInclude Include="include\Utility\bind_tracker.hpp" />

@@ -2,6 +2,7 @@
 
 #include "Subsystems/Scene/SceneObject.hpp"
 
+#include <filesystem>
 #include <fstream>
 
 namespace Saturn {
@@ -27,8 +28,26 @@ Scene::create_object_from_file(std::string_view file_path,
     f >> j;
     j.get_to(object);
     object.parent_obj = parent;
-	object.scene = this;
+    object.scene = this;
     return object;
+}
+
+void Scene::serialize_to_file(std::string_view folder) {
+    namespace fs = std::filesystem;
+    fs::create_directories(folder.data() + std::string("/entities"));
+    std::ofstream file(folder.data() + std::string("/scene.dat"));
+    for (std::size_t i = 0; i < objects.size(); ++i) {
+        auto fname = folder.data() + std::string("/entities/") +
+                     std::to_string(i) + ".json";
+        objects[i]->serialize_to_file(fname);
+        file << fname << "\n";
+    }
+}
+
+void Scene::deserialize_from_file(std::string_view path) {
+    std::ifstream file(path.data());
+    std::string fname;
+    while (file >> fname) { create_object_from_file(fname); }
 }
 
 ECS<COMPONENT_LIST>& Scene::get_ecs() { return ecs; }

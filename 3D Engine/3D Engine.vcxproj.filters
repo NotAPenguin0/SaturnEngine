@@ -94,6 +94,12 @@
     <Filter Include="Source Files\Subsystems\ECS\Components">
       <UniqueIdentifier>{5947194c-11fc-4371-82c2-90b98a10749a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Subsystems\Serialization">
+      <UniqueIdentifier>{9a427dd3-f241-45bd-a73c-f119b1c91297}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subsystems\Serialization">
+      <UniqueIdentifier>{a9a59356-10a3-4ee1-a6c7-a40a2a786cfe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -209,6 +215,9 @@
     </ClCompile>
     <ClCompile Include="src\Subsystems\Math\PositionGenerators.cpp">
       <Filter>Source Files\Subsystems\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Subsystems\Serialization\ComponentSerializers.cpp">
+      <Filter>Source Files\Subsystems\Serialization</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -403,6 +412,9 @@
     </ClInclude>
     <ClInclude Include="include\Subsystems\Math\PositionGenerators.hpp">
       <Filter>Header Files\Subsystems\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Subsystems\Serialization\ComponentSerializers.hpp">
+      <Filter>Header Files\Subsystems\Serialization</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -11,6 +11,9 @@
 #include "Subsystems/Time/Time.hpp"
 #include "Utility/Utility.hpp"
 
+#include <thread>
+#include <chrono>
+
 namespace Saturn {
 
 Application::Application(CreateInfo create_info) :
@@ -34,6 +37,7 @@ Application::Application(CreateInfo create_info) :
     }
 
     glfwMakeContextCurrent(window_handle);
+	window_is_open = true;
 }
 
 Application::Application(Application&& other) :
@@ -76,6 +80,37 @@ static const std::vector<GLuint> particle_quad_indices = {
     1, 2, 3  // Second triangle
 };
 
+static SceneObject& create_particle_emitter(std::string_view path,
+                                            Scene& scene) {
+    auto& obj = scene.create_object_from_file(path);
+    auto& emitter = obj.get_component<Components::ParticleEmitter>();
+    VertexArray::CreateInfo vao_info;
+    vao_info.attributes.push_back({0, 3}); // position
+    vao_info.attributes.push_back({1, 2}); // texture coordinates
+    vao_info.vertices = particle_quad_vertices;
+    vao_info.indices = particle_quad_indices;
+    emitter.particle_vao =
+        AssetManager<VertexArray>::get_resource(vao_info, "particle_vao");
+    VertexArray::BufferInfo pos_buffer_info;
+    pos_buffer_info.attributes.push_back({2, 3, 1}); // position
+    pos_buffer_info.mode = BufferMode::DataStream;
+    //#TODO: Get rid of make_float_vec
+    pos_buffer_info.data = make_float_vec(emitter.particle_data.positions);
+    VertexArray::BufferInfo scale_buffer_info;
+    scale_buffer_info.attributes.push_back({3, 3, 1}); // scale
+    scale_buffer_info.mode = BufferMode::DataStream;
+    scale_buffer_info.data = make_float_vec(emitter.particle_data.sizes);
+    VertexArray::BufferInfo color_buffer_info;
+    color_buffer_info.attributes.push_back({4, 4, 1}); // color
+    color_buffer_info.mode = BufferMode::DataStream;
+    color_buffer_info.data = make_float_vec(emitter.particle_data.colors);
+
+    emitter.particle_vao->add_buffer(pos_buffer_info);
+    emitter.particle_vao->add_buffer(scale_buffer_info);
+    emitter.particle_vao->add_buffer(color_buffer_info);
+    return obj;
+}
+
 void Application::run() {
     Scene scene;
 
@@ -93,34 +128,8 @@ void Application::run() {
         transform.position.y = -2.0f;
     }
 
-    auto& obj = scene.create_object_from_file("resources/entities/my_emitter.json", &x);
-    {
-		auto& emitter = obj.get_component<Components::ParticleEmitter>();
-        VertexArray::CreateInfo vao_info;
-        vao_info.attributes.push_back({0, 3}); // position
-        vao_info.attributes.push_back({1, 2}); // texture coordinates
-        vao_info.vertices = particle_quad_vertices;
-        vao_info.indices = particle_quad_indices;
-        emitter.particle_vao =
-            AssetManager<VertexArray>::get_resource(vao_info, "particle_vao");
-        VertexArray::BufferInfo pos_buffer_info;
-        pos_buffer_info.attributes.push_back({2, 3, 1}); // position
-        pos_buffer_info.mode = BufferMode::DataStream;
-		//#TODO: Get rid of make_float_vec
-        pos_buffer_info.data = make_float_vec(emitter.particle_data.positions);
-        VertexArray::BufferInfo scale_buffer_info;
-        scale_buffer_info.attributes.push_back({3, 3, 1}); // scale
-        scale_buffer_info.mode = BufferMode::DataStream;
-        scale_buffer_info.data = make_float_vec(emitter.particle_data.sizes);
-        VertexArray::BufferInfo color_buffer_info;
-        color_buffer_info.attributes.push_back({4, 4, 1}); // color
-        color_buffer_info.mode = BufferMode::DataStream;
-        color_buffer_info.data = make_float_vec(emitter.particle_data.colors);
-
-        emitter.particle_vao->add_buffer(pos_buffer_info); 
-        emitter.particle_vao->add_buffer(scale_buffer_info);
-        emitter.particle_vao->add_buffer(color_buffer_info);
-    }
+    auto& obj =
+        create_particle_emitter("resources/entities/my_emitter.json", scene);
 
     auto& main_cam = scene.create_object();
     {
@@ -147,6 +156,12 @@ void Application::run() {
 
         renderer->get_viewport(0).set_camera(camera.id);
     }
+
+    Input::bind(GLFW_KEY_F, [&scene]() {
+        scene.serialize_to_file("resources/scene0");
+        using namespace std::literals::chrono_literals;
+        std::this_thread::sleep_for(100ms);
+    });
 
     scene.on_start();
     while (!glfwWindowShouldClose(window_handle)) {
