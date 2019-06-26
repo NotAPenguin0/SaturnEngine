@@ -4,6 +4,10 @@
 # Visual Studio Code
 .vscode
 
+# Visual Studio
+*.vcxproj
+*.filters
+
 # User-specific files
 *.suo
 *.user
