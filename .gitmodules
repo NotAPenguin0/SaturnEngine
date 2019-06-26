@@ -1,0 +1,9 @@
+[submodule "3D Engine/dependencies/glfw"]
+	path = 3D Engine/dependencies/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "3D Engine/dependencies/glm"]
+	path = 3D Engine/dependencies/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "3D Engine/dependencies/nlohmann_json"]
+	path = 3D Engine/dependencies/nlohmann_json
+	url = https://github.com/nlohmann/json.git
