@@ -28,4 +28,4 @@ Currently, I am working on this project alone.
 
 - Piotr Kocia (https://github.com/kociap)
 - Nils Petter Skålerud (https://github.com/Didgy74/)
-- marttyfication (https://github.com/martty)
+- Marcel Kiss (https://github.com/martty)
