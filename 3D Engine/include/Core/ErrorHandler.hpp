@@ -18,7 +18,7 @@ private:
                                [[maybe_unused]] void* fptr,
                                [[maybe_unused]] int len_args,
                                ...);
-    static void gl_error_callback([[maybe_unused]] GLenum source,
+    static void __stdcall gl_error_callback([[maybe_unused]] GLenum source,
                                   GLenum type,
                                   [[maybe_unused]] GLuint id,
                                   GLenum severity, 

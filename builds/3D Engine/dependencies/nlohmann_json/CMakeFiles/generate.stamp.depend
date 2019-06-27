@@ -1,0 +1,9 @@
+# CMake generation dependency list for this directory.
+C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/nlohmann_json/CMakeLists.txt
+C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/nlohmann_json/cmake/config.cmake.in
+C:/Users/michi_000/Downloads/cmake-3.13.2-win64-x64/cmake-3.13.2-win64-x64/share/cmake-3.13/Modules/BasicConfigVersion-SameMajorVersion.cmake.in
+C:/Users/michi_000/Downloads/cmake-3.13.2-win64-x64/cmake-3.13.2-win64-x64/share/cmake-3.13/Modules/CMakePackageConfigHelpers.cmake
+C:/Users/michi_000/Downloads/cmake-3.13.2-win64-x64/cmake-3.13.2-win64-x64/share/cmake-3.13/Modules/CTest.cmake
+C:/Users/michi_000/Downloads/cmake-3.13.2-win64-x64/cmake-3.13.2-win64-x64/share/cmake-3.13/Modules/CTestUseLaunchers.cmake
+C:/Users/michi_000/Downloads/cmake-3.13.2-win64-x64/cmake-3.13.2-win64-x64/share/cmake-3.13/Modules/ExternalProject.cmake
+C:/Users/michi_000/Downloads/cmake-3.13.2-win64-x64/cmake-3.13.2-win64-x64/share/cmake-3.13/Modules/WriteBasicConfigVersionFile.cmake

@@ -1,0 +1,22 @@
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/CMakeFiles/SaturnEngine.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/CMakeFiles/INSTALL.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/CMakeFiles/ALL_BUILD.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/CMakeFiles/ZERO_CHECK.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/CMakeFiles/INSTALL.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/glfw/CMakeFiles/INSTALL.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/glfw/CMakeFiles/ALL_BUILD.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/glfw/src/CMakeFiles/glfw.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/glfw/src/CMakeFiles/INSTALL.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/glad/CMakeFiles/glad.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/glad/CMakeFiles/INSTALL.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/glad/CMakeFiles/ALL_BUILD.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/glm/CMakeFiles/uninstall.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/glm/CMakeFiles/INSTALL.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/glm/CMakeFiles/ALL_BUILD.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/glm/glm/CMakeFiles/INSTALL.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/glm/glm/CMakeFiles/glm_static.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/glm/test/CMakeFiles/INSTALL.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/nlohmann_json/CMakeFiles/INSTALL.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/nlohmann_json/CMakeFiles/ALL_BUILD.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/include/CMakeFiles/INSTALL.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/src/CMakeFiles/INSTALL.dir

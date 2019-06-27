@@ -33,6 +33,7 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Viewport.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Scene/Scene.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Scene/SceneObject.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Serialization/ComponentSerializers.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Time/Time.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/ColorGradient.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/Utility.cpp"

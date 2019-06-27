@@ -123,7 +123,7 @@ struct ParticleEmitter : ComponentBase {
     ParticleData particle_data;
 
     friend class Systems::ParticleSystem;
-    friend class Renderer;
+    friend class ::Saturn::Renderer;
 
 private:
     float time_since_last_spawn = 0.0f;
