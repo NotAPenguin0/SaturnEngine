@@ -30,6 +30,7 @@ void from_json(nlohmann::json const& json, Camera& camera) {
         camera.front = (*cam)["Front"].get<glm::vec3>();
         camera.up = (*cam)["Up"].get<glm::vec3>();
         camera.fov = (*cam)["FOV"].get<float>();
+        camera.viewport_id = (*cam)["ViewportID"].get<std::size_t>();
     }
 }
 
@@ -154,7 +155,44 @@ void from_json(nlohmann::json const& json, ParticleEmitter& emitter) {
             }
         }
 
-        emitter.additive = (*emit)["additive"].get<bool>();
+        static const std::vector<float> particle_quad_vertices = {
+            -1.0f, 1.0f,  0.0f, 0.0f, 1.0f, // TL
+            1.0f,  1.0f,  0.0f, 1.0f, 1.0f, // TR
+            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, // BL
+            1.0f,  -1.0f, 0.0f, 1.0f, 0.0f  // BR
+        };
+
+        static const std::vector<GLuint> particle_quad_indices = {
+            0, 1, 2, // First triangle
+            1, 2, 3  // Second triangle
+        };
+
+        emitter.additive = (*emit)["Additive"].get<bool>();
+        // Add additional rendering info
+        VertexArray::CreateInfo vao_info;
+        vao_info.attributes.push_back({0, 3}); // position
+        vao_info.attributes.push_back({1, 2}); // texture coordinates
+        vao_info.vertices = particle_quad_vertices;
+        vao_info.indices = particle_quad_indices;
+        emitter.particle_vao =
+            AssetManager<VertexArray>::get_resource(vao_info, "particle_vao");
+        VertexArray::BufferInfo pos_buffer_info;
+        pos_buffer_info.attributes.push_back({2, 3, 1}); // position
+        pos_buffer_info.mode = BufferMode::DataStream;
+        //#TODO: Get rid of make_float_vec
+        pos_buffer_info.data = make_float_vec(emitter.particle_data.positions);
+        VertexArray::BufferInfo scale_buffer_info;
+        scale_buffer_info.attributes.push_back({3, 3, 1}); // scale
+        scale_buffer_info.mode = BufferMode::DataStream;
+        scale_buffer_info.data = make_float_vec(emitter.particle_data.sizes);
+        VertexArray::BufferInfo color_buffer_info;
+        color_buffer_info.attributes.push_back({4, 4, 1}); // color
+        color_buffer_info.mode = BufferMode::DataStream;
+        color_buffer_info.data = make_float_vec(emitter.particle_data.colors);
+
+        emitter.particle_vao->add_buffer(pos_buffer_info);
+        emitter.particle_vao->add_buffer(scale_buffer_info);
+        emitter.particle_vao->add_buffer(color_buffer_info);
     }
 }
 
@@ -199,7 +237,8 @@ void to_json(nlohmann::json& json, Camera const& camera) {
     json["CameraComponent"] = nlohmann::json::object({
 		{"Front", camera.front},
 		{"Up", camera.up},
-		{"FOV", camera.fov}
+		{"FOV", camera.fov},
+		{"ViewportID", camera.viewport_id}
 		});
     // clang-format on 
 }
@@ -301,6 +340,7 @@ void to_json(nlohmann::json& json, Material const& material) {
 void to_json(nlohmann::json& json, Rotator const& rotator) {
 	json["RotatorComponent"]  = nlohmann::json::object();
 	json["RotatorComponent"]["Speed"] = rotator.speed;
+	json["RotatorComponent"]["EulerAngles"] = rotator.euler_angles;
 }
 
 } // namespace Saturn::Components

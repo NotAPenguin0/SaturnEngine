@@ -216,7 +216,7 @@ ResourceLoader<Texture>::load(std::string const& path) {
     file >> param_count;
     // Read parameters
     std::vector<Texture::ParameterInfo> params(param_count);
-    for (auto param : params) {
+    for (auto& param : params) {
         file >> str;
         param.parameter = param_from_string(str);
         char dummy;

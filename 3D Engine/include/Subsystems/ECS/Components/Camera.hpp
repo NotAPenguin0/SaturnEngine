@@ -14,6 +14,7 @@ struct Camera : public ComponentBase {
     glm::vec3 up;
 
 	float fov;
+	std::size_t viewport_id = 0;
 };
 
 } // namespace Components

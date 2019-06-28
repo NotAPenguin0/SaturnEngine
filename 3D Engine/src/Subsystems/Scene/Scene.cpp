@@ -1,5 +1,6 @@
 #include "Subsystems/Scene/Scene.hpp"
 
+#include "Core/Application.hpp"
 #include "Subsystems/Scene/SceneObject.hpp"
 
 #include <filesystem>
@@ -7,12 +8,16 @@
 
 namespace Saturn {
 
-Scene::Scene() : ecs(this) {}
+Scene::Scene(Application* app) : ecs(this), app(app) {}
 
 Scene::~Scene() {}
 
 void Scene::update_systems() { ecs.update_systems(); }
 void Scene::on_start() { ecs.on_start(); }
+
+Application* Scene::get_app() {
+	return app;
+}
 
 SceneObject& Scene::create_object(SceneObject* parent /* = nullptr*/) {
     objects.push_back(std::make_unique<SceneObject>(this, parent));

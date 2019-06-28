@@ -1,0 +1,7 @@
+none resources/shaders/postprocessing/none_f.glsl
+invert resources/shaders/postprocessing/invert_f.glsl
+grayscale resources/shaders/postprocessing/grayscale_f.glsl
+sharpen resources/shaders/postprocessing/sharpen_f.glsl
+blur resources/shaders/postprocessing/blur_f.glsl
+sharpen_edge resources/shaders/postprocessing/sharpen_edge_f.glsl
+jiggle resources/shaders/postprocessing/jiggle_f.glsl

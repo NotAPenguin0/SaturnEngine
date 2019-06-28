@@ -27,7 +27,21 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
-build/
+
+# Build files
+*.exe
+*.pdb
+*.lib
+builds/Win32/
+builds/SaturnEngine.dir/
+builds/Debug/
+builds/CMakeFiles/
+builds/3D Engine/
+builds/.vs
+builds/*.*
+
+# RenderDoc captures
+*.rdc
 
 # Visual Studio 2015 cache/options directory
 .vs/
@@ -49,7 +63,7 @@ dlldata.c
 
 # DNX
 project.lock.json
-project.fragment.lock.json
+projectD.fragment.lock.json
 artifacts/
 
 *_i.c

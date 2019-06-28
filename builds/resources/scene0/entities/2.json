@@ -1,0 +1,44 @@
+{
+    "CameraComponent": {
+        "FOV": 45.0,
+        "Front": [
+            0.5545339584350586,
+            -0.008377493359148502,
+            -0.8321190476417542
+        ],
+        "Up": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "ViewportID": 0
+    },
+    "CameraZoomControllerComponent": {
+        "MaxZoom": 45.0,
+        "MinZoom": 1.0,
+        "ZoomSpeed": 100.0
+    },
+    "FPSCameraControllerComponent": {
+        "Speed": 2.5
+    },
+    "FreeLookControllerComponent": {
+        "MouseSensitivity": 0.07999999821186066
+    },
+    "TransformComponent": {
+        "Position": [
+            7.457417964935303,
+            -0.0819028839468956,
+            10.116674423217773
+        ],
+        "Rotation": [
+            -0.4800005555152893,
+            -56.32004165649414,
+            0.0
+        ],
+        "Scale": [
+            1.0,
+            1.0,
+            1.0
+        ]
+    }
+}

@@ -91,6 +91,8 @@ public:
     void resize_callback([[maybe_unused]] GLFWwindow* window, int w, int h);
 
     WindowDim size() const;
+	
+    inline Renderer* get_renderer() { return renderer.get(); }
 
 private:
     GLFWwindow* window_handle;   ///< Handle to the GLFW window

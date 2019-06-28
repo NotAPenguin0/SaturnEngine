@@ -13,6 +13,8 @@
 
 namespace Saturn {
 
+class Application;
+
 class SceneObject;
 
 class Scene {
@@ -20,10 +22,10 @@ public:
     friend class SceneObject;
     friend class ECS<COMPONENT_LIST>;
     friend class Renderer;
-    friend class Application;
+    friend class ::Saturn::Application;
     friend class Systems::SystemBase;
 
-    Scene();
+    Scene(Application* app);
     ~Scene();
 
 	void on_start();
@@ -37,9 +39,12 @@ public:
 	void serialize_to_file(std::string_view folder);
 	void deserialize_from_file(std::string_view path);
 
+	Application* get_app();
+
 private:
     std::vector<std::unique_ptr<SceneObject>> objects;
     ECS<COMPONENT_LIST> ecs;
+	Application* app;
 };
 
 } // namespace Saturn

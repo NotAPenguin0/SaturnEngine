@@ -11,8 +11,8 @@
 #include "Subsystems/Time/Time.hpp"
 #include "Utility/Utility.hpp"
 
-#include <thread>
 #include <chrono>
+#include <thread>
 
 namespace Saturn {
 
@@ -37,7 +37,7 @@ Application::Application(CreateInfo create_info) :
     }
 
     glfwMakeContextCurrent(window_handle);
-	window_is_open = true;
+    window_is_open = true;
 }
 
 Application::Application(Application&& other) :
@@ -112,7 +112,7 @@ static SceneObject& create_particle_emitter(std::string_view path,
 }
 
 void Application::run() {
-    Scene scene;
+    Scene scene(this);
 
     // Add systems
     scene.ecs.register_system<Systems::FPSCameraControllerSystem>();
@@ -121,41 +121,43 @@ void Application::run() {
     scene.ecs.register_system<Systems::ParticleSystem>();
     scene.ecs.register_system<Systems::RotatorSystem>();
 
-    auto& x = scene.create_object();
-    {
-        auto id = x.add_component<Components::Transform>();
-        auto& transform = scene.ecs.get_with_id<Components::Transform>(id);
-        transform.position.y = -2.0f;
-    }
+    /* auto& x = scene.create_object();
+     {
+         auto id = x.add_component<Components::Transform>();
+         auto& transform = scene.ecs.get_with_id<Components::Transform>(id);
+         transform.position.y = -2.0f;
+     }
 
-    auto& obj =
-        create_particle_emitter("resources/entities/my_emitter.json", scene);
+     auto& obj =
+         create_particle_emitter("resources/entities/my_emitter.json", scene);
 
-    auto& main_cam = scene.create_object();
-    {
-        auto& transform = scene.ecs.get_with_id<Components::Transform>(
-            main_cam.add_component<Components::Transform>());
-        auto& camera = scene.ecs.get_with_id<Components::Camera>(
-            main_cam.add_component<Components::Camera>());
-        auto& fps = scene.ecs.get_with_id<Components::FPSCameraController>(
-            main_cam.add_component<Components::FPSCameraController>());
-        auto& freelook = scene.ecs.get_with_id<Components::FreeLookController>(
-            main_cam.add_component<Components::FreeLookController>());
-        auto& zoom = scene.ecs.get_with_id<Components::CameraZoomController>(
-            main_cam.add_component<Components::CameraZoomController>());
+     auto& main_cam = scene.create_object();
+     {
+         auto& transform = scene.ecs.get_with_id<Components::Transform>(
+             main_cam.add_component<Components::Transform>());
+         auto& camera = scene.ecs.get_with_id<Components::Camera>(
+             main_cam.add_component<Components::Camera>());
+         auto& fps = scene.ecs.get_with_id<Components::FPSCameraController>(
+             main_cam.add_component<Components::FPSCameraController>());
+         auto& freelook = scene.ecs.get_with_id<Components::FreeLookController>(
+             main_cam.add_component<Components::FreeLookController>());
+         auto& zoom = scene.ecs.get_with_id<Components::CameraZoomController>(
+             main_cam.add_component<Components::CameraZoomController>());
 
-        transform.position = {0.0f, 0.0f, 0.0f};
+         transform.position = {0.0f, 0.0f, 0.0f};
 
-        camera.front = {1.0f, 0.0f, 0.0f};
-        camera.up = {0.0f, 1.0f, 0.0f};
-        camera.fov = 45.0f;
+         camera.front = {1.0f, 0.0f, 0.0f};
+         camera.up = {0.0f, 1.0f, 0.0f};
+         camera.fov = 45.0f;
 
-        fps.speed = 2.5f;
-        freelook.mouse_sensitivity = 0.08f;
-        zoom.zoom_speed = 100.0f;
+         fps.speed = 2.5f;
+         freelook.mouse_sensitivity = 0.08f;
+         zoom.zoom_speed = 100.0f;
 
-        renderer->get_viewport(0).set_camera(camera.id);
-    }
+         renderer->get_viewport(0).set_camera(camera.id);
+     }*/
+
+    scene.deserialize_from_file("resources/scene0/scene.dat");
 
     Input::bind(GLFW_KEY_F, [&scene]() {
         scene.serialize_to_file("resources/scene0");

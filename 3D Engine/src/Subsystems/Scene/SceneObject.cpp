@@ -1,10 +1,13 @@
 #include "Subsystems/Scene/SceneObject.hpp"
 #include "Subsystems/Scene/Scene.hpp"
 
+#include "Core/Application.hpp"
 #include "Subsystems/AssetManager/AssetManager.hpp"
 #include "Subsystems/ECS/ComponentList.hpp"
 #include "Subsystems/ECS/Components.hpp"
 #include "Subsystems/Math/Math.hpp"
+#include "Subsystems/Renderer/Renderer.hpp"
+#include "Subsystems/Renderer/Viewport.hpp"
 #include "Subsystems/Serialization/ComponentSerializers.hpp"
 
 #include <fstream>
@@ -24,13 +27,13 @@ SceneObject const* SceneObject::parent() const { return parent_obj; }
 
 void SceneObject::serialize_to_file(std::string_view path) {
     nlohmann::json json;
-	json = *this;
+    json = *this;
     std::ofstream file(path.data());
     file << json.dump(4);
 }
 
 void to_json(nlohmann::json& j, SceneObject const& obj) {
-	obj.serialize_components<COMPONENT_LIST>(j);
+    obj.serialize_components<COMPONENT_LIST>(j);
 }
 
 void from_json(nlohmann::json const& j, SceneObject& obj) {
@@ -47,6 +50,7 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
         auto& camera = obj.get_scene()->get_ecs().get_with_id<Camera>(
             obj.add_component<Camera>());
         j.get_to(camera);
+        obj.get_scene()->get_app()->get_renderer()->get_viewport(camera.viewport_id).set_camera(camera.id);
     }
     if (auto const& fps = j.find("FPSCameraControllerComponent");
         fps != j.end()) {
