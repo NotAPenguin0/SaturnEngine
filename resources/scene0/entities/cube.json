@@ -13,13 +13,13 @@
         "Shader": {
             "Resource": "resources/shaders/lit.sh"
         },
-        "Texture": {
-            "Resource": "resources/textures/white.tex"
-        },
         "Lit": true,
-        "Ambient": [1.0, 0.5, 0.31],
-        "Diffuse": [1.0, 0.5, 0.31],
-        "Specular": [0.5, 0.5, 0.5],
-        "Shininess": 32
+        "DiffuseMap": {
+            "Resource": "resources/textures/container2.tex"
+        },
+        "SpecularMap": {
+            "Resource": "resources/textures/container2_specular.tex"
+        },
+        "Shininess": 51.2
     }
 }

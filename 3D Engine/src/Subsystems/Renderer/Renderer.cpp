@@ -115,7 +115,7 @@ void Renderer::render_scene(Scene& scene) {
             auto offset =
                 sizeof(int) /*the size variable*/ +
                 12 /*Padding after the size variable*/ +
-                i * (4 * sizeof(glm::vec3)); /*Add offsets for
+                i * (4 * sizeof(glm::vec4)); /*Add offsets for
                                           every point light in the array. vec4
                                           because of std140 layout padding*/
             lights_buffer.set_vec3(point_lights[i]->ambient, offset);
@@ -158,12 +158,12 @@ void Renderer::render_scene(Scene& scene) {
 
             // Set material data
             if (material.lit) {
-                shader.set_vec3(Shader::Uniforms::Material::Ambient,
-                                material.ambient);
-                shader.set_vec3(Shader::Uniforms::Material::Diffuse,
-                                material.diffuse);
-                shader.set_vec3(Shader::Uniforms::Material::Specular,
-                                material.specular);
+                Texture::bind(material.diffuse_map.get());
+                shader.set_int(Shader::Uniforms::Material::DiffuseMap,
+                               material.diffuse_map->unit() - GL_TEXTURE0);
+                Texture::bind(material.specular_map.get());
+                shader.set_int(Shader::Uniforms::Material::SpecularMap,
+                               material.specular_map->unit() - GL_TEXTURE0);
                 shader.set_float(Shader::Uniforms::Material::Shininess,
                                  material.shininess);
             }
@@ -171,7 +171,7 @@ void Renderer::render_scene(Scene& scene) {
             if (material.texture.is_loaded() && material.shader.is_loaded()) {
                 // If there is a texture
                 Texture::bind(material.texture.get());
-                auto loc = shader.location("tex");
+
                 shader.set_int(Shader::Uniforms::Texture,
                                material.texture->unit() - GL_TEXTURE0);
             }
@@ -181,6 +181,10 @@ void Renderer::render_scene(Scene& scene) {
             //            glBindTexture(GL_TEXTURE_2D, 0);
             if (material.texture.is_loaded() && material.shader.is_loaded()) {
                 Texture::unbind(material.texture.get());
+            }
+            if (material.lit) {
+                Texture::unbind(material.diffuse_map.get());
+                Texture::unbind(material.specular_map.get());
             }
         }
     }

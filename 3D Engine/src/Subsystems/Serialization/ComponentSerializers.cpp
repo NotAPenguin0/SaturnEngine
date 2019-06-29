@@ -208,10 +208,9 @@ void from_json(nlohmann::json const& json, Material& material) {
         }
         material.lit = (*j)["Lit"];
 		if (material.lit) {
-            material.ambient = (*j)["Ambient"];
-            material.diffuse = (*j)["Diffuse"];
-            material.specular = (*j)["Specular"];
-            material.shininess = (*j)["Shininess"];
+            material.diffuse_map = (*j)["DiffuseMap"].get<Resource<Texture>>();
+            material.specular_map = (*j)["SpecularMap"].get<Resource<Texture>>();
+            material.shininess = (*j)["Shininess"].get<float>();
         }
     }
 }
@@ -353,9 +352,8 @@ void to_json(nlohmann::json& json, Material const& material) {
 	json["MaterialComponent"]["Shader"] = material.shader;
 	json["MaterialComponent"]["Texture"] = material.texture;
 	json["MaterialComponent"]["Lit"] = material.lit;
-	json["MaterialComponent"]["Ambient"] = material.ambient;
-	json["MaterialComponent"]["Diffuse"] = material.diffuse;
-	json["MaterialComponent"]["Specular"] = material.specular;
+	json["MaterialComponent"]["DiffuseMap"] = material.diffuse_map;
+	json["MaterialComponent"]["SpecularMap"] = material.specular_map;
 	json["MaterialComponent"]["Shininess"] = material.shininess;
     // clang-format on 
 }

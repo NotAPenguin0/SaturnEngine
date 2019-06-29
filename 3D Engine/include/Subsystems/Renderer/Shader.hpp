@@ -51,11 +51,10 @@ public:
         static constexpr int Position = 2;
 
         struct Material {
-            static constexpr int Ambient = 6;
-            static constexpr int Diffuse = 7;
-            static constexpr int Specular = 8;
-			static constexpr int Shininess = 9;
-		};
+            static constexpr int DiffuseMap = 6;
+            static constexpr int SpecularMap = 7;
+			static constexpr int Shininess = 8;
+        };
     };
 
 private:

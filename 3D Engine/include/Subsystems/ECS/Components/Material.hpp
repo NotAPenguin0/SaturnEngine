@@ -15,9 +15,8 @@ struct Material : public ComponentBase {
     bool lit = true;
 
     // Lighting data
-    glm::vec3 ambient;
-    glm::vec3 diffuse;
-    glm::vec3 specular;
+    Resource<Texture> diffuse_map;
+    Resource<Texture> specular_map;
 	float shininess;
 };
 
