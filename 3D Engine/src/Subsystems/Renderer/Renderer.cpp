@@ -1,6 +1,7 @@
 #include "Subsystems/Renderer/Renderer.hpp"
 
 #include "Core/Application.hpp"
+#include "Subsystems/ECS/Components.hpp"
 #include "Subsystems/Logging/LogSystem.hpp"
 #include "Subsystems/Math/Math.hpp"
 #include "Subsystems/Renderer/PostProcessing.hpp"
@@ -23,38 +24,48 @@ static std::vector<float> screen_vertices = {
 
 Renderer::Renderer(CreateInfo create_info) :
     app(create_info.app), screen_size(create_info.screen_size) {
-    std::cout << "Before framebuffer\n";
     // Setup the framebuffer
     Framebuffer::CreateInfo framebuffer_create_info;
     framebuffer_create_info.size = screen_size;
     framebuf.assign(framebuffer_create_info);
-    std::cout << "After framebuffer";
     // Create default viewport
     add_viewport(Viewport(0, 0, screen_size.x, screen_size.y));
     // Set it as the active viewport
     Viewport::set_active(get_viewport(0));
-    std::cout << "Viewport initialized\n";
     std::vector<VertexAttribute> screen_attributes;
     screen_attributes.push_back({0, 3}); // Position is a vec3
     screen_attributes.push_back({1, 2}); // TexCoords is a vec2
 
     screen.assign({screen_attributes, screen_vertices, {0, 1, 2, 0, 3, 2}});
-    std::cout << "Screen VAO created\n";
     PostProcessing::get_instance().load_shaders(
         "resources/shaders/postprocessing/postprocessing_effects.ppe");
     PostProcessing::get_instance().set_active("none");
-    std::cout << "PostProcessing initialized\n";
     UniformBuffer::CreateInfo matrix_info;
     matrix_info.binding_point = 0;
     matrix_info.dynamic = true; // View/Projection matrices can change
     matrix_info.size_in_bytes = 2 * sizeof(glm::mat4);
     matrix_buffer.assign(matrix_info);
-    std::cout << "Uniform Buffer created\n";
+
+    UniformBuffer::CreateInfo lights_info;
+    lights_info.binding_point = 1;
+    lights_info.dynamic =
+        false; // for now, we assume lights are mostly static #CHECK
+    lights_info.size_in_bytes =
+        sizeof(int) + 12 +
+        MaxLightsPerType * 4 * sizeof(glm::vec4); //#UpdateMe When we
+                                                  // add a new light type
+    lights_buffer.assign(lights_info);
+    UniformBuffer::CreateInfo camera_info;
+    camera_info.binding_point = 2;
+    camera_info.dynamic = true; // Camera data changes
+    camera_info.size_in_bytes =
+        sizeof(glm::vec4); // vec3 padded to the size of a vec4 because of
+                           // std140 layout
+    camera_buffer.assign(camera_info);
     no_shader_error =
         AssetManager<Shader>::get_resource("resources/shaders/default.sh");
     particle_shader =
         AssetManager<Shader>::get_resource("resources/shaders/particle.sh");
-    std::cout << "Default shaders initialized\n";
 }
 
 Renderer::~Renderer() {}
@@ -94,9 +105,32 @@ void Renderer::render_scene(Scene& scene) {
         matrix_buffer.set_mat4(projection, 0);
         matrix_buffer.set_mat4(view, sizeof(glm::mat4));
 
-        render_particles(scene); // #TODO: Check if it makes any difference if
-                                 // we render particles before or after the
-                                 // scene + figure out best option
+        bind_guard<UniformBuffer> lights_guard(lights_buffer);
+        auto point_lights = collect_point_lights(scene);
+        lights_buffer.set_int(point_lights.size(), 0);
+        for (std::size_t i = 0; i < point_lights.size(); ++i) {
+            auto lightpos = point_lights[i]
+                                ->entity->get_component<Components::Transform>()
+                                .position;
+            auto offset =
+                sizeof(int) /*the size variable*/ +
+                12 /*Padding after the size variable*/ +
+                i * 4 * sizeof(glm::vec4); /*Add offsets for every point light
+                                          in the array. vec4 because of std140
+                                          layout padding*/
+            lights_buffer.set_vec3(point_lights[i]->ambient, offset);
+            lights_buffer.set_vec3(point_lights[i]->diffuse,
+                                   offset + sizeof(glm::vec4));
+            lights_buffer.set_vec3(point_lights[i]->specular,
+                                   offset + 2 * sizeof(glm::vec4));
+            lights_buffer.set_vec3(lightpos, offset + 3 * sizeof(glm::vec4));
+        }
+
+		camera_buffer.set_vec3(cam_trans.position, 0);
+
+        render_particles(scene); // #TODO: Check if it makes any difference
+                                 // if we render particles before or after
+                                 // the scene + figure out best option
 
         for (auto [relative_transform, mesh, material] :
              scene.ecs.select<Components::Transform, Components::StaticMesh,
@@ -125,12 +159,14 @@ void Renderer::render_scene(Scene& scene) {
             if (material.texture.is_loaded() && material.shader.is_loaded()) {
                 // If there is a texture
                 Texture::bind(material.texture.get());
-                shader.set_int("tex", material.texture->unit() - GL_TEXTURE0);
+                auto loc = shader.location("tex");
+                shader.set_int(Shader::Uniforms::Texture,
+                               material.texture->unit() - GL_TEXTURE0);
             }
 
             glDrawElements(GL_TRIANGLES, vtx_array.index_size(),
                            GL_UNSIGNED_INT, nullptr);
-
+//            glBindTexture(GL_TEXTURE_2D, 0);
             if (material.texture.is_loaded() && material.shader.is_loaded()) {
                 Texture::unbind(material.texture.get());
             }
@@ -177,6 +213,15 @@ void Renderer::render_particles(Scene& scene) {
         }
     }
     glEnable(GL_CULL_FACE);
+}
+
+std::vector<Components::PointLight*>
+Renderer::collect_point_lights(Scene& scene) {
+    std::vector<Components::PointLight*> result;
+    for (auto [light] : scene.ecs.select<Components::PointLight>()) {
+        result.push_back(&light);
+    }
+    return result;
 }
 
 void Renderer::update_screen() {

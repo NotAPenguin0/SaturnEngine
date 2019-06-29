@@ -1,0 +1,17 @@
+#ifndef MVG_POINT_LIGHT_HPP_
+#define MVG_POINT_LIGHT_HPP_
+
+#include "ComponentBase.hpp"
+#include <glm/glm.hpp>
+
+namespace Saturn::Components {
+
+struct PointLight : public ComponentBase {
+    glm::vec3 ambient;
+	glm::vec3 specular;
+	glm::vec3 diffuse;
+};
+
+} // namespace Saturn::Components
+
+#endif

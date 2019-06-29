@@ -73,7 +73,7 @@ void from_json(nlohmann::json const& json, StaticMesh& mesh) {
         throw std::runtime_error("No StaticMesh component stored even "
                                  "though it was requested");
     } else {
-        mesh.mesh = j->get<Resource<Mesh>>();
+        mesh.mesh = (*j)["Mesh"].get<Resource<Mesh>>();
     }
 }
 
@@ -206,6 +206,7 @@ void from_json(nlohmann::json const& json, Material& material) {
         if (j->find("Texture") != j->end()) {
             material.texture = (*j)["Texture"].get<Resource<Texture>>();
         }
+        material.lit = (*j)["Lit"];
     }
 }
 
@@ -217,6 +218,18 @@ void from_json(nlohmann::json const& json, Rotator& rotator) {
     } else {
         rotator.euler_angles = (*rot)["EulerAngles"].get<glm::vec3>();
         rotator.speed = (*rot)["Speed"].get<float>();
+    }
+}
+
+void from_json(nlohmann::json const& json, PointLight& light) {
+    auto p = json.find("PointLightComponent");
+    if (p == json.end()) {
+        throw std::runtime_error(
+            "No PointLight component stored even though it was requested");
+    } else {
+        light.ambient = (*p)["Ambient"];
+        light.diffuse = (*p)["Diffuse"];
+        light.specular = (*p)["Specular"];
     }
 }
 
@@ -271,9 +284,8 @@ void to_json(nlohmann::json& json, CameraZoomController const& zoom) {
 
 void to_json(nlohmann::json& json, StaticMesh const& mesh) {
 	// clang-format off
-    json["StaticMeshComponent"] = nlohmann::json::object({
-		{"Resource", mesh.mesh}
-		});
+    json["StaticMeshComponent"] = nlohmann::json::object();
+	json["StaticMeshComponent"]["Mesh"] = mesh.mesh;
     // clang-format on 
 }
 
@@ -334,6 +346,7 @@ void to_json(nlohmann::json& json, Material const& material) {
     json["MaterialComponent"] = nlohmann::json::object();
 	json["MaterialComponent"]["Shader"] = material.shader;
 	json["MaterialComponent"]["Texture"] = material.texture;
+	json["MaterialComponent"]["Lit"] = material.lit;
     // clang-format on 
 }
 
@@ -341,6 +354,13 @@ void to_json(nlohmann::json& json, Rotator const& rotator) {
 	json["RotatorComponent"]  = nlohmann::json::object();
 	json["RotatorComponent"]["Speed"] = rotator.speed;
 	json["RotatorComponent"]["EulerAngles"] = rotator.euler_angles;
+}
+
+void to_json(nlohmann::json& json, PointLight const& light) {
+	json["PointLightComponent"] = nlohmann::json::object();
+	json["PointLightComponent"]["Ambient"] = light.ambient;
+	json["PointLightComponent"]["Diffuse"] = light.diffuse;
+	json["PointLightComponent"]["Specular"] = light.specular;
 }
 
 } // namespace Saturn::Components

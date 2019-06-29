@@ -3,6 +3,7 @@
 
 #include "Framebuffer.hpp"
 #include "Subsystems/AssetManager/AssetManager.hpp"
+#include "Subsystems/ECS/Components.hpp"
 #include "Subsystems/Scene/Scene.hpp"
 #include "UniformBuffer.hpp"
 #include "Utility/Utility.hpp"
@@ -50,9 +51,12 @@ public:
     // /return The index of the newly added viewport
     std::size_t add_viewport(Viewport vp);
 
+    static constexpr std::size_t MaxLightsPerType = 15;
+
 private:
     // #TODO: More of these functions to split up renderer functionality more
     void render_particles(Scene& scene);
+    std::vector<Components::PointLight*> collect_point_lights(Scene& scene);
 
     std::reference_wrapper<Application> app;
     WindowDim screen_size;
@@ -61,6 +65,8 @@ private:
     Framebuffer screen_framebuf;
     VertexArray screen;
     UniformBuffer matrix_buffer;
+    UniformBuffer lights_buffer;
+	UniformBuffer camera_buffer;
     Resource<Shader> no_shader_error;
     // #MaybeTODO: Move this to ParticleEmitter?
     Resource<Shader> particle_shader;

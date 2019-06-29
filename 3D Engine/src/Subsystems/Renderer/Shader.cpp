@@ -181,7 +181,7 @@ void Shader::set_mat4(int loc, glm::mat4 const& value) {
 
 int Shader::location(std::string_view name) {
     auto& loc_data = uniform_cache[name];
-    if (loc_data != -1) { return loc_data; }
+    if (loc_data != 0) { return loc_data; }
 
     loc_data = glGetUniformLocation(program, name.data());
     assert(loc_data != -1);

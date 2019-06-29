@@ -20,6 +20,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Components/FreeLookController.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Components/Material.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Components/ParticleEmitter.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Components/PointLight.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Components/Rotator.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Components/StaticMesh.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Components/Transform.hpp"

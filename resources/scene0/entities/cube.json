@@ -1,0 +1,21 @@
+{
+    "TransformComponent": {
+        "Position": [0, 0, 5],
+        "Rotation": [0, 0, 0],
+        "Scale": [1, 1, 1]
+    },
+    "StaticMeshComponent": {
+        "Mesh": {
+            "Resource": "resources/meshes/my_cube.mesh"
+        }
+    },
+    "MaterialComponent": {
+        "Shader": {
+            "Resource": "resources/shaders/lit.sh"
+        },
+        "Texture": {
+            "Resource": "resources/textures/wood.tex"
+        },
+        "Lit": true
+    }
+}

@@ -12,6 +12,8 @@ struct Material : public ComponentBase {
     Resource<Shader> shader;
 	// Optional
 	Resource<Texture> texture;
+
+	bool lit = true;
 };
 
 } // namespace Saturn::Components

@@ -1,0 +1,20 @@
+{
+    "TransformComponent": {
+        "Position": [2, 2, 6.5],
+        "Rotation": [0, 0, 0],
+        "Scale": [0.4, 0.4, 0.4]
+    },
+    "StaticMeshComponent": {
+        "Mesh": {
+            "Resource": "resources/meshes/my_cube.mesh"
+        }
+    },
+    "MaterialComponent": {
+        "Shader": {
+            "Resource": "resources/shaders/texture.sh"
+        },
+        "Texture": {
+            "Resource": "resources/textures/white.tex"
+        }
+    }
+}

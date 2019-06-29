@@ -11,7 +11,7 @@ Texture::Texture() :
 Texture::Texture(CreateInfo const& create_info) { assign(create_info); }
 
 void Texture::assign(CreateInfo const& create_info) {
-    if (texture_handle != 0) { glDeleteTextures(1, &texture_handle); }
+//    if (texture_handle != 0) { glDeleteTextures(1, &texture_handle); }
 
     texture_handle = 0;
     texture_unit = create_info.texture_unit;

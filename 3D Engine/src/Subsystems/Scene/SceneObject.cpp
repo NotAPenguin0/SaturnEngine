@@ -50,7 +50,11 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
         auto& camera = obj.get_scene()->get_ecs().get_with_id<Camera>(
             obj.add_component<Camera>());
         j.get_to(camera);
-        obj.get_scene()->get_app()->get_renderer()->get_viewport(camera.viewport_id).set_camera(camera.id);
+        obj.get_scene()
+            ->get_app()
+            ->get_renderer()
+            ->get_viewport(camera.viewport_id)
+            .set_camera(camera.id);
     }
     if (auto const& fps = j.find("FPSCameraControllerComponent");
         fps != j.end()) {
@@ -96,6 +100,11 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
             obj.add_component<Rotator>());
         j.get_to(rotator);
     }
+	if (auto const& pl = j.find("PointLightComponent"); pl != j.end()) {
+        auto& light = obj.get_scene()->get_ecs().get_with_id<PointLight>(
+            obj.add_component<PointLight>());
+		j.get_to(light);
+	}
 } // namespace Saturn
 
 } // namespace Saturn
