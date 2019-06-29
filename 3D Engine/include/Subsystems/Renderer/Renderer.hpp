@@ -54,10 +54,30 @@ public:
     static constexpr std::size_t MaxLightsPerType = 15;
 
 private:
-    // #TODO: More of these functions to split up renderer functionality more
+    // Initialization
+    void setup_framebuffer(CreateInfo const& create_info);
+    void create_default_viewport(CreateInfo const& create_info);
+    void initialize_postprocessing();
+    void create_uniform_buffers();
+    void load_default_shaders();
+
+    // Rendering functions
+    void render_viewport(Scene& scene, Viewport& vp);
     void render_particles(Scene& scene);
+    void send_camera_matrices(Scene& scene,
+                              Viewport& vp,
+                              Components::Camera& camera);
+    void send_lighting_data(Scene& scene);
+    void send_model_matrix(Shader& shader,
+                           Components::Transform const& relative_transform);
+    void send_material_data(Shader& shader,
+                            Components::Material& material);
+	void unbind_textures(Components::Material& material);
+
+    // Utility functions
     std::vector<Components::PointLight*> collect_point_lights(Scene& scene);
 
+    // Member variables
     std::reference_wrapper<Application> app;
     WindowDim screen_size;
     Framebuffer framebuf;
@@ -66,7 +86,7 @@ private:
     VertexArray screen;
     UniformBuffer matrix_buffer;
     UniformBuffer lights_buffer;
-	UniformBuffer camera_buffer;
+    UniformBuffer camera_buffer;
     Resource<Shader> no_shader_error;
     // #MaybeTODO: Move this to ParticleEmitter?
     Resource<Shader> particle_shader;
