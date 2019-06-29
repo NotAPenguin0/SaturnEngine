@@ -52,8 +52,8 @@ Renderer::Renderer(CreateInfo create_info) :
         false; // for now, we assume lights are mostly static #CHECK
     lights_info.size_in_bytes =
         sizeof(int) + 12 +
-        MaxLightsPerType * 4 * sizeof(glm::vec4); //#UpdateMe When we
-                                                  // add a new light type
+        MaxLightsPerType * (4 * sizeof(glm::vec4)); //#UpdateMe When we
+                                                    // add a new light type
     lights_buffer.assign(lights_info);
     UniformBuffer::CreateInfo camera_info;
     camera_info.binding_point = 2;
@@ -115,9 +115,9 @@ void Renderer::render_scene(Scene& scene) {
             auto offset =
                 sizeof(int) /*the size variable*/ +
                 12 /*Padding after the size variable*/ +
-                i * 4 * sizeof(glm::vec4); /*Add offsets for every point light
-                                          in the array. vec4 because of std140
-                                          layout padding*/
+                i * (4 * sizeof(glm::vec3)); /*Add offsets for
+                                          every point light in the array. vec4
+                                          because of std140 layout padding*/
             lights_buffer.set_vec3(point_lights[i]->ambient, offset);
             lights_buffer.set_vec3(point_lights[i]->diffuse,
                                    offset + sizeof(glm::vec4));
@@ -126,7 +126,7 @@ void Renderer::render_scene(Scene& scene) {
             lights_buffer.set_vec3(lightpos, offset + 3 * sizeof(glm::vec4));
         }
 
-		camera_buffer.set_vec3(cam_trans.position, 0);
+        camera_buffer.set_vec3(cam_trans.position, 0);
 
         render_particles(scene); // #TODO: Check if it makes any difference
                                  // if we render particles before or after
@@ -156,6 +156,18 @@ void Renderer::render_scene(Scene& scene) {
             bind_guard<Shader> shader_guard(shader);
             bind_guard<VertexArray> vao_guard(vtx_array);
 
+            // Set material data
+            if (material.lit) {
+                shader.set_vec3(Shader::Uniforms::Material::Ambient,
+                                material.ambient);
+                shader.set_vec3(Shader::Uniforms::Material::Diffuse,
+                                material.diffuse);
+                shader.set_vec3(Shader::Uniforms::Material::Specular,
+                                material.specular);
+                shader.set_float(Shader::Uniforms::Material::Shininess,
+                                 material.shininess);
+            }
+
             if (material.texture.is_loaded() && material.shader.is_loaded()) {
                 // If there is a texture
                 Texture::bind(material.texture.get());
@@ -166,7 +178,7 @@ void Renderer::render_scene(Scene& scene) {
 
             glDrawElements(GL_TRIANGLES, vtx_array.index_size(),
                            GL_UNSIGNED_INT, nullptr);
-//            glBindTexture(GL_TEXTURE_2D, 0);
+            //            glBindTexture(GL_TEXTURE_2D, 0);
             if (material.texture.is_loaded() && material.shader.is_loaded()) {
                 Texture::unbind(material.texture.get());
             }

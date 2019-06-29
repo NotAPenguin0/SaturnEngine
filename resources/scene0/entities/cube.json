@@ -14,8 +14,12 @@
             "Resource": "resources/shaders/lit.sh"
         },
         "Texture": {
-            "Resource": "resources/textures/wood.tex"
+            "Resource": "resources/textures/white.tex"
         },
-        "Lit": true
+        "Lit": true,
+        "Ambient": [1.0, 0.5, 0.31],
+        "Diffuse": [1.0, 0.5, 0.31],
+        "Specular": [0.5, 0.5, 0.5],
+        "Shininess": 32
     }
 }

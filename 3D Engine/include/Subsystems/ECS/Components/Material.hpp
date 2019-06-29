@@ -10,10 +10,15 @@ namespace Saturn::Components {
 
 struct Material : public ComponentBase {
     Resource<Shader> shader;
-	// Optional
-	Resource<Texture> texture;
+    // Optional
+    Resource<Texture> texture;
+    bool lit = true;
 
-	bool lit = true;
+    // Lighting data
+    glm::vec3 ambient;
+    glm::vec3 diffuse;
+    glm::vec3 specular;
+	float shininess;
 };
 
 } // namespace Saturn::Components

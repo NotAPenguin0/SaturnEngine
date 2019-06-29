@@ -8,12 +8,11 @@ in vec3 FragPos;
 
 layout (location = 5) uniform sampler2D tex;
 
-struct PointLight { //  base alignment  aligned offset
-    vec3 ambient;   //  16              0                 
-    vec3 diffuse;   //  16              16
-    vec3 specular;  //  16              32
-
-    vec3 position;  //  16              48
+struct PointLight {
+    vec3 ambient;        
+    vec3 diffuse;  
+    vec3 specular;
+    vec3 position;
 };
 
 layout(std140, binding = 1) uniform Lights {
@@ -27,24 +26,33 @@ layout(std140, binding = 2) uniform Camera {
 
 out vec4 FragColor;
 
+struct Material {
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+
+    float shininess;
+};
+
+layout(location = 6) uniform Material material;
+
 void main() {
     vec3 norm = normalize(Normal);
-
 
     vec3 light_result = vec3(0.0f);
     for(int i = 0; i < point_light_count; ++i) {
         // ambient lighting
-        light_result += point_lights[i].ambient;
+        light_result += point_lights[i].ambient * material.ambient;
         // diffuse lighting
         vec3 light_dir = normalize(point_lights[i].position - FragPos);
         float diff = max(dot(norm, light_dir), 0.0);
-        vec3 diffuse = diff * point_lights[i].diffuse;
+        vec3 diffuse =  point_lights[i].diffuse * (diff * material.diffuse);
         light_result += diffuse;
         // specular lighting
         vec3 view_dir = normalize(camera_position - FragPos);
         vec3 reflect_dir = reflect(-light_dir, norm);
         float spec = pow(max(dot(view_dir, reflect_dir), 0.0), 32);
-        vec3 specular = point_lights[i].specular * spec;
+        vec3 specular = point_lights[i].specular * (spec * material.specular);
         light_result += specular;
     }
 
