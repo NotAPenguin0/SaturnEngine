@@ -207,9 +207,10 @@ void from_json(nlohmann::json const& json, Material& material) {
             material.texture = (*j)["Texture"].get<Resource<Texture>>();
         }
         material.lit = (*j)["Lit"];
-		if (material.lit) {
+        if (material.lit) {
             material.diffuse_map = (*j)["DiffuseMap"].get<Resource<Texture>>();
-            material.specular_map = (*j)["SpecularMap"].get<Resource<Texture>>();
+            material.specular_map =
+                (*j)["SpecularMap"].get<Resource<Texture>>();
             material.shininess = (*j)["Shininess"].get<float>();
         }
     }
@@ -236,6 +237,23 @@ void from_json(nlohmann::json const& json, PointLight& light) {
         light.diffuse = (*p)["Diffuse"];
         light.specular = (*p)["Specular"];
     }
+}
+
+void from_json(nlohmann::json const& json, DirectionalLight& light) {
+    auto l = json.find("DirectionalLightComponent");
+    if (l == json.end()) {
+        throw std::runtime_error("No DirectionalLight component stored even "
+                                 "though it was requested");
+    } else {
+        light.ambient = (*l)["Ambient"];
+        light.diffuse = (*l)["Diffuse"];
+        light.specular = (*l)["Specular"];
+        light.direction = (*l)["Direction"];
+    }
+}
+
+void from_json(nlohmann::json const& json, SpotLight& light) {
+    //#TODO
 }
 
 // Serialization
@@ -369,6 +387,18 @@ void to_json(nlohmann::json& json, PointLight const& light) {
 	json["PointLightComponent"]["Ambient"] = light.ambient;
 	json["PointLightComponent"]["Diffuse"] = light.diffuse;
 	json["PointLightComponent"]["Specular"] = light.specular;
+}
+
+void to_json(nlohmann::json& json, DirectionalLight const& light) {
+	json["DirectionalLightComponent"] = nlohmann::json::object();
+	json["PointLightComponent"]["Ambient"] = light.ambient;
+	json["PointLightComponent"]["Diffuse"] = light.diffuse;
+	json["PointLightComponent"]["Specular"] = light.specular;
+	json["DirectionalLightComponent"]["Direction"] = light.direction;
+}
+
+void to_json(nlohmann::json& json, SpotLight const& light) {
+	//#TODO
 }
 
 } // namespace Saturn::Components

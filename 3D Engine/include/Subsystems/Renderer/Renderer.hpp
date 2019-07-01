@@ -70,12 +70,13 @@ private:
     void send_lighting_data(Scene& scene);
     void send_model_matrix(Shader& shader,
                            Components::Transform const& relative_transform);
-    void send_material_data(Shader& shader,
-                            Components::Material& material);
-	void unbind_textures(Components::Material& material);
+    void send_material_data(Shader& shader, Components::Material& material);
+    void unbind_textures(Components::Material& material);
 
     // Utility functions
     std::vector<Components::PointLight*> collect_point_lights(Scene& scene);
+    std::vector<Components::DirectionalLight*>
+    collect_directional_lights(Scene& scene);
 
     // Member variables
     std::reference_wrapper<Application> app;

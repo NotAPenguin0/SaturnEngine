@@ -5,12 +5,14 @@
 
 #include "Components/Camera.hpp"
 #include "Components/CameraZoomController.hpp"
+#include "Components/DirectionalLight.hpp"
 #include "Components/FPSCameraController.hpp"
 #include "Components/FreeLookController.hpp"
 #include "Components/Material.hpp"
 #include "Components/ParticleEmitter.hpp"
 #include "Components/PointLight.hpp"
 #include "Components/Rotator.hpp"
+#include "Components/SpotLight.hpp"
 #include "Components/StaticMesh.hpp"
 #include "Components/Transform.hpp"
 

@@ -105,6 +105,16 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
             obj.add_component<PointLight>());
 		j.get_to(light);
 	}
+	if (auto const& dl = j.find("DirectionalLightComponent"); dl != j.end()) {
+        auto& light = obj.get_scene()->get_ecs().get_with_id<DirectionalLight>(
+            obj.add_component<DirectionalLight>());
+        j.get_to(light);
+	}
+    if (auto const& sl = j.find("SpotLightComponent"); sl != j.end()) {
+        auto& light = obj.get_scene()->get_ecs().get_with_id<SpotLight>(
+            obj.add_component<SpotLight>());
+        j.get_to(light);
+    }
 } // namespace Saturn
 
 } // namespace Saturn
