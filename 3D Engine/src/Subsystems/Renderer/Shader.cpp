@@ -74,6 +74,7 @@ static unsigned int create_shader(const char* vtx_path, const char* frag_path) {
                              vtx_path);
         LogSystem::write(LogSystem::Severity::Error,
                          "[SHADER::VERTEX::COMPILATION_FAILED]: "s + infolog);
+        throw "";
         return 0;
     }
 
@@ -86,6 +87,7 @@ static unsigned int create_shader(const char* vtx_path, const char* frag_path) {
                              frag_path);
         LogSystem::write(LogSystem::Severity::Error,
                          "[SHADER::FRAGMENT::COMPILATION_FAILED]: "s + infolog);
+        throw ""; //#UGLYANDMUSTREMOVELATER
         return 0;
     }
 
@@ -104,6 +106,7 @@ static unsigned int create_shader(const char* vtx_path, const char* frag_path) {
                              "\nFragment: "s + frag_path);
         LogSystem::write(LogSystem::Severity::Error,
                          "[SHADER::LINK_FAILED]: "s + infolog);
+        throw "";
         return 0;
     }
 

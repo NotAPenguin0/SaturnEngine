@@ -61,12 +61,13 @@ void Renderer::create_uniform_buffers() {
     lights_info.dynamic =
         false; // for now, we assume lights are mostly static #CHECK
     lights_info.size_in_bytes =
-        sizeof(int) +     // point_light_count
-        sizeof(int) + 8 + // directional_light_count
-        MaxLightsPerType *
-            (4 * sizeof(glm::vec4) + // PointLight is 4 vec3's padded to vec4's
-             4 * sizeof(glm::vec4)); // DirectionalLight is 4 vec3's padded to
-                                     // vec4's
+        sizeof(int) +                           // point_light_count
+        sizeof(int) +                           // directional_light_count
+        sizeof(int) +                           // spot_light_count
+        LightSizesBytes::PaddingAfterSizeVars + // padding
+        MaxLightsPerType * (LightSizesBytes::PointLightGLSL +
+                            LightSizesBytes::DirectionalLightGLSL +
+                            LightSizesBytes::SpotLightGLSL);
     lights_buffer.assign(lights_info);
 
     // Camera data buffer
@@ -149,8 +150,10 @@ void Renderer::send_lighting_data(Scene& scene) {
         // clang-format off
         const auto point_light_offset =
             sizeof(int) + // point_light_count
-			sizeof(int) + 8 + // directional_light_count
-            i * (4 * sizeof(glm::vec4)); // point_lights array
+			sizeof(int) + // directional_light_count
+			sizeof(int) + // spot_light_count
+			LightSizesBytes::PaddingAfterSizeVars +
+            i * (LightSizesBytes::PointLightGLSL); // point_lights array
         // clang-format on
         lights_buffer.set_vec3(point_lights[i]->ambient, point_light_offset);
         lights_buffer.set_vec3(point_lights[i]->diffuse,
@@ -159,19 +162,24 @@ void Renderer::send_lighting_data(Scene& scene) {
                                point_light_offset + 2 * sizeof(glm::vec4));
         lights_buffer.set_vec3(lightpos,
                                point_light_offset + 3 * sizeof(glm::vec4));
+        lights_buffer.set_float(point_lights[i]->intensity,
+                                point_light_offset + 3 * sizeof(glm::vec4) +
+                                    sizeof(glm::vec3));
     }
 
     // TODO: Same for DirectionalLights and SpotLights, but with previous data
     // size added to offset
 
     constexpr std::size_t PointLightBaseOffset =
-        (sizeof(int) + sizeof(int) + 8 +
-         MaxLightsPerType * (4 * sizeof(glm::vec4)));
+        (sizeof(int) + sizeof(int) + sizeof(int) +
+         LightSizesBytes::PaddingAfterSizeVars +
+         MaxLightsPerType * (LightSizesBytes::PointLightGLSL));
 
     auto directional_lights = collect_directional_lights(scene);
     lights_buffer.set_int(directional_lights.size(), sizeof(int));
     for (std::size_t i = 0; i < directional_lights.size(); ++i) {
-        const auto offset = PointLightBaseOffset + i * (4 * sizeof(glm::vec4));
+        const auto offset =
+            PointLightBaseOffset + i * (LightSizesBytes::DirectionalLightGLSL);
         lights_buffer.set_vec3(directional_lights[i]->ambient, offset);
         lights_buffer.set_vec3(directional_lights[i]->diffuse,
                                offset + sizeof(glm::vec4));
@@ -179,6 +187,40 @@ void Renderer::send_lighting_data(Scene& scene) {
                                offset + 2 * sizeof(glm::vec4));
         lights_buffer.set_vec3(directional_lights[i]->direction,
                                offset + 3 * sizeof(glm::vec4));
+    }
+
+    constexpr std::size_t DirectionalLightBaseOffset =
+        MaxLightsPerType * LightSizesBytes::DirectionalLightGLSL;
+    constexpr std::size_t OffsetBeforeSpotLights =
+        PointLightBaseOffset + DirectionalLightBaseOffset;
+
+    auto spot_lights = collect_spot_lights(scene);
+    lights_buffer.set_int(spot_lights.size(), 2 * sizeof(int));
+    for (std::size_t i = 0; i < spot_lights.size(); ++i) {
+        const auto offset =
+            OffsetBeforeSpotLights + i * LightSizesBytes::SpotLightGLSL;
+        auto lightpos = spot_lights[i]
+                            ->entity->get_component<Components::Transform>()
+                            .position;
+        lights_buffer.set_vec3(spot_lights[i]->ambient, offset);
+        lights_buffer.set_vec3(spot_lights[i]->diffuse,
+                               offset + sizeof(glm::vec4));
+        lights_buffer.set_vec3(spot_lights[i]->specular,
+                               offset + 2 * sizeof(glm::vec4));
+        lights_buffer.set_vec3(lightpos, offset + 3 * sizeof(glm::vec4));
+        lights_buffer.set_vec3(spot_lights[i]->direction,
+                               offset + 4 * sizeof(glm::vec4));
+        lights_buffer.set_float(
+            spot_lights[i]->intensity,
+            offset + 4 * sizeof(glm::vec4) +
+                sizeof(glm::vec3)); // the first float is packed against the
+                                    // previous vec3
+        lights_buffer.set_float(
+            glm::cos(glm::radians(spot_lights[i]->inner_angle)),
+            offset + 5 * sizeof(glm::vec4));
+        lights_buffer.set_float(
+            glm::cos(glm::radians(spot_lights[i]->outer_angle)),
+            offset + 5 * sizeof(glm::vec4) + sizeof(float));
     }
 }
 
@@ -320,6 +362,15 @@ std::vector<Components::DirectionalLight*>
 Renderer::collect_directional_lights(Scene& scene) {
     std::vector<Components::DirectionalLight*> result;
     for (auto [light] : scene.ecs.select<Components::DirectionalLight>()) {
+        result.push_back(&light);
+    }
+    return result;
+}
+
+std::vector<Components::SpotLight*>
+Renderer::collect_spot_lights(Scene& scene) {
+    std::vector<Components::SpotLight*> result;
+    for (auto [light] : scene.ecs.select<Components::SpotLight>()) {
         result.push_back(&light);
     }
     return result;

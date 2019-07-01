@@ -236,6 +236,7 @@ void from_json(nlohmann::json const& json, PointLight& light) {
         light.ambient = (*p)["Ambient"];
         light.diffuse = (*p)["Diffuse"];
         light.specular = (*p)["Specular"];
+        light.intensity = (*p)["Intensity"];
     }
 }
 
@@ -253,9 +254,20 @@ void from_json(nlohmann::json const& json, DirectionalLight& light) {
 }
 
 void from_json(nlohmann::json const& json, SpotLight& light) {
-    //#TODO
+    auto l = json.find("SpotLightComponent");
+    if (l == json.end()) {
+        throw std::runtime_error("No SpotLight component stored even "
+                                 "though it was requested");
+    } else {
+        light.ambient = (*l)["Ambient"];
+        light.diffuse = (*l)["Diffuse"];
+        light.specular = (*l)["Specular"];
+        light.direction = (*l)["Direction"];
+        light.intensity = (*l)["Intensity"];
+        light.inner_angle = (*l)["InnerAngle"];
+        light.outer_angle = (*l)["OuterAngle"];
+    }
 }
-
 // Serialization
 
 void to_json(nlohmann::json& json, Transform const& transform) {
@@ -387,18 +399,26 @@ void to_json(nlohmann::json& json, PointLight const& light) {
 	json["PointLightComponent"]["Ambient"] = light.ambient;
 	json["PointLightComponent"]["Diffuse"] = light.diffuse;
 	json["PointLightComponent"]["Specular"] = light.specular;
+	json["PointLightComponent"]["Intensity"] = light.intensity;
 }
 
 void to_json(nlohmann::json& json, DirectionalLight const& light) {
 	json["DirectionalLightComponent"] = nlohmann::json::object();
-	json["PointLightComponent"]["Ambient"] = light.ambient;
-	json["PointLightComponent"]["Diffuse"] = light.diffuse;
-	json["PointLightComponent"]["Specular"] = light.specular;
+	json["DirectionalLightComponent"]["Ambient"] = light.ambient;
+	json["DirectionalLightComponent"]["Diffuse"] = light.diffuse;
+	json["DirectionalLightComponent"]["Specular"] = light.specular;
 	json["DirectionalLightComponent"]["Direction"] = light.direction;
 }
 
 void to_json(nlohmann::json& json, SpotLight const& light) {
-	//#TODO
+	json["SpotLightComponent"] = nlohmann::json::object();
+	json["SpotLightComponent"]["Ambient"] = light.ambient;
+	json["SpotLightComponent"]["Diffuse"] = light.diffuse;
+	json["SpotLightComponent"]["Specular"] = light.specular;
+	json["SpotLightComponent"]["Direction"] = light.direction;
+	json["SpotLightComponent"]["Intensity"] = light.intensity;
+	json["SpotLightComponent"]["InnerAngle"] = light.inner_angle;
+	json["SpotLightComponent"]["OuterAngle"] = light.outer_angle;
 }
 
 } // namespace Saturn::Components

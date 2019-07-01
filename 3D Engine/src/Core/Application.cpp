@@ -120,6 +120,7 @@ void Application::run() {
     scene.ecs.register_system<Systems::FreeLookControllerSystem>();
     scene.ecs.register_system<Systems::ParticleSystem>();
     scene.ecs.register_system<Systems::RotatorSystem>();
+	scene.ecs.register_system<Systems::FlashlightSystem>();
 
     /* auto& x = scene.create_object();
      {

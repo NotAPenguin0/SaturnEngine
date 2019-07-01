@@ -21,6 +21,7 @@
     "PointLightComponent": {
         "Ambient": [0.1, 0.1, 0.1],
         "Diffuse": [0.6, 0.6, 0.6],
-        "Specular": [1, 1, 1] 
+        "Specular": [1, 1, 1],
+        "Intensity": 12.0
     }
 }

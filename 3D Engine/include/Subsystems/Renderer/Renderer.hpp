@@ -54,6 +54,14 @@ public:
     static constexpr std::size_t MaxLightsPerType = 15;
 
 private:
+    struct LightSizesBytes {
+        static constexpr std::size_t PaddingAfterSizeVars = 4;
+        static constexpr std::size_t PointLightGLSL = 4 * sizeof(glm::vec4);
+        static constexpr std::size_t DirectionalLightGLSL =
+            4 * sizeof(glm::vec4);
+        static constexpr std::size_t SpotLightGLSL = 6 * sizeof(glm::vec4);
+    };
+
     // Initialization
     void setup_framebuffer(CreateInfo const& create_info);
     void create_default_viewport(CreateInfo const& create_info);
@@ -77,6 +85,8 @@ private:
     std::vector<Components::PointLight*> collect_point_lights(Scene& scene);
     std::vector<Components::DirectionalLight*>
     collect_directional_lights(Scene& scene);
+	std::vector<Components::SpotLight*> 
+	collect_spot_lights(Scene& scene);
 
     // Member variables
     std::reference_wrapper<Application> app;

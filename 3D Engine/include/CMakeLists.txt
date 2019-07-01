@@ -28,6 +28,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Components/Transform.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/CameraZoomControllerSystem.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/FPSCameraControllerSystem.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/FlashlightSystem.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/FreeLookControllerSystem.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/ParticleSystem.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/RotatorSystem.hpp"
