@@ -171,7 +171,7 @@ void Application::run() {
         Time::update();
         Input::update();
 
-        renderer->clear(Color{0.1f, 0.1f, 0.1f, 1.0f});
+        renderer->clear(Color{0.003f, 0.003f, 0.003f, 1.0f});
 
         scene.update_systems();
         renderer->render_scene(scene);

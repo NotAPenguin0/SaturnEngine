@@ -108,6 +108,8 @@ std::unique_ptr<Mesh> ResourceLoader<Mesh>::load(std::string const& path) {
 static GLenum format_from_string(std::string const& str) {
     if (str == "RGB") return GL_RGB;
     if (str == "RGBA") return GL_RGBA;
+	if (str == "SRGB") return GL_SRGB;
+    if (str == "SRGB_ALPHA") return GL_SRGB_ALPHA;
 
     throw std::runtime_error("Invalid texture format!");
 }
@@ -186,6 +188,7 @@ ResourceLoader<Texture>::load(std::string const& path) {
      *path_to_file
      *texture_unit
      *texture_format
+     *internal_texture_format
      *flip_y (bool, true/false)
      *paramter_count
      *param1 = value
@@ -208,6 +211,8 @@ ResourceLoader<Texture>::load(std::string const& path) {
     // Read texture format
     file >> str;
     auto format = format_from_string(str);
+    file >> str;
+	auto internal_format = format_from_string(str);
     // Read flip
     file >> str;
     bool flip_y = (str == "true");
@@ -228,6 +233,7 @@ ResourceLoader<Texture>::load(std::string const& path) {
     Texture::CreateInfo info;
     info.flip_y = flip_y;
     info.format = format;
+    info.internal_format = internal_format;
     info.image_path = path_to_file;
     info.parameters = std::move(params);
     info.texture_unit = unit;

@@ -392,6 +392,8 @@ void Renderer::update_screen() {
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
 
+	glEnable(GL_FRAMEBUFFER_SRGB);
+
     // Set (postprocessing) shader
     bind_guard<Shader> shader_guard(
         PostProcessing::get_instance().get_active().get());
@@ -405,6 +407,8 @@ void Renderer::update_screen() {
     // Re enable functionality
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
+
+	glDisable(GL_FRAMEBUFFER_SRGB);
 }
 
 Viewport& Renderer::get_viewport(std::size_t index) {

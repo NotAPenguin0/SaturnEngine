@@ -19,9 +19,9 @@
         "Lit": false
     },
     "PointLightComponent": {
-        "Ambient": [0.08, 0.08, 0.08],
-        "Diffuse": [0.8, 0.8, 0.8],
-        "Specular": [1.0, 1.0, 1.0],
-        "Intensity": 8
+        "Ambient": [0.1, 0.1, 0.1],
+        "Diffuse": [0.7, 0.7, 0.7],
+        "Specular": [0.9, 0.9, 0.9],
+        "Intensity": 10
     }
 }

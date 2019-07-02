@@ -41,6 +41,7 @@ Application Engine::initialize(CreateInfo create_info) {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT,
                    create_info.enable_debug_output ? GL_TRUE : GL_FALSE);
+	glfwWindowHint(GLFW_SRGB_CAPABLE, GL_TRUE);
 
 #ifdef __APPLE__
     /*Mac OS X needs this line of code to initialize*/

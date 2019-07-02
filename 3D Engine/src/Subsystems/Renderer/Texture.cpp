@@ -40,7 +40,7 @@ void Texture::assign(CreateInfo const& create_info) {
     if (target != TextureTarget::Texture2D) {
         throw std::runtime_error("Currently only 2D textures are supported");
     } else {
-        glTexImage2D(GL_TEXTURE_2D, 0, create_info.format, w, h, 0,
+        glTexImage2D(GL_TEXTURE_2D, 0, create_info.internal_format, w, h, 0,
                      create_info.format, GL_UNSIGNED_BYTE, image_data);
     }
     // Don't forget to change if we support more textures later

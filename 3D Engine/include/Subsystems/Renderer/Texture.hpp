@@ -68,7 +68,7 @@ class Texture {
 public:
     struct ParameterInfo {
         TextureParameter parameter;
-        TextureParameterValue value; // #TODO: Maybe make this an enum too
+        TextureParameterValue value;
     };
 
     struct CreateInfo {
@@ -77,6 +77,7 @@ public:
         std::vector<ParameterInfo> parameters;
         GLenum texture_unit;
         GLenum format = GL_RGB; // #TODO: Maybe make this an enum
+        GLenum internal_format = GL_SRGB_ALPHA;
         bool flip_y = false;    // Whether to flip the y axis on loading or not
     };
 
