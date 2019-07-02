@@ -301,8 +301,11 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
         auto& vtx_array = mesh.mesh->get_vertices();
         bind_guard<Shader> guard(shader);
         bind_guard<VertexArray> vao_guard(vtx_array);
+
+        if (!mesh.face_cull) { glDisable(GL_CULL_FACE); }
         glDrawElements(GL_TRIANGLES, vtx_array.index_size(), GL_UNSIGNED_INT,
                        nullptr);
+        if (!mesh.face_cull) { glEnable(GL_CULL_FACE); }
         // Cleanup
         unbind_textures(material);
     }

@@ -1,44 +1,41 @@
 {
-    "CameraComponent": {
-        "FOV": 45.0,
-        "Front": [
-            0.8859866261482239,
-            -0.3913733959197998,
-            0.24870575964450836
-        ],
-        "Up": [
-            0.0,
-            1.0,
-            0.0
-        ],
-        "ViewportID": 0
+    "MaterialComponent": {
+        "DiffuseMap": {
+            "Resource": "resources/textures/wood_floor.tex"
+        },
+        "Lit": true,
+        "Shader": {
+            "Resource": "resources/shaders/blinn_phong.sh"
+        },
+        "Shininess": 100.0,
+        "SpecularMap": {
+            "Resource": "resources/textures/wood_floor_specular.tex"
+        },
+        "Texture": {
+            "Resource": ""
+        }
     },
-    "CameraZoomControllerComponent": {
-        "MaxZoom": 45.0,
-        "MinZoom": 1.0,
-        "ZoomSpeed": 100.0
-    },
-    "FPSCameraControllerComponent": {
-        "Speed": 2.5
-    },
-    "FreeLookControllerComponent": {
-        "MouseSensitivity": 0.07999999821186066
+    "StaticMeshComponent": {
+        "FaceCull": false,
+        "Mesh": {
+            "Resource": "resources/meshes/my_plane.mesh"
+        }
     },
     "TransformComponent": {
         "Position": [
-            -6.372315406799316,
-            3.1023311614990234,
-            2.9355475902557373
+            0.0,
+            2.0,
+            0.0
         ],
         "Rotation": [
-            -23.03998374938965,
-            15.679990768432617,
+            90.0,
+            0.0,
             0.0
         ],
         "Scale": [
-            1.0,
-            1.0,
-            1.0
+            3.0,
+            3.0,
+            3.0
         ]
     }
 }

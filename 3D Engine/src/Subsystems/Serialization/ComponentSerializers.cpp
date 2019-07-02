@@ -74,6 +74,9 @@ void from_json(nlohmann::json const& json, StaticMesh& mesh) {
                                  "though it was requested");
     } else {
         mesh.mesh = (*j)["Mesh"].get<Resource<Mesh>>();
+		if (auto cull = j->find("FaceCull"); cull != j->end()) {
+			mesh.face_cull = cull->get<bool>();
+		}
     }
 }
 
@@ -321,6 +324,7 @@ void to_json(nlohmann::json& json, StaticMesh const& mesh) {
 	// clang-format off
     json["StaticMeshComponent"] = nlohmann::json::object();
 	json["StaticMeshComponent"]["Mesh"] = mesh.mesh;
+	json["StaticMeshComponent"]["FaceCull"] = mesh.face_cull;
     // clang-format on 
 }
 

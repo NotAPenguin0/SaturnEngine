@@ -1,2 +1,3 @@
-resources/scene0/entities/cube.json
+resources/scene0/entities/light.json
+resources/scene0/entities/plane.json
 resources/scene0/entities/camera.json

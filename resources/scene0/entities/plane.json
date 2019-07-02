@@ -1,14 +1,14 @@
 {
     "TransformComponent": {
         "Position": [0, 2, 0],
-        "Rotation": [0, 0, 0],
-        "Scale": [1, 1, 1]
+        "Rotation": [90, 0, 0],
+        "Scale": [3, 3, 3]
     },
     "StaticMeshComponent": {
         "Mesh": {
-            "Resource": "resources/meshes/my_cube.mesh"
+            "Resource": "resources/meshes/my_plane.mesh"
         },
-        "FaceCull": true
+        "FaceCull": false
     },
     "MaterialComponent": {
         "Shader": {
@@ -16,11 +16,11 @@
         },
         "Lit": true,
         "DiffuseMap": {
-            "Resource": "resources/textures/container2.tex"
+            "Resource": "resources/textures/wood_floor.tex"
         },
         "SpecularMap": {
-            "Resource": "resources/textures/container2_specular.tex"
+            "Resource": "resources/textures/wood_floor_specular.tex"
         },
-        "Shininess": 100.0
+        "Shininess": 50.0
     }
 }

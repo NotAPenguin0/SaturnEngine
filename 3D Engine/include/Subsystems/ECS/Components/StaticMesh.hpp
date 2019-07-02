@@ -9,6 +9,7 @@ namespace Saturn::Components {
 
 struct StaticMesh : public ComponentBase {
     Resource<Mesh> mesh;
+	bool face_cull = true;
 };
 
 } // namespace Saturn::Components
