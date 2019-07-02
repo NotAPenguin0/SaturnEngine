@@ -13,15 +13,18 @@ Currently, I am working on this project alone.
 - Asset Manager
 - Scene Management
 - Multiple viewports and cameras
+- Serialization and deserializarion to and from JSON
+- CPU Particle System
 
 # Planned 
 
 - Input system overhaul
 - Terrain Engine
 - Physics Engine
-- Particle system
+- GPU Particle system
 - Editor
 - Sound Engine
+- Node based shader and material editor
 - ... and much more
 
 # Special thanks
