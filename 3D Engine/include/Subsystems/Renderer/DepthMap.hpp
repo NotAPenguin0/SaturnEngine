@@ -18,17 +18,23 @@ public:
     DepthMap(DepthMap const&) = delete;
     DepthMap(DepthMap&&) = delete;
 
-	~DepthMap();
+    ~DepthMap();
 
     DepthMap& operator=(DepthMap const&) = delete;
     DepthMap& operator=(DepthMap&&) = delete;
 
     void assign(CreateInfo const& info);
 
+    static void bind_framebuffer(DepthMap& map);
+	static void unbind_framebuffer();
+
+	static void bind_texture(DepthMap& map);
+    static void unbind_texture();
+
 private:
-	// The depth map framebuffer
+    // The depth map framebuffer
     unsigned int fbo = 0;
-	// The depth map texture
+    // The depth map texture
     unsigned int texture = 0;
 };
 

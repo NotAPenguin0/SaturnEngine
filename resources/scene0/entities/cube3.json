@@ -12,7 +12,7 @@
     },
     "MaterialComponent": {
         "Shader": {
-            "Resource": "resources/shaders/blinn_phong.sh"
+            "Resource": "resources/shaders/shadow.sh"
         },
         "Lit": true,
         "DiffuseMap": {

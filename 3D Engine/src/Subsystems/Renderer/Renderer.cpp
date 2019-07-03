@@ -86,6 +86,14 @@ void Renderer::load_default_shaders() {
         AssetManager<Shader>::get_resource("resources/shaders/default.sh");
     particle_shader =
         AssetManager<Shader>::get_resource("resources/shaders/particle.sh");
+    depth_shader =
+        AssetManager<Shader>::get_resource("resources/shaders/depth_map.sh");
+}
+
+void Renderer::create_depth_map() {
+    DepthMap::CreateInfo info;
+    info.dimensions = {DepthMapPrecision, DepthMapPrecision};
+    shadow_depth_map.assign(info);
 }
 
 Renderer::Renderer(CreateInfo create_info) :
@@ -96,6 +104,7 @@ Renderer::Renderer(CreateInfo create_info) :
     initialize_postprocessing();
     create_uniform_buffers();
     load_default_shaders();
+    create_depth_map();
 }
 
 Renderer::~Renderer() {}
@@ -116,6 +125,9 @@ void Renderer::render_scene(Scene& scene) {
     // Render every viewport
     for (auto& vp : viewports) {
         if (!vp.has_camera()) continue;
+        // Render to depth map
+        render_to_depthmap(scene);
+        // Render viewport with depth map
         render_viewport(scene, vp);
     }
 }
@@ -274,6 +286,61 @@ void Renderer::unbind_textures(Components::Material& material) {
     }
 }
 
+glm::mat4 Renderer::get_lightspace_matrix(Scene& scene) {
+    // For now, we only support one directional light for shadows
+    auto dirlights = collect_directional_lights(scene);
+    if (dirlights.empty())
+        throw std::runtime_error("There must be a light"); // Temporary
+    auto& light = *dirlights[0];
+    static constexpr float near_plane = 1.0;
+    static constexpr float far_plane = 20.0f;
+    // Orthographic projection for light
+    glm::mat4 light_projection =
+        glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+    // direction * -10 to get a postion for enough along the direction vector
+    glm::mat4 light_view =
+        glm::lookAt(glm::vec3(-2.0f, -4.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f),
+                    glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 lightspace_mat = light_projection * light_view;
+    return lightspace_mat;
+}
+
+void Renderer::render_to_depthmap(Scene& scene) {
+    using namespace Components;
+    DepthMap::bind_framebuffer(shadow_depth_map);
+    glActiveTexture(GL_TEXTURE2);
+    DepthMap::bind_texture(shadow_depth_map);
+    // Clear the depth buffer
+    glClear(GL_DEPTH_BUFFER_BIT);
+    // Create a viewport for the depth map
+    static Viewport depthmap_vp =
+        Viewport(0, 0, DepthMapPrecision, DepthMapPrecision);
+    // Render the scene to the depth map
+
+    Viewport::set_active(depthmap_vp);
+    auto lightspace = get_lightspace_matrix(scene);
+    bind_guard<Shader> shader_guard(depth_shader.get());
+    depth_shader->set_mat4(Shader::Uniforms::LightSpaceMatrix, lightspace);
+    glDisable(GL_CULL_FACE);
+    for (auto [transform, mesh] : scene.ecs.select<Transform, StaticMesh>()) {
+        // Send model matrix
+        send_model_matrix(depth_shader.get(), transform);
+
+        // Do the rendering
+        auto& vtx_array = mesh.mesh->get_vertices();
+        bind_guard<VertexArray> vao_guard(vtx_array);
+
+        glDrawElements(GL_TRIANGLES, vtx_array.index_size(), GL_UNSIGNED_INT,
+                       nullptr);
+    }
+    glEnable(GL_CULL_FACE);
+    DepthMap::unbind_texture();
+	glActiveTexture(GL_TEXTURE0);
+    // Rebind other framebuffer afterwards to make sure the bind_guard from
+    // render_scene() doesn't break
+    Framebuffer::bind(framebuf);
+}
+
 void Renderer::render_viewport(Scene& scene, Viewport& vp) {
     Viewport::set_active(vp);
 
@@ -297,17 +364,28 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
         send_model_matrix(shader, relative_transform);
         send_material_data(shader, material);
 
-        // Do the actual rendering
-        auto& vtx_array = mesh.mesh->get_vertices();
+        // Set lightspace matrix in shader
         bind_guard<Shader> guard(shader);
-        bind_guard<VertexArray> vao_guard(vtx_array);
+        auto lightspace = get_lightspace_matrix(scene);
+        shader.set_mat4(Shader::Uniforms::LightSpaceMatrix, lightspace);
+        // Set shadow map in shader
+        glActiveTexture(GL_TEXTURE2);
+        DepthMap::bind_texture(shadow_depth_map);
+        shader.set_int(Shader::Uniforms::DepthMap, 2);
 
+        // Do the actual rendering (maybe putt this in another function
+        // render_mesh() or something)
+        auto& vtx_array = mesh.mesh->get_vertices();
+
+        bind_guard<VertexArray> vao_guard(vtx_array);
         if (!mesh.face_cull) { glDisable(GL_CULL_FACE); }
         glDrawElements(GL_TRIANGLES, vtx_array.index_size(), GL_UNSIGNED_INT,
                        nullptr);
         if (!mesh.face_cull) { glEnable(GL_CULL_FACE); }
         // Cleanup
         unbind_textures(material);
+        glActiveTexture(GL_TEXTURE2);
+        DepthMap::unbind_texture();
     }
 }
 
@@ -392,15 +470,17 @@ void Renderer::update_screen() {
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
 
-	// Enable gamma correction
-	glEnable(GL_FRAMEBUFFER_SRGB);
+    // Enable gamma correction
+    glEnable(GL_FRAMEBUFFER_SRGB);
 
     // Set (postprocessing) shader
     bind_guard<Shader> shader_guard(
         PostProcessing::get_instance().get_active().get());
 
     // Render framebuffer texture to the screen
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, framebuf.texture);
+
     PostProcessing::get_instance().get_active()->set_int(
         Shader::Uniforms::Texture, 0);
     glDrawElements(GL_TRIANGLES, screen.index_size(), GL_UNSIGNED_INT, nullptr);
@@ -409,8 +489,8 @@ void Renderer::update_screen() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
-	// Disable gamma correction
-	glDisable(GL_FRAMEBUFFER_SRGB);
+    // Disable gamma correction
+    glDisable(GL_FRAMEBUFFER_SRGB);
 }
 
 Viewport& Renderer::get_viewport(std::size_t index) {

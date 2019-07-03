@@ -1,10 +1,12 @@
 #ifndef MVG_RENDERER_HPP_
 #define MVG_RENDERER_HPP_
 
-#include "Framebuffer.hpp"
 #include "Subsystems/AssetManager/AssetManager.hpp"
 #include "Subsystems/ECS/Components.hpp"
 #include "Subsystems/Scene/Scene.hpp"
+
+#include "DepthMap.hpp"
+#include "Framebuffer.hpp"
 #include "UniformBuffer.hpp"
 #include "Utility/Utility.hpp"
 #include "VertexArray.hpp"
@@ -62,16 +64,21 @@ private:
         static constexpr std::size_t SpotLightGLSL = 6 * sizeof(glm::vec4);
     };
 
+	static constexpr std::size_t DepthMapPrecision = 1024;
+
     // Initialization
     void setup_framebuffer(CreateInfo const& create_info);
     void create_default_viewport(CreateInfo const& create_info);
     void initialize_postprocessing();
     void create_uniform_buffers();
     void load_default_shaders();
+	void create_depth_map();
 
     // Rendering functions
     void render_viewport(Scene& scene, Viewport& vp);
+	void render_to_depthmap(Scene& scene);
     void render_particles(Scene& scene);
+	glm::mat4 get_lightspace_matrix(Scene& scene);
     void send_camera_matrices(Scene& scene,
                               Viewport& vp,
                               Components::Camera& camera);
@@ -85,8 +92,7 @@ private:
     std::vector<Components::PointLight*> collect_point_lights(Scene& scene);
     std::vector<Components::DirectionalLight*>
     collect_directional_lights(Scene& scene);
-	std::vector<Components::SpotLight*> 
-	collect_spot_lights(Scene& scene);
+    std::vector<Components::SpotLight*> collect_spot_lights(Scene& scene);
 
     // Member variables
     std::reference_wrapper<Application> app;
@@ -98,9 +104,11 @@ private:
     UniformBuffer matrix_buffer;
     UniformBuffer lights_buffer;
     UniformBuffer camera_buffer;
+	DepthMap shadow_depth_map;
     Resource<Shader> no_shader_error;
     // #MaybeTODO: Move this to ParticleEmitter?
     Resource<Shader> particle_shader;
+	Resource<Shader> depth_shader;
     std::vector<Viewport> viewports;
 };
 
