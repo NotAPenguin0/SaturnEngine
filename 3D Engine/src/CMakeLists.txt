@@ -21,6 +21,7 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Math/PositionGenerators.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Math/RandomEngine.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Math/Transform.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/DepthMap.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Framebuffer.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Mesh.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/OpenGL.cpp"

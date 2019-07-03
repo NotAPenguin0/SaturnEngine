@@ -47,6 +47,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Math/PositionGenerators.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Math/RandomEngine.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Math/Transform.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/DepthMap.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Framebuffer.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Mesh.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/OpenGL.hpp"

@@ -87,21 +87,20 @@ vec3 calc_point_light(PointLight light, vec3 norm) {
 vec3 calc_directional_light(DirectionalLight light, vec3 norm) {
     vec3 light_result = vec3(0.0f);
     // ambient lighting
-    light_result += light.ambient * vec3(texture(material.diffuse_map, TexCoords));
+    vec3 ambient = light.ambient * vec3(texture(material.diffuse_map, TexCoords));
     // diffuse lighting
     vec3 light_dir = normalize(-light.direction);
     float diff = max(dot(light_dir, norm), 0.0);
     vec3 diffuse =  light.diffuse * (diff * vec3(texture(material.diffuse_map, TexCoords)));
-    light_result += diffuse;
     // specular lighting
     vec3 view_dir = normalize(camera_position - FragPos);
     vec3 halfway_dir = normalize(light_dir + view_dir); // blinn_phong halfway dir
     float spec = pow(max(dot(norm, halfway_dir), 0.0), material.shininess);
     vec3 specular = light.specular * spec * vec3(texture(material.specular_map, TexCoords));
     
-    light_result += specular;
+    light_result = ambient + diffuse + specular;
 
-    return light_result;
+    return saturate(light_result);
 }
 
 vec3 calc_spot_light(SpotLight light, vec3 norm) {

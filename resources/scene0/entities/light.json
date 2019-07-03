@@ -1,27 +1,9 @@
 {
-    "TransformComponent": {
-        "Position": [0, 3, 0],
-        "Rotation": [0, 0, 0],
-        "Scale": [0.2, 0.2, 0.2]
-    },
-    "StaticMeshComponent": {
-        "Mesh": {
-            "Resource": "resources/meshes/my_cube.mesh"
-        }
-    },
-    "MaterialComponent": {
-        "Shader": {
-            "Resource": "resources/shaders/texture.sh"
-        },
-        "Texture": {
-            "Resource": "resources/textures/white.tex"
-        },
-        "Lit": false
-    },
-    "PointLightComponent": {
-        "Ambient": [0.1, 0.1, 0.1],
-        "Diffuse": [0.5, 0.5, 0.5],
-        "Specular": [0.3, 0.3, 0.3],
-        "Intensity": 5
+    "DirectionalLightComponent": {
+        "Ambient": [0.07, 0.07, 0.07],
+        "Diffuse": [0.4, 0.4, 0.4],
+        "Specular": [0.5, 0.5, 0.5],
+        "Intensity": 5,
+        "Direction": [0.20739, -0.829561, -0.518476]
     }
 }

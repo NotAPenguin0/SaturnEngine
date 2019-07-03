@@ -1,37 +1,19 @@
 {
     "MaterialComponent": {
         "DiffuseMap": {
-            "Resource": ""
+            "Resource": "resources/textures/container2.tex"
         },
-        "Lit": false,
+        "Lit": true,
         "Shader": {
-            "Resource": "resources/shaders/texture.sh"
+            "Resource": "resources/shaders/blinn_phong.sh"
         },
-        "Shininess": 0.0,
+        "Shininess": 100.0,
         "SpecularMap": {
-            "Resource": ""
+            "Resource": "resources/textures/container2_specular.tex"
         },
         "Texture": {
-            "Resource": "resources/textures/white.tex"
+            "Resource": ""
         }
-    },
-    "PointLightComponent": {
-        "Ambient": [
-            0.07999999821186066,
-            0.07999999821186066,
-            0.07999999821186066
-        ],
-        "Diffuse": [
-            0.800000011920929,
-            0.800000011920929,
-            0.800000011920929
-        ],
-        "Intensity": 8.0,
-        "Specular": [
-            1.0,
-            1.0,
-            1.0
-        ]
     },
     "StaticMeshComponent": {
         "FaceCull": true,
@@ -51,9 +33,9 @@
             0.0
         ],
         "Scale": [
-            0.20000000298023224,
-            0.20000000298023224,
-            0.20000000298023224
+            0.5,
+            0.5,
+            0.5
         ]
     }
 }
