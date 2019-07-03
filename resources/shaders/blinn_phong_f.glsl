@@ -67,26 +67,21 @@ vec3 saturate(vec3 val) {
 vec3 calc_point_light(PointLight light, vec3 norm) {
     vec3 light_result = vec3(0.0f);
     // ambient lighting
-    light_result += light.ambient * vec3(texture(material.diffuse_map, TexCoords));
+    vec3 ambient = light.ambient * vec3(texture(material.diffuse_map, TexCoords));
     // diffuse lighting
     vec3 light_dir = normalize(light.position - FragPos);
-    float diff = max(dot(norm, light_dir), 0.0);
+    float diff = max(dot(light_dir, norm), 0.0);
     vec3 diffuse =  light.diffuse * (diff * vec3(texture(material.diffuse_map, TexCoords)));
-    light_result += diffuse;
     // specular lighting
     vec3 view_dir = normalize(camera_position - FragPos);
-    vec3 halfway_dir = normalize(light_dir + view_dir); // blinn_phong halfway dir
+    vec3 halfway_dir = normalize(light_dir + view_dir); // blinn-phong halfway dir
     float spec = pow(max(dot(norm, halfway_dir), 0.0), material.shininess);
     vec3 specular = light.specular * (spec * vec3(texture(material.specular_map, TexCoords)));
-    light_result += specular;
-
     // apply light falloff
     float distance = length(light.position - FragPos);
-    float falloff = light.intensity / (distance * distance);
-    light_result *= falloff;
-    light_result = saturate(light_result);
-
-    return light_result;
+    float falloff = light.intensity / (distance);
+    light_result = (ambient + diffuse + specular) * falloff;
+    return saturate(light_result);
 }
 
 vec3 calc_directional_light(DirectionalLight light, vec3 norm) {
@@ -95,7 +90,7 @@ vec3 calc_directional_light(DirectionalLight light, vec3 norm) {
     light_result += light.ambient * vec3(texture(material.diffuse_map, TexCoords));
     // diffuse lighting
     vec3 light_dir = normalize(-light.direction);
-    float diff = max(dot(norm, light_dir), 0.0);
+    float diff = max(dot(light_dir, norm), 0.0);
     vec3 diffuse =  light.diffuse * (diff * vec3(texture(material.diffuse_map, TexCoords)));
     light_result += diffuse;
     // specular lighting
@@ -117,7 +112,7 @@ vec3 calc_spot_light(SpotLight light, vec3 norm) {
     vec3 ambient = vec3(light.ambient * vec3(texture(material.diffuse_map, TexCoords)));
     // diffuse lighting
     vec3 light_dir = normalize(light.position - FragPos);
-    float diff = max(dot(norm, light_dir), 0.0);
+    float diff = max(dot(light_dir, norm), 0.0);
     vec3 diffuse =  light.diffuse * (diff * vec3(texture(material.diffuse_map, TexCoords)));
     
     // specular lighting
@@ -126,7 +121,6 @@ vec3 calc_spot_light(SpotLight light, vec3 norm) {
     float spec = pow(max(dot(norm, halfway_dir), 0.0), material.shininess);
     vec3 specular = light.specular * (spec * vec3(texture(material.specular_map, TexCoords)));
     
-
     // spot light with smooth edges
     float theta = dot(light_dir, normalize(-light.direction)); 
     float epsilon = (light.inner_angle - light.outer_angle);
@@ -136,7 +130,7 @@ vec3 calc_spot_light(SpotLight light, vec3 norm) {
 
     // apply light falloff
     float distance = length(light.position - FragPos);
-    float falloff = light.intensity / (distance * distance);
+    float falloff = light.intensity / (distance); // don't square distance because of gamma correction
     
     return saturate((ambient + diffuse + specular) * falloff);
 }

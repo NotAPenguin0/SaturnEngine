@@ -20,8 +20,8 @@
     },
     "PointLightComponent": {
         "Ambient": [0.1, 0.1, 0.1],
-        "Diffuse": [0.7, 0.7, 0.7],
-        "Specular": [0.9, 0.9, 0.9],
-        "Intensity": 10
+        "Diffuse": [0.5, 0.5, 0.5],
+        "Specular": [0.3, 0.3, 0.3],
+        "Intensity": 5
     }
 }
