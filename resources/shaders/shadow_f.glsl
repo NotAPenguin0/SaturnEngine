@@ -139,13 +139,28 @@ vec3 calc_spot_light(SpotLight light, vec3 norm, float shadow) {
 float calc_shadow() {
     // perspective division
     vec3 projcoords = FragPosLightSpace.xyz / FragPosLightSpace.w;
+    // values out of range will get no shadows
+    if (projcoords.z > 1.0) return 0.0;
+
     // transform to from [-1, 1] to range [0, 1]
     projcoords = projcoords * 0.5 + 0.5;
     float closest_depth = texture(depth_map, projcoords.xy).r;
     float current_depth = projcoords.z;
 
     float bias = 0.005;
-    float shadow = current_depth - bias > closest_depth  ? 1.0 : 0.0;
+//    float shadow = current_depth - bias > closest_depth  ? 1.0 : 0.0;
+    // PCF for soft shadows
+    float shadow = 0.0;
+    vec2 texel_size = 1.0 / textureSize(depth_map, 0);
+    for(int x = -1; x <= 1; ++x)
+    {
+        for(int y = -1; y <= 1; ++y)
+        {
+            float pcf_depth = texture(depth_map, projcoords.xy + vec2(x, y) * texel_size).r; 
+            shadow += current_depth - bias > pcf_depth  ? 1.0 : 0.0;        
+        }    
+    }
+    shadow /= 9.0;
     return shadow;
 }
 
@@ -165,5 +180,4 @@ void main() {
     }
 
     FragColor = vec4(light_result, 1.0);
-    FragColor = vec4(vec3(shadow), 1.0);
 }

@@ -1,9 +1,9 @@
 {
     "DirectionalLightComponent": {
         "Ambient": [0.07, 0.07, 0.07],
-        "Diffuse": [0.4, 0.4, 0.4],
-        "Specular": [0.5, 0.5, 0.5],
+        "Diffuse": [0.1, 0.1, 0.1],
+        "Specular": [0.3, 0.3, 0.3],
         "Intensity": 5,
-        "Direction": [0.20739, -0.829561, -0.518476]
+        "Direction": [-0.57735, -0.57735, -0.57735]
     }
 }

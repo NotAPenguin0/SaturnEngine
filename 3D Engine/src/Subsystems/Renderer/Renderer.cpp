@@ -292,15 +292,16 @@ glm::mat4 Renderer::get_lightspace_matrix(Scene& scene) {
     if (dirlights.empty())
         throw std::runtime_error("There must be a light"); // Temporary
     auto& light = *dirlights[0];
-    static constexpr float near_plane = 1.0;
-    static constexpr float far_plane = 20.0f;
+    static constexpr float near_plane = 0.00001f;
+    static constexpr float far_plane = 100.0f;
     // Orthographic projection for light
     glm::mat4 light_projection =
         glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-    // direction * -10 to get a postion for enough along the direction vector
-    glm::mat4 light_view =
-        glm::lookAt(glm::vec3(-2.0f, -4.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f),
-                    glm::vec3(0.0f, 1.0f, 0.0f));
+    static constexpr float distance = 10.0f;
+    glm::vec3 light_pos = glm::vec3(0.0f, 0.0f, 0.0f) +
+                          distance * glm::normalize(-light.direction);
+    glm::mat4 light_view = glm::lookAt(light_pos, glm::vec3(0.0f, 0.0f, 0.0f),
+                                       glm::vec3(0.0f, 1.0f, 0.0f));
     glm::mat4 lightspace_mat = light_projection * light_view;
     return lightspace_mat;
 }
@@ -315,13 +316,15 @@ void Renderer::render_to_depthmap(Scene& scene) {
     // Create a viewport for the depth map
     static Viewport depthmap_vp =
         Viewport(0, 0, DepthMapPrecision, DepthMapPrecision);
+
     // Render the scene to the depth map
+
+    // We set the cull face to front for the depth map
+    glCullFace(GL_FRONT);
 
     Viewport::set_active(depthmap_vp);
     auto lightspace = get_lightspace_matrix(scene);
-    bind_guard<Shader> shader_guard(depth_shader.get());
-    depth_shader->set_mat4(Shader::Uniforms::LightSpaceMatrix, lightspace);
-    glDisable(GL_CULL_FACE);
+
     for (auto [transform, mesh] : scene.ecs.select<Transform, StaticMesh>()) {
         // Send model matrix
         send_model_matrix(depth_shader.get(), transform);
@@ -329,13 +332,17 @@ void Renderer::render_to_depthmap(Scene& scene) {
         // Do the rendering
         auto& vtx_array = mesh.mesh->get_vertices();
         bind_guard<VertexArray> vao_guard(vtx_array);
-
+        bind_guard<Shader> shader_guard(depth_shader.get());
+        depth_shader->set_mat4(Shader::Uniforms::LightSpaceMatrix, lightspace);
         glDrawElements(GL_TRIANGLES, vtx_array.index_size(), GL_UNSIGNED_INT,
                        nullptr);
     }
-    glEnable(GL_CULL_FACE);
+
+    // Reset cull face
+    glCullFace(GL_BACK);
+
     DepthMap::unbind_texture();
-	glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0);
     // Rebind other framebuffer afterwards to make sure the bind_guard from
     // render_scene() doesn't break
     Framebuffer::bind(framebuf);
@@ -366,12 +373,14 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
 
         // Set lightspace matrix in shader
         bind_guard<Shader> guard(shader);
-        auto lightspace = get_lightspace_matrix(scene);
-        shader.set_mat4(Shader::Uniforms::LightSpaceMatrix, lightspace);
-        // Set shadow map in shader
-        glActiveTexture(GL_TEXTURE2);
-        DepthMap::bind_texture(shadow_depth_map);
-        shader.set_int(Shader::Uniforms::DepthMap, 2);
+        if (material.lit) {
+            auto lightspace = get_lightspace_matrix(scene);
+            shader.set_mat4(Shader::Uniforms::LightSpaceMatrix, lightspace);
+            // Set shadow map in shader
+            glActiveTexture(GL_TEXTURE2);
+            DepthMap::bind_texture(shadow_depth_map);
+            shader.set_int(Shader::Uniforms::DepthMap, 2);
+        }
 
         // Do the actual rendering (maybe putt this in another function
         // render_mesh() or something)
