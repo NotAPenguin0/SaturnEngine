@@ -5,7 +5,7 @@
 
 namespace Saturn::Components {
 
-struct FPSCameraController : public ComponentBase {
+struct COMPONENT FPSCameraController : public ComponentBase {
 	// Movement speed
     float speed;
 };

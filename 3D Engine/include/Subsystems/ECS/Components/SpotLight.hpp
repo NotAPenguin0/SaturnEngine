@@ -6,7 +6,7 @@
 
 namespace Saturn::Components {
 
-struct SpotLight : ComponentBase {
+struct COMPONENT SpotLight : ComponentBase {
     glm::vec3 ambient;
     glm::vec3 diffuse;
     glm::vec3 specular;

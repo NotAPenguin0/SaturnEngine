@@ -5,7 +5,7 @@
 
 namespace Saturn::Components {
 
-struct CameraZoomController : public ComponentBase {
+struct COMPONENT CameraZoomController : public ComponentBase {
     float zoom_speed;
 
 	//#TODO: Enforce min/max to be in a valid range

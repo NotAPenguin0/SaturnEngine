@@ -1,0 +1,8 @@
+#ifndef MVG_CODEGEN_DEFINITIONS_HPP_
+#define MVG_CODEGEN_DEFINITIONS_HPP_
+
+#define COMPONENT
+#define SYSTEM
+#define DEFAULT_SERIALIZE
+
+#endif

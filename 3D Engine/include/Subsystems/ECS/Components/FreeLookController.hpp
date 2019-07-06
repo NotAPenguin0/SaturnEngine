@@ -5,7 +5,7 @@
 
 namespace Saturn::Components {
 
-struct FreeLookController : public ComponentBase {
+struct COMPONENT FreeLookController : public ComponentBase {
     float mouse_sensitivity;
 };
 

@@ -23,7 +23,7 @@ class ParticleSystem;
 
 namespace Saturn::Components {
 
-struct ParticleEmitter : ComponentBase {
+struct COMPONENT ParticleEmitter : ComponentBase {
     struct Particle {
         // #TODO: Better duration type
         float life_left;

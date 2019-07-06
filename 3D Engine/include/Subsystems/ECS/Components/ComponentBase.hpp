@@ -3,6 +3,8 @@
 
 #include <cstddef>
 
+#include "Subsystems/Serialization/CodeGenDefinitions.hpp"
+
 namespace Saturn {
 class SceneObject;
 }

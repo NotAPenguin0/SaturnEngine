@@ -10,7 +10,7 @@ namespace Saturn {
 
 namespace Components {
 
-struct Transform : public ComponentBase {
+struct COMPONENT Transform : public ComponentBase {
     glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
     // euler angles rotation
     glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);

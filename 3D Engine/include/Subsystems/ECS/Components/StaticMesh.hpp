@@ -7,7 +7,7 @@
 
 namespace Saturn::Components {
 
-struct StaticMesh : public ComponentBase {
+struct COMPONENT StaticMesh : public ComponentBase {
     Resource<Mesh> mesh;
 	bool face_cull = true;
 };

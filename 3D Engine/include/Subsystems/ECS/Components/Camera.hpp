@@ -9,7 +9,7 @@ namespace Saturn {
 
 namespace Components {
 
-struct Camera : public ComponentBase {
+struct COMPONENT Camera : public ComponentBase {
     glm::vec3 front;
     glm::vec3 up;
 
