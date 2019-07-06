@@ -62,3 +62,8 @@ target_link_libraries(${PROJECT_NAME}
     nlohmann_json
     glm
 )
+
+# Code Generation projects
+
+# Add subdirectories
+add_subdirectory("CodeGen/Serialization")

@@ -37,6 +37,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/cmake_install.cmake")
   include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/include/cmake_install.cmake")
   include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/src/cmake_install.cmake")
+  include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/CodeGen/Serialization/cmake_install.cmake")
 
 endif()
 
