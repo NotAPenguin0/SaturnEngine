@@ -7,3 +7,12 @@
 [submodule "3D Engine/dependencies/nlohmann_json"]
 	path = 3D Engine/dependencies/nlohmann_json
 	url = https://github.com/nlohmann/json.git
+[submodule "clang-test"]
+	path = clang-test
+	url = https://github.com/llvm-mirror/clang
+[submodule "CodeGen/dependencies/clang"]
+	path = CodeGen/dependencies/clang
+	url = https://github.com/llvm-mirror/clang
+[submodule "CodeGen/dependencies/llvm"]
+	path = CodeGen/dependencies/llvm
+	url = https://github.com/llvm/llvm-project.git
