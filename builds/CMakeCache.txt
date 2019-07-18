@@ -285,6 +285,9 @@ CVS_UPDATE_OPTIONS:STRING=-d -A -P
 //Maximum time allowed before CTest will kill the test.
 DART_TESTING_TIMEOUT:STRING=1500
 
+//Path to a library.
+DL_LIBRARY_PATH:FILEPATH=DL_LIBRARY_PATH-NOTFOUND
+
 //Doxygen documentation generation tool (http://www.doxygen.org)
 DOXYGEN_EXECUTABLE:FILEPATH=C:/Program Files/doxygen/bin/doxygen.exe
 
@@ -392,6 +395,9 @@ JSON_Sanitizer:BOOL=OFF
 
 //Execute test suite with Valgrind
 JSON_Valgrind:BOOL=OFF
+
+//Build libclang as a static library (in addition to a shared one)
+LIBCLANG_BUILD_STATIC:BOOL=OFF
 
 //Command to build the project
 MAKECOMMAND:STRING=C:\Users\michi_000\Downloads\cmake-3.13.2-win64-x64\cmake-3.13.2-win64-x64\bin\cmake.exe --build . --config "${CTEST_CONFIGURATION_TYPE}"

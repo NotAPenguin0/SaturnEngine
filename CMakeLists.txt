@@ -10,6 +10,8 @@ enable_language(CXX)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 17)
 
+set(ENGINE_COMPILE_FLAGS "-Wno-unused-variable -Wno-unused-function -Wno-unused-parameter")
+
 # Define Release by default.
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release")
@@ -21,6 +23,8 @@ add_definitions(
    -DENGINE_DEBUG_BUILD 
    -D_MBCS 
    # -D__clang__%(PreprocessorDefinitions) # doesn't compile in msvc
+    ${ENGINE_COMPILE_FLAGS}  # Dirty, but easy and convenient, see 			     	     
+		             # https://stackoverflow.com/questions/11783932/how-do-i-add-a-linker-or-compile-flag-in-a-cmake-file
 )
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/${DEBUG_OUTPUT_DIRECTORY}")

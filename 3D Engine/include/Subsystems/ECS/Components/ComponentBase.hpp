@@ -1,9 +1,8 @@
 #ifndef MVG_COMPONENT_BASE_HPP_
 #define MVG_COMPONENT_BASE_HPP_
 
-#include <cstddef>
-
 #include "Subsystems/Serialization/CodeGenDefinitions.hpp"
+#include "Subsystems/Serialization/ForwardDeclarations.hpp"
 
 namespace Saturn {
 class SceneObject;
@@ -17,7 +16,7 @@ namespace Components {
 // owning entity and an id referring to itself
 struct ComponentBase {
     SceneObject* entity;
-    std::size_t id;
+    unsigned int id;
 };
 
 } // namespace Components

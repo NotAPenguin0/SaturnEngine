@@ -1,0 +1,7 @@
+#ifndef MVG_FORWARD_DECLARATIONS_HPP_
+#define MVG_FORWARD_DECLARATIONS_HPP_
+
+// removed 15/07/2019
+
+
+#endif
