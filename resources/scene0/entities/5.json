@@ -1,44 +1,38 @@
 {
-    "CameraComponent": {
-        "FOV": 45.0,
-        "Front": [
-            0.5236524939537048,
-            -0.5132419466972351,
-            0.6799784898757935
-        ],
-        "Up": [
-            0.0,
-            1.0,
-            0.0
-        ],
-        "ViewportID": 0
+    "MaterialComponent": {
+        "DiffuseMap": {
+            "Resource": "resources/textures/container2.tex"
+        },
+        "Lit": true,
+        "Shader": {
+            "Resource": "resources/shaders/shadow.sh"
+        },
+        "Shininess": 100.0,
+        "SpecularMap": {
+            "Resource": "resources/textures/container2_specular.tex"
+        }
     },
-    "CameraZoomControllerComponent": {
-        "MaxZoom": 45.0,
-        "MinZoom": 1.0,
-        "ZoomSpeed": 100.0
-    },
-    "FPSCameraControllerComponent": {
-        "Speed": 2.5
-    },
-    "FreeLookControllerComponent": {
-        "MouseSensitivity": 0.07999999821186066
+    "StaticMeshComponent": {
+        "FaceCull": true,
+        "Mesh": {
+            "Resource": "resources/meshes/my_cube.mesh"
+        }
     },
     "TransformComponent": {
         "Position": [
-            -7.449331760406494,
-            10.472859382629395,
-            -7.191701889038086
+            -4.0,
+            4.0,
+            6.0
         ],
         "Rotation": [
-            -30.880016326904297,
-            52.40007400512695,
+            0.0,
+            0.0,
             0.0
         ],
         "Scale": [
-            1.0,
-            1.0,
-            1.0
+            0.5,
+            0.5,
+            0.5
         ]
     }
 }

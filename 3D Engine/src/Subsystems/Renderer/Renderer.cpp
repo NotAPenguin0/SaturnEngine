@@ -267,19 +267,10 @@ void Renderer::send_material_data(Shader& shader,
                        material.specular_map->unit() - GL_TEXTURE0);
         shader.set_float(Shader::Uniforms::Material::Shininess,
                          material.shininess);
-    } else if (material.texture.is_loaded() && material.shader.is_loaded()) {
-        // If there is a texture
-        Texture::bind(material.texture.get());
-
-        shader.set_int(Shader::Uniforms::Texture,
-                       material.texture->unit() - GL_TEXTURE0);
     }
 }
 
 void Renderer::unbind_textures(Components::Material& material) {
-    if (material.texture.is_loaded() && material.shader.is_loaded()) {
-        Texture::unbind(material.texture.get());
-    }
     if (material.lit) {
         Texture::unbind(material.diffuse_map.get());
         Texture::unbind(material.specular_map.get());

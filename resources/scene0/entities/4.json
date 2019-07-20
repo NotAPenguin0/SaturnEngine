@@ -5,14 +5,11 @@
         },
         "Lit": true,
         "Shader": {
-            "Resource": "resources/shaders/blinn_phong.sh"
+            "Resource": "resources/shaders/shadow.sh"
         },
         "Shininess": 100.0,
         "SpecularMap": {
             "Resource": "resources/textures/container2_specular.tex"
-        },
-        "Texture": {
-            "Resource": ""
         }
     },
     "StaticMeshComponent": {
@@ -23,9 +20,9 @@
     },
     "TransformComponent": {
         "Position": [
-            -4.0,
-            4.0,
-            6.0
+            0.0,
+            3.0,
+            0.0
         ],
         "Rotation": [
             0.0,

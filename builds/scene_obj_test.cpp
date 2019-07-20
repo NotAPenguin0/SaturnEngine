@@ -14,7 +14,6 @@
 #include "Subsystems/Renderer/Renderer.hpp"
 #include "Subsystems/Renderer/Viewport.hpp"
 #include "Subsystems/Serialization/ComponentSerializers.hpp"
-#include "Subsystems/Serialization/CustomSerializers.hpp"
 
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -51,7 +50,7 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
 		auto& c = obj.get_scene()->get_ecs().get_with_id<Camera>(
 			obj.add_component<Camera>());
 		j.get_to(c);
-		obj.get_scene()->get_app()->get_renderer()->get_viewport(c.viewport_id).set_camera(c.id);
+		obj.get_scene()->get_app()->get_renderer()->get_viewport(component.viewport_id).set_camera(component.id);
 	}
 	// Deserialization for CameraZoomController component
 	if (auto const& component = j.find("CameraZoomControllerComponent"); component != j.end()) {

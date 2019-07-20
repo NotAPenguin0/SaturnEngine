@@ -1,24 +1,44 @@
 {
-    "DirectionalLightComponent": {
-        "Ambient": [
-            0.07000000029802322,
-            0.07000000029802322,
-            0.07000000029802322
+    "CameraComponent": {
+        "Fov": 45.0,
+        "Front": [
+            -0.4950963258743286,
+            -0.7134953141212463,
+            -0.4957863688468933
         ],
-        "Diffuse": [
-            0.4000000059604645,
-            0.4000000059604645,
-            0.4000000059604645
+        "Up": [
+            0.0,
+            1.0,
+            0.0
         ],
-        "Direction": [
-            0.20738999545574188,
-            -0.8295609951019287,
-            -0.5184760093688965
+        "ViewportId": 0
+    },
+    "CameraZoomControllerComponent": {
+        "MaxZoom": 45.0,
+        "MinZoom": 1.0,
+        "ZoomSpeed": 100.0
+    },
+    "FPSCameraControllerComponent": {
+        "Speed": 2.5
+    },
+    "FreeLookControllerComponent": {
+        "MouseSensitivity": 0.07999999821186066
+    },
+    "TransformComponent": {
+        "Position": [
+            4.256966590881348,
+            14.047253608703613,
+            8.377970695495605
         ],
-        "Specular": [
-            0.5,
-            0.5,
-            0.5
+        "Rotation": [
+            -45.52001953125,
+            -134.96009826660156,
+            0.0
+        ],
+        "Scale": [
+            1.0,
+            1.0,
+            1.0
         ]
     }
 }

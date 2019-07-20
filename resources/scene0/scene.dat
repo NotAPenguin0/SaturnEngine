@@ -1,6 +1,6 @@
+resources/scene0/entities/cube.json
+resources/scene0/entities/cube2.json
+resources/scene0/entities/cube3.json
+resources/scene0/entities/plane.json
 resources/scene0/entities/camera.json
 resources/scene0/entities/main_dirlight.json
-resources/scene0/entities/plane.json
-resources/scene0/entities/cube2.json
-resources/scene0/entities/cube.json
-resources/scene0/entities/cube3.json

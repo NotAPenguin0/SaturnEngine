@@ -1,41 +1,24 @@
 {
-    "MaterialComponent": {
-        "DiffuseMap": {
-            "Resource": "resources/textures/wood_floor.tex"
-        },
-        "Lit": true,
-        "Shader": {
-            "Resource": "resources/shaders/blinn_phong.sh"
-        },
-        "Shininess": 100.0,
-        "SpecularMap": {
-            "Resource": "resources/textures/wood_floor_specular.tex"
-        },
-        "Texture": {
-            "Resource": ""
-        }
-    },
-    "StaticMeshComponent": {
-        "FaceCull": false,
-        "Mesh": {
-            "Resource": "resources/meshes/scaled_plane.mesh"
-        }
-    },
-    "TransformComponent": {
-        "Position": [
-            0.0,
-            2.0,
-            0.0
+    "DirectionalLightComponent": {
+        "Ambient": [
+            0.07000000029802322,
+            0.07000000029802322,
+            0.07000000029802322
         ],
-        "Rotation": [
-            90.0,
-            0.0,
-            0.0
+        "Diffuse": [
+            0.10000000149011612,
+            0.10000000149011612,
+            0.10000000149011612
         ],
-        "Scale": [
-            2.0,
-            2.0,
-            2.0
+        "Direction": [
+            -0.5773500204086304,
+            -0.5773500204086304,
+            -0.5773500204086304
+        ],
+        "Specular": [
+            0.30000001192092896,
+            0.30000001192092896,
+            0.30000001192092896
         ]
     }
 }

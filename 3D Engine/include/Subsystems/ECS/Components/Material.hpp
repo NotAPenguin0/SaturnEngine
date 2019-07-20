@@ -11,7 +11,7 @@ namespace Saturn::Components {
 struct COMPONENT DEFAULT_SERIALIZE Material : public ComponentBase {
     Resource<Shader> shader;
     // Optional
-    Resource<Texture> texture;
+    /*Resource<Texture> texture;*/
     bool lit = true;
 
     // Lighting data
