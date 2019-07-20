@@ -20,6 +20,8 @@
 *.userprefs
 
 # Build results
+build/
+builds/
 [Dd]ebugPublic/
 [Rr]eleases/
 x64/
@@ -28,22 +30,6 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
-
-# Build files
-*.exe
-*.pdb
-*.lib
-builds/Win32/
-builds/SaturnEngine.dir/
-builds/Debug/
-builds/CMakeFiles/
-builds/3D Engine/
-builds/.vs
-builds/*.vcxproj
-builds/*.cmake
-builds/*.txt
-builds/*.sln
-builds/*.in
 
 # RenderDoc captures
 *.rdc
