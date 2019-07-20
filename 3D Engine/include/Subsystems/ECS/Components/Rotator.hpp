@@ -6,7 +6,7 @@
 
 namespace Saturn::Components {
 
-struct COMPONENT Rotator : public ComponentBase {
+struct COMPONENT DEFAULT_SERIALIZE Rotator : public ComponentBase {
     float speed;
     glm::vec3 euler_angles;
 };

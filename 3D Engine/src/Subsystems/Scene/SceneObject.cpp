@@ -115,6 +115,6 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
             obj.add_component<SpotLight>());
         j.get_to(light);
     }
-} // namespace Saturn
+} 
 
 } // namespace Saturn

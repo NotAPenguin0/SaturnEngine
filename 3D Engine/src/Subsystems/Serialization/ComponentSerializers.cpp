@@ -29,8 +29,8 @@ void from_json(nlohmann::json const& json, Camera& camera) {
     } else {
         camera.front = (*cam)["Front"].get<glm::vec3>();
         camera.up = (*cam)["Up"].get<glm::vec3>();
-        camera.fov = (*cam)["FOV"].get<float>();
-        camera.viewport_id = (*cam)["ViewportID"].get<std::size_t>();
+        camera.fov = (*cam)["Fov"].get<float>();
+        camera.viewport_id = (*cam)["ViewportId"].get<std::size_t>();
     }
 }
 
@@ -288,8 +288,8 @@ void to_json(nlohmann::json& json, Camera const& camera) {
     json["CameraComponent"] = nlohmann::json::object({
 		{"Front", camera.front},
 		{"Up", camera.up},
-		{"FOV", camera.fov},
-		{"ViewportID", camera.viewport_id}
+		{"Fov", camera.fov},
+		{"ViewportId", camera.viewport_id}
 		});
     // clang-format on 
 }

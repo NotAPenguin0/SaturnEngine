@@ -8,7 +8,7 @@
 
 namespace Saturn::Components {
 
-struct COMPONENT Material : public ComponentBase {
+struct COMPONENT DEFAULT_SERIALIZE Material : public ComponentBase {
     Resource<Shader> shader;
     // Optional
     Resource<Texture> texture;

@@ -1,3 +1,4 @@
+#include <chrono>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -39,15 +40,16 @@ struct Directories {
 };
 
 struct OutputFiles {
-    fs::path source;
     fs::path header;
+    fs::path source;
+    fs::path scene_obj;
 };
 
 struct ComponentData {
     using type_name_t = std::string;
 
     std::string name;
-    // bool default_serialize // #TODO
+    bool default_serialize;
     // Maps a member name to its type
     std::unordered_map<std::string, type_name_t> fields;
 };
@@ -140,7 +142,9 @@ OutputFiles get_output_files(Directories const& dirs) {
                                    "Serialization" / "ComponentSerializers.hpp";
     const fs::path output_source = dirs.source / "Subsystems" /
                                    "Serialization" / "ComponentSerializers.cpp";
-    return {output_source, output_header};
+    const fs::path output_scene_obj =
+        dirs.source / "Subsystems" / "Scene" / "SceneObject.cpp";
+    return {output_source, output_header, output_scene_obj};
 }
 
 std::vector<fs::path> get_component_files(Directories const& dirs) {
@@ -173,9 +177,17 @@ std::string read_file_into_string(fs::path const& path) {
 std::string get_component_name(std::string const& first_line) {
     static const std::size_t declaration_len =
         strlen("struct " COMPONENT_MACRO);
+
+    std::size_t default_serialize_len = 0;
+    if (first_line.find("DEFAULT_SERIALIZE") != std::string::npos) {
+        default_serialize_len =
+            strlen(" DEFAULT_SERIALIZE"); // Don't forget the space in front
+    }
+
     // Find the position after the struct declaration
     const std::size_t name_start_with_spaces =
-        first_line.find("struct " COMPONENT_MACRO) + declaration_len;
+        first_line.find("struct " COMPONENT_MACRO) + declaration_len +
+        default_serialize_len;
     // Find the first non-space character
     const std::size_t name_start =
         first_line.find_first_not_of(' ', name_start_with_spaces);
@@ -183,6 +195,14 @@ std::string get_component_name(std::string const& first_line) {
     // Note that the second parameter of substr asks for a length, not a stop
     // index
     return first_line.substr(name_start, name_end - name_start);
+}
+
+bool get_component_default_serialize(std::string const& first_line) {
+    if (first_line.find("DEFAULT_SERIALIZE") != std::string::npos) {
+        return true;
+    }
+
+    return false;
 }
 
 TranslationUnit get_translation_unit(Directories const& dirs,
@@ -275,6 +295,7 @@ ComponentData parse_component(Directories const& dirs,
                               std::ifstream& rest_of_file) {
     ComponentData data;
     data.name = get_component_name(first_line);
+    data.default_serialize = get_component_default_serialize(first_line);
     auto translation_unit = get_translation_unit(dirs, path);
     data.fields = get_component_fields(translation_unit, data.name);
 
@@ -306,47 +327,139 @@ ComponentData process_component_file(Directories const& dirs,
     return {};
 }
 
-void replace_forward_declarations(
-    kainjow::mustache::mustache& header,
-    std::vector<ComponentData> const& components) {
-    using namespace kainjow;
+using namespace kainjow;
 
-    mustache::data forward_decl_data = mustache::data::type::object;
-    forward_decl_data["ForwardDeclarations"] = mustache::data::type::list;
+void add_forward_declarations_data(
+    mustache::data& data, std::vector<ComponentData> const& components) {
+
+    data["ForwardDeclarations"] = mustache::data::type::list;
     for (auto const& component : components) {
-        forward_decl_data["ForwardDeclarations"].push_back(
-            mustache::data("ComponentName", component.name));
+        if (component.default_serialize) {
+            data["ForwardDeclarations"].push_back(
+                mustache::data("ComponentName", component.name));
+        }
     }
-
-    std::string rendered = header.render(forward_decl_data);
-    std::cout << rendered << "\n";
-    header = rendered;
 }
 
-std::string generate_header(OutputFiles const& outfiles,
-                            std::vector<ComponentData> const& components) {
-    using namespace kainjow;
+void add_function_declarations_data(
+    mustache::data& data, std::vector<ComponentData> const& components) {
 
-    static const std::string base_header =
-        "#ifndef MVG_COMPONENT_SERIALIZERS_HPP_\n"
-        "#define MVG_COMPONENT_SERIALIZERS_HPP_\n"
-        "\n"
-        "#include <nlohmann/json.hpp>\n"
-        "\n"
-        "namespace Saturn::Components {\n"
-        "\n"
-        "{{#ForwardDeclarations}}\n"  // Mustache section: forward declarations
-        "struct {{ComponentName}};\n" // Don't forget the semicolon
-        "{{/ForwardDeclarations}}\n"
-        "} // namespace Saturn::Components\n"
-        "\n"
-        "#endif\n";
+    data["FromJsonDecl"] = mustache::data::type::list;
+    data["ToJsonDecl"] = mustache::data::type::list;
+    for (auto const& component : components) {
+        if (component.default_serialize) {
+            data["FromJsonDecl"].push_back(
+                mustache::data("ComponentName", component.name));
+            data["ToJsonDecl"].push_back(
+                mustache::data("ComponentName", component.name));
+        }
+    }
+}
+
+std::string generate_header(std::vector<ComponentData> const& components) {
+
+    static const std::string base_header = read_file_into_string("header.tpl");
 
     mustache::mustache header(base_header);
-    replace_forward_declarations(header, components);
-    // get as string
-    return header.render(mustache::data());
-    return base_header;
+    mustache::data data = mustache::data::type::object;
+
+    // Add all data
+    add_forward_declarations_data(data, components);
+    add_function_declarations_data(data, components);
+
+    // Render to a string
+    return header.render(data);
+}
+
+// Transforms a name from snake_case into PascalCase
+std::string snake_case_to_pascal_case(std::string const& field_name) {
+    std::string result;
+
+    bool next_upper = false;
+    for (char c : field_name) {
+        if (c == '_') {
+            next_upper = true;
+        } else {
+            if (next_upper) {
+                result += std::toupper(c);
+            } else {
+                result += c;
+            }
+
+            next_upper = false;
+        }
+    }
+
+    result.front() = std::toupper(result.front());
+
+    return result;
+}
+
+void add_from_json_impl_data(mustache::data& data,
+                             std::vector<ComponentData> const& components) {
+
+    data["FromJsonImpl"] = mustache::data::type::list;
+    for (auto const& component : components) {
+        // Skip ParticleEmitter for now
+        if (!component.default_serialize) continue;
+
+        mustache::data impl_data = mustache::data::type::object;
+        impl_data["ComponentName"] = component.name;
+        impl_data["DeserializeField"] = mustache::data::type::list;
+
+        // Add fields
+        for (auto const& [field, type] : component.fields) {
+            mustache::data field_data = mustache::data::type::object;
+
+            field_data["FieldName"] = field;
+            field_data["FieldType"] = type;
+            field_data["FieldNameJson"] = snake_case_to_pascal_case(field);
+
+            impl_data["DeserializeField"].push_back(field_data);
+        }
+
+        data["FromJsonImpl"].push_back(impl_data);
+    }
+}
+
+void add_to_json_impl_data(mustache::data& data,
+                           std::vector<ComponentData> const& components) {
+
+    data["ToJsonImpl"] = mustache::data::type::list;
+    for (auto const& component : components) {
+        // Skip ParticleEmitter for now
+        if (!component.default_serialize) continue;
+
+        mustache::data impl_data = mustache::data::type::object;
+        impl_data["ComponentName"] = component.name;
+        impl_data["SerializeField"] = mustache::data::type::list;
+
+        // Add fields
+        for (auto const& [field, type] : component.fields) {
+            mustache::data field_data = mustache::data::type::object;
+
+            field_data["FieldName"] = field;
+            field_data["FieldNameJson"] = snake_case_to_pascal_case(field);
+
+            impl_data["SerializeField"].push_back(field_data);
+        }
+
+        data["ToJsonImpl"].push_back(impl_data);
+    }
+}
+
+std::string generate_source(std::vector<ComponentData> const& components) {
+    static const std::string base_source = read_file_into_string("source.tpl");
+
+    mustache::mustache source(base_source);
+    mustache::data data = mustache::data::type::object;
+
+    // Add all data
+    add_from_json_impl_data(data, components);
+    add_to_json_impl_data(data, components);
+
+    // Render to a string
+    return source.render(data);
 }
 
 int main(int argc, char** argv) {
@@ -366,21 +479,36 @@ int main(int argc, char** argv) {
 
     std::vector<ComponentData> components;
     for (auto const& file : component_files) {
+        auto start = std::chrono::system_clock::now();
         components.push_back(process_component_file(directories, file));
-        std::cout << "Parsed component: " << components.back().name << "\n";
+        auto end = std::chrono::system_clock::now();
+        auto elapsed =
+            std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
+                .count();
+        std::cout << "Parsed component: " << components.back().name << " in "
+                  << elapsed << " ms\n";
     }
 
-    for (auto const& component : components) {
+    /*for (auto const& component : components) {
         std::cout << "Component: " << component.name << "\n\n";
         std::cout << "Fields: \n";
         for (auto const& [name, type] : component.fields) {
             std::cout << type << " " << name << "\n";
         }
         std::cout << "====================================================\n";
-    }
+    }*/
 
-    // Print the header file that was generated
-    std::cout << generate_header(output_files, components);
+    std::string header = generate_header(components);
+    std::string source = generate_source(components);
+
+    std::ofstream out_header(output_files.header);
+    out_header << header;
+    std::ofstream out_source(output_files.source);
+    out_source << source;
+
+    std::cout << "Generated output files have been written to "
+              << output_files.header << " and " << output_files.source
+              << ".\nPress ENTER to quit\n";
 
     std::cin.get();
 }

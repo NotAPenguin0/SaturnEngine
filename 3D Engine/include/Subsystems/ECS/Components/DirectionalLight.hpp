@@ -6,7 +6,7 @@
 
 namespace Saturn::Components {
 
-struct COMPONENT DirectionalLight : public ComponentBase {
+struct COMPONENT DEFAULT_SERIALIZE DirectionalLight : public ComponentBase {
     glm::vec3 ambient;
     glm::vec3 diffuse;
     glm::vec3 specular;

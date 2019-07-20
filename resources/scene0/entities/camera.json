@@ -1,6 +1,6 @@
 {
     "CameraComponent": {
-        "FOV": 45.0,
+        "Fov": 45.0,
         "Front": [
             0.5236524939537048,
             -0.5132419466972351,
@@ -11,7 +11,7 @@
             1.0,
             0.0
         ],
-        "ViewportID": 0
+        "ViewportId": 0
     },
     "CameraZoomControllerComponent": {
         "MaxZoom": 45.0,
