@@ -43,6 +43,8 @@ struct OutputFiles {
     fs::path header;
     fs::path source;
     fs::path scene_obj;
+    fs::path components;
+    fs::path component_list;
 };
 
 struct ComponentData {
@@ -144,7 +146,12 @@ OutputFiles get_output_files(Directories const& dirs) {
                                    "Serialization" / "ComponentSerializers.cpp";
     const fs::path output_scene_obj =
         dirs.source / "Subsystems" / "Scene" / "SceneObject.cpp";
-    return {output_source, output_header, output_scene_obj};
+    const fs::path components =
+        dirs.include / "Subsystems" / "ECS" / "Components.hpp";
+    const fs::path component_list =
+        dirs.include / "Subsystems" / "ECS" / "ComponentList.hpp";
+    return {output_source, output_header, output_scene_obj, components,
+            component_list};
 }
 
 std::vector<fs::path> get_component_files(Directories const& dirs) {
@@ -462,10 +469,70 @@ std::string generate_source(std::vector<ComponentData> const& components) {
     return source.render(data);
 }
 
+std::string generate_scene_obj(std::vector<ComponentData> const& components) {
+    static const std::string base = read_file_into_string("scene_obj.tpl");
+
+    mustache::mustache file(base);
+    mustache::data data = mustache::data::type::object;
+
+    // Add data
+    data["DeserializeComponent"] = mustache::data::type::list;
+    for (auto const& component : components) {
+        mustache::data comp_data = mustache::data::type::object;
+        comp_data["ComponentName"] = component.name;
+        // Ugly, but I can't come up with a better way right now
+        if (component.name == "Camera") {
+            comp_data["AdditionalCode"] =
+                "obj.get_scene()"
+                "->get_app()"
+                "->get_renderer()"
+                "->get_viewport(component.viewport_id)"
+                ".set_camera(component.id);";
+        }
+        data["DeserializeComponent"].push_back(comp_data);
+    }
+
+    // Render to a string
+    return file.render(data);
+}
+
+std::string
+generate_components_header(std::vector<ComponentData> const& components) {
+    static const std::string base = read_file_into_string("components.tpl");
+
+    mustache::mustache file(base);
+    mustache::data data = mustache::data::type::object;
+    data["IncludeComponentFile"] = mustache::data::type::list;
+
+    for (auto const& component : components) {
+        mustache::data comp_data = mustache::data::type::object;
+        comp_data["ComponentName"] = component.name;
+        data["IncludeComponentFile"].push_back(comp_data);
+    }
+
+    return file.render(data);
+}
+
+std::string
+generate_component_list_header(std::vector<ComponentData> const& components) {
+    // Component list will be manually generated, so no mustache templates here
+    std::string header = "#ifndef MVG_COMPONENT_LIST_HPP_\n"
+						 "#define MVG_COMPONENT_LIST_HPP_\n\n"
+						 "#include \"Components.hpp\"\n\n";
+    header += "#define COMPONENT_LIST \\ \n";
+	for (std::size_t i = 0; i < components.size(); ++i) {
+        auto const& name = components[i].name;
+
+		(header += "::Saturn::Components::") += name;
+		if (i != components.size() -1) { // if we're not at the last iteration 
+			header += ", \\ \n";
+		}
+	}
+    header += "\n#endif";
+	return header;
+}
+
 int main(int argc, char** argv) {
-    /*
-        libclang_testing();
-        return 0;*/
     if (argc < 2) {
         std::cerr << "Usage: SerializationCodeGen [project_directory]\n";
         return -1;
@@ -473,7 +540,10 @@ int main(int argc, char** argv) {
     auto directories = get_directories(argv[1]);
     auto output_files = get_output_files(directories);
 
-    output_files = {"test.hpp", "test.cpp"};
+    // Temporary, this is to make sure we don't overwrite our manual files with
+    // wrong generated ones during testing
+    output_files = {"test.hpp", "test.cpp", "scene_obj_test.cpp",
+                    "components_test.hpp", "component_list_test.hpp"};
 
     std::vector<fs::path> component_files = get_component_files(directories);
 
@@ -500,14 +570,26 @@ int main(int argc, char** argv) {
 
     std::string header = generate_header(components);
     std::string source = generate_source(components);
+    std::string scene_obj = generate_scene_obj(components);
+    std::string components_header = generate_components_header(components);
+    std::string component_list_header =
+        generate_component_list_header(components);
 
     std::ofstream out_header(output_files.header);
     out_header << header;
     std::ofstream out_source(output_files.source);
     out_source << source;
+    std::ofstream out_scene_obj(output_files.scene_obj);
+    out_scene_obj << scene_obj;
+    std::ofstream out_components_header(output_files.components);
+    out_components_header << components_header;
+    std::ofstream out_component_list_header(output_files.component_list);
+    out_component_list_header << component_list_header;
 
     std::cout << "Generated output files have been written to "
-              << output_files.header << " and " << output_files.source
+              << output_files.header << ", " << output_files.source << ", "
+              << output_files.components << ", " << output_files.component_list
+              << " and " << output_files.scene_obj
               << ".\nPress ENTER to quit\n";
 
     std::cin.get();

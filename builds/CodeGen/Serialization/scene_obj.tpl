@@ -51,7 +51,7 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
 		auto& c = obj.get_scene()->get_ecs().get_with_id<{{ComponentName}}>(
 			obj.add_component<{{ComponentName}}>());
 		j.get_to(c);
-		{{AdditionalCode}}
+		{{{AdditionalCode}}}
 	}
 	{{/DeserializeComponent}}
 } 

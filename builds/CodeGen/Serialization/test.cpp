@@ -18,10 +18,10 @@ void from_json(nlohmann::json const& json, Camera& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No Camera component stored even though it was requested");
 	} else {
-		component.up = (*c)[Up].get<glm::vec3>();
-		component.front = (*c)[Front].get<glm::vec3>();
-		component.fov = (*c)[Fov].get<float>();
-		component.viewport_id = (*c)[ViewportId].get<unsigned int>();
+		component.up = (*c)["Up"].get<glm::vec3>();
+		component.front = (*c)["Front"].get<glm::vec3>();
+		component.fov = (*c)["Fov"].get<float>();
+		component.viewport_id = (*c)["ViewportId"].get<unsigned int>();
 	}
 }
 
@@ -30,9 +30,9 @@ void from_json(nlohmann::json const& json, CameraZoomController& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No CameraZoomController component stored even though it was requested");
 	} else {
-		component.zoom_speed = (*c)[ZoomSpeed].get<float>();
-		component.min_zoom = (*c)[MinZoom].get<float>();
-		component.max_zoom = (*c)[MaxZoom].get<float>();
+		component.zoom_speed = (*c)["ZoomSpeed"].get<float>();
+		component.min_zoom = (*c)["MinZoom"].get<float>();
+		component.max_zoom = (*c)["MaxZoom"].get<float>();
 	}
 }
 
@@ -41,10 +41,10 @@ void from_json(nlohmann::json const& json, DirectionalLight& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No DirectionalLight component stored even though it was requested");
 	} else {
-		component.ambient = (*c)[Ambient].get<glm::vec3>();
-		component.diffuse = (*c)[Diffuse].get<glm::vec3>();
-		component.specular = (*c)[Specular].get<glm::vec3>();
-		component.direction = (*c)[Direction].get<glm::vec3>();
+		component.ambient = (*c)["Ambient"].get<glm::vec3>();
+		component.diffuse = (*c)["Diffuse"].get<glm::vec3>();
+		component.specular = (*c)["Specular"].get<glm::vec3>();
+		component.direction = (*c)["Direction"].get<glm::vec3>();
 	}
 }
 
@@ -53,7 +53,7 @@ void from_json(nlohmann::json const& json, FPSCameraController& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No FPSCameraController component stored even though it was requested");
 	} else {
-		component.speed = (*c)[Speed].get<float>();
+		component.speed = (*c)["Speed"].get<float>();
 	}
 }
 
@@ -62,7 +62,7 @@ void from_json(nlohmann::json const& json, FreeLookController& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No FreeLookController component stored even though it was requested");
 	} else {
-		component.mouse_sensitivity = (*c)[MouseSensitivity].get<float>();
+		component.mouse_sensitivity = (*c)["MouseSensitivity"].get<float>();
 	}
 }
 
@@ -71,12 +71,12 @@ void from_json(nlohmann::json const& json, Material& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No Material component stored even though it was requested");
 	} else {
-		component.diffuse_map = (*c)[DiffuseMap].get<Resource<Saturn::Texture>>();
-		component.shader = (*c)[Shader].get<Resource<Saturn::Shader>>();
-		component.texture = (*c)[Texture].get<Resource<Saturn::Texture>>();
-		component.lit = (*c)[Lit].get<bool>();
-		component.specular_map = (*c)[SpecularMap].get<Resource<Saturn::Texture>>();
-		component.shininess = (*c)[Shininess].get<float>();
+		component.diffuse_map = (*c)["DiffuseMap"].get<Resource<Saturn::Texture>>();
+		component.shader = (*c)["Shader"].get<Resource<Saturn::Shader>>();
+		component.texture = (*c)["Texture"].get<Resource<Saturn::Texture>>();
+		component.lit = (*c)["Lit"].get<bool>();
+		component.specular_map = (*c)["SpecularMap"].get<Resource<Saturn::Texture>>();
+		component.shininess = (*c)["Shininess"].get<float>();
 	}
 }
 
@@ -85,10 +85,10 @@ void from_json(nlohmann::json const& json, PointLight& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No PointLight component stored even though it was requested");
 	} else {
-		component.ambient = (*c)[Ambient].get<glm::vec3>();
-		component.diffuse = (*c)[Diffuse].get<glm::vec3>();
-		component.specular = (*c)[Specular].get<glm::vec3>();
-		component.intensity = (*c)[Intensity].get<float>();
+		component.ambient = (*c)["Ambient"].get<glm::vec3>();
+		component.diffuse = (*c)["Diffuse"].get<glm::vec3>();
+		component.specular = (*c)["Specular"].get<glm::vec3>();
+		component.intensity = (*c)["Intensity"].get<float>();
 	}
 }
 
@@ -97,8 +97,8 @@ void from_json(nlohmann::json const& json, Rotator& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No Rotator component stored even though it was requested");
 	} else {
-		component.speed = (*c)[Speed].get<float>();
-		component.euler_angles = (*c)[EulerAngles].get<glm::vec3>();
+		component.speed = (*c)["Speed"].get<float>();
+		component.euler_angles = (*c)["EulerAngles"].get<glm::vec3>();
 	}
 }
 
@@ -107,13 +107,13 @@ void from_json(nlohmann::json const& json, SpotLight& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No SpotLight component stored even though it was requested");
 	} else {
-		component.inner_angle = (*c)[InnerAngle].get<float>();
-		component.ambient = (*c)[Ambient].get<glm::vec3>();
-		component.diffuse = (*c)[Diffuse].get<glm::vec3>();
-		component.specular = (*c)[Specular].get<glm::vec3>();
-		component.intensity = (*c)[Intensity].get<float>();
-		component.direction = (*c)[Direction].get<glm::vec3>();
-		component.outer_angle = (*c)[OuterAngle].get<float>();
+		component.inner_angle = (*c)["InnerAngle"].get<float>();
+		component.ambient = (*c)["Ambient"].get<glm::vec3>();
+		component.diffuse = (*c)["Diffuse"].get<glm::vec3>();
+		component.specular = (*c)["Specular"].get<glm::vec3>();
+		component.intensity = (*c)["Intensity"].get<float>();
+		component.direction = (*c)["Direction"].get<glm::vec3>();
+		component.outer_angle = (*c)["OuterAngle"].get<float>();
 	}
 }
 
@@ -122,8 +122,8 @@ void from_json(nlohmann::json const& json, StaticMesh& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No StaticMesh component stored even though it was requested");
 	} else {
-		component.mesh = (*c)[Mesh].get<Resource<Saturn::Mesh>>();
-		component.face_cull = (*c)[FaceCull].get<bool>();
+		component.mesh = (*c)["Mesh"].get<Resource<Saturn::Mesh>>();
+		component.face_cull = (*c)["FaceCull"].get<bool>();
 	}
 }
 
@@ -132,9 +132,9 @@ void from_json(nlohmann::json const& json, Transform& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No Transform component stored even though it was requested");
 	} else {
-		component.position = (*c)[Position].get<glm::vec3>();
-		component.rotation = (*c)[Rotation].get<glm::vec3>();
-		component.scale = (*c)[Scale].get<glm::vec3>();
+		component.position = (*c)["Position"].get<glm::vec3>();
+		component.rotation = (*c)["Rotation"].get<glm::vec3>();
+		component.scale = (*c)["Scale"].get<glm::vec3>();
 	}
 }
 

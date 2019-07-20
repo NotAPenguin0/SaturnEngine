@@ -20,7 +20,7 @@ void from_json(nlohmann::json const& json, {{ComponentName}}& component) {
 		throw std::runtime_error("No {{ComponentName}} component stored even though it was requested");
 	} else {
 		{{#DeserializeField}}
-		component.{{FieldName}} = (*c)[{{FieldNameJson}}].get<{{{FieldType}}}>();
+		component.{{FieldName}} = (*c)["{{FieldNameJson}}"].get<{{{FieldType}}}>();
 		{{/DeserializeField}}
 	}
 }
