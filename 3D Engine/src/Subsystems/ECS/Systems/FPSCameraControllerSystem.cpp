@@ -25,24 +25,25 @@ void FPSCameraControllerSystem::on_update(Scene& scene) {
          ecs.select<Components::Transform, Components::Camera,
                     Components::FPSCameraController>()) {
 
-
         float speed = controller.speed * Time::deltaTime;
-        if (Input::key_pressed(GLFW_KEY_W)) {
+        if (RawInput::get_key(Key::W).down) {
             trans.position += (speed * cam.front);
         }
-        if (Input::key_pressed(GLFW_KEY_S)) {
+        if (RawInput::get_key(Key::S).down) {
             trans.position -= (speed * cam.front);
         }
-        if (Input::key_pressed(GLFW_KEY_A)) {
+        if (RawInput::get_key(Key::A).down) {
             trans.position -=
                 (speed * glm::normalize(glm::cross(cam.front, cam.up)));
         }
-        if (Input::key_pressed(GLFW_KEY_D)) {
+        if (RawInput::get_key(Key::D).down) {
             trans.position +=
                 (speed * glm::normalize(glm::cross(cam.front, cam.up)));
         }
-        if (Input::key_pressed(GLFW_KEY_SPACE)) { trans.position.y += speed; }
-        if (Input::key_pressed(GLFW_KEY_LEFT_SHIFT)) {
+        if (RawInput::get_key(Key::Space).down) {
+            trans.position.y += speed;
+        }
+        if (RawInput::get_key(Key::LeftShift).down) {
             trans.position.y -= speed;
         }
     }
