@@ -105,11 +105,11 @@ std::unique_ptr<Mesh> ResourceLoader<Mesh>::load(std::string const& path) {
     return std::make_unique<Mesh>(info);
 }
 
-static GLenum format_from_string(std::string const& str) {
-    if (str == "RGB") return GL_RGB;
-    if (str == "RGBA") return GL_RGBA;
-	if (str == "SRGB") return GL_SRGB;
-    if (str == "SRGB_ALPHA") return GL_SRGB_ALPHA;
+static TextureFormat format_from_string(std::string const& str) {
+    if (str == "RGB") return TextureFormat::RGB;
+    if (str == "RGBA") return TextureFormat::RGBA;
+    if (str == "SRGB") return TextureFormat::SRGB;
+    if (str == "SRGB_ALPHA") return TextureFormat::SRGBAlpha;
 
     throw std::runtime_error("Invalid texture format!");
 }
@@ -207,12 +207,12 @@ ResourceLoader<Texture>::load(std::string const& path) {
     // Read texture unit
     int unit_n;
     file >> unit_n;
-    GLenum unit = (GLenum)(GL_TEXTURE0 + unit_n);
+    auto unit = (GLenum)(GL_TEXTURE0 + unit_n);
     // Read texture format
     file >> str;
     auto format = format_from_string(str);
     file >> str;
-	auto internal_format = format_from_string(str);
+    auto internal_format = format_from_string(str);
     // Read flip
     file >> str;
     bool flip_y = (str == "true");

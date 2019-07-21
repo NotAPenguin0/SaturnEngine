@@ -11,7 +11,7 @@ Texture::Texture() :
 Texture::Texture(CreateInfo const& create_info) { assign(create_info); }
 
 void Texture::assign(CreateInfo const& create_info) {
-//    if (texture_handle != 0) { glDeleteTextures(1, &texture_handle); }
+    //    if (texture_handle != 0) { glDeleteTextures(1, &texture_handle); }
 
     texture_handle = 0;
     texture_unit = create_info.texture_unit;
@@ -40,8 +40,10 @@ void Texture::assign(CreateInfo const& create_info) {
     if (target != TextureTarget::Texture2D) {
         throw std::runtime_error("Currently only 2D textures are supported");
     } else {
-        glTexImage2D(GL_TEXTURE_2D, 0, create_info.internal_format, w, h, 0,
-                     create_info.format, GL_UNSIGNED_BYTE, image_data);
+        glTexImage2D(GL_TEXTURE_2D, 0,
+                     static_cast<GLenum>(create_info.internal_format), w, h, 0,
+                     static_cast<GLenum>(create_info.format), GL_UNSIGNED_BYTE,
+                     image_data);
     }
     // Don't forget to change if we support more textures later
     glGenerateMipmap(GL_TEXTURE_2D);

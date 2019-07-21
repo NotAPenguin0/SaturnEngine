@@ -32,8 +32,6 @@ public:
     static void bind(UniformBuffer& buf);
     static void unbind();
 
-    // #TODO: Maybe a way to calculate byte_offset's easily
-
     void set_int(int value, std::size_t byte_offset);
     void set_float(float value, std::size_t byte_offset);
     void set_vec3(glm::vec3 const& value, std::size_t byte_offset);

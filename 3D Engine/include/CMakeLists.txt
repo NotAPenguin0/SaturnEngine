@@ -72,6 +72,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/IDGenerator.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/type_erased.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/Utility.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Utility/in_range.hpp"
     PARENT_SCOPE
 )
 

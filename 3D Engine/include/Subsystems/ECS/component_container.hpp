@@ -40,8 +40,6 @@ public:
     component_container& operator=(component_container&&) = default;
     ~component_container() override = default;
 
-    // #TODO: Add functionality here (nonvirtual, use cast to access)
-
     virtual std::type_info const& get_component_type() const override {
         return typeid(C);
     }

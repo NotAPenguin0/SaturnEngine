@@ -348,9 +348,7 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
 
     send_lighting_data(scene);
 
-    render_particles(scene); // #TODO: Check if it makes any difference
-                             // if we render particles before or after
-                             // the scene + figure out best option
+    render_particles(scene);
 
     for (auto [relative_transform, mesh, material] :
          scene.ecs.select<Components::Transform, Components::StaticMesh,
@@ -389,7 +387,6 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
     }
 }
 
-//#MaybeTODO: Render particles with GL_POINTS if they're not textured?
 void Renderer::render_particles(Scene& scene) {
     using namespace Components;
     bind_guard<Shader> shader_guard(particle_shader.get());

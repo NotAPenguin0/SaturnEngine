@@ -40,7 +40,6 @@ void ParticleSystem::on_update(Scene& scene) {
 
         if (!emitter.emission.enabled) { new_particles = 0; }
         emitter.time_since_start += Time::deltaTime;
-        //#TODO: Move this to particles_to_spawn()?
         if (!emitter.main.enabled) {
             new_particles = 0;
         } else if (!emitter.main.loop) {
@@ -55,9 +54,6 @@ void ParticleSystem::on_update(Scene& scene) {
             new_particles =
                 emitter.main.max_particles - emitter.particles.size();
         }
-
-        // #MaybeOptimize Insertion/deletion of particles (maybe switch to
-        // std::list since no random access is needed?)
 
         // First step: spawn new particles
         auto trans = make_absolute_transform(

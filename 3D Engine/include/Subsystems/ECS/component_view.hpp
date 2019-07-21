@@ -50,7 +50,7 @@ public:
         iterator& operator++() {
             if (stop) { return *this; }
 
-            if (it == last) { //#MaybeOptimize Is this check redundant?
+            if (it == last) {
                 stop = true;
                 return *this;
             }

@@ -107,7 +107,7 @@ void from_json(nlohmann::json const& json, ParticleEmitter& emitter) {
         VertexArray::BufferInfo pos_buffer_info;
         pos_buffer_info.attributes.push_back({2, 3, 1}); // position
         pos_buffer_info.mode = BufferMode::DataStream;
-        //#TODO: Get rid of make_float_vec
+        
         pos_buffer_info.data = make_float_vec(emitter.particle_data.positions);
         VertexArray::BufferInfo scale_buffer_info;
         scale_buffer_info.attributes.push_back({3, 3, 1}); // scale
@@ -166,7 +166,7 @@ void to_json(nlohmann::json& json, ParticleEmitter const& emitter) {
 
     shape["Enabled"] = emitter.shape.enabled;
     shape["Type"] = emitter.shape.shape;
-    //#TODO: Work with optional stuff
+    
     shape["Radius"] = *emitter.shape.radius;
     shape["Arc"] = *emitter.shape.arc;
     shape["Angle"] = *emitter.shape.angle;

@@ -25,7 +25,6 @@ namespace Saturn::Components {
 
 struct COMPONENT ParticleEmitter : ComponentBase {
     struct Particle {
-        // #TODO: Better duration type
         float life_left;
         float velocity;
         glm::vec3 direction;
@@ -35,7 +34,6 @@ struct COMPONENT ParticleEmitter : ComponentBase {
         // If disabled, no particles will spawn
         bool enabled = true;
 
-        // #TODO: Better duration type
         float start_lifetime;
 
         float start_velocity;
@@ -89,7 +87,7 @@ struct COMPONENT ParticleEmitter : ComponentBase {
         // Only present if shape is a Cone
         std::optional<SpawnMode> mode = SpawnMode::Random;
 
-        // Must be in range [0, 1] //#Enforce
+        // Must be in range [0, 1]
         float randomize_direction = 0.0f;
         //#MaybeTODO: Vector for x, y, z separate? (Optional)
         float random_position_offset = 0.0f;
@@ -102,7 +100,6 @@ struct COMPONENT ParticleEmitter : ComponentBase {
     bool additive = false;
 
     // Modules:
-    // #TODO: module class that only allocates when the module is enabled
     MainModule main;
     EmissionModule emission;
     VelocityOverTimeModule velocity_over_lifetime;
@@ -129,7 +126,6 @@ private:
     float time_since_last_spawn = 0.0f;
     float time_since_start = 0.0f;
 };
-
 
 // Serializers for enums
 

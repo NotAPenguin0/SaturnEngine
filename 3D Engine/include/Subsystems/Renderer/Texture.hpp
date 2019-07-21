@@ -44,10 +44,6 @@ enum class TextureParameter {
 
 enum class TextureParameterValue {
     DepthComponent = GL_DEPTH_COMPONENT,
-    // #TODO: figure out how to pass raw integer values
-    // #TODO: Compare function
-    // #TODO: Many options from http://docs.gl/gl4/glTexParameter
-
     // Mipmap filters
     Nearest = GL_NEAREST,
     Linear = GL_LINEAR,
@@ -60,7 +56,13 @@ enum class TextureParameterValue {
     ClampToBorder = GL_CLAMP_TO_BORDER,
     MirroredRepeat = GL_MIRRORED_REPEAT,
     Repeat = GL_REPEAT,
+};
 
+enum class TextureFormat {
+    RGB = GL_RGB,
+    RGBA = GL_RGBA,
+    SRGB = GL_SRGB,
+    SRGBAlpha = GL_SRGB_ALPHA
 };
 
 /*Do NOT use the bind_guard for the texture class.*/
@@ -76,9 +78,9 @@ public:
         TextureTarget target;
         std::vector<ParameterInfo> parameters;
         GLenum texture_unit;
-        GLenum format = GL_RGB; // #TODO: Maybe make this an enum
-        GLenum internal_format = GL_SRGB_ALPHA;
-        bool flip_y = false;    // Whether to flip the y axis on loading or not
+        TextureFormat format = TextureFormat::RGB;
+        TextureFormat internal_format = TextureFormat::SRGBAlpha;
+        bool flip_y = false; // Whether to flip the y axis on loading or not
     };
 
     Texture();

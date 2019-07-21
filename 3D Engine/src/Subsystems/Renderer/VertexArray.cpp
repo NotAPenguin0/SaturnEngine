@@ -64,7 +64,6 @@ void VertexArray::do_create(CreateInfo const& create_info) {
         LogSystem::write(LogSystem::Severity::Error, "Failed to create VBO");
     }
 
-    //#MaybeOptimize
     indices = create_info.indices;
 
     // If the EBO is empty, generate a default one (indices from 0 ... to

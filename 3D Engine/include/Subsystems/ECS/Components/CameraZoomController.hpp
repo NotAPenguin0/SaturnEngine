@@ -2,13 +2,12 @@
 #define MVG_CAMERA_ZOOM_CONTROLLER_HPP_
 
 #include "ComponentBase.hpp"
+#include "Utility/in_range.hpp"
 
 namespace Saturn::Components {
 
 struct COMPONENT DEFAULT_SERIALIZE CameraZoomController : public ComponentBase {
     float zoom_speed;
-
-	//#TODO: Enforce min/max to be in a valid range
 
 	// minimum zoom. Has to be > 0
     float min_zoom = 1.0f;
