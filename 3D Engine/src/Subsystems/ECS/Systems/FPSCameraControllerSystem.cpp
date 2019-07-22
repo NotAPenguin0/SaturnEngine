@@ -15,7 +15,7 @@ namespace Saturn {
 namespace Systems {
 
 void FPSCameraControllerSystem::on_start(Scene&) {
-    Input::enable_mouse_capture();
+    InputOld::enable_mouse_capture();
 }
 
 void FPSCameraControllerSystem::on_update(Scene& scene) {
@@ -26,26 +26,20 @@ void FPSCameraControllerSystem::on_update(Scene& scene) {
                     Components::FPSCameraController>()) {
 
         float speed = controller.speed * Time::deltaTime;
-        if (RawInput::get_key(Key::W).down) {
-            trans.position += (speed * cam.front);
-        }
-        if (RawInput::get_key(Key::S).down) {
-            trans.position -= (speed * cam.front);
-        }
-        if (RawInput::get_key(Key::A).down) {
-            trans.position -=
-                (speed * glm::normalize(glm::cross(cam.front, cam.up)));
-        }
-        if (RawInput::get_key(Key::D).down) {
-            trans.position +=
-                (speed * glm::normalize(glm::cross(cam.front, cam.up)));
-        }
-        if (RawInput::get_key(Key::Space).down) {
-            trans.position.y += speed;
-        }
-        if (RawInput::get_key(Key::LeftShift).down) {
-            trans.position.y -= speed;
-        }
+
+		/*
+        if (RawInput::get_mouse_button(MouseButton::Left).down) {
+            speed += 5.0f * Time::deltaTime;
+        }*/
+
+        float horizontal = Input::get_axis("Horizontal");
+        float vertical = Input::get_axis("Vertical");
+
+        glm::vec3 cam_right = glm::normalize(glm::cross(cam.front, cam.up));
+
+        trans.position += (speed * cam.front * vertical);
+        trans.position += (speed * cam_right * horizontal);
+        trans.position.y += speed * Input::get_axis_raw("Up");
     }
 }
 

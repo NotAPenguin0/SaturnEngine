@@ -66,7 +66,17 @@ Application::~Application() {
     }
 }
 
-void Application::initialize_keybinds() {}
+void Application::initialize_keybinds() {
+
+	ActionBinding quit_binding;
+    quit_binding.key = Key::Escape;
+    quit_binding.when = KeyAction::Press;
+	quit_binding.callback = [this]() {
+		quit();
+	};
+
+	ActionBindingManager::add_action(quit_binding);
+}
 
 static const std::vector<float> particle_quad_vertices = {
     -1.0f, 1.0f,  0.0f, 0.0f, 1.0f, // TL
@@ -160,16 +170,10 @@ void Application::run() {
 
     scene.deserialize_from_file("resources/scene0/scene.dat");
 
-    Input::bind(GLFW_KEY_F, [&scene]() {
-        scene.serialize_to_file("resources/scene0");
-        using namespace std::literals::chrono_literals;
-        std::this_thread::sleep_for(100ms);
-    });
-
     scene.on_start();
     while (!glfwWindowShouldClose(window_handle)) {
         Time::update();
-        Input::update();
+        InputOld::update();
 
         renderer->clear(Color{0.003f, 0.003f, 0.003f, 1.0f});
 
@@ -179,7 +183,7 @@ void Application::run() {
         // Copy framebuffer to screen
         renderer->update_screen();
 
-        Input::tick_end();
+        InputOld::tick_end();
 
         glfwSwapBuffers(window_handle);
         glfwPollEvents();

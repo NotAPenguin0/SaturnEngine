@@ -41,7 +41,7 @@ Application Engine::initialize(CreateInfo create_info) {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT,
                    create_info.enable_debug_output ? GL_TRUE : GL_FALSE);
-	glfwWindowHint(GLFW_SRGB_CAPABLE, GL_TRUE);
+    glfwWindowHint(GLFW_SRGB_CAPABLE, GL_TRUE);
 
 #ifdef __APPLE__
     /*Mac OS X needs this line of code to initialize*/
@@ -96,12 +96,7 @@ Application Engine::initialize(CreateInfo create_info) {
     }
 
     // Initialize subsystems. This process is multithreaded for all subsystems.
-    std::thread input_init([&app]() {
-        Input::initialize(app);
-        // Bind the escape key to quit. This may change in the future or be
-        // configurable somewhere
-        Input::bind(GLFW_KEY_ESCAPE, [&app]() { app.quit(); });
-    });
+    std::thread input_init([&app]() { InputOld::initialize(app); });
 
     std::thread random_init(Math::RandomEngine::initialize);
 

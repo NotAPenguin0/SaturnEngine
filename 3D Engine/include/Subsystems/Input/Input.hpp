@@ -3,12 +3,15 @@
 
 #include <functional>
 #include <queue>
+#include <string>
+#include <string_view>
 #include <unordered_map>
 
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 
 #include "Core/Application.hpp"
+#include "Utility/IDGenerator.hpp"
 
 namespace Saturn {
 
@@ -137,6 +140,19 @@ enum class Key {
     Menu = GLFW_KEY_MENU,
     Unknown = GLFW_KEY_UNKNOWN
 };
+enum class MouseButton {
+    Left = GLFW_MOUSE_BUTTON_LEFT,
+    Right = GLFW_MOUSE_BUTTON_RIGHT,
+    Middle = GLFW_MOUSE_BUTTON_MIDDLE,
+    Button1 = GLFW_MOUSE_BUTTON_1,
+    Button2 = GLFW_MOUSE_BUTTON_2,
+    Button3 = GLFW_MOUSE_BUTTON_3,
+    Button4 = GLFW_MOUSE_BUTTON_4,
+    Button5 = GLFW_MOUSE_BUTTON_5,
+    Button6 = GLFW_MOUSE_BUTTON_6,
+    Button7 = GLFW_MOUSE_BUTTON_7,
+    Button8 = GLFW_MOUSE_BUTTON_8
+};
 
 enum class KeyAction { Press = GLFW_PRESS, Release = GLFW_RELEASE };
 
@@ -151,10 +167,10 @@ struct MouseState {
     float xoffset = 0.0f;
     float yoffset = 0.0f;
     float wheel = 0.0f;
-	bool has_changed = false;
+    bool has_changed = false;
 };
 
-class Input {
+class InputOld {
 public:
     using CallbackT = std::function<void()>;
     using KeyT = int;
@@ -205,30 +221,73 @@ class RawInput {
 public:
     static KeyState& get_key(Key key);
     static std::unordered_map<Key, KeyState>& get_all_keys();
-	static MouseState& get_mouse();
+	static KeyState& get_mouse_button(MouseButton button);
+    static std::unordered_map<MouseButton, KeyState>& get_all_mouse_buttons();
+    static MouseState& get_mouse();
 
 private:
     static std::unordered_map<Key, KeyState> keys;
-	static MouseState mouse;
+	static std::unordered_map<MouseButton, KeyState> mouse_buttons;
+    static MouseState mouse;
+};
+
+struct Axis {
+    // The axis name
+    std::string name;
+    // The axis ID
+    std::size_t id;
+    // Smoothed value of the axis
+    float value = 0.0f;
+    // Raw value of the axis
+    float raw_value = 0.0f;
+};
+
+struct AxisMapping {
+    // The name of the axis this mapping refers to
+    std::string name;
+    // The key this axis mapping works with
+    Key key = Key::Unknown;
+    // Value to multiply the raw axis value with
+    float scale = 1.0f;
+    // How fast the axis accumulates, in units/s
+    float sensitivity = 1.0f;
+    // The smoothed value of the axis
+    float value = 0.0f;
+    // The raw value of the axis
+    float raw_value = 0.0f;
+};
+
+struct ActionBinding {
+    using callback_t = std::function<void()>;
+    // The key that triggers this action
+    Key key;
+    // The state the key needs to have for the action to take place
+    KeyAction when;
+    // The callback function to call
+    callback_t callback;
+};
+
+class AxisManager {
+public:
+    static void add_axis(std::string_view name);
+    static void add_axis_mapping(AxisMapping const& mapping);
+
+    static void update_axis_values();
+
+    static std::vector<Axis>& get_axes();
+    static std::size_t get_axis_id(std::string const& name);
+
+private:
+    // Stores all axes
+    static std::vector<Axis> axes;
+    // Stores all axis mappings
+    static std::vector<AxisMapping> mappings;
+    // Maps an axis name to an axis ID
+    static std::unordered_map<std::string, std::size_t> name_id_map;
 };
 
 class InputEventManager {
 public:
-    static void init(Application& program);
-
-    static void process_events();
-
-private:
-    static void keyboard_callback(
-        GLFWwindow* win, int key, int scancode, int action, int mods);
-    static void
-    mouse_position_callback(GLFWwindow* win, double xpos, double ypos);
-    static void
-    scroll_callback(GLFWwindow* win, double xoffset, double yoffset);
-
-    static void process_keyboard_events();
-    static void process_mouse_events();
-
     struct KeyEvent {
         Key key;
         KeyAction action;
@@ -241,13 +300,54 @@ private:
         float wheel;
     };
 
+	struct MouseClickEvent {
+		MouseButton button;
+		KeyAction action;
+		float value;
+	};
+
+    static void init(Application& program);
+
+    static void process_events();
+
+private:
+    static void keyboard_callback(
+        GLFWwindow* win, int key, int scancode, int action, int mods);
+    static void
+    mouse_position_callback(GLFWwindow* win, double xpos, double ypos);
+    static void
+    mouse_button_callback(GLFWwindow* win, int button, int action, int mods);
+    static void
+    scroll_callback(GLFWwindow* win, double xoffset, double yoffset);
+
+    static void process_keyboard_events();
+    static void process_mouse_events();
+
     struct Events {
         std::queue<KeyEvent> key_events;
         std::queue<MouseEvent> mouse_events;
+		std::queue<MouseClickEvent> mouse_click_events;
     };
 
     static Events events;
     static Application* app;
+};
+
+class ActionBindingManager {
+public:
+    static void add_action(ActionBinding const& action);
+    static void trigger_if_event(InputEventManager::KeyEvent const& event);
+
+private:
+    static std::vector<ActionBinding> actions;
+};
+
+class Input {
+public:
+    static float get_axis(std::string const& name);
+    static float get_axis_raw(std::string const& name);
+
+private:
 };
 
 } // namespace Saturn
