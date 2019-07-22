@@ -138,8 +138,36 @@ enum class Key {
     RightAlt = GLFW_KEY_RIGHT_ALT,
     RightSuper = GLFW_KEY_RIGHT_SUPER,
     Menu = GLFW_KEY_MENU,
+    GamepadA = GLFW_GAMEPAD_BUTTON_A,
+    GamepadB = GLFW_GAMEPAD_BUTTON_B,
+    GamepadX = GLFW_GAMEPAD_BUTTON_X,
+    GamepadY = GLFW_GAMEPAD_BUTTON_Y,
+    GamepadLeftBumper = GLFW_GAMEPAD_BUTTON_LEFT_BUMPER,
+    GamepadRightBumper = GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER,
+    GamepadBack = GLFW_GAMEPAD_BUTTON_BACK,
+    GamepadStart = GLFW_GAMEPAD_BUTTON_START,
+    GamepadGuide = GLFW_GAMEPAD_BUTTON_GUIDE,
+    GamepadLeftThumb = GLFW_GAMEPAD_BUTTON_LEFT_THUMB,
+    GamepadRightThumb = GLFW_GAMEPAD_BUTTON_RIGHT_THUMB,
+    GamepadDPadUp = GLFW_GAMEPAD_BUTTON_DPAD_UP,
+    GamepadDPadRight = GLFW_GAMEPAD_BUTTON_DPAD_RIGHT,
+    GamepadDPadDown = GLFW_GAMEPAD_BUTTON_DPAD_DOWN,
+    GamepadDPadLeft = GLFW_GAMEPAD_BUTTON_DPAD_LEFT,
+    GamepadLeftXAxis = GLFW_GAMEPAD_AXIS_LEFT_X,
+    GamepadLeftYAxis = GLFW_GAMEPAD_AXIS_LEFT_Y,
+    GamepadRightXAxis = GLFW_GAMEPAD_AXIS_RIGHT_X,
+    GamepadRightYAxis = GLFW_GAMEPAD_AXIS_RIGHT_Y,
+    GamepadLeftTriggerAxis = GLFW_GAMEPAD_AXIS_LEFT_TRIGGER,
+    GamepadRightTriggerAxis = GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER,
     Unknown = GLFW_KEY_UNKNOWN
 };
+
+// Aliases for PS4 controllers
+static constexpr inline Key KeyGamepadCross = Key::GamepadA;
+static constexpr inline Key KeyGamepadCircle = Key::GamepadB;
+static constexpr inline Key KeyGamepadSquare = Key::GamepadX;
+static constexpr inline Key KeyGamepadTriangle = Key::GamepadY;
+
 enum class MouseButton {
     Left = GLFW_MOUSE_BUTTON_LEFT,
     Right = GLFW_MOUSE_BUTTON_RIGHT,
@@ -353,11 +381,21 @@ private:
 
 class JoystickInputManager {
 public:
-	static void find_present_joysticks();
-	static void joystick_connection_callback(int id, int event);
+    static void find_present_joysticks();
+    static void joystick_connection_callback(int id, int event);
+    static void update_key_data();
+
+    struct JoystickData {
+        bool connected;
+        bool is_gamepad;
+        std::string name;
+        // This may be different from the joystick name. Only present if
+        // is_gamepad is true
+        std::string gamepad_name;
+    };
 
 private:
-    static std::unordered_map<JoystickId, bool> present_joysticks;
+    static std::unordered_map<JoystickId, JoystickData> present_joysticks;
 };
 
 class ActionBindingManager {

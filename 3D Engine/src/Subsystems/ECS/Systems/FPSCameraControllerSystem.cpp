@@ -27,7 +27,7 @@ void FPSCameraControllerSystem::on_update(Scene& scene) {
 
         float speed = controller.speed * Time::deltaTime;
 
-		/*
+        /*
         if (RawInput::get_mouse_button(MouseButton::Left).down) {
             speed += 5.0f * Time::deltaTime;
         }*/
@@ -36,7 +36,6 @@ void FPSCameraControllerSystem::on_update(Scene& scene) {
         float vertical = Input::get_axis("Vertical");
 
         glm::vec3 cam_right = glm::normalize(glm::cross(cam.front, cam.up));
-
         trans.position += (speed * cam.front * vertical);
         trans.position += (speed * cam_right * horizontal);
         trans.position.y += speed * Input::get_axis_raw("Up");

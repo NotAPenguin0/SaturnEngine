@@ -26,6 +26,8 @@ void InputOld::initialize(Application& program) {
     AxisManager::add_axis("Horizontal");
     AxisManager::add_axis("Vertical");
     AxisManager::add_axis("Up");
+    AxisManager::add_axis("MouseHorizontal");
+    AxisManager::add_axis("MouseVertical");
     AxisMapping front_mapping;
     front_mapping.key = Key::W;
     front_mapping.name = "Vertical";
@@ -53,6 +55,23 @@ void InputOld::initialize(Application& program) {
     down_mapping.name = "Up";
     down_mapping.sensitivity = -1.0f;
     AxisManager::add_axis_mapping(down_mapping);
+
+    // Vertical axis has to be inverted
+    AxisMapping cf{"Vertical", Key::GamepadRightYAxis, 1.0f, -1.0f};
+    AxisMapping cl{"Horizontal", Key::GamepadRightXAxis};
+
+    AxisMapping gamepad_look_hor{"MouseHorizontal", Key::GamepadLeftXAxis,
+                                 2.5f};
+    AxisMapping gamepad_look_ver{
+        "MouseVertical",
+        Key::GamepadLeftYAxis,
+        2.5f, -1.0f
+    };
+
+    AxisManager::add_axis_mapping(cf);
+    AxisManager::add_axis_mapping(cl);
+    AxisManager::add_axis_mapping(gamepad_look_hor);
+    AxisManager::add_axis_mapping(gamepad_look_ver);
 }
 
 void InputOld::update() {
@@ -111,6 +130,16 @@ void InputOld::scroll_callback([[maybe_unused]] GLFWwindow* window,
     current.yscroll = static_cast<float>(yoffset);
 }
 
+static bool is_gamepad_key(Key key) {
+    return static_cast<int>(key) >= GLFW_GAMEPAD_BUTTON_A &&
+           static_cast<int>(key) <= GLFW_GAMEPAD_BUTTON_LAST;
+}
+
+static bool is_gamepad_axis(Key key) {
+    return static_cast<int>(key) >= GLFW_GAMEPAD_AXIS_LEFT_X &&
+           static_cast<int>(key) <= GLFW_GAMEPAD_AXIS_LAST;
+}
+
 // RawInput class
 
 std::unordered_map<Key, KeyState> RawInput::keys;
@@ -159,23 +188,35 @@ void AxisManager::update_axis_values() {
                              [id](Axis const& axis) { return id == axis.id; });
             it != axes.end()) {
 
-            KeyState const& state = keys[mapping.key];
+            KeyState state;
+            if (!is_gamepad_key(mapping.key)) {
+                state = keys[mapping.key];
+            } else {
+                // #TODO For now, we only support a single joystick. This means
+                // we just store the joystick key values inside our normal key
+                // map
+                state = keys[mapping.key];
+            }
 
-            // #TODO: No smoothing for mouse input
+            if (is_gamepad_axis(mapping.key)) {
+                // use raw value for gamepad axes
+                mapping.raw_value = state.raw_value;
+                mapping.value = glm::sign(mapping.sensitivity) * mapping.scale *
+                                state.raw_value;
+            } else {
+                // Smooth value
+                mapping.raw_value = state.raw_value;
 
-            // Smooth value
-            mapping.raw_value = state.raw_value;
+                // First, get the raw value scaled
+                float scaled_raw = glm::sign(mapping.sensitivity) *
+                                   mapping.scale * mapping.raw_value;
+                // #Verify
+                mapping.raw_value = scaled_raw;
 
-            // First, get the raw value scaled
-            float scaled_raw = glm::sign(mapping.sensitivity) * mapping.scale *
-                               mapping.raw_value;
-            // #Verify
-            mapping.raw_value = scaled_raw;
-
-            // #TODO: Snapping
-            float delta = glm::abs(mapping.sensitivity) * Time::deltaTime;
-            mapping.value = glm::lerp(mapping.value, scaled_raw, delta);
-
+                // #TODO: Snapping
+                float delta = glm::abs(mapping.sensitivity) * Time::deltaTime;
+                mapping.value = glm::lerp(mapping.value, scaled_raw, delta);
+            }
         } else {
             // No axis found with requested name
             LogSystem::write(LogSystem::Severity::Warning,
@@ -287,6 +328,7 @@ void InputEventManager::mouse_button_callback(GLFWwindow* win,
 void InputEventManager::process_events() {
     process_keyboard_events();
     process_mouse_events();
+    JoystickInputManager::update_key_data();
     AxisManager::update_axis_values();
 }
 
@@ -364,16 +406,27 @@ void InputEventManager::process_mouse_events() {
     }
 }
 
-std::unordered_map<JoystickId, bool> JoystickInputManager::present_joysticks;
+std::unordered_map<JoystickId, JoystickInputManager::JoystickData>
+    JoystickInputManager::present_joysticks;
 
 void JoystickInputManager::find_present_joysticks() {
-    for (int raw_id = GLFW_JOYSTICK_1; raw_id < GLFW_JOYSTICK_LAST; ++raw_id) {
+    for (int raw_id = GLFW_JOYSTICK_1; raw_id <= GLFW_JOYSTICK_LAST; ++raw_id) {
         auto id = static_cast<JoystickId>(raw_id);
         int present = glfwJoystickPresent(raw_id);
         if (present == 1) {
-            present_joysticks[id] = true;
+            auto& joystick = present_joysticks[id];
+            joystick.connected = true;
+            joystick.is_gamepad = glfwJoystickIsGamepad(raw_id);
+            joystick.name = glfwGetJoystickName(raw_id);
+            if (joystick.is_gamepad) {
+                joystick.gamepad_name = glfwGetGamepadName(raw_id);
+            }
+            LogSystem::write(LogSystem::Severity::Info,
+                             "Joystick '" + joystick.name +
+                                 "' detected in slot " +
+                                 std::to_string(raw_id - GLFW_JOYSTICK_1));
         } else if (present == 0) {
-            present_joysticks[id] = false;
+            present_joysticks[id].connected = false;
         }
     }
 }
@@ -381,9 +434,60 @@ void JoystickInputManager::find_present_joysticks() {
 void JoystickInputManager::joystick_connection_callback(int raw_id, int event) {
     auto id = static_cast<JoystickId>(raw_id);
     if (event == GLFW_CONNECTED) {
-        present_joysticks[id] = true;
+        auto& joystick = present_joysticks[id];
+        joystick.connected = true;
+        joystick.is_gamepad = glfwJoystickIsGamepad(raw_id);
+        joystick.name = glfwGetJoystickName(raw_id);
+        if (joystick.is_gamepad) {
+            joystick.gamepad_name = glfwGetGamepadName(raw_id);
+        }
+        LogSystem::write(LogSystem::Severity::Info,
+                         "Joystick '" + joystick.name + "' connected to slot " +
+                             std::to_string(raw_id - GLFW_JOYSTICK_1));
     } else if (event == GLFW_DISCONNECTED) {
-        present_joysticks[id] = false;
+        present_joysticks[id].connected = false;
+        LogSystem::write(LogSystem::Severity::Info,
+                         "Joystick '" + present_joysticks[id].name +
+                             "' disconnected from slot " +
+                             std::to_string(raw_id - GLFW_JOYSTICK_1));
+    }
+}
+
+void JoystickInputManager::update_key_data() {
+    auto& keys = RawInput::get_all_keys();
+    // #SingleJoystick (Update later)
+    if (!present_joysticks[JoystickId::Joystick1].connected) { return; }
+    // #TODO currently we only support input from joysticks that are
+    // gamepads
+    if (!present_joysticks[JoystickId::Joystick1].is_gamepad) { return; }
+
+    auto& joystick = present_joysticks[JoystickId::Joystick1];
+
+    GLFWgamepadstate glfw_state;
+    if (!glfwGetGamepadState(static_cast<int>(JoystickId::Joystick1),
+                             &glfw_state)) {
+        return;
+    }
+
+    for (int btn = GLFW_GAMEPAD_BUTTON_A; btn <= GLFW_GAMEPAD_BUTTON_LAST;
+         ++btn) {
+        auto button = static_cast<Key>(btn);
+        keys[button].down = glfw_state.buttons[btn];
+        keys[button].raw_value = keys[button].value = glfw_state.buttons[btn];
+    }
+
+    for (int ax = GLFW_GAMEPAD_AXIS_LEFT_X; ax <= GLFW_GAMEPAD_AXIS_LAST;
+         ++ax) {
+        auto axis = static_cast<Key>(ax);
+        auto val = glfw_state.axes[ax];
+		static constexpr float epsilon = 0.1f;
+        if (val > epsilon || val < -epsilon) {
+            keys[axis].down = true;
+        } else {
+            keys[axis].down = false;
+            val = 0.0f;
+        }
+        keys[axis].value = keys[axis].raw_value = val;
     }
 }
 

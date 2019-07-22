@@ -12,7 +12,6 @@
 #include "Subsystems/ECS/Components/FreeLookController.hpp"
 #include "Subsystems/ECS/Components/Transform.hpp"
 
-
 namespace Saturn::Systems {
 
 void FreeLookControllerSystem::on_update(Scene& scene) {
@@ -23,10 +22,8 @@ void FreeLookControllerSystem::on_update(Scene& scene) {
     for (auto [transform, cam, controller] :
          ecs.select<Transform, Camera, FreeLookController>()) {
 
-        MouseState mouse = RawInput::get_mouse();
-        float xoffset = mouse.xoffset;
-        // reversed since y coords go bottom to top
-        float yoffset = mouse.yoffset;
+        float xoffset = Input::get_axis("MouseHorizontal");
+        float yoffset = Input::get_axis("MouseVertical");
         xoffset *= controller.mouse_sensitivity; //* Time::deltaTime;
         yoffset *= controller.mouse_sensitivity; //* Time::deltaTime;
 
