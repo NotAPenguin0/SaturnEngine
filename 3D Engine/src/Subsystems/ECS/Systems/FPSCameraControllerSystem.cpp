@@ -14,9 +14,7 @@ namespace Saturn {
 
 namespace Systems {
 
-void FPSCameraControllerSystem::on_start(Scene&) {
-    InputOld::enable_mouse_capture();
-}
+void FPSCameraControllerSystem::on_start(Scene&) {}
 
 void FPSCameraControllerSystem::on_update(Scene& scene) {
     auto& ecs = scene.get_ecs();

@@ -173,8 +173,7 @@ void Application::run() {
     scene.on_start();
     while (!glfwWindowShouldClose(window_handle)) {
         Time::update();
-        InputOld::update();
-
+		InputEventManager::process_events();
         renderer->clear(Color{0.003f, 0.003f, 0.003f, 1.0f});
 
         scene.update_systems();
@@ -182,8 +181,6 @@ void Application::run() {
 
         // Copy framebuffer to screen
         renderer->update_screen();
-
-        InputOld::tick_end();
 
         glfwSwapBuffers(window_handle);
         glfwPollEvents();

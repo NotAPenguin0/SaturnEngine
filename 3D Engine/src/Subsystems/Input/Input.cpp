@@ -3,132 +3,160 @@
 #include "Core/Application.hpp"
 #include "Subsystems/Time/Time.hpp"
 
+#include <fstream>
+
 #include <glm/glm.hpp>
-#include <glm/gtx/compatibility.hpp> // #TODO This is for glm::lerp(), check if this doesn't cause issues
+#include <glm/gtx/compatibility.hpp> // #TODO This is for glm::lerp(), check if this doesn't cause issuess
+#include <nlohmann/json.hpp>
 
 namespace Saturn {
 
-std::unordered_map<InputOld::KeyT, InputOld::CallbackT> InputOld::keybinds;
-Application* InputOld::app = nullptr;
-
-InputOld::MouseData InputOld::current = {0.0f, 0.0f, 0.0f, 0.0f};
-InputOld::MouseData InputOld::previous = {0.0f, 0.0f, 0.0f, 0.0f};
-
-void InputOld::initialize(Application& program) {
-    InputEventManager::init(program);
-
-    app = &program;
-    // center mouse
-    current = previous =
-        MouseData{program.size().x / 2.0f, program.size().y / 2.0f, 0.0f, 0.0f};
-
-    // Add axes here temporarily
-    AxisManager::add_axis("Horizontal");
-    AxisManager::add_axis("Vertical");
-    AxisManager::add_axis("Up");
-    AxisManager::add_axis("MouseHorizontal");
-    AxisManager::add_axis("MouseVertical");
-    AxisMapping front_mapping;
-    front_mapping.key = Key::W;
-    front_mapping.name = "Vertical";
-    AxisManager::add_axis_mapping(front_mapping);
-    AxisMapping back_mapping;
-    back_mapping.key = Key::S;
-    back_mapping.name = "Vertical";
-    back_mapping.sensitivity = -1.0f;
-    AxisManager::add_axis_mapping(back_mapping);
-    AxisMapping left_mapping;
-    left_mapping.key = Key::A;
-    left_mapping.name = "Horizontal";
-    left_mapping.sensitivity = -1.0f;
-    AxisManager::add_axis_mapping(left_mapping);
-    AxisMapping right_mapping;
-    right_mapping.key = Key::D;
-    right_mapping.name = "Horizontal";
-    AxisManager::add_axis_mapping(right_mapping);
-    AxisMapping up_mapping;
-    up_mapping.key = Key::Space;
-    up_mapping.name = "Up";
-    AxisManager::add_axis_mapping(up_mapping);
-    AxisMapping down_mapping;
-    down_mapping.key = Key::LeftShift;
-    down_mapping.name = "Up";
-    down_mapping.sensitivity = -1.0f;
-    AxisManager::add_axis_mapping(down_mapping);
-
-    // Vertical axis has to be inverted
-    AxisMapping cf{"Vertical", Key::GamepadRightYAxis, 1.0f, -1.0f};
-    AxisMapping cl{"Horizontal", Key::GamepadRightXAxis};
-
-    AxisMapping gamepad_look_hor{"MouseHorizontal", Key::GamepadLeftXAxis,
-                                 2.5f};
-    AxisMapping gamepad_look_ver{
-        "MouseVertical",
-        Key::GamepadLeftYAxis,
-        2.5f, -1.0f
-    };
-
-    AxisManager::add_axis_mapping(cf);
-    AxisManager::add_axis_mapping(cl);
-    AxisManager::add_axis_mapping(gamepad_look_hor);
-    AxisManager::add_axis_mapping(gamepad_look_ver);
-}
-
-void InputOld::update() {
-    InputEventManager::process_events();
-    for (auto& [k, cb] : keybinds) {
-        if (glfwGetKey(app->window(), k) == GLFW_PRESS) {
-            // Call the callback function the user specified
-            cb();
-        }
-    }
-}
-
-void InputOld::tick_end() {
-    previous = current;
-    current.xscroll = 0.0f;
-    current.yscroll = 0.0f;
-}
-
-bool InputOld::key_pressed(KeyT key) {
-    return glfwGetKey(app->window(), key) == GLFW_PRESS;
-}
-
-void InputOld::enable_mouse_capture() {
-    glfwSetInputMode(app->window(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-}
-
-InputOld::MouseData InputOld::mouse() { return current; }
-InputOld::MouseData InputOld::previous_mouse() { return previous; }
-
-void InputOld::mouse_callback([[maybe_unused]] GLFWwindow* window,
-                              double xpos,
-                              double ypos) {
-    // prevent the camera from making a 'jump' when entering the window for the
-    // first time (on startup)
-    static bool first = true;
-
-    previous.xpos = current.xpos;
-    previous.ypos = current.ypos;
-    current.xpos = static_cast<float>(xpos);
-    current.ypos = static_cast<float>(ypos);
-
-    if (first) {
-        previous = current;
-        first = false;
-    }
-}
-
-void InputOld::scroll_callback([[maybe_unused]] GLFWwindow* window,
-                               double xoffset,
-                               double yoffset) {
-
-    previous.xscroll = current.xscroll;
-    previous.yscroll = current.yscroll;
-
-    current.xscroll = static_cast<float>(xoffset);
-    current.yscroll = static_cast<float>(yoffset);
-}
+// clang-format off
+NLOHMANN_JSON_SERIALIZE_ENUM(Key,
+{{Key::Space, "Space"},
+{Key::Apostrophe, "Apostrophe"},
+{Key::Comma, "Comma"},
+{Key::Minus, "Minus"},
+{Key::Period, "Period"},
+{Key::Slash, "Slash"},
+{Key::Key0, "Key0"},
+{Key::Key1, "Key1"},
+{Key::Key2, "Key2"},
+{Key::Key3, "Key3"},
+{Key::Key4, "Key4"},
+{Key::Key5, "Key5"},
+{Key::Key6, "Key6"},
+{Key::Key7, "Key7"},
+{Key::Key8, "Key8"},
+{Key::Key9, "Key9"},
+{Key::Semicolon, "Semicolon"},
+{Key::Equal, "Equal"},
+{Key::A, "A"},
+{Key::B, "B"},
+{Key::C, "C"},
+{Key::D, "D"},
+{Key::E, "E"},
+{Key::F, "F"},
+{Key::G, "G"},
+{Key::H, "H"},
+{Key::I, "I"},
+{Key::J, "J"},
+{Key::K, "K"},
+{Key::L, "L"},
+{Key::M, "M"},
+{Key::N, "N"},
+{Key::O, "O"},
+{Key::P, "P"},
+{Key::Q, "Q"},
+{Key::R, "R"},
+{Key::S, "S"},
+{Key::T, "T"},
+{Key::U, "U"},
+{Key::V, "V"},
+{Key::W, "W"},
+{Key::X, "X"},
+{Key::Y, "Y"},
+{Key::Z, "Z"},
+{Key::LeftBracket, "LeftBracket"},
+{Key::Backslash, "Backslash"},
+{Key::RightBracket, "RightBracket"},
+{Key::GraveAccent, "GraveAccent"},
+{Key::World1, "World1"},
+{Key::World2, "World2"},
+{Key::Escape, "Escape"},
+{Key::Enter, "Enter"},
+{Key::Tab, "Tab"},
+{Key::Backspace, "Backspace"},
+{Key::Insert, "Insert"},
+{Key::Delete, "Delete"},
+{Key::Right, "Right"},
+{Key::Left, "Left"},
+{Key::Down, "Down"},
+{Key::Up, "Up"},
+{Key::PageUp, "PageUp"},
+{Key::PageDown, "PageDown"},
+{Key::Home, "Home"},
+{Key::End, "End"},
+{Key::CapsLock, "CapsLock"},
+{Key::ScrollLock, "ScrollLock"},
+{Key::NumLock, "NumLock"},
+{Key::PrintScreen, "PrintScreen"},
+{Key::Pause, "Pause"},
+{Key::F1, "F1"},
+{Key::F2, "F2"},
+{Key::F3, "F3"},
+{Key::F4, "F4"},
+{Key::F5, "F5"},
+{Key::F6, "F6"},
+{Key::F7, "F7"},
+{Key::F8, "F8"},
+{Key::F9, "F9"},
+{Key::F10, "F10"},
+{Key::F11, "F11"},
+{Key::F12, "F12"},
+{Key::F13, "F13"},
+{Key::F14, "F14"},
+{Key::F15, "F15"},
+{Key::F16, "F16"},
+{Key::F17, "F17"},
+{Key::F18, "F18"},
+{Key::F19, "F19"},
+{Key::F20, "F20"},
+{Key::F21, "F21"},
+{Key::F22, "F22"},
+{Key::F23, "F23"},
+{Key::F24, "F24"},
+{Key::F25, "F25"},
+{Key::Kp0, "Kp0"},
+{Key::Kp1, "Kp1"},
+{Key::Kp2, "Kp2"},
+{Key::Kp3, "Kp3"},
+{Key::Kp4, "Kp4"},
+{Key::Kp5, "Kp5"},
+{Key::Kp6, "Kp6"},
+{Key::Kp7, "Kp7"},
+{Key::Kp8, "Kp8"},
+{Key::Kp9, "Kp9"},
+{Key::KpDecimal, "KpDecimal"},
+{Key::KpDivide, "KpDivide"},
+{Key::KpMultiply, "KpMultiply"},
+{Key::KpSubtract, "KpSubtract"},
+{Key::KpAdd, "KpAdd"},
+{Key::KpEnter, "KpEnter"},
+{Key::KpEqual, "KpEqual"},
+{Key::LeftShift, "LeftShift"},
+{Key::LeftControl, "LeftControl"},
+{Key::LeftAlt, "LeftAlt"},
+{Key::LeftSuper, "LeftSuper"},
+{Key::RightShift, "RightShift"},
+{Key::RightControl, "RightControl"},
+{Key::RightAlt, "RightAlt"},
+{Key::RightSuper, "RightSuper"},
+{Key::Menu, "Menu"},
+{Key::GamepadA, "GamepadA"},
+{Key::GamepadB, "GamepadB"},
+{Key::GamepadX, "GamepadX"},
+{Key::GamepadY, "GamepadY"},
+{Key::GamepadLeftBumper, "GamepadLeftBumper"},
+{Key::GamepadRightBumper, "GamepadRightBumper"},
+{Key::GamepadBack, "GamepadBack"},
+{Key::GamepadStart, "GamepadStart"},
+{Key::GamepadGuide, "GamepadGuide"},
+{Key::GamepadLeftThumb, "GamepadLeftThumb"},
+{Key::GamepadRightThumb, "GamepadRightThumb"},
+{Key::GamepadDPadUp, "GamepadDPadUp"},
+{Key::GamepadDPadRight, "GamepadDPadRight"},
+{Key::GamepadDPadDown, "GamepadDPadDown"},
+{Key::GamepadDPadLeft, "GamepadDPadLeft"},
+{Key::GamepadLeftXAxis, "GamepadLeftXAxis"},
+{Key::GamepadLeftYAxis, "GamepadLeftYAxis"},
+{Key::GamepadRightXAxis, "GamepadRightXAxis"},
+{Key::GamepadRightYAxis, "GamepadRightYAxis"},
+{Key::GamepadLeftTriggerAxis, "GamepadLeftTriggerAxis"},
+{Key::GamepadRightTriggerAxis, "GamepadRightTriggerAxis"},
+{Key::Unknown, "Unknown"}
+})
+// clang-format on
 
 static bool is_gamepad_key(Key key) {
     return static_cast<int>(key) >= GLFW_GAMEPAD_BUTTON_A &&
@@ -480,7 +508,7 @@ void JoystickInputManager::update_key_data() {
          ++ax) {
         auto axis = static_cast<Key>(ax);
         auto val = glfw_state.axes[ax];
-		static constexpr float epsilon = 0.1f;
+        static constexpr float epsilon = 0.1f;
         if (val > epsilon || val < -epsilon) {
             keys[axis].down = true;
         } else {
@@ -508,6 +536,8 @@ void ActionBindingManager::trigger_if_event(
     }
 }
 
+Application* Input::app = nullptr;
+
 float Input::get_axis(std::string const& name) {
     auto const& axes = AxisManager::get_axes();
     std::size_t id = AxisManager::get_axis_id(name);
@@ -529,6 +559,37 @@ float Input::get_axis_raw(std::string const& name) {
     LogSystem::write(LogSystem::Severity::Warning,
                      "No axis exists with name " + name);
     return 0.0f;
+}
+
+void Input::initialize(Application& program) {
+    app = &program;
+    // Enable mouse capture
+    glfwSetInputMode(app->window(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    // Initialize the event manager
+    InputEventManager::init(program);
+}
+
+void Input::load_config_file(std::string const& path) {
+    std::ifstream in(path);
+    if (!in.good()) {
+        LogSystem::write(LogSystem::Severity::Warning,
+                         "Failed to open config file at path " + path);
+        return;
+    }
+    nlohmann::json j;
+    in >> j;
+
+    for (auto const& axis : j["Axes"]) {
+        AxisManager::add_axis(axis["Name"].get<std::string>());
+    }
+    for (auto const& map : j["AxisMappings"]) {
+        AxisMapping mapping;
+        mapping.name = map["Axis"].get<std::string>();
+        mapping.key = map["Key"].get<Key>();
+        mapping.sensitivity = map["Sensitivity"].get<float>();
+        mapping.scale = map["Scale"].get<float>();
+		AxisManager::add_axis_mapping(mapping);
+    }
 }
 
 } // namespace Saturn

@@ -96,7 +96,12 @@ Application Engine::initialize(CreateInfo create_info) {
     }
 
     // Initialize subsystems. This process is multithreaded for all subsystems.
-    std::thread input_init([&app]() { InputOld::initialize(app); });
+    std::thread input_init([&app]() {
+        Input::initialize(app);
+        Input::load_config_file("resources/config/input.config.json");
+        ActionBindingManager::add_action(ActionBinding{
+            Key::Escape, KeyAction::Press, [&app]() { app.quit(); }});
+    });
 
     std::thread random_init(Math::RandomEngine::initialize);
 
