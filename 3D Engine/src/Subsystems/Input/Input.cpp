@@ -222,9 +222,12 @@ void InputEventManager::init(Application& program) {
     glfwSetKeyCallback(program.window(), &InputEventManager::keyboard_callback);
     glfwSetCursorPosCallback(program.window(),
                              &InputEventManager::mouse_position_callback);
-	glfwSetMouseButtonCallback(program.window(), &InputEventManager::mouse_button_callback);
+    glfwSetMouseButtonCallback(program.window(),
+                               &InputEventManager::mouse_button_callback);
     glfwSetScrollCallback(program.window(),
                           &InputEventManager::scroll_callback);
+    glfwSetJoystickCallback(JoystickInputManager::joystick_connection_callback);
+    JoystickInputManager::find_present_joysticks();
     app = &program;
 }
 
@@ -361,6 +364,29 @@ void InputEventManager::process_mouse_events() {
     }
 }
 
+std::unordered_map<JoystickId, bool> JoystickInputManager::present_joysticks;
+
+void JoystickInputManager::find_present_joysticks() {
+    for (int raw_id = GLFW_JOYSTICK_1; raw_id < GLFW_JOYSTICK_LAST; ++raw_id) {
+        auto id = static_cast<JoystickId>(raw_id);
+        int present = glfwJoystickPresent(raw_id);
+        if (present == 1) {
+            present_joysticks[id] = true;
+        } else if (present == 0) {
+            present_joysticks[id] = false;
+        }
+    }
+}
+
+void JoystickInputManager::joystick_connection_callback(int raw_id, int event) {
+    auto id = static_cast<JoystickId>(raw_id);
+    if (event == GLFW_CONNECTED) {
+        present_joysticks[id] = true;
+    } else if (event == GLFW_DISCONNECTED) {
+        present_joysticks[id] = false;
+    }
+}
+
 std::vector<ActionBinding> ActionBindingManager::actions;
 
 void ActionBindingManager::add_action(ActionBinding const& action) {
@@ -387,7 +413,7 @@ float Input::get_axis(std::string const& name) {
 
     LogSystem::write(LogSystem::Severity::Warning,
                      "No axis exists with name " + name);
-	return 0.0f;
+    return 0.0f;
 }
 
 float Input::get_axis_raw(std::string const& name) {
@@ -398,7 +424,7 @@ float Input::get_axis_raw(std::string const& name) {
     }
     LogSystem::write(LogSystem::Severity::Warning,
                      "No axis exists with name " + name);
-	return 0.0f;
+    return 0.0f;
 }
 
 } // namespace Saturn

@@ -153,6 +153,24 @@ enum class MouseButton {
     Button7 = GLFW_MOUSE_BUTTON_7,
     Button8 = GLFW_MOUSE_BUTTON_8
 };
+enum class JoystickId {
+    Joystick1 = GLFW_JOYSTICK_1,
+    Joystick2 = GLFW_JOYSTICK_2,
+    Joystick3 = GLFW_JOYSTICK_3,
+    Joystick4 = GLFW_JOYSTICK_4,
+    Joystick5 = GLFW_JOYSTICK_5,
+    Joystick6 = GLFW_JOYSTICK_6,
+    Joystick7 = GLFW_JOYSTICK_7,
+    Joystick8 = GLFW_JOYSTICK_8,
+    Joystick9 = GLFW_JOYSTICK_9,
+    Joystick10 = GLFW_JOYSTICK_10,
+    Joystick11 = GLFW_JOYSTICK_11,
+    Joystick12 = GLFW_JOYSTICK_12,
+    Joystick13 = GLFW_JOYSTICK_13,
+    Joystick14 = GLFW_JOYSTICK_14,
+    Joystick15 = GLFW_JOYSTICK_15,
+    Joystick16 = GLFW_JOYSTICK_16
+};
 
 enum class KeyAction { Press = GLFW_PRESS, Release = GLFW_RELEASE };
 
@@ -221,13 +239,13 @@ class RawInput {
 public:
     static KeyState& get_key(Key key);
     static std::unordered_map<Key, KeyState>& get_all_keys();
-	static KeyState& get_mouse_button(MouseButton button);
+    static KeyState& get_mouse_button(MouseButton button);
     static std::unordered_map<MouseButton, KeyState>& get_all_mouse_buttons();
     static MouseState& get_mouse();
 
 private:
     static std::unordered_map<Key, KeyState> keys;
-	static std::unordered_map<MouseButton, KeyState> mouse_buttons;
+    static std::unordered_map<MouseButton, KeyState> mouse_buttons;
     static MouseState mouse;
 };
 
@@ -300,11 +318,11 @@ public:
         float wheel;
     };
 
-	struct MouseClickEvent {
-		MouseButton button;
-		KeyAction action;
-		float value;
-	};
+    struct MouseClickEvent {
+        MouseButton button;
+        KeyAction action;
+        float value;
+    };
 
     static void init(Application& program);
 
@@ -326,11 +344,20 @@ private:
     struct Events {
         std::queue<KeyEvent> key_events;
         std::queue<MouseEvent> mouse_events;
-		std::queue<MouseClickEvent> mouse_click_events;
+        std::queue<MouseClickEvent> mouse_click_events;
     };
 
     static Events events;
     static Application* app;
+};
+
+class JoystickInputManager {
+public:
+	static void find_present_joysticks();
+	static void joystick_connection_callback(int id, int event);
+
+private:
+    static std::unordered_map<JoystickId, bool> present_joysticks;
 };
 
 class ActionBindingManager {
