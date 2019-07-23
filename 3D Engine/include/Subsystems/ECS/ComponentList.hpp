@@ -12,6 +12,7 @@
 ::Saturn::Components::Material, \
 ::Saturn::Components::ParticleEmitter, \
 ::Saturn::Components::PointLight, \
+::Saturn::Components::Rigidbody, \
 ::Saturn::Components::Rotator, \
 ::Saturn::Components::SpotLight, \
 ::Saturn::Components::StaticMesh, \

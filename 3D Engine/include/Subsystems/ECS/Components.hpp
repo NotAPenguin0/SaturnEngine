@@ -13,6 +13,7 @@
 #include "Components/Material.hpp"
 #include "Components/ParticleEmitter.hpp"
 #include "Components/PointLight.hpp"
+#include "Components/Rigidbody.hpp"
 #include "Components/Rotator.hpp"
 #include "Components/SpotLight.hpp"
 #include "Components/StaticMesh.hpp"

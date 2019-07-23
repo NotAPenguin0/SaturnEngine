@@ -142,6 +142,8 @@ enum class Key {
     GamepadB = GLFW_GAMEPAD_BUTTON_B,
     GamepadX = GLFW_GAMEPAD_BUTTON_X,
     GamepadY = GLFW_GAMEPAD_BUTTON_Y,
+    //#TODO: These 2 'bumper' buttons act weird (try using them for up-down
+    //controls). Fix this
     GamepadLeftBumper = GLFW_GAMEPAD_BUTTON_LEFT_BUMPER,
     GamepadRightBumper = GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER,
     GamepadBack = GLFW_GAMEPAD_BUTTON_BACK,
@@ -215,7 +217,6 @@ struct MouseState {
     float wheel = 0.0f;
     bool has_changed = false;
 };
-
 
 class RawInput {
 public:
@@ -366,11 +367,11 @@ public:
     static float get_axis(std::string const& name);
     static float get_axis_raw(std::string const& name);
 
-	static void initialize(Application& app);
-	static void load_config_file(std::string const& path);
+    static void initialize(Application& app);
+    static void load_config_file(std::string const& path);
 
 private:
-	static Application* app;
+    static Application* app;
 };
 
 } // namespace Saturn

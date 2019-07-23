@@ -10,6 +10,7 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/FlashlightSystem.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/FreeLookControllerSystem.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/ParticleSystem.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/PhysicsSystem.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/RotatorSystem.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/SystemBase.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Input/Input.cpp"

@@ -91,6 +91,15 @@ void from_json(nlohmann::json const& json, PointLight& component) {
 	}
 }
 
+void from_json(nlohmann::json const& json, Rigidbody& component) {
+	auto c = json.find("RigidbodyComponent");
+	if (c == json.end()) {
+		throw std::runtime_error("No Rigidbody component stored even though it was requested");
+	} else {
+		component.mass = (*c)["Mass"].get<float>();
+	}
+}
+
 void from_json(nlohmann::json const& json, Rotator& component) {
 	auto c = json.find("RotatorComponent");
 	if (c == json.end()) {
@@ -199,6 +208,13 @@ void to_json(nlohmann::json& json, PointLight const& component) {
 	json["PointLightComponent"]["Diffuse"] = component.diffuse;
 	json["PointLightComponent"]["Specular"] = component.specular;
 	json["PointLightComponent"]["Intensity"] = component.intensity;
+	// clang-format on
+}
+
+void to_json(nlohmann::json& json, Rigidbody const& component) {
+	json["RigidbodyComponent"] = nlohmann::json::object();
+	// clang-format off
+	json["RigidbodyComponent"]["Mass"] = component.mass;
 	// clang-format on
 }
 

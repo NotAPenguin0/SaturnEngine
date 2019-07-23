@@ -102,6 +102,13 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
 		j.get_to(c);
 		
 	}
+	// Deserialization for Rigidbody component
+	if (auto const& component = j.find("RigidbodyComponent"); component != j.end()) {
+		auto& c = obj.get_scene()->get_ecs().get_with_id<Rigidbody>(
+			obj.add_component<Rigidbody>());
+		j.get_to(c);
+		
+	}
 	// Deserialization for Rotator component
 	if (auto const& component = j.find("RotatorComponent"); component != j.end()) {
 		auto& c = obj.get_scene()->get_ecs().get_with_id<Rotator>(

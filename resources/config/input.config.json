@@ -29,12 +29,12 @@
             "Scale": 1.0
         }, {
             "Axis": "Up",
-            "Key": "Space",
+            "Key": "GamepadRightThumb",
             "Sensitivity": 1.0,
             "Scale": 1.0
         }, {
             "Axis": "Up",
-            "Key": "LeftShift",
+            "Key": "GamepadLeftThumb",
             "Sensitivity": -1.0,
             "Scale": 1.0
         }, {
