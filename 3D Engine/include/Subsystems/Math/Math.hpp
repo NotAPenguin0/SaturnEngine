@@ -22,10 +22,14 @@ namespace glm {
 void to_json(::nlohmann::json& j, vec2 const& v);
 void to_json(::nlohmann::json& j, vec3 const& v);
 void to_json(::nlohmann::json& j, vec4 const& v);
+void to_json(::nlohmann::json& j, bvec3 const& v);
 
 void from_json(::nlohmann::json const& j, vec2& v);
 void from_json(::nlohmann::json const& j, vec3& v);
 void from_json(::nlohmann::json const& j, vec4& v);
+void from_json(::nlohmann::json const& j, bvec3& v);
+
+bvec3 negate(bvec3 const& vec);
 
 } // namespace glm
 

@@ -247,8 +247,17 @@ bool cursor_is_component_field(std::string_view component_name,
         // If the parent name is the component name, the cursor is a field of
         // the component
         if (clang_getCString(parent_name) == component_name) {
-            clang_disposeString(parent_name);
-            return true;
+            // Check if the field is a public field
+            const auto specifier = clang_getCXXAccessSpecifier(cursor);
+            if (specifier == CX_CXXAccessSpecifier::CX_CXXPublic) 
+            {
+                clang_disposeString(parent_name);
+                return true;
+            }
+			else {
+				clang_disposeString(parent_name);
+                return false;
+			}
         } else {
             clang_disposeString(parent_name);
             return false;
@@ -538,10 +547,10 @@ void write_output_file(fs::path const& out, std::string const& content) {
     if (old == content) {
         // Skip writing to this file
         return;
-    } 
-	std::ofstream file(out);
-	file.clear();
-	file << content;
+    }
+    std::ofstream file(out);
+    file.clear();
+    file << content;
 }
 
 int main(int argc, char** argv) {
@@ -572,17 +581,18 @@ int main(int argc, char** argv) {
     std::string components_header = generate_components_header(components);
     std::string component_list_header =
         generate_component_list_header(components);
-	
-	// Write output with small cache check
-	write_output_file(output_files.header, header);
-	write_output_file(output_files.source, source);
-	write_output_file(output_files.scene_obj, scene_obj);
-    write_output_file(output_files.components, components_header);
-	write_output_file(output_files.component_list, component_list_header);
 
+    // Write output with small cache check
+    write_output_file(output_files.header, header);
+    write_output_file(output_files.source, source);
+    write_output_file(output_files.scene_obj, scene_obj);
+    write_output_file(output_files.components, components_header);
+    write_output_file(output_files.component_list, component_list_header);
 
     std::cout << "Generated output files have been written to "
-              << output_files.header << ",\n" << output_files.source << ",\n"
-              << output_files.components << ",\n" << output_files.component_list
-              << " and\n" << output_files.scene_obj << "\n";
+              << output_files.header << ",\n"
+              << output_files.source << ",\n"
+              << output_files.components << ",\n"
+              << output_files.component_list << " and\n"
+              << output_files.scene_obj << "\n";
 }

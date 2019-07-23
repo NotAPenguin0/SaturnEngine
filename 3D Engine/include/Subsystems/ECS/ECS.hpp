@@ -40,6 +40,8 @@ public:
 
     void update_systems() {
         for (auto& system : systems) { system->on_update(*scene); }
+        // Call late_update()
+        for (auto& system : systems) { system->on_late_update(*scene); }
     }
 
     // Assumes that ptr is a valid pointer returned from
@@ -55,7 +57,7 @@ public:
     template<typename... Comps>
     component_view<Comps...> select() {
         return component_view<Comps...>(scene->objects.begin(),
-                                     scene->objects.end());
+                                        scene->objects.end());
     }
 
     template<typename C>

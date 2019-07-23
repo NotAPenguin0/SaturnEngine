@@ -131,6 +131,7 @@ void Application::run() {
     scene.ecs.register_system<Systems::ParticleSystem>();
     scene.ecs.register_system<Systems::RotatorSystem>();
 	scene.ecs.register_system<Systems::FlashlightSystem>();
+	scene.ecs.register_system<Systems::PhysicsSystem>();
 
     /* auto& x = scene.create_object();
      {

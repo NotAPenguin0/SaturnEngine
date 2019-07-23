@@ -97,6 +97,7 @@ void from_json(nlohmann::json const& json, Rigidbody& component) {
 		throw std::runtime_error("No Rigidbody component stored even though it was requested");
 	} else {
 		component.mass = (*c)["Mass"].get<float>();
+		component.locked_axes = (*c)["LockedAxes"].get<glm::bvec3>();
 	}
 }
 
@@ -215,6 +216,7 @@ void to_json(nlohmann::json& json, Rigidbody const& component) {
 	json["RigidbodyComponent"] = nlohmann::json::object();
 	// clang-format off
 	json["RigidbodyComponent"]["Mass"] = component.mass;
+	json["RigidbodyComponent"]["LockedAxes"] = component.locked_axes;
 	// clang-format on
 }
 
