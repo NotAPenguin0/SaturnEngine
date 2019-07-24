@@ -78,6 +78,7 @@ private:
     void render_viewport(Scene& scene, Viewport& vp);
 	void render_to_depthmap(Scene& scene);
     void render_particles(Scene& scene);
+	void debug_render_colliders(Scene& scene);
 	glm::mat4 get_lightspace_matrix(Scene& scene);
     void send_camera_matrices(Scene& scene,
                               Viewport& vp,
@@ -109,6 +110,7 @@ private:
     // #MaybeTODO: Move this to ParticleEmitter?
     Resource<Shader> particle_shader;
 	Resource<Shader> depth_shader;
+    Resource<Shader> collider_shader;
     std::vector<Viewport> viewports;
 };
 

@@ -5,6 +5,7 @@
 #include "Subsystems/Input/Input.hpp"
 #include "Subsystems/Logging/LogSystem.hpp"
 #include "Subsystems/Math/Math.hpp"
+#include "Subsystems/Physics/Physics.hpp"
 #include "Subsystems/Renderer/Viewport.hpp"
 #include "Subsystems/Scene/Scene.hpp"
 #include "Subsystems/Scene/SceneObject.hpp"
@@ -38,6 +39,9 @@ Application::Application(CreateInfo create_info) :
 
     glfwMakeContextCurrent(window_handle);
     window_is_open = true;
+
+    physics = std::make_unique<Physics>();
+    physics_scheduler.set_physics_system(*physics);
 }
 
 Application::Application(Application&& other) :
@@ -68,14 +72,12 @@ Application::~Application() {
 
 void Application::initialize_keybinds() {
 
-	ActionBinding quit_binding;
+    ActionBinding quit_binding;
     quit_binding.key = Key::Escape;
     quit_binding.when = KeyAction::Press;
-	quit_binding.callback = [this]() {
-		quit();
-	};
+    quit_binding.callback = [this]() { quit(); };
 
-	ActionBindingManager::add_action(quit_binding);
+    ActionBindingManager::add_action(quit_binding);
 }
 
 static const std::vector<float> particle_quad_vertices = {
@@ -90,37 +92,6 @@ static const std::vector<GLuint> particle_quad_indices = {
     1, 2, 3  // Second triangle
 };
 
-static SceneObject& create_particle_emitter(std::string_view path,
-                                            Scene& scene) {
-    auto& obj = scene.create_object_from_file(path);
-    auto& emitter = obj.get_component<Components::ParticleEmitter>();
-    VertexArray::CreateInfo vao_info;
-    vao_info.attributes.push_back({0, 3}); // position
-    vao_info.attributes.push_back({1, 2}); // texture coordinates
-    vao_info.vertices = particle_quad_vertices;
-    vao_info.indices = particle_quad_indices;
-    emitter.particle_vao =
-        AssetManager<VertexArray>::get_resource(vao_info, "particle_vao");
-    VertexArray::BufferInfo pos_buffer_info;
-    pos_buffer_info.attributes.push_back({2, 3, 1}); // position
-    pos_buffer_info.mode = BufferMode::DataStream;
-    //#TODO: Get rid of make_float_vec
-    pos_buffer_info.data = make_float_vec(emitter.particle_data.positions);
-    VertexArray::BufferInfo scale_buffer_info;
-    scale_buffer_info.attributes.push_back({3, 3, 1}); // scale
-    scale_buffer_info.mode = BufferMode::DataStream;
-    scale_buffer_info.data = make_float_vec(emitter.particle_data.sizes);
-    VertexArray::BufferInfo color_buffer_info;
-    color_buffer_info.attributes.push_back({4, 4, 1}); // color
-    color_buffer_info.mode = BufferMode::DataStream;
-    color_buffer_info.data = make_float_vec(emitter.particle_data.colors);
-
-    emitter.particle_vao->add_buffer(pos_buffer_info);
-    emitter.particle_vao->add_buffer(scale_buffer_info);
-    emitter.particle_vao->add_buffer(color_buffer_info);
-    return obj;
-}
-
 void Application::run() {
     Scene scene(this);
 
@@ -130,54 +101,20 @@ void Application::run() {
     scene.ecs.register_system<Systems::FreeLookControllerSystem>();
     scene.ecs.register_system<Systems::ParticleSystem>();
     scene.ecs.register_system<Systems::RotatorSystem>();
-	scene.ecs.register_system<Systems::FlashlightSystem>();
-	scene.ecs.register_system<Systems::PhysicsSystem>();
+    scene.ecs.register_system<Systems::FlashlightSystem>();
 
-    /* auto& x = scene.create_object();
-     {
-         auto id = x.add_component<Components::Transform>();
-         auto& transform = scene.ecs.get_with_id<Components::Transform>(id);
-         transform.position.y = -2.0f;
-     }
-
-     auto& obj =
-         create_particle_emitter("resources/entities/my_emitter.json", scene);
-
-     auto& main_cam = scene.create_object();
-     {
-         auto& transform = scene.ecs.get_with_id<Components::Transform>(
-             main_cam.add_component<Components::Transform>());
-         auto& camera = scene.ecs.get_with_id<Components::Camera>(
-             main_cam.add_component<Components::Camera>());
-         auto& fps = scene.ecs.get_with_id<Components::FPSCameraController>(
-             main_cam.add_component<Components::FPSCameraController>());
-         auto& freelook = scene.ecs.get_with_id<Components::FreeLookController>(
-             main_cam.add_component<Components::FreeLookController>());
-         auto& zoom = scene.ecs.get_with_id<Components::CameraZoomController>(
-             main_cam.add_component<Components::CameraZoomController>());
-
-         transform.position = {0.0f, 0.0f, 0.0f};
-
-         camera.front = {1.0f, 0.0f, 0.0f};
-         camera.up = {0.0f, 1.0f, 0.0f};
-         camera.fov = 45.0f;
-
-         fps.speed = 2.5f;
-         freelook.mouse_sensitivity = 0.08f;
-         zoom.zoom_speed = 100.0f;
-
-         renderer->get_viewport(0).set_camera(camera.id);
-     }*/
-
-    scene.deserialize_from_file("resources/scene0/scene.dat");
+	scene.deserialize_from_file("resources/scene0/scene.dat");
 
     scene.on_start();
     while (!glfwWindowShouldClose(window_handle)) {
         Time::update();
-		InputEventManager::process_events();
+        InputEventManager::process_events();
         renderer->clear(Color{0.003f, 0.003f, 0.003f, 1.0f});
 
         scene.update_systems();
+        // This updates the timer in the physics scheduler, and runs a physics
+        // tick if needed
+        physics_scheduler.update(scene);
         renderer->render_scene(scene);
 
         // Copy framebuffer to screen
@@ -199,6 +136,7 @@ void Application::resize_callback([[maybe_unused]] GLFWwindow* window,
                                   int w,
                                   int h) {
     // Set the viewport correctly
+    // #TODO: This should work correctly with the actual viewport system
     Viewport::set_active(Viewport(0u, 0u, static_cast<unsigned int>(w),
                                   static_cast<unsigned int>(h)));
 }

@@ -46,6 +46,13 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
     using namespace Components;
     auto& ecs = obj.get_scene()->get_ecs();
 
+	// Deserialization for BoxCollider component
+	if (auto const& component = j.find("BoxColliderComponent"); component != j.end()) {
+		auto& c = obj.get_scene()->get_ecs().get_with_id<BoxCollider>(
+			obj.add_component<BoxCollider>());
+		j.get_to(c);
+		
+	}
 	// Deserialization for Camera component
 	if (auto const& component = j.find("CameraComponent"); component != j.end()) {
 		auto& c = obj.get_scene()->get_ecs().get_with_id<Camera>(

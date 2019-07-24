@@ -88,6 +88,8 @@ void Renderer::load_default_shaders() {
         AssetManager<Shader>::get_resource("resources/shaders/particle.sh");
     depth_shader =
         AssetManager<Shader>::get_resource("resources/shaders/depth_map.sh");
+    collider_shader =
+        AssetManager<Shader>::get_resource("resources/shaders/collider.sh");
 }
 
 void Renderer::create_depth_map() {
@@ -339,6 +341,20 @@ void Renderer::render_to_depthmap(Scene& scene) {
     Framebuffer::bind(framebuf);
 }
 
+void Renderer::debug_render_colliders(Scene& scene) {
+    using namespace Components;
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    for (auto [rel_trans, collider] :
+         scene.ecs.select<Transform, BoxCollider>()) {
+        auto& shader = collider_shader.get();
+        shader.set_vec3(Shader::Uniforms::ColliderCenter, collider.center);
+		shader.set_vec3(Shader::Uniforms::ColliderHalfWidths, collider.half_widths);
+        send_model_matrix(shader, rel_trans);
+        bind_guard<Shader> guard(shader);
+    }
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
 void Renderer::render_viewport(Scene& scene, Viewport& vp) {
     Viewport::set_active(vp);
 
@@ -349,6 +365,7 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
     send_lighting_data(scene);
 
     render_particles(scene);
+    debug_render_colliders(scene);
 
     for (auto [relative_transform, mesh, material] :
          scene.ecs.select<Components::Transform, Components::StaticMesh,
@@ -371,7 +388,7 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
             shader.set_int(Shader::Uniforms::DepthMap, 2);
         }
 
-        // Do the actual rendering (maybe putt this in another function
+        // Do the actual rendering (maybe put this in another function
         // render_mesh() or something)
         auto& vtx_array = mesh.mesh->get_vertices();
 

@@ -1,6 +1,9 @@
 #ifndef SATURN_APPLICATION_HPP_
 #define SATURN_APPLICATION_HPP_
 
+
+#include "Subsystems/Physics/Physics.hpp"
+#include "Subsystems/Physics/PhysicsTickScheduler.hpp"
 #include "Subsystems/Renderer/Renderer.hpp"
 #include "Utility/Utility.hpp"
 
@@ -91,7 +94,7 @@ public:
     void resize_callback([[maybe_unused]] GLFWwindow* window, int w, int h);
 
     WindowDim size() const;
-	
+
     inline Renderer* get_renderer() { return renderer.get(); }
 
 private:
@@ -101,6 +104,10 @@ private:
 
     std::unique_ptr<Renderer> renderer =
         nullptr; ///< The main renderer of the application
+
+    std::unique_ptr<Physics> physics = nullptr; ///< The core Physics system
+	PhysicsTickScheduler physics_scheduler;
+	
 };
 
 } // namespace Saturn

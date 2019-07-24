@@ -6,9 +6,7 @@
 #include <glm/glm.hpp>
 
 namespace Saturn {
-namespace Systems {
-class PhysicsSystem;
-}
+class Physics;
 }
 
 namespace Saturn::Components {
@@ -17,7 +15,7 @@ struct COMPONENT DEFAULT_SERIALIZE Rigidbody : public ComponentBase {
     float mass;
 	glm::bvec3 locked_axes = {false, false, false};
 private:
-    friend class ::Saturn::Systems::PhysicsSystem;
+    friend class ::Saturn::Physics;
     glm::vec3 forces;
 };
 

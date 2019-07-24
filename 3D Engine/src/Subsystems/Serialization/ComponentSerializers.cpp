@@ -13,6 +13,16 @@ namespace Saturn::Components {
 
 // Deserialization functions
 
+void from_json(nlohmann::json const& json, BoxCollider& component) {
+	auto c = json.find("BoxColliderComponent");
+	if (c == json.end()) {
+		throw std::runtime_error("No BoxCollider component stored even though it was requested");
+	} else {
+		component.center = (*c)["Center"].get<glm::vec3>();
+		component.half_widths = (*c)["HalfWidths"].get<glm::vec3>();
+	}
+}
+
 void from_json(nlohmann::json const& json, Camera& component) {
 	auto c = json.find("CameraComponent");
 	if (c == json.end()) {
@@ -116,12 +126,12 @@ void from_json(nlohmann::json const& json, SpotLight& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No SpotLight component stored even though it was requested");
 	} else {
-		component.inner_angle = (*c)["InnerAngle"].get<float>();
 		component.ambient = (*c)["Ambient"].get<glm::vec3>();
+		component.inner_angle = (*c)["InnerAngle"].get<float>();
 		component.diffuse = (*c)["Diffuse"].get<glm::vec3>();
 		component.specular = (*c)["Specular"].get<glm::vec3>();
-		component.intensity = (*c)["Intensity"].get<float>();
 		component.direction = (*c)["Direction"].get<glm::vec3>();
+		component.intensity = (*c)["Intensity"].get<float>();
 		component.outer_angle = (*c)["OuterAngle"].get<float>();
 	}
 }
@@ -147,6 +157,14 @@ void from_json(nlohmann::json const& json, Transform& component) {
 	}
 }
 
+
+void to_json(nlohmann::json& json, BoxCollider const& component) {
+	json["BoxColliderComponent"] = nlohmann::json::object();
+	// clang-format off
+	json["BoxColliderComponent"]["Center"] = component.center;
+	json["BoxColliderComponent"]["HalfWidths"] = component.half_widths;
+	// clang-format on
+}
 
 void to_json(nlohmann::json& json, Camera const& component) {
 	json["CameraComponent"] = nlohmann::json::object();
@@ -231,12 +249,12 @@ void to_json(nlohmann::json& json, Rotator const& component) {
 void to_json(nlohmann::json& json, SpotLight const& component) {
 	json["SpotLightComponent"] = nlohmann::json::object();
 	// clang-format off
-	json["SpotLightComponent"]["InnerAngle"] = component.inner_angle;
 	json["SpotLightComponent"]["Ambient"] = component.ambient;
+	json["SpotLightComponent"]["InnerAngle"] = component.inner_angle;
 	json["SpotLightComponent"]["Diffuse"] = component.diffuse;
 	json["SpotLightComponent"]["Specular"] = component.specular;
-	json["SpotLightComponent"]["Intensity"] = component.intensity;
 	json["SpotLightComponent"]["Direction"] = component.direction;
+	json["SpotLightComponent"]["Intensity"] = component.intensity;
 	json["SpotLightComponent"]["OuterAngle"] = component.outer_angle;
 	// clang-format on
 }

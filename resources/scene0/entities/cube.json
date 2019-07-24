@@ -24,11 +24,14 @@
         "Shininess": 100.0
     },
     "RigidbodyComponent": {
-        "Mass": 1.2,
+        "Mass": 1.0,
         "LockedAxes": [
             false,
             false, 
             false
         ]
+    },
+    "BoxColliderComponent": {
+        
     }
 }

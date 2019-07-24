@@ -2,7 +2,6 @@
 #define SATURN_COMPONENTS_TRANSFORM_HPP_
 
 #include "ComponentBase.hpp"
-#include "Subsystems/Math/Math.hpp"
 
 #include <glm/glm.hpp>
 

@@ -1,9 +1,10 @@
-#ifndef SATURN_COMPONENT_LIST_HPP_
-#define SATURN_COMPONENT_LIST_HPP_
+#ifndef MVG_COMPONENT_LIST_HPP_
+#define MVG_COMPONENT_LIST_HPP_
 
 #include "Components.hpp"
 
 #define COMPONENT_LIST \
+::Saturn::Components::BoxCollider, \
 ::Saturn::Components::Camera, \
 ::Saturn::Components::CameraZoomController, \
 ::Saturn::Components::DirectionalLight, \

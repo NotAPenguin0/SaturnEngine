@@ -1,5 +1,5 @@
-#ifndef SATURN_COMPONENT_SERIALIZERS_HPP_
-#define SATURN_COMPONENT_SERIALIZERS_HPP_
+#ifndef MVG_COMPONENT_SERIALIZERS_HPP_
+#define MVG_COMPONENT_SERIALIZERS_HPP_
 
 /*	This file was generated using the serialization code generation program 
  *	for SaturnEngine. Do NOT modify this file manually.
@@ -9,6 +9,7 @@
         
 namespace Saturn::Components {
         
+struct BoxCollider;
 struct Camera;
 struct CameraZoomController;
 struct DirectionalLight;
@@ -22,6 +23,7 @@ struct SpotLight;
 struct StaticMesh;
 struct Transform;
 
+void from_json(nlohmann::json const& json, BoxCollider& component);
 void from_json(nlohmann::json const& json, Camera& component);
 void from_json(nlohmann::json const& json, CameraZoomController& component);
 void from_json(nlohmann::json const& json, DirectionalLight& component);
@@ -35,6 +37,7 @@ void from_json(nlohmann::json const& json, SpotLight& component);
 void from_json(nlohmann::json const& json, StaticMesh& component);
 void from_json(nlohmann::json const& json, Transform& component);
 
+void to_json(nlohmann::json& json, BoxCollider const& component);
 void to_json(nlohmann::json& json, Camera const& component);
 void to_json(nlohmann::json& json, CameraZoomController const& component);
 void to_json(nlohmann::json& json, DirectionalLight const& component);

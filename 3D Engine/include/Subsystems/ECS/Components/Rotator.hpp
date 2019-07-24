@@ -2,7 +2,8 @@
 #define SATURN_ROTATOR_COMPONENT_HPP_
 
 #include "ComponentBase.hpp"
-#include "Subsystems/Math/Math.hpp"
+
+#include <glm/glm.hpp>
 
 namespace Saturn::Components {
 
