@@ -14,7 +14,9 @@
 
 namespace Saturn {
 
-static unsigned int create_shader(const char* vtx_path, const char* frag_path) {
+static unsigned int create_shader(const char* vtx_path,
+                                  const char* frag_path,
+                                  const char* geom_path = nullptr) {
     using namespace std::literals::string_literals;
 
     std::fstream file(vtx_path);
@@ -47,10 +49,46 @@ static unsigned int create_shader(const char* vtx_path, const char* frag_path) {
     buf << file.rdbuf();
 
     std::string frag_source(buf.str());
+    buf = std::stringstream{};
 
-    unsigned int vtx_shader, frag_shader;
+    std::string geom_source;
+    file.close();
+    if (geom_path != nullptr) {
+        file.open(geom_path);
+        if (!file.good()) {
+            LogSystem::write(
+                LogSystem::Severity::Error,
+                "[SHADER::GEOMETRY]: failed to open geometry shader source file at path"s +
+                    frag_path);
+            return 0;
+        }
+        buf << file.rdbuf();
+        geom_source = buf.str();
+    }
+
+    unsigned int vtx_shader, frag_shader, geom_shader = 0;
     vtx_shader = glCreateShader(GL_VERTEX_SHADER);
     frag_shader = glCreateShader(GL_FRAGMENT_SHADER);
+    if (geom_source != "") {
+        geom_shader = glCreateShader(GL_GEOMETRY_SHADER);
+        const char* geom_carr = geom_source.c_str();
+        glShaderSource(geom_shader, 1, &geom_carr, nullptr);
+        glCompileShader(geom_shader);
+        int success;
+        char infolog[512];
+        glGetShaderiv(geom_shader, GL_COMPILE_STATUS, &success);
+        if (!success) {
+            glGetShaderInfoLog(geom_shader, 512, nullptr, infolog);
+            LogSystem::write(LogSystem::Severity::Error,
+                             "Failed to compile geometry shader at path: "s +
+                                 vtx_path);
+            LogSystem::write(LogSystem::Severity::Error,
+                             "[SHADER::GEOMETRY::COMPILATION_FAILED]: "s +
+                                 infolog);
+            throw "";
+            return 0;
+        }
+    }
     // This is wrapped inside a lambda to limit the scope of vtx_carr and
     // frag_carr
     [&vtx_source, &frag_source, &vtx_shader, &frag_shader]() {
@@ -95,6 +133,7 @@ static unsigned int create_shader(const char* vtx_path, const char* frag_path) {
     unsigned int shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vtx_shader);
     glAttachShader(shaderProgram, frag_shader);
+    if (geom_shader != 0) { glAttachShader(shaderProgram, geom_shader); }
     glLinkProgram(shaderProgram);
 
     // Check for errors
@@ -113,6 +152,7 @@ static unsigned int create_shader(const char* vtx_path, const char* frag_path) {
     // These are linked now and can safely be deleted
     glDeleteShader(vtx_shader);
     glDeleteShader(frag_shader);
+    if (geom_shader != 0) { glDeleteShader(geom_shader); }
 
     return shaderProgram;
 }
@@ -121,8 +161,9 @@ Shader::Shader(CreateInfo create_info) { assign(create_info); }
 
 void Shader::assign(CreateInfo create_info) {
     if (program != 0) { glDeleteProgram(program); }
-    program = create_shader(create_info.vtx_path.data(),
-                            create_info.frag_path.data());
+    program =
+        create_shader(create_info.vtx_path.data(), create_info.frag_path.data(),
+                      create_info.geom_path.data());
 }
 
 unsigned int Shader::handle() { return program; }

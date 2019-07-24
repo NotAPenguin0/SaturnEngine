@@ -107,6 +107,9 @@ Renderer::Renderer(CreateInfo create_info) :
     create_uniform_buffers();
     load_default_shaders();
     create_depth_map();
+
+    box_collider_mesh =
+        AssetManager<Mesh>::get_resource("resources/meshes/box_collider.mesh");
 }
 
 Renderer::~Renderer() {}
@@ -347,10 +350,15 @@ void Renderer::debug_render_colliders(Scene& scene) {
     for (auto [rel_trans, collider] :
          scene.ecs.select<Transform, BoxCollider>()) {
         auto& shader = collider_shader.get();
-        shader.set_vec3(Shader::Uniforms::ColliderCenter, collider.center);
-		shader.set_vec3(Shader::Uniforms::ColliderHalfWidths, collider.half_widths);
-        send_model_matrix(shader, rel_trans);
+        auto copy = rel_trans;
+        copy.position += collider.center;
+		copy.scale = collider.half_widths * 2.0f;
+        send_model_matrix(shader, copy);
         bind_guard<Shader> guard(shader);
+        auto& vtx_array = box_collider_mesh->get_vertices();
+        bind_guard<VertexArray> vao(vtx_array);
+        glDrawElements(GL_LINES, vtx_array.index_size(), GL_UNSIGNED_INT,
+                       nullptr);
     }
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }

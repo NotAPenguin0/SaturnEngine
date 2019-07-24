@@ -13,6 +13,7 @@ public:
     struct CreateInfo {
         std::string_view vtx_path;
         std::string_view frag_path;
+		std::string_view geom_path;
     };
 
     static void bind(Shader& shader);
@@ -58,8 +59,6 @@ public:
 		
 		static constexpr int LightSpaceMatrix = 9;
 		static constexpr int DepthMap = 10;
-        static constexpr int ColliderCenter = 11;
-        static constexpr int ColliderHalfWidths = 12;
     };
 
 private:

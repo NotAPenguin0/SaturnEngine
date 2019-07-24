@@ -111,6 +111,7 @@ private:
     Resource<Shader> particle_shader;
 	Resource<Shader> depth_shader;
     Resource<Shader> collider_shader;
+	Resource<Mesh> box_collider_mesh;
     std::vector<Viewport> viewports;
 };
 

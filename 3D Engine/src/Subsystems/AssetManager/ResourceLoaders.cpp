@@ -18,9 +18,12 @@ std::unique_ptr<Shader> ResourceLoader<Shader>::load(std::string const& path) {
     // The shader file contains two paths: the first is to the vertex shader,
     // the second to the fragment shader
 
-    std::string vtx, frag;
+    std::string vtx, frag, geom;
     std::getline(file, vtx);
     std::getline(file, frag);
+	if (std::getline(file, geom) && geom != "None") {
+		info.geom_path = geom;
+	}
 
     info.vtx_path = vtx;
     info.frag_path = frag;
