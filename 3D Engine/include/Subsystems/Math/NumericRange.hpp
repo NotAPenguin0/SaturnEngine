@@ -1,5 +1,5 @@
-#ifndef MVG_NUMERIC_RANGE_HPP_
-#define MVG_NUMERIC_RANGE_HPP_
+#ifndef SATURN_NUMERIC_RANGE_HPP_
+#define SATURN_NUMERIC_RANGE_HPP_
 
 namespace Saturn::Math {
 

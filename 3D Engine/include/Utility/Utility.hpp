@@ -1,5 +1,5 @@
-#ifndef MVG_UTILITY_HPP_
-#define MVG_UTILITY_HPP_
+#ifndef SATURN_UTILITY_HPP_
+#define SATURN_UTILITY_HPP_
 
 #include "Subsystems/ECS/Components/Transform.hpp"
 #include "Subsystems/Logging/LogSystem.hpp"

@@ -1,5 +1,5 @@
-#ifndef MVG_RESOURCE_LOADERS_HPP_
-#define MVG_RESOURCE_LOADERS_HPP_
+#ifndef SATURN_RESOURCE_LOADERS_HPP_
+#define SATURN_RESOURCE_LOADERS_HPP_
 
 #include <memory>
 #include <string>

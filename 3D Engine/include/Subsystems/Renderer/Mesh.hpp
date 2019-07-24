@@ -1,5 +1,5 @@
-#ifndef MVG_MESH_HPP_
-#define MVG_MESH_HPP_
+#ifndef SATURN_MESH_HPP_
+#define SATURN_MESH_HPP_
 
 #include "VertexArray.hpp"
 

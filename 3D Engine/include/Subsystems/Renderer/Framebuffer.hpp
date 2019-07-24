@@ -1,5 +1,5 @@
-#ifndef MVG_FRAMEBUFFER_HPP_
-#define MVG_FRAMEBUFFER_HPP_
+#ifndef SATURN_FRAMEBUFFER_HPP_
+#define SATURN_FRAMEBUFFER_HPP_
 
 #include "Utility/Utility.hpp"
 

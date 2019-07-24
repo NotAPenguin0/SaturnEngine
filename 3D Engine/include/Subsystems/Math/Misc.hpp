@@ -1,5 +1,5 @@
-#ifndef MVG_MISC_HPP_
-#define MVG_MISC_HPP_
+#ifndef SATURN_MISC_HPP_
+#define SATURN_MISC_HPP_
 
 namespace Saturn::Math {
 template<typename T>

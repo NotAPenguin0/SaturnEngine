@@ -1,5 +1,5 @@
-#ifndef MVG_PARTICLE_EMITTER_HPP_
-#define MVG_PARTICLE_EMITTER_HPP_
+#ifndef SATURN_PARTICLE_EMITTER_HPP_
+#define SATURN_PARTICLE_EMITTER_HPP_
 
 #include "ComponentBase.hpp"
 #include "Subsystems/AssetManager/Resource.hpp"

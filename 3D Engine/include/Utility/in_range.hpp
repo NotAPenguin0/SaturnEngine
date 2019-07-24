@@ -1,5 +1,5 @@
-#ifndef MVG_IN_RANGE_HPP_
-#define MVG_IN_RANGE_HPP_
+#ifndef SATURN_IN_RANGE_HPP_
+#define SATURN_IN_RANGE_HPP_
 
 #include <cassert>
 #include <type_traits>

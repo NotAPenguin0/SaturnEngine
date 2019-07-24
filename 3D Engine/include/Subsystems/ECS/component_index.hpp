@@ -1,5 +1,5 @@
-#ifndef MVG_COMPONENT_INDEX_HPP_
-#define MVG_COMPONENT_INDEX_HPP_
+#ifndef SATURN_COMPONENT_INDEX_HPP_
+#define SATURN_COMPONENT_INDEX_HPP_
 
 #include <cstddef>
 #include <type_traits>

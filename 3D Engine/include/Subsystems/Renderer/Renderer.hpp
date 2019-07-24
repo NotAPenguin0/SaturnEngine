@@ -1,5 +1,5 @@
-#ifndef MVG_RENDERER_HPP_
-#define MVG_RENDERER_HPP_
+#ifndef SATURN_RENDERER_HPP_
+#define SATURN_RENDERER_HPP_
 
 #include "Subsystems/AssetManager/AssetManager.hpp"
 #include "Subsystems/ECS/Components.hpp"

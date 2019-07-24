@@ -1,5 +1,5 @@
-#ifndef MVG_SPOT_LIGHT_COMPONENT_HPP_
-#define MVG_SPOT_LIGHT_COMPONENT_HPP_
+#ifndef SATURN_SPOT_LIGHT_COMPONENT_HPP_
+#define SATURN_SPOT_LIGHT_COMPONENT_HPP_
 
 #include "ComponentBase.hpp"
 #include <glm/glm.hpp>

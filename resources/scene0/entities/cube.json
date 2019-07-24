@@ -24,7 +24,7 @@
         "Shininess": 100.0
     },
     "RigidbodyComponent": {
-        "Mass": 1.0,
+        "Mass": 1.2,
         "LockedAxes": [
             false,
             false, 

@@ -1,5 +1,5 @@
-#ifndef MVG_EXCEPTIONS_HPP_
-#define MVG_EXCEPTIONS_HPP_
+#ifndef SATURN_EXCEPTIONS_HPP_
+#define SATURN_EXCEPTIONS_HPP_
 
 #include <stdexcept>
 

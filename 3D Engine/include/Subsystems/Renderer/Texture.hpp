@@ -1,5 +1,5 @@
-#ifndef MVG_TEXTURE_HPP_
-#define MVG_TEXTURE_HPP_
+#ifndef SATURN_TEXTURE_HPP_
+#define SATURN_TEXTURE_HPP_
 
 #include <string_view>
 #include <vector>

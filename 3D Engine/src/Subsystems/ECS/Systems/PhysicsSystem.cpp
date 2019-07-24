@@ -9,9 +9,7 @@
 namespace Saturn::Systems {
 using namespace Components;
 
-void PhysicsSystem::on_update(Scene& scene) {}
-
-void PhysicsSystem::on_late_update(Scene& scene) {
+void PhysicsSystem::on_update(Scene& scene) {
 
     auto& ecs = scene.get_ecs();
     for (auto [transform, rb] : ecs.select<Transform, Rigidbody>()) {
@@ -22,8 +20,13 @@ void PhysicsSystem::on_late_update(Scene& scene) {
         // PhysicsSystem.hpp to see why we do this
         float gravity = rb.mass * gravity_constant * gravity_multiplier;
         add_force(rb, gravity, glm::vec3{0.0f, -1.0f, 0.0f});
+    }
+}
 
-        // Apply all forces to the object
+void PhysicsSystem::on_late_update(Scene& scene) {
+    auto& ecs = scene.get_ecs();
+    for (auto [transform, rb] : ecs.select<Transform, Rigidbody>()) {
+        // Apply all accumulated forces to the object
         apply_forces(rb, transform);
     }
 }

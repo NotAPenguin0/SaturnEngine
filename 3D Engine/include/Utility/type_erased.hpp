@@ -1,5 +1,5 @@
-#ifndef MVG_TYPE_ERASED_HPP_
-#define MVG_TYPE_ERASED_HPP_
+#ifndef SATURN_TYPE_ERASED_HPP_
+#define SATURN_TYPE_ERASED_HPP_
 
 #include <memory>
 

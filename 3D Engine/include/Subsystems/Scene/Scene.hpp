@@ -1,5 +1,5 @@
-#ifndef MVG_SCENE_HPP_
-#define MVG_SCENE_HPP_
+#ifndef SATURN_SCENE_HPP_
+#define SATURN_SCENE_HPP_
 
 #include <memory>
 #include <vector>

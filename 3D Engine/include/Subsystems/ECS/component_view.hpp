@@ -1,5 +1,5 @@
-#ifndef MVG_COMPONENT_VIEW_HPP_
-#define MVG_COMPONENT_VIEW_HPP_
+#ifndef SATURN_COMPONENT_VIEW_HPP_
+#define SATURN_COMPONENT_VIEW_HPP_
 
 #include "Subsystems/Scene/SceneObject.hpp"
 #include "component_index.hpp"

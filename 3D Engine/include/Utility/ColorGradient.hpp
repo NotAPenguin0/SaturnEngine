@@ -1,5 +1,5 @@
-#ifndef MVG_COLOR_GRADIENT_HPP_
-#define MVG_COLOR_GRADIENT_HPP_
+#ifndef SATURN_COLOR_GRADIENT_HPP_
+#define SATURN_COLOR_GRADIENT_HPP_
 
 #include <glm/glm.hpp>
 

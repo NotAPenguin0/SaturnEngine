@@ -1,5 +1,5 @@
-#ifndef MVG_PARTICLE_SYSTEM_HPP_
-#define MVG_PARTICLE_SYSTEM_HPP_
+#ifndef SATURN_PARTICLE_SYSTEM_HPP_
+#define SATURN_PARTICLE_SYSTEM_HPP_
 
 #include "../Components/ParticleEmitter.hpp"
 #include "SystemBase.hpp"

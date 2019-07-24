@@ -1,5 +1,5 @@
-#ifndef MVG_BIND_TRACKER_HPP_
-#define MVG_BIND_TRACKER_HPP_
+#ifndef SATURN_BIND_TRACKER_HPP_
+#define SATURN_BIND_TRACKER_HPP_
 
 namespace Saturn {
 

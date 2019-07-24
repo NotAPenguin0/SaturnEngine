@@ -1,5 +1,5 @@
-#ifndef MVG_RESOURCE_HPP_
-#define MVG_RESOURCE_HPP_
+#ifndef SATURN_RESOURCE_HPP_
+#define SATURN_RESOURCE_HPP_
 
 #include <cstddef>
 

@@ -1,5 +1,5 @@
-#ifndef MVG_BIND_GUARD_HPP_
-#define MVG_BIND_GUARD_HPP_
+#ifndef SATURN_BIND_GUARD_HPP_
+#define SATURN_BIND_GUARD_HPP_
 
 #include "Utility/bind_tracker.hpp"
 

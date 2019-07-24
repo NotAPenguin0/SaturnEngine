@@ -1,5 +1,5 @@
-#ifndef MVG_UNIFORM_BUFFER_HPP_
-#define MVG_UNIFORM_BUFFER_HPP_
+#ifndef SATURN_UNIFORM_BUFFER_HPP_
+#define SATURN_UNIFORM_BUFFER_HPP_
 
 #include "Utility/bind_guard.hpp"
 

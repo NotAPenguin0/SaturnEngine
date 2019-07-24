@@ -1,5 +1,5 @@
-#ifndef MVG_SHADER_HPP_
-#define MVG_SHADER_HPP_
+#ifndef SATURN_SHADER_HPP_
+#define SATURN_SHADER_HPP_
 
 #include <string_view>
 #include <unordered_map>

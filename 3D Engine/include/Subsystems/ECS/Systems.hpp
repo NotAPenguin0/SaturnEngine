@@ -1,5 +1,5 @@
-#ifndef MVG_SYSTEMS_HPP_
-#define MVG_SYSTEMS_HPP_
+#ifndef SATURN_SYSTEMS_HPP_
+#define SATURN_SYSTEMS_HPP_
 
 #include "Subsystems/ECS/Systems/CameraZoomControllerSystem.hpp"
 #include "Subsystems/ECS/Systems/FPSCameraControllerSystem.hpp"

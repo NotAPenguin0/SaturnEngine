@@ -1,5 +1,5 @@
-#ifndef MVG_POST_PROCESSING_HPP_
-#define MVG_POST_PROCESSING_HPP_
+#ifndef SATURN_POST_PROCESSING_HPP_
+#define SATURN_POST_PROCESSING_HPP_
 
 #include <memory>
 #include <string>

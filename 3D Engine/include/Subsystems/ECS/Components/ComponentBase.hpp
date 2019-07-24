@@ -1,5 +1,5 @@
-#ifndef MVG_COMPONENT_BASE_HPP_
-#define MVG_COMPONENT_BASE_HPP_
+#ifndef SATURN_COMPONENT_BASE_HPP_
+#define SATURN_COMPONENT_BASE_HPP_
 
 #include "Subsystems/Serialization/CodeGenDefinitions.hpp"
 #include "Subsystems/Serialization/ForwardDeclarations.hpp"

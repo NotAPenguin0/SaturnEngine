@@ -1,5 +1,5 @@
-#ifndef MVG_ERROR_HANDLER_HPP_
-#define MVG_ERROR_HANDLER_HPP_
+#ifndef SATURN_ERROR_HANDLER_HPP_
+#define SATURN_ERROR_HANDLER_HPP_
 
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>

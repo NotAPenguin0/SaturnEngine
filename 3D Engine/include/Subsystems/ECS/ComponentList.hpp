@@ -1,5 +1,5 @@
-#ifndef MVG_COMPONENT_LIST_HPP_
-#define MVG_COMPONENT_LIST_HPP_
+#ifndef SATURN_COMPONENT_LIST_HPP_
+#define SATURN_COMPONENT_LIST_HPP_
 
 #include "Components.hpp"
 

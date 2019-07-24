@@ -1,5 +1,5 @@
-#ifndef MVG_COMPONENT_SERIALIZERS_HPP_
-#define MVG_COMPONENT_SERIALIZERS_HPP_
+#ifndef SATURN_COMPONENT_SERIALIZERS_HPP_
+#define SATURN_COMPONENT_SERIALIZERS_HPP_
 
 /*	This file was generated using the serialization code generation program 
  *	for SaturnEngine. Do NOT modify this file manually.

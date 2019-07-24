@@ -1,5 +1,5 @@
-#ifndef MVG_RANDOM_ENGINE_HPP_
-#define MVG_RANDOM_ENGINE_HPP_
+#ifndef SATURN_RANDOM_ENGINE_HPP_
+#define SATURN_RANDOM_ENGINE_HPP_
 
 #include <mutex>
 #include <random>

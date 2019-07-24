@@ -1,5 +1,5 @@
-#ifndef MVG_CONSTEXPR_MATH_HPP_
-#define MVG_CONSTEXPR_MATH_HPP_
+#ifndef SATURN_CONSTEXPR_MATH_HPP_
+#define SATURN_CONSTEXPR_MATH_HPP_
 
 #include <cassert>
 #include <cstddef>

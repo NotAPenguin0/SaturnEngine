@@ -1,5 +1,5 @@
-#ifndef MVG_CUSTOM_SERIALIZERS_HPP_
-#define MVG_CUSTOM_SERIALIZERS_HPP_
+#ifndef SATURN_CUSTOM_SERIALIZERS_HPP_
+#define SATURN_CUSTOM_SERIALIZERS_HPP_
 
 #include <nlohmann/json.hpp>
 

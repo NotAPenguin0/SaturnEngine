@@ -1,5 +1,5 @@
-#ifndef MVG_SCENE_OBJECT_HPP_
-#define MVG_SCENE_OBJECT_HPP_
+#ifndef SATURN_SCENE_OBJECT_HPP_
+#define SATURN_SCENE_OBJECT_HPP_
 
 #include "Subsystems/ECS/Components.hpp"
 #include "Subsystems/Scene/Scene.hpp"

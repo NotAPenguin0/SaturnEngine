@@ -1,5 +1,5 @@
-#ifndef MVG_DEPTH_MAP_HPP_
-#define MVG_DEPTH_MAP_HPP_
+#ifndef SATURN_DEPTH_MAP_HPP_
+#define SATURN_DEPTH_MAP_HPP_
 
 #include "Utility/Utility.hpp"
 

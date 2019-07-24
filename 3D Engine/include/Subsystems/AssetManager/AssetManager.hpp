@@ -1,5 +1,5 @@
-#ifndef MVG_ASSET_MANAGER_HPP_
-#define MVG_ASSET_MANAGER_HPP_
+#ifndef SATURN_ASSET_MANAGER_HPP_
+#define SATURN_ASSET_MANAGER_HPP_
 
 #include <memory>
 #include <nlohmann/json.hpp>

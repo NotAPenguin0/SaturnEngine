@@ -1,5 +1,5 @@
-#ifndef MVG_ECS_HPP_
-#define MVG_ECS_HPP_
+#ifndef SATURN_ECS_HPP_
+#define SATURN_ECS_HPP_
 
 #include <vector>
 

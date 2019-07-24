@@ -1,5 +1,5 @@
-#ifndef MVG_VIEWPORT_HPP_
-#define MVG_VIEWPORT_HPP_
+#ifndef SATURN_VIEWPORT_HPP_
+#define SATURN_VIEWPORT_HPP_
 
 #include "Utility/Utility.hpp"
 

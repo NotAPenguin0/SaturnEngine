@@ -1,5 +1,5 @@
-#ifndef MVG_CAMERA_ZOOM_CONTROLLER_HPP_
-#define MVG_CAMERA_ZOOM_CONTROLLER_HPP_
+#ifndef SATURN_CAMERA_ZOOM_CONTROLLER_HPP_
+#define SATURN_CAMERA_ZOOM_CONTROLLER_HPP_
 
 #include "ComponentBase.hpp"
 #include "Utility/in_range.hpp"

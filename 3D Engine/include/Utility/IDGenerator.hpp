@@ -1,5 +1,5 @@
-#ifndef MVG_ID_GENERATOR_HPP_
-#define MVG_ID_GENERATOR_HPP_
+#ifndef SATURN_ID_GENERATOR_HPP_
+#define SATURN_ID_GENERATOR_HPP_
 
 #include <cstddef>
 

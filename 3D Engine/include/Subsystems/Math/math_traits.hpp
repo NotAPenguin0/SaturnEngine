@@ -1,5 +1,5 @@
-#ifndef MVG_PI_HPP_
-#define MVG_PI_HPP_
+#ifndef SATURN_PI_HPP_
+#define SATURN_PI_HPP_
 
 namespace Saturn {
 namespace Math {

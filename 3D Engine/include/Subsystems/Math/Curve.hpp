@@ -1,5 +1,5 @@
-#ifndef MVG_CURVE_HPP_
-#define MVG_CURVE_HPP_
+#ifndef SATURN_CURVE_HPP_
+#define SATURN_CURVE_HPP_
 
 #include "NumericRange.hpp"
 #include <nlohmann/json.hpp>

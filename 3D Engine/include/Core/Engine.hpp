@@ -1,5 +1,5 @@
-#ifndef MVG_ENGINE_HPP_
-#define MVG_ENGINE_HPP_
+#ifndef SATURN_ENGINE_HPP_
+#define SATURN_ENGINE_HPP_
 
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>

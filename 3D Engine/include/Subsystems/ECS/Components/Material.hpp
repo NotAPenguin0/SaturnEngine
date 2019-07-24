@@ -1,5 +1,5 @@
-#ifndef MVG_MATERIAL_HPP_
-#define MVG_MATERIAL_HPP_
+#ifndef SATURN_MATERIAL_HPP_
+#define SATURN_MATERIAL_HPP_
 
 #include "ComponentBase.hpp"
 #include "Subsystems/AssetManager/Resource.hpp"

@@ -1,5 +1,5 @@
-#ifndef MVG_VERTEX_ARRAY_HPP_
-#define MVG_VERTEX_ARRAY_HPP_
+#ifndef SATURN_VERTEX_ARRAY_HPP_
+#define SATURN_VERTEX_ARRAY_HPP_
 
 #include <cstddef>
 #include <vector>

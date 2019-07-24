@@ -1,5 +1,5 @@
-#ifndef MVG_LOG_SYSTEM_HPP_
-#define MVG_LOG_SYSTEM_HPP_
+#ifndef SATURN_LOG_SYSTEM_HPP_
+#define SATURN_LOG_SYSTEM_HPP_
 
 #include <functional>
 #include <iostream>

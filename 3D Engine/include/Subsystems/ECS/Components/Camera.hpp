@@ -1,5 +1,5 @@
-#ifndef MVG_COMPONENT_CAMERA_HPP_
-#define MVG_COMPONENT_CAMERA_HPP_
+#ifndef SATURN_COMPONENT_CAMERA_HPP_
+#define SATURN_COMPONENT_CAMERA_HPP_
 
 #include "ComponentBase.hpp"
 

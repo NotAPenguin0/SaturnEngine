@@ -1,5 +1,5 @@
-#ifndef MVG_PHYSICS_SYSTEM_HPP_
-#define MVG_PHYSICS_SYSTEM_HPP_
+#ifndef SATURN_PHYSICS_SYSTEM_HPP_
+#define SATURN_PHYSICS_SYSTEM_HPP_
 
 #include "SystemBase.hpp"
 
@@ -11,6 +11,11 @@ struct Transform;
 } // namespace Saturn::Components
 
 namespace Saturn::Systems {
+
+// #TODO: Run Physics system separately from all other systems, at fixed
+// time steps (maybe even multithread it?)
+// https://discordapp.com/channels/331718482485837825/552607083330011154/603208251584020481
+// ^ Link to conversation with martty in TCCPP explaining how this works.
 
 class PhysicsSystem : public SystemBase {
 public:

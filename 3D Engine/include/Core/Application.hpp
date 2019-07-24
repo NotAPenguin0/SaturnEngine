@@ -1,5 +1,5 @@
-#ifndef MVG_APPLICATION_HPP_
-#define MVG_APPLICATION_HPP_
+#ifndef SATURN_APPLICATION_HPP_
+#define SATURN_APPLICATION_HPP_
 
 #include "Subsystems/Renderer/Renderer.hpp"
 #include "Utility/Utility.hpp"
