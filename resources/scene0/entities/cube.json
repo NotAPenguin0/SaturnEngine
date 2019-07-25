@@ -24,7 +24,7 @@
         "Shininess": 100.0
     },
     "RigidbodyComponent": {
-        "Mass": 1.0,
+        "Mass": 0.5,
         "LockedAxes": [
             false,
             false, 
@@ -33,6 +33,6 @@
     },
     "BoxColliderComponent": {
         "Center": [0, 0, 0],
-        "HalfWidths": [0.25, 0.25, 0.25]
+        "HalfWidths": [0.5, 0.5, 0.5]
     }
 }

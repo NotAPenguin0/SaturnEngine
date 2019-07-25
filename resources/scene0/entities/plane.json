@@ -22,5 +22,9 @@
             "Resource": "resources/textures/wood_floor_specular.tex"
         },
         "Shininess": 100
+    },
+    "BoxColliderComponent": {
+        "Center": [0, 0, 0],
+        "HalfWidths": [10, 0.01, 10]
     }
 }

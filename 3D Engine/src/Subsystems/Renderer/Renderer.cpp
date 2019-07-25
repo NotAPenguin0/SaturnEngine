@@ -352,7 +352,8 @@ void Renderer::debug_render_colliders(Scene& scene) {
         auto& shader = collider_shader.get();
         auto copy = rel_trans;
         copy.position += collider.center;
-		copy.scale = collider.half_widths * 2.0f;
+		copy.scale = collider.half_widths;
+		copy.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
         send_model_matrix(shader, copy);
         bind_guard<Shader> guard(shader);
         auto& vtx_array = box_collider_mesh->get_vertices();

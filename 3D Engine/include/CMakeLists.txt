@@ -49,6 +49,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Math/PositionGenerators.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Math/RandomEngine.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Math/Transform.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Physics/CollisionDetectors.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Physics/Gravity.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Physics/Physics.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Physics/PhysicsTickScheduler.hpp"

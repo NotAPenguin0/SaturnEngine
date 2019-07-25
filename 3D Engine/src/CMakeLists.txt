@@ -21,6 +21,7 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Math/PositionGenerators.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Math/RandomEngine.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Math/Transform.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Physics/CollisionDetectors.cpp" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Physics/Gravity.cpp" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Physics/Physics.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Physics/PhysicsTickScheduler.cpp"

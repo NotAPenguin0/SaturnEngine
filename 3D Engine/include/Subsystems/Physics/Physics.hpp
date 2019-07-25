@@ -3,6 +3,7 @@
 
 #include <glm/glm.hpp>
 
+#include "AABBCollisionHandler.hpp"
 #include "Gravity.hpp"
 
 namespace Saturn {
@@ -33,6 +34,7 @@ private:
                       Components::Rigidbody& rb);
 
     Gravity gravity_system;
+	AABBCollisionHandler aabb_handler;
 };
 
 } // namespace Saturn
