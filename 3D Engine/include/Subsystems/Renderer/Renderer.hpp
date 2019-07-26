@@ -79,6 +79,7 @@ private:
 	void render_to_depthmap(Scene& scene);
     void render_particles(Scene& scene);
 	void debug_render_colliders(Scene& scene);
+    void render_axes();
 	glm::mat4 get_lightspace_matrix(Scene& scene);
     void send_camera_matrices(Scene& scene,
                               Viewport& vp,
@@ -111,7 +112,9 @@ private:
     Resource<Shader> particle_shader;
 	Resource<Shader> depth_shader;
     Resource<Shader> collider_shader;
+	Resource<Shader> axis_shader;
 	Resource<Mesh> box_collider_mesh;
+	Resource<Mesh> line_mesh;
     std::vector<Viewport> viewports;
 };
 

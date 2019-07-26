@@ -24,6 +24,8 @@ void FreeLookControllerSystem::on_update(Scene& scene) {
 
         float xoffset = Input::get_axis("MouseHorizontal");
         float yoffset = Input::get_axis("MouseVertical");
+        xoffset = RawInput::get_mouse().xoffset;
+        yoffset = RawInput::get_mouse().yoffset;
         xoffset *= controller.mouse_sensitivity; //* Time::deltaTime;
         yoffset *= controller.mouse_sensitivity; //* Time::deltaTime;
 

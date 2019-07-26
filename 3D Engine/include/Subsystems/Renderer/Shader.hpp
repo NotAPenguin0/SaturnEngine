@@ -59,6 +59,7 @@ public:
 		
 		static constexpr int LightSpaceMatrix = 9;
 		static constexpr int DepthMap = 10;
+        static constexpr int NormalMap = 11;
     };
 
 private:

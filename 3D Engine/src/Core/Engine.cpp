@@ -77,6 +77,7 @@ Application Engine::initialize(CreateInfo create_info) {
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
+    glEnable(GL_MULTISAMPLE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Enable debug output if specified
@@ -96,12 +97,11 @@ Application Engine::initialize(CreateInfo create_info) {
     }
 
     // Initialize subsystems. This process is multithreaded for all subsystems.
-    std::thread input_init([&app]() {
-        Input::initialize(app);
-        Input::load_config_file("resources/config/input.config.json");
-        ActionBindingManager::add_action(ActionBinding{
-            Key::Escape, KeyAction::Press, [&app]() { app.quit(); }});
-    });
+
+    Input::initialize(app);
+    Input::load_config_file("resources/config/input.config.json");
+    ActionBindingManager::add_action(
+        ActionBinding{Key::Escape, KeyAction::Press, [&app]() { app.quit(); }});
 
     std::thread random_init(Math::RandomEngine::initialize);
 
@@ -114,7 +114,7 @@ Application Engine::initialize(CreateInfo create_info) {
     app.initialize_keybinds();
 
     // Join all subsystem threads
-    input_init.join();
+
     random_init.join();
 
     return app;

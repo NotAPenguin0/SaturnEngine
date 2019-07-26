@@ -90,6 +90,8 @@ void Renderer::load_default_shaders() {
         AssetManager<Shader>::get_resource("resources/shaders/depth_map.sh");
     collider_shader =
         AssetManager<Shader>::get_resource("resources/shaders/collider.sh");
+    axis_shader =
+        AssetManager<Shader>::get_resource("resources/shaders/axis.sh");
 }
 
 void Renderer::create_depth_map() {
@@ -110,6 +112,7 @@ Renderer::Renderer(CreateInfo create_info) :
 
     box_collider_mesh =
         AssetManager<Mesh>::get_resource("resources/meshes/box_collider.mesh");
+    line_mesh = AssetManager<Mesh>::get_resource("resources/meshes/line.mesh");
 }
 
 Renderer::~Renderer() {}
@@ -352,8 +355,8 @@ void Renderer::debug_render_colliders(Scene& scene) {
         auto& shader = collider_shader.get();
         auto copy = rel_trans;
         copy.position += collider.center;
-		copy.scale = collider.half_widths;
-		copy.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+        copy.scale = collider.half_widths;
+        copy.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
         send_model_matrix(shader, copy);
         bind_guard<Shader> guard(shader);
         auto& vtx_array = box_collider_mesh->get_vertices();
@@ -362,6 +365,43 @@ void Renderer::debug_render_colliders(Scene& scene) {
                        nullptr);
     }
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
+void Renderer::render_axes() {
+    glm::vec3 rotations[] = {
+        glm::vec3(0.0f, 0.0f, 0.0f),  // y axis
+        glm::vec3(90.0f, 0.0f, 0.0f), // z axis
+        glm::vec3(0.0f, 0.0f, 90.0f)  // x axis
+    };
+    glm::vec3 colors[] = {
+		glm::vec3(0.0f, 1.0f, 0.0f), // y axis
+		glm::vec3(0.0f, 0.0f, 1.0f), // z axis
+		glm::vec3(1.0f, 0.0f, 0.0f)  // x axis
+    }; 
+	auto& shader = axis_shader.get();
+    auto& vertices = line_mesh->get_vertices();
+    Components::Transform axis_transform;
+    axis_transform.scale = glm::vec3(1.0, 100.0f, 1.0f);
+    axis_transform.position = glm::vec3(0.0f, 0.0f, 0.0f);
+    // There are 3 axes
+    for (int i = 0; i < 3; ++i) {
+        axis_transform.rotation = rotations[i];
+        auto model = glm::mat4(1.0f);
+        // Apply transformations
+        model = glm::translate(model, axis_transform.position);
+        model = glm::rotate(model, {glm::radians(axis_transform.rotation.x),
+                                    glm::radians(axis_transform.rotation.y),
+                                    glm::radians(axis_transform.rotation.z)});
+        model = glm::scale(model, axis_transform.scale);
+        // Send to shader
+        bind_guard<Shader> guard(shader);
+        shader.set_mat4(Shader::Uniforms::Model, model);
+        bind_guard<VertexArray> vao(vertices);
+        auto const& color = colors[i];
+		shader.set_vec3(Shader::Uniforms::Color, color);
+        glDrawElements(GL_LINES, vertices.index_size(), GL_UNSIGNED_INT,
+                            nullptr);
+    }
 }
 
 void Renderer::render_viewport(Scene& scene, Viewport& vp) {
@@ -375,6 +415,7 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
 
     render_particles(scene);
     debug_render_colliders(scene);
+    render_axes();
 
     for (auto [relative_transform, mesh, material] :
          scene.ecs.select<Components::Transform, Components::StaticMesh,
