@@ -3,6 +3,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Core/Application.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Core/Engine.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Core/ErrorHandler.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Editor.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/AssetManager/AssetManager.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/AssetManager/Resource.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/AssetManager/ResourceLoaders.hpp"
@@ -53,6 +54,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Physics/Gravity.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Physics/Physics.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Physics/PhysicsTickScheduler.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Physics/AABBCollisionHandler.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/DepthMap.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Framebuffer.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Mesh.hpp"
@@ -79,6 +81,9 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/type_erased.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/Utility.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/in_range.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_impl_opengl3.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_impl_glfw.h"
     PARENT_SCOPE
 )
 

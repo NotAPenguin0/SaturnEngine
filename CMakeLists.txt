@@ -4,6 +4,7 @@ set(ENGINE_FOLDER_NAME "Engine")
 set(ENGINE_DEPENDENCIES_FOLDER_NAME "Dependencies")
 set(DEBUG_OUTPUT_DIRECTORY "bin/debug")
 set(RELEASE_OUTPUT_DIRECTORY "bin/release")
+set(EDITOR_OUTPUT_DIRECTORY "bin/editor")
 
 project(SaturnEngine)
 enable_language(CXX)
@@ -14,9 +15,12 @@ set(ENGINE_COMPILE_FLAGS "-Wno-unused-variable -Wno-unused-function -Wno-unused-
 
 # Define Release by default.
 if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "Release")
-  message(STATUS "Build type not specified: Use Release by default.")
+  set(CMAKE_BUILD_TYPE "Editor")
+  message(STATUS "Build type not specified: Use Editor by default.")
 endif(NOT CMAKE_BUILD_TYPE)
+
+
+set(CMAKE_CXX_FLAGS_EDITOR "${CMAKE_CXX_FLAGS_EDITOR} -DWITH_EDITOR")
 
 add_definitions(
    -DNO_PERFORMANCE_LOG 
@@ -26,6 +30,7 @@ add_definitions(
     ${ENGINE_COMPILE_FLAGS}  # Dirty, but easy and convenient, see 			     	     
 		             # https://stackoverflow.com/questions/11783932/how-do-i-add-a-linker-or-compile-flag-in-a-cmake-file
 )
+
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/${DEBUG_OUTPUT_DIRECTORY}")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/${DEBUG_OUTPUT_DIRECTORY}")

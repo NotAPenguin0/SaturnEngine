@@ -12,6 +12,12 @@
 #include <memory>
 #include <string_view>
 
+#ifdef WITH_EDITOR
+namespace Saturn::Editor {
+class Editor;
+}
+#endif
+
 namespace Saturn {
 
 /**
@@ -23,6 +29,9 @@ namespace Saturn {
 class Application {
 public:
     friend class Engine;
+#ifdef WITH_EDITOR
+	friend class ::Saturn::Editor::Editor;
+#endif
 
     /**
      * /brief Creation info for the application.
@@ -97,6 +106,10 @@ public:
 
     inline Renderer* get_renderer() { return renderer.get(); }
 
+	#ifdef WITH_EDITOR
+	void set_editor_instance(Editor::Editor* editor);
+	#endif
+
 private:
     GLFWwindow* window_handle;   ///< Handle to the GLFW window
     WindowDim window_dimensions; ///< Size of the window
@@ -107,6 +120,9 @@ private:
 
     std::unique_ptr<Physics> physics = nullptr; ///< The core Physics system
 	PhysicsTickScheduler physics_scheduler;
+	#ifdef WITH_EDITOR
+	Editor::Editor* editor;
+	#endif
 	
 };
 

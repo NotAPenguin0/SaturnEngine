@@ -18,12 +18,8 @@ public:
     static constexpr glm::vec3 direction = glm::vec3(0.0f, -1.0f, 0.0f);
     // Gravity constant. #TODO: We should make this a setting somewhere.
     // I will do this when working on the editor
-    static constexpr float gravity_constant = 9.81f;
+    static constexpr float gravity_constant = 1.0f;
 
-private:
-    // To soften the effect of the gravity force. Otherwise a mass of 1.0 falls
-    // down way too fast
-    static constexpr float gravity_multiplier = 0.00013f;
 };
 
 } // namespace Saturn

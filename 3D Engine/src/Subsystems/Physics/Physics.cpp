@@ -26,7 +26,7 @@ void Physics::tick(Scene& scene) {
             auto collision =
                 aabb_handler.detect_collision(rb, collider, collider2);
             if (collision.collided) { 
-				rb.forces = glm::vec3(0.0f, 0.0f, 0.0f); 
+				rb.velocity = glm::vec3(0.0f, 0.0f, 0.0f); 
 			}
         }
     }
@@ -41,16 +41,16 @@ void Physics::add_force(Rigidbody& rb,
                         float force,
                         glm::vec3 const& direction) {
 
-    rb.forces += force * direction;
+    rb.velocity += force * direction;
 }
 
 void Physics::apply_forces(Transform& trans, Rigidbody& rb) {
     // Make sure locked axes remain locked. For this we have to negate the
     // locked_axis bool vec, because lock = true has to become 0.0 as a float
     // vector
-    rb.forces = rb.forces * static_cast<glm::vec3>(glm::negate(rb.locked_axes));
+    rb.velocity = rb.velocity * static_cast<glm::vec3>(glm::negate(rb.locked_axes));
 
-    trans.position += rb.forces;
+    trans.position += rb.velocity;
 }
 
 } // namespace Saturn

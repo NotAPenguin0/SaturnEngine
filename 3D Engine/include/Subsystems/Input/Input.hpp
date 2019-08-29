@@ -369,6 +369,7 @@ public:
 
     static void initialize(Application& app);
     static void load_config_file(std::string const& path);
+    static void set_mouse_capture(bool capture);
 
 private:
     static Application* app;

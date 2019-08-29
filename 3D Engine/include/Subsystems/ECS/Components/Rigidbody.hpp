@@ -16,7 +16,7 @@ struct COMPONENT DEFAULT_SERIALIZE Rigidbody : public ComponentBase {
 	glm::bvec3 locked_axes = {false, false, false};
 private:
     friend class ::Saturn::Physics;
-    glm::vec3 forces;
+    glm::vec3 velocity;
 };
 
 } // namespace Saturn::Components

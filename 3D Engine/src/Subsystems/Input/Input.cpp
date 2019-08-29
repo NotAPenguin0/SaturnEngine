@@ -564,9 +564,13 @@ float Input::get_axis_raw(std::string const& name) {
 void Input::initialize(Application& program) {
     app = &program;
     // Enable mouse capture
-    glfwSetInputMode(app->window(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
     // Initialize the event manager
     InputEventManager::init(program);
+}
+
+void Input::set_mouse_capture(bool capture) {
+    glfwSetInputMode(app->window(), GLFW_CURSOR, capture ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
 }
 
 void Input::load_config_file(std::string const& path) {

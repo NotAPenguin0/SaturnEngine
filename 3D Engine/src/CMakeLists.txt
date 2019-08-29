@@ -3,6 +3,7 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Core/Application.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Core/Engine.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Core/ErrorHandler.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Editor.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/AssetManager/ResourceLoaders.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/component_container.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/CameraZoomControllerSystem.cpp"
@@ -21,6 +22,7 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Math/PositionGenerators.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Math/RandomEngine.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Math/Transform.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Physics/AABBCollisionHandler.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Physics/CollisionDetectors.cpp" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Physics/Gravity.cpp" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Physics/Physics.cpp"
@@ -45,5 +47,11 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/ColorGradient.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/Utility.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../include/imgui/imgui.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../include/imgui/imgui_demo.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../include/imgui/imgui_widgets.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../include/imgui/imgui_impl_opengl3.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../include/imgui/imgui_impl_glfw.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../include/imgui/imgui_draw.cpp"
     PARENT_SCOPE
 )
