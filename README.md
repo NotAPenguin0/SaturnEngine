@@ -15,10 +15,11 @@ Currently, I am working on this project alone.
 - Multiple viewports and cameras
 - Serialization and deserializarion to and from JSON
 - CPU Particle System
+- Very rudimentary gravity system
+- Basic AABB collision detection
 
 # Planned 
 
-- Input system overhaul
 - Terrain Engine
 - Physics Engine
 - GPU Particle system
