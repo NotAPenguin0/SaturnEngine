@@ -1,4 +1,9 @@
 {
+    "ID": 5,
+    "ParentID": 1,
+    "NameComponent": {
+        "Name": "Cube 3"
+    },
     "TransformComponent": {
         "Position": [-4, 4, 6],
         "Rotation": [0, 0, 0],

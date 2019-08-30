@@ -23,7 +23,9 @@
 namespace Saturn {
 
 SceneObject::SceneObject(Scene* s, SceneObject* parent /*= nullptr*/) :
-    scene(s), parent_obj(parent) {}
+    scene(s), parent_obj(parent) {
+    if (has_parent()) { parent_id = parent_obj->get_id(); }
+}
 
 bool SceneObject::has_parent() const { return parent_obj != nullptr; }
 
@@ -40,7 +42,10 @@ void SceneObject::serialize_to_file(std::string_view path) {
 
 void to_json(nlohmann::json& j, SceneObject const& obj) {
     obj.serialize_components<COMPONENT_LIST>(j);
+    j["ID"] = obj.get_id();
+    j["ParentID"] = obj.get_parent_id();
 }
+
 
 void from_json(nlohmann::json const& j, SceneObject& obj) {
     using namespace Components;
@@ -95,6 +100,13 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
 		j.get_to(c);
 		
 	}
+	// Deserialization for Name component
+	if (auto const& component = j.find("NameComponent"); component != j.end()) {
+		auto& c = obj.get_scene()->get_ecs().get_with_id<Name>(
+			obj.add_component<Name>());
+		j.get_to(c);
+		
+	}
 	// Deserialization for ParticleEmitter component
 	if (auto const& component = j.find("ParticleEmitterComponent"); component != j.end()) {
 		auto& c = obj.get_scene()->get_ecs().get_with_id<ParticleEmitter>(
@@ -144,6 +156,17 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
 		j.get_to(c);
 		
 	}
+	
+	
+    // Deserialize parent entity
+    if (auto const& parent = j.find("ParentID"); parent != j.end()) {
+        std::size_t p_id = (*parent).get<int>();
+        obj.set_parent_id(p_id);
+    }
+
+    if (auto const& id = j.find("ID"); id != j.end()) {
+        obj.set_id((*id).get<int>());
+    }
 } 
 
 } // namespace Saturn

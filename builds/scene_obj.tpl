@@ -23,7 +23,9 @@
 namespace Saturn {
 
 SceneObject::SceneObject(Scene* s, SceneObject* parent /*= nullptr*/) :
-    scene(s), parent_obj(parent) {}
+    scene(s), parent_obj(parent) {
+    if (has_parent()) { parent_id = parent_obj->get_id(); }
+}
 
 bool SceneObject::has_parent() const { return parent_obj != nullptr; }
 
@@ -40,7 +42,10 @@ void SceneObject::serialize_to_file(std::string_view path) {
 
 void to_json(nlohmann::json& j, SceneObject const& obj) {
     obj.serialize_components<COMPONENT_LIST>(j);
+    j["ID"] = obj.get_id();
+    j["ParentID"] = obj.get_parent_id();
 }
+
 
 void from_json(nlohmann::json const& j, SceneObject& obj) {
     using namespace Components;
@@ -55,6 +60,17 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
 		{{{AdditionalCode}}}
 	}
 	{{/DeserializeComponent}}
+	
+	
+    // Deserialize parent entity
+    if (auto const& parent = j.find("ParentID"); parent != j.end()) {
+        std::size_t p_id = (*parent).get<int>();
+        obj.set_parent_id(p_id);
+    }
+
+    if (auto const& id = j.find("ID"); id != j.end()) {
+        obj.set_id((*id).get<int>());
+    }
 } 
 
 } // namespace Saturn

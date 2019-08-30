@@ -1,0 +1,12 @@
+{
+    "ID": 1,
+    "ParentID": 0,
+    "TransformComponent":{
+        "Position": [0, 0, 0],
+        "Rotation": [0, 0, 0],
+        "Scale": [1, 1, 1]
+    },
+    "NameComponent": {
+        "Name": "Cube Root"
+    }
+}

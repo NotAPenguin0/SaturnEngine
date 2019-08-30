@@ -122,7 +122,7 @@ void Application::run() {
         Time::update();
         InputEventManager::process_events();
 #ifdef WITH_EDITOR
-        editor->render();
+        editor->render(scene);
         glViewport(0, 0, window_dimensions.x, window_dimensions.y);
 #endif
         renderer->clear(Color{0.003f, 0.003f, 0.003f, 1.0f});

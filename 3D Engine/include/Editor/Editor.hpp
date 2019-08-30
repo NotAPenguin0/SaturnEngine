@@ -4,10 +4,13 @@
 #ifdef WITH_EDITOR
 
 #include <cstddef>
+#include <vector>
 
 namespace Saturn {
 
 class Application;
+class Scene;
+class SceneObject;
 
 namespace Editor {
 
@@ -18,12 +21,21 @@ public:
 	void setup_viewports();
 
 	// Must be called at the start of the frame
-	void render();
+	void render(Scene& scene);
     void frame_end();
 
 private:
+	void show_scene_tree(Scene& scene);
+    void show_menu_bar();
+
     Application* app;
     std::size_t scene_view_viewport_id = 0;
+
+	struct WidgetsShowData {
+		bool entity_tree = true;
+	} show_widgets;
+
+	std::vector<SceneObject*> build_entity_tree(Scene& scene);
 };
 
 } // namespace Editor

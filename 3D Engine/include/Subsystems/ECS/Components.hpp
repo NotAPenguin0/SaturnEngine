@@ -12,6 +12,7 @@
 #include "Components/FPSCameraController.hpp"
 #include "Components/FreeLookController.hpp"
 #include "Components/Material.hpp"
+#include "Components/Name.hpp"
 #include "Components/ParticleEmitter.hpp"
 #include "Components/PointLight.hpp"
 #include "Components/Rigidbody.hpp"

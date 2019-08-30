@@ -11,6 +11,7 @@
 ::Saturn::Components::FPSCameraController, \
 ::Saturn::Components::FreeLookController, \
 ::Saturn::Components::Material, \
+::Saturn::Components::Name, \
 ::Saturn::Components::ParticleEmitter, \
 ::Saturn::Components::PointLight, \
 ::Saturn::Components::Rigidbody, \

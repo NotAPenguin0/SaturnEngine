@@ -1,9 +1,14 @@
 {
+    "ID": 7,
+    "ParentID": 0,
     "DirectionalLightComponent": {
         "Ambient": [0.07, 0.07, 0.07],
         "Diffuse": [0.1, 0.1, 0.1],
         "Specular": [0.3, 0.3, 0.3],
         "Intensity": 5,
         "Direction": [-0.57735, -0.57735, -0.57735]
+    },
+    "NameComponent": {
+        "Name": "Main Directional Light"
     }
 }

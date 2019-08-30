@@ -1,4 +1,9 @@
 {
+    "ID": 2,
+    "ParentID": 0,
+    "NameComponent": {
+        "Name": "Camera"
+    },
     "CameraComponent": {
         "Fov": 45.0,
         "Front": [

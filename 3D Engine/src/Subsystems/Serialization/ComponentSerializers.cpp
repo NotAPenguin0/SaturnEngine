@@ -89,6 +89,15 @@ void from_json(nlohmann::json const& json, Material& component) {
 	}
 }
 
+void from_json(nlohmann::json const& json, Name& component) {
+	auto c = json.find("NameComponent");
+	if (c == json.end()) {
+		throw std::runtime_error("No Name component stored even though it was requested");
+	} else {
+		component.name = (*c)["Name"].get<std::string>();
+	}
+}
+
 void from_json(nlohmann::json const& json, PointLight& component) {
 	auto c = json.find("PointLightComponent");
 	if (c == json.end()) {
@@ -217,6 +226,13 @@ void to_json(nlohmann::json& json, Material const& component) {
 	json["MaterialComponent"]["Lit"] = component.lit;
 	json["MaterialComponent"]["SpecularMap"] = component.specular_map;
 	json["MaterialComponent"]["Shininess"] = component.shininess;
+	// clang-format on
+}
+
+void to_json(nlohmann::json& json, Name const& component) {
+	json["NameComponent"] = nlohmann::json::object();
+	// clang-format off
+	json["NameComponent"]["Name"] = component.name;
 	// clang-format on
 }
 

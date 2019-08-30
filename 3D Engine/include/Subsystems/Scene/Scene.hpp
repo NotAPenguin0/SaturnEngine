@@ -2,20 +2,25 @@
 #define SATURN_SCENE_HPP_
 
 #include <memory>
-#include <vector>
 #include <string_view>
+#include <vector>
 
 #include "Subsystems/ECS/Components.hpp"
 
-#include "Subsystems/ECS/ECS.hpp"
 #include "Subsystems/ECS/ComponentList.hpp"
-
+#include "Subsystems/ECS/ECS.hpp"
 
 namespace Saturn {
 
 class Application;
 
 class SceneObject;
+
+#ifdef WITH_EDITOR
+namespace Editor {
+class Editor;
+}
+#endif
 
 class Scene {
 public:
@@ -24,27 +29,33 @@ public:
     friend class Renderer;
     friend class ::Saturn::Application;
     friend class Systems::SystemBase;
+#ifdef WITH_EDITOR
+    friend class ::Saturn::Editor::Editor;
+#endif
 
     Scene(Application* app);
     ~Scene();
 
-	void on_start();
-	void update_systems();
+    void on_start();
+    void update_systems();
 
     SceneObject& create_object(SceneObject* parent = nullptr);
-    SceneObject& create_object_from_file(std::string_view file_path, SceneObject* parent = nullptr);
+    SceneObject& create_object_from_file(std::string_view file_path,
+                                         SceneObject* parent = nullptr);
 
-	ECS<COMPONENT_LIST>& get_ecs();
+    ECS<COMPONENT_LIST>& get_ecs();
 
-	void serialize_to_file(std::string_view folder);
-	void deserialize_from_file(std::string_view path);
+    void serialize_to_file(std::string_view folder);
+    void deserialize_from_file(std::string_view path);
 
-	Application* get_app();
+    Application* get_app();
 
 private:
+    void resolve_parent_pointers();
+    void set_id_generator_value();
     std::vector<std::unique_ptr<SceneObject>> objects;
     ECS<COMPONENT_LIST> ecs;
-	Application* app;
+    Application* app;
 };
 
 } // namespace Saturn

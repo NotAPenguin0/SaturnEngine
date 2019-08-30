@@ -1,4 +1,9 @@
 {
+    "ID": 8,
+    "ParentID": 0,
+    "NameComponent": {
+        "Name": "Particle Emitter"
+    },
     "ParticleEmitterComponent": {
         "Additive": false,
         "ColorOverLifetime": {

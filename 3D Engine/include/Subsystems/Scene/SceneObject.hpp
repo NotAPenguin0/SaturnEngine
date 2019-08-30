@@ -69,6 +69,7 @@ public:
     bool has_parent() const;
     SceneObject* parent();
     SceneObject const* parent() const;
+    inline void set_parent(SceneObject* new_parent) { parent_obj = new_parent; }
 
     inline Scene* get_scene() { return scene; }
 
@@ -89,7 +90,15 @@ public:
 
     friend void from_json(nlohmann::json const& j, SceneObject& obj);
 
+    inline void set_id(std::size_t new_id) { id = new_id; }
+    inline std::size_t get_id() const { return id; }
+
+    inline void set_parent_id(std::size_t p_id) { parent_id = p_id; }
+    inline std::size_t get_parent_id() const { return parent_id; }
+
 private:
+    std::size_t id = IDGenerator<SceneObject>::none;
+    std::size_t parent_id = IDGenerator<SceneObject>::none;
     Scene* scene;
     SceneObject* parent_obj;
     // Maps a component type to a component id. The id will be translated in an
