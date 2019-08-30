@@ -24,8 +24,12 @@ public:
 	void render(Scene& scene);
     void frame_end();
 
+	using EntityTreeT = std::vector<SceneObject*>;
+
 private:
 	void show_scene_tree(Scene& scene);
+	void show_entity_tree(EntityTreeT& enttree, Scene& scene, SceneObject*& selected);
+	void show_entity_details(SceneObject* entity, Scene& scene);
     void show_menu_bar();
 
     Application* app;

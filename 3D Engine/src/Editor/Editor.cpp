@@ -2,6 +2,7 @@
 
 #    include "Editor/Editor.hpp"
 #    include "Core/Application.hpp"
+#    include "Subsystems/ECS/ComponentList.hpp"
 #    include "Subsystems/ECS/Components.hpp"
 #    include "Subsystems/Input/Input.hpp"
 #    include "Subsystems/Scene/Scene.hpp"
@@ -61,6 +62,9 @@ void Editor::render(Scene& scene) {
 }
 
 void Editor::show_menu_bar() {
+    // Temporary
+    static bool show_demo_window = false;
+
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
             ImGui::MenuItem("Nothing here yet");
@@ -72,6 +76,7 @@ void Editor::show_menu_bar() {
         }
         if (ImGui::BeginMenu("View")) {
             ImGui::MenuItem("Entity Tree", nullptr, &show_widgets.entity_tree);
+            ImGui::MenuItem("ImGui Demo Window", nullptr, &show_demo_window);
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Options")) {
@@ -81,28 +86,48 @@ void Editor::show_menu_bar() {
 
         ImGui::EndMainMenuBar();
     }
+
+    if (show_demo_window) ImGui::ShowDemoWindow();
 }
 
-static void show_entity(SceneObject& entity) {
-    ImGui::Text("An entity with id: %i", entity.get_id());
-    ImGui::Text("Parent id: %i", entity.get_parent_id());
+static bool has_child(Editor::EntityTreeT& enttree,
+                      Editor::EntityTreeT::iterator entity) {
+    // only do this if the entity is not the last one
+    return entity != enttree.end() - 1 &&
+           (*entity)->get_id() == (*(entity + 1))->get_parent_id();
 }
 
-static std::vector<SceneObject*>::iterator
-show_self_and_children(std::vector<SceneObject*>& enttree,
-                       std::vector<SceneObject*>::iterator entity) {
+static Editor::EntityTreeT::iterator
+show_self_and_children(Editor::EntityTreeT& enttree,
+                       Editor::EntityTreeT::iterator entity,
+                       SceneObject*& selected) {
     using namespace ::Saturn::Components;
     std::string to_display = "";
     if (SceneObject* obj = *entity; obj->has_component<Name>()) {
-        Name& name_component = obj->get_component<Name>();
+        auto& name_component = obj->get_component<Name>();
         to_display = name_component.name;
     } else {
         to_display =
             "Unknown entity with ID " + std::to_string((*entity)->get_id());
     }
     auto cur = entity;
-    if (ImGui::TreeNode(to_display.c_str())) {
-        show_entity(**entity);
+
+    bool is_leaf = false;
+    ImGuiTreeNodeFlags node_flags =
+        ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+    if (!has_child(enttree, entity)) {
+        // If the node has no children, give it the 'leaf' flags so you cannot
+        // see the expand arrow next to it
+        node_flags |=
+            ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+        is_leaf = true;
+    }
+
+    if (*entity == selected) { node_flags |= ImGuiTreeNodeFlags_Selected; }
+
+    if (ImGui::TreeNodeEx(to_display.c_str(), node_flags)) {
+
+        if (ImGui::IsItemClicked()) { selected = *entity; }
         ++cur;
         // For each next entity, show it if it's parent is the current
         // entity.
@@ -111,7 +136,7 @@ show_self_and_children(std::vector<SceneObject*>& enttree,
             // If the parent is the current entity's ID, show it and its
             // children.
             if (parent == (*entity)->get_id()) {
-                cur = show_self_and_children(enttree, cur);
+                cur = show_self_and_children(enttree, cur, selected);
             } else {
                 // If the parent is not the current entity, we are in the
                 // next section of our tree, so break out of the loop We
@@ -123,32 +148,50 @@ show_self_and_children(std::vector<SceneObject*>& enttree,
             // Move to next entity
             if (cur != enttree.end()) { ++cur; }
         }
-
-        ImGui::TreePop();
+        if (!is_leaf) { ImGui::TreePop(); }
     }
     return cur;
 }
 
-void Editor::show_scene_tree(Scene& scene) {
-    if (show_widgets.entity_tree) {
-        auto enttree = build_entity_tree(scene);
-        ImGui::Begin("Entity Tree", &show_widgets.entity_tree);
-        std::size_t i = 0;
-        for (auto entity_it = enttree.begin(); entity_it != enttree.end();
-             ++entity_it) {
-            auto entity = *entity_it;
+void Editor::show_entity_tree(EntityTreeT& enttree,
+                              Scene& scene,
+                              SceneObject*& selected) {
+    std::size_t i = 0;
+    for (auto entity_it = enttree.begin(); entity_it != enttree.end();
+         ++entity_it) {
+        auto entity = *entity_it;
 
-            // Only display if this is a root entity
-            if (entity->get_parent_id() == 0) {
-                entity_it = show_self_and_children(enttree, entity_it);
-            }
-
-            // #TODO: Use ImGui::CollapsingHeader() to display components
-            if (entity_it == enttree.end()) break;
+        // Only display if this is a root entity
+        if (entity->get_parent_id() == 0) {
+            entity_it = show_self_and_children(enttree, entity_it, selected);
         }
 
-        ImGui::End();
+        // #TODO: Use ImGui::CollapsingHeader() to display components
+        if (entity_it == enttree.end()) break;
     }
+}
+
+void Editor::show_entity_details(SceneObject* entity, Scene& scene) {
+    using namespace ::Saturn::Components;
+    static constexpr std::size_t name_buffer_size = 128;
+    std::string& name = entity->get_component<Name>().name;
+    name.resize(name_buffer_size);
+    ImGui::InputText("Entity name", name.data(), name_buffer_size);
+}
+
+void Editor::show_scene_tree(Scene& scene) {
+    static SceneObject* selected = nullptr;
+    if (show_widgets.entity_tree) {
+        ImGui::Begin("Entity Tree", &show_widgets.entity_tree);
+        auto enttree = build_entity_tree(scene);
+        ImGui::Columns(2, "EntityTree", true);
+        show_entity_tree(enttree, scene, selected);
+        ImGui::NextColumn();
+        if (selected != nullptr) { show_entity_details(selected, scene); }
+        // End columns section
+        ImGui::Columns(1);
+    }
+    ImGui::End();
 }
 
 void Editor::frame_end() {
