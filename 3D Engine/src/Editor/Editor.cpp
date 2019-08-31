@@ -171,12 +171,33 @@ void Editor::show_entity_tree(EntityTreeT& enttree,
     }
 }
 
+template<typename C>
+void display_component(SceneObject* entity, std::size_t i) {
+	if (!entity->has_component<C>()) return;
+    auto& comp = entity->get_component<C>();
+	if (ImGui::CollapsingHeader(
+		("Component nr. " + std::to_string(i)).c_str())) {
+		ImGui::Text("It's a component!");
+	}
+
+	//#TODO: Fix crash when closing entity tree
+}
+
+template<typename C, typename... Cs>
+void display_components(SceneObject* entity, std::size_t& i) {
+    display_component<C>(entity, i);
+    ++i;
+    if constexpr (sizeof...(Cs) != 0) { display_components<Cs...>(entity, i); }
+}
+
 void Editor::show_entity_details(SceneObject* entity, Scene& scene) {
     using namespace ::Saturn::Components;
     static constexpr std::size_t name_buffer_size = 128;
     std::string& name = entity->get_component<Name>().name;
     name.resize(name_buffer_size);
     ImGui::InputText("Entity name", name.data(), name_buffer_size);
+    std::size_t i = 0;
+    display_components<COMPONENT_LIST>(entity, i);
 }
 
 void Editor::show_scene_tree(Scene& scene) {
@@ -190,8 +211,9 @@ void Editor::show_scene_tree(Scene& scene) {
         if (selected != nullptr) { show_entity_details(selected, scene); }
         // End columns section
         ImGui::Columns(1);
+        ImGui::End();
     }
-    ImGui::End();
+
 }
 
 void Editor::frame_end() {
