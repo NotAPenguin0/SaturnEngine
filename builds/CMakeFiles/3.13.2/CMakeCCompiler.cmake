@@ -1,4 +1,4 @@
-set(CMAKE_C_COMPILER "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.15.26726/bin/Hostx86/x86/cl.exe")
+set(CMAKE_C_COMPILER "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.16.27023/bin/Hostx86/x86/cl.exe")
 set(CMAKE_C_COMPILER_ARG1 "")
 set(CMAKE_C_COMPILER_ID "Clang")
 set(CMAKE_C_COMPILER_VERSION "7.0.0")
@@ -12,7 +12,7 @@ set(CMAKE_C11_COMPILE_FEATURES "c_std_11")
 
 set(CMAKE_C_PLATFORM_ID "Windows")
 set(CMAKE_C_SIMULATE_ID "MSVC")
-set(CMAKE_C_SIMULATE_VERSION "19.15")
+set(CMAKE_C_SIMULATE_VERSION "19.16")
 set(CMAKE_C_COMPILER_ARCHITECTURE_ID X86)
 set(MSVC_C_ARCHITECTURE_ID X86)
 

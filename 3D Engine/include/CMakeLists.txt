@@ -72,6 +72,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Scene/SceneObject.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Serialization/CodeGenDefinitions.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Serialization/ComponentSerializers.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Serialization/ComponentMetaInfo.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Serialization/CustomSerializers.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Time/Time.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/bind_guard.hpp"

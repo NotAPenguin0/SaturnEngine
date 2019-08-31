@@ -38,11 +38,16 @@ Scene::create_object_from_file(std::string_view file_path,
 
 void Scene::serialize_to_file(std::string_view folder) {
     namespace fs = std::filesystem;
+    using namespace Components;
     fs::create_directories(folder.data() + std::string("/entities"));
     std::ofstream file(folder.data() + std::string("/scene.dat"));
     for (std::size_t i = 0; i < objects.size(); ++i) {
-        auto fname = folder.data() + std::string("/entities/") +
-                     std::to_string(i) + ".json";
+        std::string fname = folder.data() + std::string("/entities/");
+        if (objects[i]->has_component<Name>()) {
+            fname += objects[i]->get_component<Name>().name + ".json";
+        } else {
+            fname += std::to_string(i) + ".json";
+        }
         objects[i]->serialize_to_file(fname);
         file << fname << "\n";
     }
@@ -51,7 +56,7 @@ void Scene::serialize_to_file(std::string_view folder) {
 void Scene::deserialize_from_file(std::string_view path) {
     std::ifstream file(path.data());
     std::string fname;
-    while (file >> fname) { create_object_from_file(fname); }
+    while (std::getline(file, fname)) { create_object_from_file(fname); }
     resolve_parent_pointers();
     set_id_generator_value();
 }

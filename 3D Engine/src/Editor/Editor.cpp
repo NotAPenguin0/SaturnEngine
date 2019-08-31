@@ -7,6 +7,7 @@
 #    include "Subsystems/Input/Input.hpp"
 #    include "Subsystems/Scene/Scene.hpp"
 #    include "Subsystems/Scene/SceneObject.hpp"
+#    include "Subsystems/Serialization/ComponentMetaInfo.hpp"
 #    include "imgui/imgui.h"
 #    include "imgui/imgui_impl_glfw.h"
 #    include "imgui/imgui_impl_opengl3.h"
@@ -20,6 +21,8 @@ Editor::Editor(Application& app) : app(&app) {
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(this->app->window_handle, true);
     ImGui_ImplOpenGL3_Init("#version 430");
+    // Initialize components metadata
+    Meta::ComponentsMeta<COMPONENT_LIST>::init();
 }
 
 void Editor::setup_viewports() {
@@ -53,7 +56,7 @@ void Editor::render(Scene& scene) {
     if (show_demo) { ImGui::ShowDemoWindow(&show_demo); }
 
     show_scene_tree(scene);
-    show_menu_bar();
+    show_menu_bar(scene);
 
     ImGui::Render();
     Viewport::set_active(
@@ -61,13 +64,18 @@ void Editor::render(Scene& scene) {
     glViewport(0, 0, 800, 600);
 }
 
-void Editor::show_menu_bar() {
+void Editor::show_menu_bar(Scene& scene) {
     // Temporary
     static bool show_demo_window = false;
 
+    static bool save_item_selected = false;
+
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
-            ImGui::MenuItem("Nothing here yet");
+            if (ImGui::MenuItem("Save scene to scene1", nullptr, &save_item_selected)) {
+                scene.serialize_to_file("resources/scene1");
+                save_item_selected = false;
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit")) {
@@ -173,14 +181,20 @@ void Editor::show_entity_tree(EntityTreeT& enttree,
 
 template<typename C>
 void display_component(SceneObject* entity, std::size_t i) {
-	if (!entity->has_component<C>()) return;
+    using namespace Components;
+    if constexpr (std::is_same_v<C, Name>) return;
+    if (!entity->has_component<C>()) return;
     auto& comp = entity->get_component<C>();
-	if (ImGui::CollapsingHeader(
-		("Component nr. " + std::to_string(i)).c_str())) {
-		ImGui::Text("It's a component!");
-	}
+    auto const& component_meta =
+        Meta::ComponentsMeta<COMPONENT_LIST>::get_component_meta_info<C>();
+    if (ImGui::CollapsingHeader(component_meta.name.c_str())) {
+        for (auto const& [field_name, field_type] : component_meta.fields) {
+            ImGui::Text("Field: %s of type %s", field_name.c_str(),
+                        field_type.c_str());
+        }
+    }
 
-	//#TODO: Fix crash when closing entity tree
+    //#TODO: Fix crash when closing entity tree
 }
 
 template<typename C, typename... Cs>
@@ -213,7 +227,6 @@ void Editor::show_scene_tree(Scene& scene) {
         ImGui::Columns(1);
         ImGui::End();
     }
-
 }
 
 void Editor::frame_end() {

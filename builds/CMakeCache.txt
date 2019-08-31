@@ -29,7 +29,7 @@ BZRCOMMAND:FILEPATH=BZRCOMMAND-NOTFOUND
 //Semicolon separated list of supported configuration types, only
 // supports Debug, Release, MinSizeRel, and RelWithDebInfo, anything
 // else will be ignored.
-CMAKE_CONFIGURATION_TYPES:STRING=Debug;Release;MinSizeRel;RelWithDebInfo;Editor
+CMAKE_CONFIGURATION_TYPES:STRING=Editor;Debug;Release;MinSizeRel
 
 //LLVM archiver
 CMAKE_CXX_COMPILER_AR:FILEPATH=C:/Program Files (x86)/LLVM/bin/llvm-ar.exe

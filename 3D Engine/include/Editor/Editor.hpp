@@ -30,7 +30,7 @@ private:
 	void show_scene_tree(Scene& scene);
 	void show_entity_tree(EntityTreeT& enttree, Scene& scene, SceneObject*& selected);
 	void show_entity_details(SceneObject* entity, Scene& scene);
-    void show_menu_bar();
+    void show_menu_bar(Scene& scene);
 
     Application* app;
     std::size_t scene_view_viewport_id = 0;
