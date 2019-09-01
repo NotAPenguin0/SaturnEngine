@@ -5,6 +5,7 @@
 #    include "Subsystems/ECS/ComponentList.hpp"
 #    include "Subsystems/ECS/Components.hpp"
 #    include "Subsystems/Input/Input.hpp"
+#    include "Subsystems/Renderer/Viewport.hpp"
 #    include "Subsystems/Scene/Scene.hpp"
 #    include "Subsystems/Scene/SceneObject.hpp"
 #    include "Subsystems/Serialization/ComponentMetaInfo.hpp"
@@ -72,7 +73,8 @@ void Editor::show_menu_bar(Scene& scene) {
 
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
-            if (ImGui::MenuItem("Save scene to scene1", nullptr, &save_item_selected)) {
+            if (ImGui::MenuItem("Save scene to scene1", nullptr,
+                                &save_item_selected)) {
                 scene.serialize_to_file("resources/scene1");
                 save_item_selected = false;
             }
@@ -179,29 +181,87 @@ void Editor::show_entity_tree(EntityTreeT& enttree,
     }
 }
 
-template<typename C>
-void display_component(SceneObject* entity, std::size_t i) {
-    using namespace Components;
-    if constexpr (std::is_same_v<C, Name>) return;
-    if (!entity->has_component<C>()) return;
-    auto& comp = entity->get_component<C>();
-    auto const& component_meta =
-        Meta::ComponentsMeta<COMPONENT_LIST>::get_component_meta_info<C>();
-    if (ImGui::CollapsingHeader(component_meta.name.c_str())) {
-        for (auto const& [field_name, field_type] : component_meta.fields) {
-            ImGui::Text("Field: %s of type %s", field_name.c_str(),
-                        field_type.c_str());
-        }
+struct ComponentFieldVisitor {
+    // Define overloaded visitor for types:
+    // std::size_t, float, int, std::string, glm::vec3, glm::vec4, bool
+
+    std::string_view field_name;
+
+    void operator()(std::size_t* field) {
+		ImGui::DragScalar(field_name.data(), ImGuiDataType_U64, field, 0.2f);
     }
 
-    //#TODO: Fix crash when closing entity tree
+    void operator()(float* field) {
+        ImGui::DragScalar(field_name.data(), ImGuiDataType_Float, field, 0.2f);
+    }
+
+    void operator()(int* field) {
+        ImGui::DragScalar(field_name.data(), ImGuiDataType_S32, field, 0.2f);
+    }
+
+    void operator()(std::string* field) {
+        static constexpr std::size_t buf_size = 128;
+        field->resize(buf_size);
+		ImGui::InputText(field_name.data(), field->data(), buf_size);
+    }
+
+    void operator()(glm::vec3* field) {
+        ImGui::InputFloat3(field_name.data(), &field->x);
+    }
+
+    void operator()(glm::vec4* field) {
+        ImGui::InputFloat4(field_name.data(), &field->x);
+    }
+
+    void operator()(glm::bvec3* field) {
+        ImGui::Text("%s: ", field_name.data());
+        ImGui::SameLine();
+		ImGui::Checkbox("x", &field->x);
+		ImGui::SameLine();
+        ImGui::Checkbox("y", &field->y);
+        ImGui::SameLine();
+        ImGui::Checkbox("z", &field->z);
+    }
+
+    void operator()(bool* field) {
+        ImGui::Checkbox(field_name.data(), field);
+    }
+};
+
+template<typename C>
+void display_component(SceneObject* entity) {
+    using namespace Meta;
+    using namespace Components;
+    using ComponentMeta = ComponentsMeta<COMPONENT_LIST>;
+    auto& comp = entity->get_component<C>();
+    ComponentInfo const& component_meta =
+        ComponentMeta::get_component_meta_info<C>();
+    if (ImGui::CollapsingHeader(component_meta.name.c_str())) {
+
+        for (auto const& [field_name, field_type] : component_meta.fields) {
+            if (field_type.find("Resource") != std::string::npos) {
+                continue; // unsupported for now, this will be added once we
+                          // have an asset browser
+            }
+            ComponentFieldPtr field_info =
+                ComponentMeta::get_component_field(comp, field_name);
+            // Check if pointer isn't null
+            if (!field_info) { continue; }
+            std::visit(ComponentFieldVisitor{field_name}, field_info.get());
+        }
+    }
 }
 
 template<typename C, typename... Cs>
-void display_components(SceneObject* entity, std::size_t& i) {
-    display_component<C>(entity, i);
-    ++i;
-    if constexpr (sizeof...(Cs) != 0) { display_components<Cs...>(entity, i); }
+void display_components(SceneObject* entity) {
+    using namespace Components;
+    if (!std::is_same_v<C, Name> && entity->has_component<C>()) {
+        // Temporary
+        if constexpr (!std::is_same_v<C, ParticleEmitter>) {
+            display_component<C>(entity);
+        }
+    };
+    if constexpr (sizeof...(Cs) != 0) { display_components<Cs...>(entity); }
 }
 
 void Editor::show_entity_details(SceneObject* entity, Scene& scene) {
@@ -210,8 +270,7 @@ void Editor::show_entity_details(SceneObject* entity, Scene& scene) {
     std::string& name = entity->get_component<Name>().name;
     name.resize(name_buffer_size);
     ImGui::InputText("Entity name", name.data(), name_buffer_size);
-    std::size_t i = 0;
-    display_components<COMPONENT_LIST>(entity, i);
+    display_components<COMPONENT_LIST>(entity);
 }
 
 void Editor::show_scene_tree(Scene& scene) {

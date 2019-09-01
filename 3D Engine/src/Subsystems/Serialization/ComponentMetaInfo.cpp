@@ -133,4 +133,5 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	}
 }
 
+
 } // namespace Saturn::Meta::detail

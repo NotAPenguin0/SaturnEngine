@@ -46,6 +46,7 @@ struct OutputFiles {
     fs::path components;
     fs::path component_list;
     fs::path component_meta_src;
+    fs::path component_meta_header;
 };
 
 struct ComponentData {
@@ -153,8 +154,11 @@ OutputFiles get_output_files(Directories const& dirs) {
         dirs.include / "Subsystems" / "ECS" / "ComponentList.hpp";
     const fs::path component_meta_src =
         dirs.source / "Subsystems" / "Serialization" / "ComponentMetaInfo.cpp";
-    return {output_header, output_source,  output_scene_obj,
-            components,    component_list, component_meta_src};
+    const fs::path component_meta_header =
+        dirs.include / "Subsystems" / "Serialization" / "ComponentMetaInfo.hpp";
+    return {output_header,        output_source,  output_scene_obj,
+            components,           component_list, component_meta_src,
+            component_meta_header};
 }
 
 std::vector<fs::path> get_component_files(Directories const& dirs) {
@@ -567,6 +571,37 @@ generate_components_meta_info(std::vector<ComponentData> const& components) {
     return source.render(data);
 }
 
+std::string
+generate_meta_info_header(std::vector<ComponentData> const& components) {
+    static const std::string base = read_file_into_string("meta_header.tpl");
+    mustache::mustache source(base);
+
+    mustache::data data = mustache::data::type::object;
+    data["ComponentFieldOverload"] = mustache::data::type::list;
+    auto& list = data["ComponentFieldOverload"];
+
+    for (auto const& component : components) {
+        mustache::data c_data = mustache::data::type::object;
+        c_data["ComponentName"] = component.name;
+        // #TODO: Skipping particle emitter for now, needs special treatment
+        if (component.name == "ParticleEmitter") continue;
+        c_data["Field"] = mustache::data::type::list;
+        auto& field_list = c_data["Field"];
+        for (auto const& [field_name, field_type] : component.fields) {
+            mustache::data f_data = mustache::data::type::object;
+            if (field_type.find("Resource") != std::string::npos) {
+                // We don't support these right now
+                continue;
+            }
+            f_data["FieldName"] = field_name;
+            field_list.push_back(f_data);
+        }
+        list.push_back(c_data);
+    }
+
+    return source.render(data);
+}
+
 void write_output_file(fs::path const& out, std::string const& content) {
     // Check if the output file is the same as our content that we are going to
     // write. This helps avoid a recompilation
@@ -611,6 +646,7 @@ int main(int argc, char** argv) {
     std::string component_list_header =
         generate_component_list_header(components);
     std::string meta_source = generate_components_meta_info(components);
+    std::string meta_header = generate_meta_info_header(components);
 
     // Write output with small cache check
     write_output_file(output_files.header, header);
@@ -619,4 +655,5 @@ int main(int argc, char** argv) {
     write_output_file(output_files.components, components_header);
     write_output_file(output_files.component_list, component_list_header);
     write_output_file(output_files.component_meta_src, meta_source);
+	write_output_file(output_files.component_meta_header, meta_header);
 }

@@ -44,7 +44,7 @@ void Scene::serialize_to_file(std::string_view folder) {
     for (std::size_t i = 0; i < objects.size(); ++i) {
         std::string fname = folder.data() + std::string("/entities/");
         if (objects[i]->has_component<Name>()) {
-            fname += objects[i]->get_component<Name>().name + ".json";
+            fname += (objects[i]->get_component<Name>().name + ".json");
         } else {
             fname += std::to_string(i) + ".json";
         }
