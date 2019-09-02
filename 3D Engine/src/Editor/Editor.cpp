@@ -80,8 +80,12 @@ void Editor::show_menu_bar(Scene& scene) {
                 dialog.show(SelectFileDialog::PickFolders);
                 fs::path result = dialog.get_result();
                 result += "/scene.dat";
-				scene.deserialize_from_file(result.string());
-				on_scene_reload();
+                scene.deserialize_from_file(result.string());
+                on_scene_reload();
+            }
+            ImGui::Separator();
+			if (ImGui::MenuItem("Exit")) {
+				app->quit();
 			}
             ImGui::EndMenu();
         }
@@ -106,9 +110,8 @@ void Editor::show_menu_bar(Scene& scene) {
 }
 
 void Editor::on_scene_reload() {
-	selected_entity = nullptr;
-	// Update viewport camera id
-
+    selected_entity = nullptr;
+    // Update viewport camera id
 }
 
 static bool has_child(Editor::EntityTreeT& enttree,
@@ -289,7 +292,9 @@ void Editor::show_scene_tree(Scene& scene) {
         ImGui::Columns(2, "EntityTree", true);
         show_entity_tree(enttree, scene, selected_entity);
         ImGui::NextColumn();
-        if (selected_entity != nullptr) { show_entity_details(selected_entity, scene); }
+        if (selected_entity != nullptr) {
+            show_entity_details(selected_entity, scene);
+        }
         // End columns section
         ImGui::Columns(1);
         ImGui::End();
