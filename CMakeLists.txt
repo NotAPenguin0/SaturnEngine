@@ -73,13 +73,22 @@ add_custom_command(TARGET ${PROJECT_NAME}
 	COMMAND ${ABSOLUTE_CODEGEN_PATH} ${ABSOLUTE_PROJECT_DIR}
 )
 
-target_link_libraries(${PROJECT_NAME}
-    ${OPENGL_LIBRARIES}
-    glad
-    glfw
-    nlohmann_json
-    glm
-)
+set(LINK_LIBRARIES
+	${OPENGL_LIBRARIES} glad glfw nlohmann_json glm)
+
+if (WIN32) 
+	set(LINK_LIBRARIES ${LINK_LIBRARIES} shlwapi.lib propsys.lib)
+endif(WIN32)
+
+# target_link_libraries(${PROJECT_NAME}
+#    ${OPENGL_LIBRARIES}
+#    glad
+#    glfw
+#    nlohmann_json
+#    glm
+#)
+
+target_link_libraries(${PROJECT_NAME} ${LINK_LIBRARIES})
 
 # Code Generation projects
 

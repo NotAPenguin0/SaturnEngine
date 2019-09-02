@@ -110,12 +110,11 @@ void Application::run() {
     scene.ecs.register_system<Systems::RotatorSystem>();
     scene.ecs.register_system<Systems::FlashlightSystem>();
 
-    scene.deserialize_from_file("resources/scene1/scene.dat");
-
 #ifdef WITH_EDITOR
     editor->setup_viewports();
 #endif
 
+    scene.deserialize_from_file("resources/scene1/scene.dat");
     scene.on_start();
     while (!glfwWindowShouldClose(window_handle)) {
         glfwPollEvents();

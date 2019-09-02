@@ -42,11 +42,13 @@ public:
     SceneObject& create_object(SceneObject* parent = nullptr);
     SceneObject& create_object_from_file(std::string_view file_path,
                                          SceneObject* parent = nullptr);
+	void destroy_object(SceneObject* object);
 
     ECS<COMPONENT_LIST>& get_ecs();
 
     void serialize_to_file(std::string_view folder);
     void deserialize_from_file(std::string_view path);
+	void clear_scene();
 
     Application* get_app();
 

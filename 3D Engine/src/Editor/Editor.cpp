@@ -2,6 +2,7 @@
 
 #    include "Editor/Editor.hpp"
 #    include "Core/Application.hpp"
+#    include "Editor/SelectFileDialog.hpp"
 #    include "Subsystems/ECS/ComponentList.hpp"
 #    include "Subsystems/ECS/Components.hpp"
 #    include "Subsystems/Input/Input.hpp"
@@ -69,15 +70,19 @@ void Editor::show_menu_bar(Scene& scene) {
     // Temporary
     static bool show_demo_window = false;
 
-    static bool save_item_selected = false;
-
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
-            if (ImGui::MenuItem("Save scene to scene1", nullptr,
-                                &save_item_selected)) {
+            if (ImGui::MenuItem("Save scene to scene1")) {
                 scene.serialize_to_file("resources/scene1");
-                save_item_selected = false;
             }
+            if (ImGui::MenuItem("Open")) {
+                static SelectFileDialog dialog;
+                dialog.show(SelectFileDialog::PickFolders);
+                fs::path result = dialog.get_result();
+                result += "/scene.dat";
+				scene.deserialize_from_file(result.string());
+				on_scene_reload();
+			}
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit")) {
@@ -98,6 +103,12 @@ void Editor::show_menu_bar(Scene& scene) {
     }
 
     if (show_demo_window) ImGui::ShowDemoWindow();
+}
+
+void Editor::on_scene_reload() {
+	selected_entity = nullptr;
+	// Update viewport camera id
+
 }
 
 static bool has_child(Editor::EntityTreeT& enttree,
@@ -126,8 +137,8 @@ show_self_and_children(Editor::EntityTreeT& enttree,
     ImGuiTreeNodeFlags node_flags =
         ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
     if (!has_child(enttree, entity)) {
-        // If the node has no children, give it the 'leaf' flags so you cannot
-        // see the expand arrow next to it
+        // If the node has no children, give it the 'leaf' flags so you
+        // cannot see the expand arrow next to it
         node_flags |=
             ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
         is_leaf = true;
@@ -188,7 +199,7 @@ struct ComponentFieldVisitor {
     std::string_view field_name;
 
     void operator()(std::size_t* field) {
-		ImGui::DragScalar(field_name.data(), ImGuiDataType_U64, field, 0.2f);
+        ImGui::DragScalar(field_name.data(), ImGuiDataType_U64, field, 0.2f);
     }
 
     void operator()(float* field) {
@@ -202,7 +213,7 @@ struct ComponentFieldVisitor {
     void operator()(std::string* field) {
         static constexpr std::size_t buf_size = 128;
         field->resize(buf_size);
-		ImGui::InputText(field_name.data(), field->data(), buf_size);
+        ImGui::InputText(field_name.data(), field->data(), buf_size);
     }
 
     void operator()(glm::vec3* field) {
@@ -216,16 +227,14 @@ struct ComponentFieldVisitor {
     void operator()(glm::bvec3* field) {
         ImGui::Text("%s: ", field_name.data());
         ImGui::SameLine();
-		ImGui::Checkbox("x", &field->x);
-		ImGui::SameLine();
+        ImGui::Checkbox("x", &field->x);
+        ImGui::SameLine();
         ImGui::Checkbox("y", &field->y);
         ImGui::SameLine();
         ImGui::Checkbox("z", &field->z);
     }
 
-    void operator()(bool* field) {
-        ImGui::Checkbox(field_name.data(), field);
-    }
+    void operator()(bool* field) { ImGui::Checkbox(field_name.data(), field); }
 };
 
 template<typename C>
@@ -274,14 +283,13 @@ void Editor::show_entity_details(SceneObject* entity, Scene& scene) {
 }
 
 void Editor::show_scene_tree(Scene& scene) {
-    static SceneObject* selected = nullptr;
     if (show_widgets.entity_tree) {
         ImGui::Begin("Entity Tree", &show_widgets.entity_tree);
         auto enttree = build_entity_tree(scene);
         ImGui::Columns(2, "EntityTree", true);
-        show_entity_tree(enttree, scene, selected);
+        show_entity_tree(enttree, scene, selected_entity);
         ImGui::NextColumn();
-        if (selected != nullptr) { show_entity_details(selected, scene); }
+        if (selected_entity != nullptr) { show_entity_details(selected_entity, scene); }
         // End columns section
         ImGui::Columns(1);
         ImGui::End();

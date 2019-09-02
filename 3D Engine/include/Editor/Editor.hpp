@@ -31,6 +31,7 @@ private:
 	void show_entity_tree(EntityTreeT& enttree, Scene& scene, SceneObject*& selected);
 	void show_entity_details(SceneObject* entity, Scene& scene);
     void show_menu_bar(Scene& scene);
+	void on_scene_reload();
 
     Application* app;
     std::size_t scene_view_viewport_id = 0;
@@ -40,6 +41,7 @@ private:
 	} show_widgets;
 
 	std::vector<SceneObject*> build_entity_tree(Scene& scene);
+	SceneObject* selected_entity = nullptr;
 };
 
 } // namespace Editor

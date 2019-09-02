@@ -10,7 +10,9 @@ namespace Saturn {
 
 Scene::Scene(Application* app) : ecs(this), app(app) {}
 
-Scene::~Scene() {}
+Scene::~Scene() {
+	clear_scene();
+}
 
 void Scene::update_systems() { ecs.update_systems(); }
 void Scene::on_start() { ecs.on_start(); }
@@ -36,6 +38,10 @@ Scene::create_object_from_file(std::string_view file_path,
     return object;
 }
 
+void Scene::destroy_object(SceneObject* object) {
+//    objects.erase(std::find(objects.begin(), objects.end(), object));
+}
+
 void Scene::serialize_to_file(std::string_view folder) {
     namespace fs = std::filesystem;
     using namespace Components;
@@ -54,11 +60,17 @@ void Scene::serialize_to_file(std::string_view folder) {
 }
 
 void Scene::deserialize_from_file(std::string_view path) {
+    clear_scene();
     std::ifstream file(path.data());
     std::string fname;
     while (std::getline(file, fname)) { create_object_from_file(fname); }
     resolve_parent_pointers();
     set_id_generator_value();
+}
+
+void Scene::clear_scene() {
+    // SceneObject's destructor will take care of the work
+    objects.clear();
 }
 
 ECS<COMPONENT_LIST>& Scene::get_ecs() { return ecs; }

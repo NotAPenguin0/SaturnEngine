@@ -86,8 +86,6 @@ public:
         // Insert new element and put a default constructed container for
         // component C in it
         components.emplace_back().template emplace<component_container<C>>();
-
-        // components.back().emplace<component_container<C>>();
     }
 
 private:

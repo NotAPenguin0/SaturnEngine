@@ -22,6 +22,8 @@ public:
     SceneObject() = default;
     SceneObject(Scene* s, SceneObject* parent = nullptr);
 
+    ~SceneObject() { remove_all_components<COMPONENT_LIST>(); }
+
     template<typename C, typename... Args>
     std::size_t add_component(Args&&... args) {
         auto& ecs = scene->ecs;
@@ -64,6 +66,12 @@ public:
         std::type_index ti = typeid(C);
         container.erase_component(component_ids.at(ti));
         component_ids.erase(ti);
+    }
+
+    template<typename C, typename... Cs>
+    void remove_all_components() {
+        if (has_component<C>()) { remove_component<C>(); }
+        if constexpr (sizeof...(Cs) != 0) remove_all_components<Cs...>();
     }
 
     bool has_parent() const;

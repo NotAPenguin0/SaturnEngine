@@ -57,13 +57,20 @@ public:
         /*
         1. Swap element to erase with last element
         2. Update index for swapped elements
-        3. Erase
+		3. Remove erased id from index map
+		4. Erase
         */
 
+		// Setup for 1 and 2
         auto id_to_update = components.back().id;
         auto erased_idx = id_index_map.at(id);
+		// 1
         std::swap(components[erased_idx], components.back());
+		// 2
         id_index_map[id_to_update] = erased_idx;
+		// 3
+		id_index_map.erase(id);
+		// 4
         return components.erase(components.end() - 1);
     }
 
