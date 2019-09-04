@@ -62,7 +62,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Engine")
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/3D Engine" FILES ${ENGINE_HEADER_FILES} ${ENGINE_SOURCE_FILES})
 
 target_include_directories(${PROJECT_NAME}
-    PUBLIC ${ENGINE_PUBLIC_INCLUDE_DIRECTORIES}
+    PUBLIC ${ENGINE_PUBLIC_INCLUDE_DIRECTORIES} "${CMAKE_CURRENT_SOURCE_DIR}/3D Engine/dependencies/libfmt/include"
 )
 
 get_filename_component(ABSOLUTE_PROJECT_DIR "3D Engine" ABSOLUTE)
@@ -74,19 +74,11 @@ add_custom_command(TARGET ${PROJECT_NAME}
 )
 
 set(LINK_LIBRARIES
-	${OPENGL_LIBRARIES} glad glfw nlohmann_json glm)
+	${OPENGL_LIBRARIES} glad glfw nlohmann_json glm fmt)
 
 if (WIN32) 
 	set(LINK_LIBRARIES ${LINK_LIBRARIES} shlwapi.lib propsys.lib)
 endif(WIN32)
-
-# target_link_libraries(${PROJECT_NAME}
-#    ${OPENGL_LIBRARIES}
-#    glad
-#    glfw
-#    nlohmann_json
-#    glm
-#)
 
 target_link_libraries(${PROJECT_NAME} ${LINK_LIBRARIES})
 

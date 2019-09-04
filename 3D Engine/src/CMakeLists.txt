@@ -1,6 +1,7 @@
 set(ENGINE_SOURCE_FILES
     ${ENGINE_SOURCE_FILES}
     "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Editor.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Editor/DebugConsole.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Editor/SelectFileDialog.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Core/Application.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Core/Engine.cpp"

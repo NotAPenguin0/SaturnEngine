@@ -14,6 +14,8 @@
 #    include "imgui/imgui_impl_glfw.h"
 #    include "imgui/imgui_impl_opengl3.h"
 
+#    include <fmt/format.h>
+
 namespace Saturn::Editor {
 
 Editor::Editor(Application& app) : app(&app) {
@@ -25,9 +27,11 @@ Editor::Editor(Application& app) : app(&app) {
     ImGui_ImplOpenGL3_Init("#version 430");
     // Initialize components metadata
     Meta::ComponentsMeta<COMPONENT_LIST>::init();
+    editor_widgets.debug_console.add_entry("Initialization of Editor complete");
 }
 
 void Editor::setup_viewports() {
+    editor_widgets.debug_console.add_entry("Setting up Editor viewports");
     // Setup viewport for scene view
     auto main_cam = this->app->get_renderer()->get_viewport(0).get_camera();
     auto scene_view = Viewport(main_cam, 0, 0, 800, 600);
@@ -60,6 +64,10 @@ void Editor::render(Scene& scene) {
     show_scene_tree(scene);
     show_menu_bar(scene);
 
+    if (editor_widgets.debug_console.is_shown()) {
+        editor_widgets.debug_console.show();
+    }
+
     ImGui::Render();
     Viewport::set_active(
         app->get_renderer()->get_viewport(scene_view_viewport_id));
@@ -82,11 +90,11 @@ void Editor::show_menu_bar(Scene& scene) {
                 result += "/scene.dat";
                 scene.deserialize_from_file(result.string());
                 on_scene_reload();
+                editor_widgets.debug_console.add_entry(
+                    fmt::format("Loaded scene at path: {}", result.string()));
             }
             ImGui::Separator();
-			if (ImGui::MenuItem("Exit")) {
-				app->quit();
-			}
+            if (ImGui::MenuItem("Exit")) { app->quit(); }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit")) {
@@ -95,6 +103,8 @@ void Editor::show_menu_bar(Scene& scene) {
         }
         if (ImGui::BeginMenu("View")) {
             ImGui::MenuItem("Entity Tree", nullptr, &show_widgets.entity_tree);
+            ImGui::MenuItem("Debug Console", nullptr,
+                            editor_widgets.debug_console.get_shown_pointer());
             ImGui::MenuItem("ImGui Demo Window", nullptr, &show_demo_window);
             ImGui::EndMenu();
         }
@@ -110,6 +120,7 @@ void Editor::show_menu_bar(Scene& scene) {
 }
 
 void Editor::on_scene_reload() {
+    editor_widgets.debug_console.add_entry("Reloading scene");
     selected_entity = nullptr;
     // Update viewport camera id
 }
