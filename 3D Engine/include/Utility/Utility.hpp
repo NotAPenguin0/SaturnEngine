@@ -5,6 +5,9 @@
 #include "Subsystems/Logging/LogSystem.hpp"
 #include <cstddef>
 
+#include <sstream>
+#include <vector>
+
 namespace Saturn {
 
 #define log_function_info(sev)                                                 \
@@ -50,6 +53,66 @@ make_absolute_transform(Components::Transform const& old_transform);
 std::vector<float> make_float_vec(std::vector<glm::vec4> const& v);
 std::vector<float> make_float_vec(std::vector<glm::vec3> const& v);
 
+template<typename string_type>
+std::vector<string_type> split(string_type const& s,
+                               typename string_type::value_type delim) {
+    std::vector<string_type> elems;
+    std::basic_stringstream<typename string_type::value_type> ss(s);
+    string_type item;
+    while (std::getline(ss, item, delim)) { elems.push_back(item); }
+    return elems;
+}
+
+template<typename string_type>
+string_type join(std::vector<string_type> const& v,
+                 typename string_type::value_type sep = ' ') {
+    string_type result;
+    for (auto elem : v) {
+        result += elem;
+        result += sep;
+    }
+    result.pop_back();
+    return result;
+}
+
+template<typename string_type>
+bool string_match_n(string_type const& a, string_type const& b, std::size_t n) {
+    if (n < a.size() || n < b.size()) return false;
+    for (std::size_t i = 0; i < n; ++i) {
+        if (a[i] != b[i]) return false;
+    }
+    return true;
+}
+
+namespace detail {
+struct comp_eq {
+    template<typename T>
+    bool operator()(T const& a, T const& b) {
+        return a == b;
+    }
+};
+} // namespace detail
+
+template<typename string_type, typename Comp>
+bool string_match_n(string_type const& a,
+                    string_type const& b,
+                    std::size_t n,
+                    Comp&& compare = detail::comp_eq{}) {
+    if (n > a.size() || n > b.size()) return false;
+    for (std::size_t i = 0; i < n; ++i) {
+        if (!compare(a[i], b[i])) return false;
+    }
+    return true;
+}
+
+template<typename InputIt, typename F>
+bool all_satisfy_condition(InputIt begin, InputIt end, F&& condition) {
+    for (; begin != end; ++begin) {
+        if (!condition(*begin)) return false;
+    }
+    return true;
+};
+
 namespace detail {
 
 template<std::size_t I, typename T, typename... Ts>
@@ -72,7 +135,8 @@ struct index_of_impl<I, T, Head> {
 
 template<typename T, typename... Ts>
 struct index_of {
-    static constexpr std::size_t value = detail::index_of_impl<0, T, Ts...>::value;
+    static constexpr std::size_t value =
+        detail::index_of_impl<0, T, Ts...>::value;
 };
 
 template<class... Ts>

@@ -14,6 +14,7 @@
 #    include "imgui/imgui_impl_opengl3.h"
 
 #    include <fmt/format.h>
+#    include <fmt/ranges.h>
 
 namespace Saturn::Editor {
 
@@ -26,7 +27,12 @@ Editor::Editor(Application& app) : app(&app) {
     ImGui_ImplOpenGL3_Init("#version 430");
     // Initialize components metadata
     Meta::ComponentsMeta<COMPONENT_LIST>::init();
-    editor_widgets.debug_console.add_entry("Initialization of Editor complete");
+    auto& console = editor_widgets.debug_console;
+    console.add_entry("Initialization of Editor complete");
+    console.add_command(
+        "log", [&console](DebugConsole::CommandContext const& context) {
+            console.add_entry(fmt::format("{}", join(context.args)));
+        });
 }
 
 void Editor::setup_viewports() {
@@ -107,6 +113,8 @@ void Editor::show_menu_bar(Scene& scene) {
                             editor_widgets.entity_tree.get_shown_pointer());
             ImGui::MenuItem("Debug Console", nullptr,
                             editor_widgets.debug_console.get_shown_pointer());
+            ImGui::MenuItem("Editor Preferences", nullptr,
+                            editor_widgets.preferences.get_shown_pointer());
             ImGui::MenuItem("ImGui Demo Window", nullptr, &show_demo_window);
             ImGui::EndMenu();
         }

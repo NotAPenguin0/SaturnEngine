@@ -46,6 +46,8 @@ public:
                                          SceneObject* parent = nullptr);
 	void destroy_object(SceneObject* object);
 
+	SceneObject& get_entity_by_name(std::string_view name);
+
     ECS<COMPONENT_LIST>& get_ecs();
 
     void serialize_to_file(std::string_view folder);

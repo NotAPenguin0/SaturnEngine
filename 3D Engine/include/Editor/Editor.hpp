@@ -7,6 +7,7 @@
 #    include <vector>
 
 #    include "Editor/DebugConsole.hpp"
+#    include "Editor/EditorPreferencesWidget.hpp"
 #    include "Editor/EntityTree.hpp"
 
 namespace Saturn {
@@ -36,10 +37,10 @@ private:
     Application* app;
     std::size_t scene_view_viewport_id = 0;
 
-
     struct Widgets {
         DebugConsole debug_console;
-		EntityTree entity_tree;
+        EntityTree entity_tree;
+		EditorPreferencesWidget preferences;
     } editor_widgets;
 };
 

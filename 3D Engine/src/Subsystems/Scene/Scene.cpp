@@ -10,9 +10,7 @@ namespace Saturn {
 
 Scene::Scene(Application* app) : ecs(this), app(app) {}
 
-Scene::~Scene() {
-	clear_scene();
-}
+Scene::~Scene() { clear_scene(); }
 
 void Scene::update_systems() { ecs.update_systems(); }
 void Scene::on_start() { ecs.on_start(); }
@@ -39,7 +37,17 @@ Scene::create_object_from_file(std::string_view file_path,
 }
 
 void Scene::destroy_object(SceneObject* object) {
-//    objects.erase(std::find(objects.begin(), objects.end(), object));
+    //    objects.erase(std::find(objects.begin(), objects.end(), object));
+}
+
+SceneObject& Scene::get_entity_by_name(std::string_view name) {
+    using namespace Components;
+    for (auto& obj : objects) {
+        if (obj->has_component<Name>()) {
+            if (name == obj->get_component<Name>().name) { return *obj; }
+        }
+    }
+    throw std::runtime_error("Entity not found");
 }
 
 void Scene::serialize_to_file(std::string_view folder) {

@@ -3220,7 +3220,7 @@ static void ShowDemoWindowPopups() {
         //    if (IsItemHovered() && IsMouseReleased(0))
         //       OpenPopup(id);
         //    return BeginPopup(id);
-        // For more advanced uses you may want to replicate and cuztomize this
+        // For more advanced uses you may want to replicate and customize this
         // code. This the comments inside BeginPopupContextItem()
         // implementation.
         static float value = 0.5f;
