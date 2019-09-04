@@ -16,3 +16,6 @@
 [submodule "CodeGen/dependencies/llvm"]
 	path = CodeGen/dependencies/llvm
 	url = https://github.com/llvm/llvm-project.git
+[submodule "3D Engine/dependencies/libfmt"]
+	path = 3D Engine/dependencies/libfmt
+	url = https://github.com/fmtlib/fmt
