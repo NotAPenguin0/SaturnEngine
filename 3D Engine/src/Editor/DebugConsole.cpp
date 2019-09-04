@@ -16,7 +16,10 @@ std::unordered_map<DebugConsole::LogType, DebugConsole::LogTypeStyle>
 };
 // clang-format on
 
-DebugConsole::DebugConsole() { clear(); }
+DebugConsole::DebugConsole() {
+    clear();
+    input_buffer.resize(input_buffer_size);
+}
 
 void DebugConsole::show() {
     ImGui::SetNextWindowSize(ImVec2(520, 600), ImGuiCond_FirstUseEver);
@@ -26,8 +29,12 @@ void DebugConsole::show() {
         ImGui::Checkbox("Auto-open", &auto_open);
         ImGui::Separator();
 
+		// 1 reserve space for a separator and an InputText
+        const float footer_height = ImGui::GetStyle().ItemSpacing.y +
+                                    ImGui::GetFrameHeightWithSpacing();
+
         // Pass a negative value to the vec2's y to leave room for things below
-        ImGui::BeginChild("ScrollingRegion", ImVec2(0, 0), false,
+        ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height), false,
                           ImGuiWindowFlags_HorizontalScrollbar);
 
         // Tighten spacing a little bit
@@ -51,6 +58,25 @@ void DebugConsole::show() {
 
         ImGui::PopStyleVar();
         ImGui::EndChild();
+
+		ImGui::Separator();
+		// Command-line input
+        bool reclaim_focus = false;
+		if (ImGui::InputText("Command line", input_buffer.data(),
+			input_buffer_size,
+			ImGuiInputTextFlags_EnterReturnsTrue)) {
+            add_entry(input_buffer);
+            input_buffer.clear();
+			input_buffer.resize(input_buffer_size);
+			reclaim_focus = true;
+		}
+
+		// Default focus on the command line
+		ImGui::SetItemDefaultFocus();
+		if (reclaim_focus) {
+			// Focus command line if we just entered a command
+			ImGui::SetKeyboardFocusHere(-1);
+		}
     }
 
     ImGui::End();
