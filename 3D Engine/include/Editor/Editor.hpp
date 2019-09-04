@@ -7,6 +7,7 @@
 #    include <vector>
 
 #    include "Editor/DebugConsole.hpp"
+#    include "Editor/EntityTree.hpp"
 
 namespace Saturn {
 
@@ -29,27 +30,17 @@ public:
     using EntityTreeT = std::vector<SceneObject*>;
 
 private:
-    void show_scene_tree(Scene& scene);
-    void show_entity_tree(EntityTreeT& enttree,
-                          Scene& scene,
-                          SceneObject*& selected);
-    void show_entity_details(SceneObject* entity, Scene& scene);
     void show_menu_bar(Scene& scene);
     void on_scene_reload();
 
     Application* app;
     std::size_t scene_view_viewport_id = 0;
 
-    struct WidgetsShowData {
-        bool entity_tree = true;
-    } show_widgets;
 
-    std::vector<SceneObject*> build_entity_tree(Scene& scene);
-    SceneObject* selected_entity = nullptr;
-
-	struct Widgets {
-		DebugConsole debug_console;
-	} editor_widgets;
+    struct Widgets {
+        DebugConsole debug_console;
+		EntityTree entity_tree;
+    } editor_widgets;
 };
 
 } // namespace Editor

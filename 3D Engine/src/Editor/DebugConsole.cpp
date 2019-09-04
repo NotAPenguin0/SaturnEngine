@@ -56,12 +56,6 @@ void DebugConsole::show() {
     ImGui::End();
 }
 
-bool DebugConsole::is_shown() const { return shown; }
-
-void DebugConsole::set_shown(bool s) { shown = s; }
-
-bool* DebugConsole::get_shown_pointer() { return &shown; }
-
 void DebugConsole::clear() {
     if (log_entries.capacity() < max_log_entries) {
         log_entries.reserve(max_log_entries);

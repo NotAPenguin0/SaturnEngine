@@ -19,6 +19,7 @@ class SceneObject;
 #ifdef WITH_EDITOR
 namespace Editor {
 class Editor;
+class EntityTree;
 }
 #endif
 
@@ -31,6 +32,7 @@ public:
     friend class Systems::SystemBase;
 #ifdef WITH_EDITOR
     friend class ::Saturn::Editor::Editor;
+	friend class ::Saturn::Editor::EntityTree;
 #endif
 
     Scene(Application* app);

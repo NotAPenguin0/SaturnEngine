@@ -5,14 +5,15 @@
 #include <string_view>
 #include <unordered_map>
 #include <vector>
-
 #include "imgui/imgui.h"
+
+#include "EditorWidget.hpp"
 
 namespace Saturn::Editor {
 
 #ifdef WITH_EDITOR
 
-class DebugConsole {
+class DebugConsole : public EditorWidget {
 public:
     enum LogType { Debug, Log, Warning, Error };
 
@@ -29,17 +30,12 @@ public:
     DebugConsole();
 
     void show();
-    bool is_shown() const;
-    void set_shown(bool s);
-
-    bool* get_shown_pointer();
 
     void clear();
 
     void add_entry(std::string_view entry, LogType type = LogType::Log);
 
 private:
-    bool shown = false;
     // Specifies whether the console will automatically open when an entry is
     // added
     bool auto_open = true;
