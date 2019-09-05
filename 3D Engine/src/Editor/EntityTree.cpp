@@ -7,6 +7,7 @@
 #    include "Subsystems/Scene/Scene.hpp"
 #    include "Subsystems/Scene/SceneObject.hpp"
 #    include "Subsystems/Serialization/ComponentMetaInfo.hpp"
+#    include "Utility/Color.hpp"
 
 #    include "imgui/imgui.h"
 
@@ -196,6 +197,16 @@ struct ComponentFieldVisitor {
     }
 
     void operator()(bool* field) { ImGui::Checkbox(field_name.data(), field); }
+
+    void operator()(color3* field) {
+        ImGui::ColorEdit3((std::string(field_name) + " color").c_str(),
+                          &field->x);
+    }
+
+    void operator()(color4* field) {
+        ImGui::ColorEdit4((std::string(field_name) + " color").c_str(),
+                          &field->x);
+    }
 };
 
 template<typename C>
@@ -206,8 +217,21 @@ void display_component(SceneObject* entity) {
     auto& comp = entity->get_component<C>();
     ComponentInfo const& component_meta =
         ComponentMeta::get_component_meta_info<C>();
+    static constexpr int imgui_mouse_right_button = 1;
     if (ImGui::CollapsingHeader(component_meta.name.c_str())) {
-
+        if (ImGui::IsItemClicked(imgui_mouse_right_button)) {
+            // Show popup menu containing actions to delete this component
+            ImGui::OpenPopup("Component Actions");
+        }
+        if (ImGui::BeginPopup("Component Actions")) {
+			if (ImGui::Selectable("Delete component")) {
+				entity->remove_component<C>();
+				ImGui::CloseCurrentPopup();
+				ImGui::EndPopup();
+				return;
+			}
+            ImGui::EndPopup();
+        }
         for (auto const& [field_name, field_type] : component_meta.fields) {
             if (field_type.find("Resource") != std::string::npos) {
                 continue; // unsupported for now, this will be added once we
@@ -234,15 +258,58 @@ void display_components(SceneObject* entity) {
     if constexpr (sizeof...(Cs) != 0) { display_components<Cs...>(entity); }
 }
 
+template<typename C>
+void show_add_component_entry(SceneObject* entity) {
+    using namespace ::Saturn::Meta;
+    using ComponentMeta = ComponentsMeta<COMPONENT_LIST>;
+
+    std::string name = ComponentMeta::get_component_meta_info<C>().name;
+    if (ImGui::Selectable(("New " + name).c_str())) {
+        if (!entity->has_component<C>()) { entity->add_component<C>(); }
+    }
+}
+
+template<typename C, typename... Cs>
+void show_add_component_list(SceneObject* entity) {
+    using namespace ::Saturn::Components;
+    if (!std::is_same_v<C, Name> && !std::is_same_v<C, ParticleEmitter>) {
+        show_add_component_entry<C>(entity);
+    }
+
+    if constexpr (sizeof...(Cs) != 0) {
+        show_add_component_list<Cs...>(entity);
+    }
+}
+
 } // namespace impl
 
 void EntityTree::show_entity_details(SceneObject* entity, Scene& scene) {
     using namespace ::Saturn::Components;
+    using namespace ::Saturn::Meta;
+
+    using ComponentMeta = ComponentsMeta<COMPONENT_LIST>;
+
     static constexpr std::size_t name_buffer_size = 128;
     std::string& name = entity->get_component<Name>().name;
     name.resize(name_buffer_size);
     ImGui::InputText("Entity name", name.data(), name_buffer_size);
-    impl::display_components<COMPONENT_LIST>(entity);
+    if (ImGui::Button("Entity actions ...", ImVec2(150, 0))) {
+        ImGui::OpenPopup("Entity actions");
+    }
+    if (ImGui::BeginPopup("Entity actions")) {
+        if (ImGui::Selectable("Delete entity")) {
+            scene.destroy_object(selected_entity);
+            selected_entity = nullptr;
+            entity = nullptr;
+            ImGui::CloseCurrentPopup();
+        }
+        if (ImGui::BeginMenu("Add Component")) {
+            impl::show_add_component_list<COMPONENT_LIST>(entity);
+            ImGui::EndMenu();
+        }
+        ImGui::EndPopup();
+    }
+    if (entity) { impl::display_components<COMPONENT_LIST>(entity); }
 }
 
 } // namespace Saturn::Editor

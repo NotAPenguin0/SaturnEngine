@@ -2,14 +2,14 @@
 #define SATURN_SPOT_LIGHT_COMPONENT_HPP_
 
 #include "ComponentBase.hpp"
-#include <glm/glm.hpp>
+#include "Utility/Color.hpp"
 
 namespace Saturn::Components {
 
 struct COMPONENT DEFAULT_SERIALIZE SpotLight : ComponentBase {
-    glm::vec3 ambient;
-    glm::vec3 diffuse;
-    glm::vec3 specular;
+    color3 ambient;
+    color3 diffuse;
+    color3 specular;
     glm::vec3 direction;
     float inner_angle; // in degrees
     float outer_angle; // in degrees

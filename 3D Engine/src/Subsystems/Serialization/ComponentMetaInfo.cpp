@@ -31,9 +31,9 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "DirectionalLight ";
-		info.fields["ambient"] = "glm::vec3";
-		info.fields["diffuse"] = "glm::vec3";
-		info.fields["specular"] = "glm::vec3";
+		info.fields["ambient"] = "Saturn::color3";
+		info.fields["diffuse"] = "Saturn::color3";
+		info.fields["specular"] = "Saturn::color3";
 		info.fields["direction"] = "glm::vec3";
 		data.push_back(info);
 	}
@@ -84,9 +84,9 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "PointLight ";
-		info.fields["ambient"] = "glm::vec3";
-		info.fields["diffuse"] = "glm::vec3";
-		info.fields["specular"] = "glm::vec3";
+		info.fields["ambient"] = "Saturn::color3";
+		info.fields["diffuse"] = "Saturn::color3";
+		info.fields["specular"] = "Saturn::color3";
 		info.fields["intensity"] = "float";
 		data.push_back(info);
 	}
@@ -107,10 +107,10 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "SpotLight ";
-		info.fields["ambient"] = "glm::vec3";
+		info.fields["ambient"] = "Saturn::color3";
 		info.fields["inner_angle"] = "float";
-		info.fields["diffuse"] = "glm::vec3";
-		info.fields["specular"] = "glm::vec3";
+		info.fields["diffuse"] = "Saturn::color3";
+		info.fields["specular"] = "Saturn::color3";
 		info.fields["direction"] = "glm::vec3";
 		info.fields["intensity"] = "float";
 		info.fields["outer_angle"] = "float";

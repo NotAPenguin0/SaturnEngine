@@ -28,11 +28,10 @@ public:
     void render(Scene& scene);
     void frame_end();
 
-    using EntityTreeT = std::vector<SceneObject*>;
-
 private:
     void show_menu_bar(Scene& scene);
     void on_scene_reload();
+	void create_entity(Scene& scene, std::string const& name);
 
     Application* app;
     std::size_t scene_view_viewport_id = 0;

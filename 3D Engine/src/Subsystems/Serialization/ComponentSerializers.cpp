@@ -51,9 +51,9 @@ void from_json(nlohmann::json const& json, DirectionalLight& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No DirectionalLight component stored even though it was requested");
 	} else {
-		component.ambient = (*c)["Ambient"].get<glm::vec3>();
-		component.diffuse = (*c)["Diffuse"].get<glm::vec3>();
-		component.specular = (*c)["Specular"].get<glm::vec3>();
+		component.ambient = (*c)["Ambient"].get<Saturn::color3>();
+		component.diffuse = (*c)["Diffuse"].get<Saturn::color3>();
+		component.specular = (*c)["Specular"].get<Saturn::color3>();
 		component.direction = (*c)["Direction"].get<glm::vec3>();
 	}
 }
@@ -103,9 +103,9 @@ void from_json(nlohmann::json const& json, PointLight& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No PointLight component stored even though it was requested");
 	} else {
-		component.ambient = (*c)["Ambient"].get<glm::vec3>();
-		component.diffuse = (*c)["Diffuse"].get<glm::vec3>();
-		component.specular = (*c)["Specular"].get<glm::vec3>();
+		component.ambient = (*c)["Ambient"].get<Saturn::color3>();
+		component.diffuse = (*c)["Diffuse"].get<Saturn::color3>();
+		component.specular = (*c)["Specular"].get<Saturn::color3>();
 		component.intensity = (*c)["Intensity"].get<float>();
 	}
 }
@@ -135,10 +135,10 @@ void from_json(nlohmann::json const& json, SpotLight& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No SpotLight component stored even though it was requested");
 	} else {
-		component.ambient = (*c)["Ambient"].get<glm::vec3>();
+		component.ambient = (*c)["Ambient"].get<Saturn::color3>();
 		component.inner_angle = (*c)["InnerAngle"].get<float>();
-		component.diffuse = (*c)["Diffuse"].get<glm::vec3>();
-		component.specular = (*c)["Specular"].get<glm::vec3>();
+		component.diffuse = (*c)["Diffuse"].get<Saturn::color3>();
+		component.specular = (*c)["Specular"].get<Saturn::color3>();
 		component.direction = (*c)["Direction"].get<glm::vec3>();
 		component.intensity = (*c)["Intensity"].get<float>();
 		component.outer_angle = (*c)["OuterAngle"].get<float>();

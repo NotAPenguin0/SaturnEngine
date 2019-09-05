@@ -8,6 +8,8 @@
 #include <sstream>
 #include <vector>
 
+#include <glm/glm.hpp>
+
 namespace Saturn {
 
 #define log_function_info(sev)                                                 \
@@ -46,6 +48,7 @@ public:
     NonCopyable(NonCopyable const&) = delete;
     NonCopyable& operator=(NonCopyable const&) = delete;
 };
+
 
 Components::Transform
 make_absolute_transform(Components::Transform const& old_transform);

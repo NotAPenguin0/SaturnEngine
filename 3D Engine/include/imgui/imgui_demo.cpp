@@ -4003,7 +4003,7 @@ void ImGui::ShowAboutWindow(bool* p_open) {
 
 // Demo helper function to select among default colors. See ShowStyleEditor()
 // for more advanced options. Here we use the simplified Combo() api that packs
-// items into a single literal string. Useful for quick combo boxes where the
+// items into a single literal string. Useful for quick combo boxcoes where the
 // choices are known locally.
 bool ImGui::ShowStyleSelector(const char* label) {
     static int style_idx = -1;

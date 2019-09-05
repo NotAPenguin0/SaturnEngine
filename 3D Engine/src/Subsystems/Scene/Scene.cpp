@@ -37,7 +37,20 @@ Scene::create_object_from_file(std::string_view file_path,
 }
 
 void Scene::destroy_object(SceneObject* object) {
-    //    objects.erase(std::find(objects.begin(), objects.end(), object));
+    // #TODO: Actually delete the children too, no idea where they went with the
+    // current implementation 
+    
+	// First, clear out all parents
+    for (auto& obj : objects) {
+        if (obj->get_parent_id() == object->get_id()) {
+            obj->set_parent(nullptr);
+        }
+    }
+    // Then, erase the object from the list
+    objects.erase(std::find_if(objects.begin(), objects.end(),
+                               [object](std::unique_ptr<SceneObject> const& o) {
+                                   return object == o.get();
+                               }));
 }
 
 SceneObject& Scene::get_entity_by_name(std::string_view name) {

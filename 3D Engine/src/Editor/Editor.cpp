@@ -74,6 +74,9 @@ void Editor::render(Scene& scene) {
     if (editor_widgets.entity_tree.is_shown()) {
         editor_widgets.entity_tree.show(scene);
     }
+    if (editor_widgets.preferences.is_shown()) {
+        editor_widgets.preferences.show();
+    }
 
     ImGui::Render();
     Viewport::set_active(
@@ -82,8 +85,11 @@ void Editor::render(Scene& scene) {
 }
 
 void Editor::show_menu_bar(Scene& scene) {
+    using namespace Components;
     // Temporary
     static bool show_demo_window = false;
+
+    bool open_new_entity_popup = false;
 
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
@@ -105,7 +111,12 @@ void Editor::show_menu_bar(Scene& scene) {
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit")) {
-            ImGui::MenuItem("Nothing here yet");
+            if (ImGui::BeginMenu("Entity")) {
+                if (ImGui::MenuItem("Create new entity")) {
+                    open_new_entity_popup = true;
+                }
+                ImGui::EndMenu();
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("View")) {
@@ -126,12 +137,48 @@ void Editor::show_menu_bar(Scene& scene) {
         ImGui::EndMainMenuBar();
     }
 
+    if (open_new_entity_popup) { ImGui::OpenPopup("New..."); }
+    if (ImGui::BeginPopupModal("New...", nullptr,
+                               ImGuiWindowFlags_AlwaysAutoResize)) {
+        static constexpr std::size_t bufsize = 256;
+        static std::string entity_name_buffer(bufsize, '\0');
+        if (ImGui::InputText("Entity Name", entity_name_buffer.data(), bufsize,
+                             ImGuiInputTextFlags_EnterReturnsTrue)) {
+            create_entity(scene, entity_name_buffer);
+            ImGui::CloseCurrentPopup();
+            entity_name_buffer.clear();
+        }
+
+        if (ImGui::Button("Create", ImVec2(120, 0))) {
+            create_entity(scene, entity_name_buffer);
+            ImGui::CloseCurrentPopup();
+            entity_name_buffer.clear();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+            ImGui::CloseCurrentPopup();
+            entity_name_buffer.clear();
+        }
+
+        ImGui::EndPopup();
+    }
+
     if (show_demo_window) ImGui::ShowDemoWindow();
 }
 
 void Editor::on_scene_reload() {
     editor_widgets.debug_console.add_entry("Reloading scene");
     editor_widgets.entity_tree.reset_selected_entity();
+}
+
+void Editor::create_entity(Scene& scene, std::string const& name) {
+    using namespace Components;
+    auto& obj = scene.create_object();
+    auto& name_c = scene.get_ecs().get_with_id<Name>(obj.add_component<Name>());
+    name_c.name = name;
+    obj.add_component<Transform>();
+    editor_widgets.debug_console.add_entry(
+        fmt::format("Creating entity with name: {}", name_c.name));
 }
 
 void Editor::frame_end() {

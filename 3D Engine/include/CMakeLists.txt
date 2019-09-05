@@ -82,6 +82,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Time/Time.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/bind_guard.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/bind_tracker.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Utility/Color.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/ColorGradient.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/Exceptions.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/IDGenerator.hpp"
