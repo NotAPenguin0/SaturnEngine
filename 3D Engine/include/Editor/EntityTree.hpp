@@ -29,7 +29,7 @@ private:
 	tree_t build_entity_tree(Scene& scene);
 	void show_entity_tree(tree_t& enttree, Scene& scene);
     bool has_child(tree_t& tree, tree_t::iterator entity);
-	tree_t::iterator show_self_and_children(tree_t& tree, tree_t::iterator entity);
+	tree_t::iterator show_self_and_children(Scene& scene, tree_t& tree, tree_t::iterator entity);
 
 	void show_entity_details(SceneObject* entity, Scene& scene);
 };

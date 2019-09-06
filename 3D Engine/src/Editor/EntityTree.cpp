@@ -2,6 +2,7 @@
 
 #ifdef WITH_EDITOR
 
+#    include "Editor/EditorLog.hpp"
 #    include "Subsystems/ECS/ComponentList.hpp"
 #    include "Subsystems/ECS/Components.hpp"
 #    include "Subsystems/Scene/Scene.hpp"
@@ -14,6 +15,166 @@
 #    include <type_traits>
 
 namespace Saturn::Editor {
+
+namespace impl {
+
+struct ComponentFieldVisitor {
+    // Define overloaded visitor for types:
+    // std::size_t, float, int, std::string, glm::vec3, glm::vec4, bool
+
+    std::string_view field_name;
+
+    void operator()(std::size_t* field) {
+        ImGui::DragScalar(field_name.data(), ImGuiDataType_U64, field, 0.2f);
+    }
+
+    void operator()(float* field) {
+        ImGui::DragScalar(field_name.data(), ImGuiDataType_Float, field, 0.2f);
+    }
+
+    void operator()(int* field) {
+        ImGui::DragScalar(field_name.data(), ImGuiDataType_S32, field, 0.2f);
+    }
+
+    void operator()(std::string* field) {
+        static constexpr std::size_t buf_size = 128;
+        field->resize(buf_size);
+        ImGui::InputText(field_name.data(), field->data(), buf_size);
+    }
+
+    void operator()(glm::vec3* field) {
+        ImGui::InputFloat3(field_name.data(), &field->x);
+    }
+
+    void operator()(glm::vec4* field) {
+        ImGui::InputFloat4(field_name.data(), &field->x);
+    }
+
+    void operator()(glm::bvec3* field) {
+        ImGui::Text("%s: ", field_name.data());
+        ImGui::SameLine();
+        ImGui::Checkbox("x", &field->x);
+        ImGui::SameLine();
+        ImGui::Checkbox("y", &field->y);
+        ImGui::SameLine();
+        ImGui::Checkbox("z", &field->z);
+    }
+
+    void operator()(bool* field) { ImGui::Checkbox(field_name.data(), field); }
+
+    void operator()(color3* field) {
+        ImGui::ColorEdit3((std::string(field_name) + " color").c_str(),
+                          &field->x);
+    }
+
+    void operator()(color4* field) {
+        ImGui::ColorEdit4((std::string(field_name) + " color").c_str(),
+                          &field->x);
+    }
+};
+
+template<typename C>
+void display_component(SceneObject* entity) {
+    using namespace ::Saturn::Meta;
+    using namespace ::Saturn::Components;
+    using ComponentMeta = ComponentsMeta<COMPONENT_LIST>;
+    auto& comp = entity->get_component<C>();
+    ComponentInfo const& component_meta =
+        ComponentMeta::get_component_meta_info<C>();
+    static constexpr int imgui_mouse_right_button = 1;
+
+    if (ImGui::CollapsingHeader(component_meta.name.c_str())) {
+        if (ImGui::IsItemClicked(imgui_mouse_right_button)) {
+            // Show popup menu containing actions to delete this component
+            if (!ImGui::IsPopupOpen("Component Actions")) {
+                ImGui::OpenPopup("Component Actions");
+            }
+        }
+
+        if (ImGui::BeginPopup("Component Actions")) {
+            if (ImGui::Selectable("Delete component")) {
+                log::log(fmt::format("Deleting component: {0} from entity: {1}",
+                                     component_meta.name,
+                                     entity->get_component<Name>().name));
+                entity->remove_component<C>();
+                ImGui::CloseCurrentPopup();
+                ImGui::EndPopup();
+                return;
+            }
+            ImGui::EndPopup();
+        }
+
+        for (auto const& [field_name, field_type] : component_meta.fields) {
+            if (field_type.find("Resource") != std::string::npos) {
+                continue; // unsupported for now, this will be added once we
+                          // have an asset browser
+            }
+            ComponentFieldPtr field_info =
+                ComponentMeta::get_component_field(comp, field_name);
+            // Check if pointer isn't null
+            if (!field_info) { continue; }
+            std::visit(ComponentFieldVisitor{field_name}, field_info.get());
+        }
+    }
+}
+
+template<typename C, typename... Cs>
+void display_components(SceneObject* entity) {
+    using namespace Components;
+    if (!std::is_same_v<C, Name> && entity->has_component<C>()) {
+        // Temporary
+        if constexpr (!std::is_same_v<C, ParticleEmitter>) {
+            display_component<C>(entity);
+        }
+    };
+    if constexpr (sizeof...(Cs) != 0) { display_components<Cs...>(entity); }
+}
+
+template<typename C>
+void show_add_component_entry(SceneObject* entity) {
+    using namespace ::Saturn::Meta;
+    using ComponentMeta = ComponentsMeta<COMPONENT_LIST>;
+
+    std::string name = ComponentMeta::get_component_meta_info<C>().name;
+    if (ImGui::Selectable(("New " + name).c_str())) {
+        if (!entity->has_component<C>()) { entity->add_component<C>(); }
+    }
+}
+
+template<typename C, typename... Cs>
+void show_add_component_list(SceneObject* entity) {
+    using namespace ::Saturn::Components;
+    if (!std::is_same_v<C, Name> && !std::is_same_v<C, ParticleEmitter>) {
+        show_add_component_entry<C>(entity);
+    }
+
+    if constexpr (sizeof...(Cs) != 0) {
+        show_add_component_list<Cs...>(entity);
+    }
+}
+
+void show_entity_actions_popup(Scene& scene,
+                               SceneObject*& entity,
+                               SceneObject*& selected_entity) {
+    using namespace Components;
+    if (ImGui::BeginPopup("Entity actions")) {
+        if (ImGui::Selectable("Delete entity")) {
+            log::log(fmt::format("Deleting entity: {}",
+                                 entity->get_component<Name>().name));
+            scene.destroy_object(selected_entity);
+            selected_entity = nullptr;
+            entity = nullptr;
+            ImGui::CloseCurrentPopup();
+        }
+        if (ImGui::BeginMenu("Add Component")) {
+            impl::show_add_component_list<COMPONENT_LIST>(entity);
+            ImGui::EndMenu();
+        }
+        ImGui::EndPopup();
+    }
+}
+
+} // namespace impl
 
 EntityTree::EntityTree() {
     // Show by default
@@ -84,7 +245,7 @@ void EntityTree::show_entity_tree(tree_t& enttree, Scene& scene) {
 
         // Only display if this is a root entity
         if (entity->get_parent_id() == 0) {
-            entity_it = show_self_and_children(enttree, entity_it);
+            entity_it = show_self_and_children(scene, enttree, entity_it);
         }
 
         if (entity_it == enttree.end()) break;
@@ -96,8 +257,8 @@ bool EntityTree::has_child(tree_t& tree, tree_t::iterator entity) {
            (*entity)->get_id() == (*(entity + 1))->get_parent_id();
 }
 
-EntityTree::tree_t::iterator
-EntityTree::show_self_and_children(tree_t& tree, tree_t::iterator entity) {
+EntityTree::tree_t::iterator EntityTree::show_self_and_children(
+    Scene& scene, tree_t& tree, tree_t::iterator entity) {
     using namespace ::Saturn::Components;
     std::string to_display = "";
     if (SceneObject* obj = *entity; obj->has_component<Name>()) {
@@ -135,7 +296,7 @@ EntityTree::show_self_and_children(tree_t& tree, tree_t::iterator entity) {
             // If the parent is the current entity's ID, show it and its
             // children.
             if (parent == (*entity)->get_id()) {
-                cur = show_self_and_children(tree, cur);
+                cur = show_self_and_children(scene, tree, cur);
             } else {
                 // If the parent is not the current entity, we are in the
                 // next section of our tree, so break out of the loop We
@@ -152,137 +313,6 @@ EntityTree::show_self_and_children(tree_t& tree, tree_t::iterator entity) {
     return cur;
 }
 
-namespace impl {
-
-struct ComponentFieldVisitor {
-    // Define overloaded visitor for types:
-    // std::size_t, float, int, std::string, glm::vec3, glm::vec4, bool
-
-    std::string_view field_name;
-
-    void operator()(std::size_t* field) {
-        ImGui::DragScalar(field_name.data(), ImGuiDataType_U64, field, 0.2f);
-    }
-
-    void operator()(float* field) {
-        ImGui::DragScalar(field_name.data(), ImGuiDataType_Float, field, 0.2f);
-    }
-
-    void operator()(int* field) {
-        ImGui::DragScalar(field_name.data(), ImGuiDataType_S32, field, 0.2f);
-    }
-
-    void operator()(std::string* field) {
-        static constexpr std::size_t buf_size = 128;
-        field->resize(buf_size);
-        ImGui::InputText(field_name.data(), field->data(), buf_size);
-    }
-
-    void operator()(glm::vec3* field) {
-        ImGui::InputFloat3(field_name.data(), &field->x);
-    }
-
-    void operator()(glm::vec4* field) {
-        ImGui::InputFloat4(field_name.data(), &field->x);
-    }
-
-    void operator()(glm::bvec3* field) {
-        ImGui::Text("%s: ", field_name.data());
-        ImGui::SameLine();
-        ImGui::Checkbox("x", &field->x);
-        ImGui::SameLine();
-        ImGui::Checkbox("y", &field->y);
-        ImGui::SameLine();
-        ImGui::Checkbox("z", &field->z);
-    }
-
-    void operator()(bool* field) { ImGui::Checkbox(field_name.data(), field); }
-
-    void operator()(color3* field) {
-        ImGui::ColorEdit3((std::string(field_name) + " color").c_str(),
-                          &field->x);
-    }
-
-    void operator()(color4* field) {
-        ImGui::ColorEdit4((std::string(field_name) + " color").c_str(),
-                          &field->x);
-    }
-};
-
-template<typename C>
-void display_component(SceneObject* entity) {
-    using namespace ::Saturn::Meta;
-    using namespace ::Saturn::Components;
-    using ComponentMeta = ComponentsMeta<COMPONENT_LIST>;
-    auto& comp = entity->get_component<C>();
-    ComponentInfo const& component_meta =
-        ComponentMeta::get_component_meta_info<C>();
-    static constexpr int imgui_mouse_right_button = 1;
-    if (ImGui::CollapsingHeader(component_meta.name.c_str())) {
-        if (ImGui::IsItemClicked(imgui_mouse_right_button)) {
-            // Show popup menu containing actions to delete this component
-            ImGui::OpenPopup("Component Actions");
-        }
-        if (ImGui::BeginPopup("Component Actions")) {
-			if (ImGui::Selectable("Delete component")) {
-				entity->remove_component<C>();
-				ImGui::CloseCurrentPopup();
-				ImGui::EndPopup();
-				return;
-			}
-            ImGui::EndPopup();
-        }
-        for (auto const& [field_name, field_type] : component_meta.fields) {
-            if (field_type.find("Resource") != std::string::npos) {
-                continue; // unsupported for now, this will be added once we
-                          // have an asset browser
-            }
-            ComponentFieldPtr field_info =
-                ComponentMeta::get_component_field(comp, field_name);
-            // Check if pointer isn't null
-            if (!field_info) { continue; }
-            std::visit(ComponentFieldVisitor{field_name}, field_info.get());
-        }
-    }
-}
-
-template<typename C, typename... Cs>
-void display_components(SceneObject* entity) {
-    using namespace Components;
-    if (!std::is_same_v<C, Name> && entity->has_component<C>()) {
-        // Temporary
-        if constexpr (!std::is_same_v<C, ParticleEmitter>) {
-            display_component<C>(entity);
-        }
-    };
-    if constexpr (sizeof...(Cs) != 0) { display_components<Cs...>(entity); }
-}
-
-template<typename C>
-void show_add_component_entry(SceneObject* entity) {
-    using namespace ::Saturn::Meta;
-    using ComponentMeta = ComponentsMeta<COMPONENT_LIST>;
-
-    std::string name = ComponentMeta::get_component_meta_info<C>().name;
-    if (ImGui::Selectable(("New " + name).c_str())) {
-        if (!entity->has_component<C>()) { entity->add_component<C>(); }
-    }
-}
-
-template<typename C, typename... Cs>
-void show_add_component_list(SceneObject* entity) {
-    using namespace ::Saturn::Components;
-    if (!std::is_same_v<C, Name> && !std::is_same_v<C, ParticleEmitter>) {
-        show_add_component_entry<C>(entity);
-    }
-
-    if constexpr (sizeof...(Cs) != 0) {
-        show_add_component_list<Cs...>(entity);
-    }
-}
-
-} // namespace impl
-
 void EntityTree::show_entity_details(SceneObject* entity, Scene& scene) {
     using namespace ::Saturn::Components;
     using namespace ::Saturn::Meta;
@@ -296,19 +326,7 @@ void EntityTree::show_entity_details(SceneObject* entity, Scene& scene) {
     if (ImGui::Button("Entity actions ...", ImVec2(150, 0))) {
         ImGui::OpenPopup("Entity actions");
     }
-    if (ImGui::BeginPopup("Entity actions")) {
-        if (ImGui::Selectable("Delete entity")) {
-            scene.destroy_object(selected_entity);
-            selected_entity = nullptr;
-            entity = nullptr;
-            ImGui::CloseCurrentPopup();
-        }
-        if (ImGui::BeginMenu("Add Component")) {
-            impl::show_add_component_list<COMPONENT_LIST>(entity);
-            ImGui::EndMenu();
-        }
-        ImGui::EndPopup();
-    }
+    impl::show_entity_actions_popup(scene, entity, selected_entity);
     if (entity) { impl::display_components<COMPONENT_LIST>(entity); }
 }
 

@@ -27,16 +27,18 @@ Editor::Editor(Application& app) : app(&app) {
     ImGui_ImplOpenGL3_Init("#version 430");
     // Initialize components metadata
     Meta::ComponentsMeta<COMPONENT_LIST>::init();
-    auto& console = editor_widgets.debug_console;
+    auto& console = log::get_console();
     console.add_entry("Initialization of Editor complete");
     console.add_command(
         "log", [&console](DebugConsole::CommandContext const& context) {
             console.add_entry(fmt::format("{}", join(context.args)));
         });
+    log::log("The component editor does not support Resource<T> types yet",
+             DebugConsole::Warning);
 }
 
 void Editor::setup_viewports() {
-    editor_widgets.debug_console.add_entry("Setting up Editor viewports");
+    log::log("Setting up Editor viewports");
     // Setup viewport for scene view
     auto main_cam = this->app->get_renderer()->get_viewport(0).get_camera();
     auto scene_view = Viewport(main_cam, 0, 0, 800, 600);
@@ -68,9 +70,7 @@ void Editor::render(Scene& scene) {
 
     show_menu_bar(scene);
 
-    if (editor_widgets.debug_console.is_shown()) {
-        editor_widgets.debug_console.show();
-    }
+    if (log::get_console().is_shown()) { log::get_console().show(); }
     if (editor_widgets.entity_tree.is_shown()) {
         editor_widgets.entity_tree.show(scene);
     }
@@ -95,6 +95,7 @@ void Editor::show_menu_bar(Scene& scene) {
         if (ImGui::BeginMenu("File")) {
             if (ImGui::MenuItem("Save scene to scene1")) {
                 scene.serialize_to_file("resources/scene1");
+                log::log("Saved scene to scene1");
             }
             if (ImGui::MenuItem("Open")) {
                 static SelectFileDialog dialog;
@@ -103,7 +104,7 @@ void Editor::show_menu_bar(Scene& scene) {
                 result += "/scene.dat";
                 scene.deserialize_from_file(result.string());
                 on_scene_reload();
-                editor_widgets.debug_console.add_entry(
+                log::log(
                     fmt::format("Loaded scene at path: {}", result.string()));
             }
             ImGui::Separator();
@@ -123,7 +124,7 @@ void Editor::show_menu_bar(Scene& scene) {
             ImGui::MenuItem("Entity Tree", nullptr,
                             editor_widgets.entity_tree.get_shown_pointer());
             ImGui::MenuItem("Debug Console", nullptr,
-                            editor_widgets.debug_console.get_shown_pointer());
+                            log::get_console().get_shown_pointer());
             ImGui::MenuItem("Editor Preferences", nullptr,
                             editor_widgets.preferences.get_shown_pointer());
             ImGui::MenuItem("ImGui Demo Window", nullptr, &show_demo_window);
@@ -147,17 +148,20 @@ void Editor::show_menu_bar(Scene& scene) {
             create_entity(scene, entity_name_buffer);
             ImGui::CloseCurrentPopup();
             entity_name_buffer.clear();
+            entity_name_buffer.resize(bufsize);
         }
 
         if (ImGui::Button("Create", ImVec2(120, 0))) {
             create_entity(scene, entity_name_buffer);
             ImGui::CloseCurrentPopup();
             entity_name_buffer.clear();
+            entity_name_buffer.resize(bufsize);
         }
         ImGui::SameLine();
         if (ImGui::Button("Cancel", ImVec2(120, 0))) {
             ImGui::CloseCurrentPopup();
             entity_name_buffer.clear();
+            entity_name_buffer.resize(bufsize);
         }
 
         ImGui::EndPopup();
@@ -167,7 +171,7 @@ void Editor::show_menu_bar(Scene& scene) {
 }
 
 void Editor::on_scene_reload() {
-    editor_widgets.debug_console.add_entry("Reloading scene");
+    log::log("Reloading scene");
     editor_widgets.entity_tree.reset_selected_entity();
 }
 
@@ -177,8 +181,7 @@ void Editor::create_entity(Scene& scene, std::string const& name) {
     auto& name_c = scene.get_ecs().get_with_id<Name>(obj.add_component<Name>());
     name_c.name = name;
     obj.add_component<Transform>();
-    editor_widgets.debug_console.add_entry(
-        fmt::format("Creating entity with name: {}", name_c.name));
+    log::log(fmt::format("Creating entity with name: {}", name_c.name));
 }
 
 void Editor::frame_end() {

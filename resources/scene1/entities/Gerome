@@ -1,16 +1,4 @@
 {
-    "BoxColliderComponent": {
-        "Center": [
-            0.0,
-            0.0,
-            0.0
-        ],
-        "HalfWidths": [
-            0.5199999809265137,
-            0.5199999809265137,
-            0.5199999809265137
-        ]
-    },
     "ID": 5,
     "MaterialComponent": {
         "DiffuseMap": {
@@ -32,10 +20,18 @@
     "RigidbodyComponent": {
         "LockedAxes": [
             false,
-            false,
+            true,
             false
         ],
         "Mass": 1.0
+    },
+    "RotatorComponent": {
+        "EulerAngles": [
+            0.0,
+            90.0,
+            0.0
+        ],
+        "Speed": 0.30000001192092896
     },
     "StaticMeshComponent": {
         "FaceCull": true,
@@ -46,12 +42,12 @@
     "TransformComponent": {
         "Position": [
             -4.0,
-            2.5004541873931885,
+            3.0,
             6.0
         ],
         "Rotation": [
             0.0,
-            0.0,
+            16707.337890625,
             0.0
         ],
         "Scale": [

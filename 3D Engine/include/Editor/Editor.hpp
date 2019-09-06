@@ -6,7 +6,7 @@
 #    include <cstddef>
 #    include <vector>
 
-#    include "Editor/DebugConsole.hpp"
+#    include "Editor/EditorLog.hpp"
 #    include "Editor/EditorPreferencesWidget.hpp"
 #    include "Editor/EntityTree.hpp"
 
@@ -37,7 +37,6 @@ private:
     std::size_t scene_view_viewport_id = 0;
 
     struct Widgets {
-        DebugConsole debug_console;
         EntityTree entity_tree;
 		EditorPreferencesWidget preferences;
     } editor_widgets;

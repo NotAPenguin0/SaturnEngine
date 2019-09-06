@@ -4,6 +4,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Core/Engine.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Core/ErrorHandler.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Editor.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Editor/EditorLog.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Editor/EditorPreferencesWidget.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Editor/EditorWidget.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Editor/EntityTree.hpp"
