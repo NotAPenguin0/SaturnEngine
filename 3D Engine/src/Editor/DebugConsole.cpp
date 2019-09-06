@@ -13,6 +13,7 @@ std::unordered_map<DebugConsole::LogType, DebugConsole::LogTypeStyle>
     DebugConsole::log_type_styles = {
         {LogType::Debug, {"[Debug]", ImVec4(0.0f, 1.0f, 0.0f, 1.0f)}},
 		{LogType::Log, {"[Log]", ImVec4(1.0f, 1.0f, 1.0f, 1.0f)}},
+		{LogType::Info, {"[Info]", ImVec4(1.0f, 1.0f, 1.0f, 1.0f)}},
 		{LogType::Warning, {"[Warning]", ImVec4(1.0f, 1.0f, 0.0f, 1.0f)}},
 		{LogType::Error, {"[Error]", ImVec4(1.0f, 0.0f, 0.0f, 1.0f)}},
 		{LogType::Raw, {"", ImVec4(1.0f, 1.0f, 1.0f, 1.0f)}}

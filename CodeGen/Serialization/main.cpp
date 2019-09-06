@@ -17,6 +17,30 @@ using namespace std::literals::string_view_literals;
 
 namespace fs = std::filesystem;
 
+template<typename string_type>
+std::vector<string_type> split(string_type const& s,
+                               typename string_type::value_type delim) {
+    std::vector<string_type> elems;
+    std::basic_stringstream<typename string_type::value_type> ss(s);
+    string_type item;
+    while (std::getline(ss, item, delim)) { elems.push_back(item); }
+    return elems;
+}
+
+template<typename string_type>
+string_type join(std::vector<string_type> const& v,
+                 typename string_type::value_type sep = ' ') {
+    string_type result;
+    for (auto elem : v) {
+        result += elem;
+        result += sep;
+    }
+    result.pop_back();
+    return result;
+}
+
+std::string bool_str(bool b) { return b ? "true"s : "false"s; }
+
 namespace settings {
 
 constexpr const char* component_base_file = "ComponentBase.hpp";
@@ -50,10 +74,17 @@ struct OutputFiles {
 };
 
 struct ComponentData {
+    enum Flags : uint32_t {
+        None = 0,
+        DefaultSerialize = 1,
+        HideInEditor = 2,
+        EditorOnly = 4
+    };
+
     using type_name_t = std::string;
 
     std::string name;
-    bool default_serialize;
+    uint32_t flags;
     // Maps a member name to its type
     std::unordered_map<std::string, type_name_t> fields;
 };
@@ -187,6 +218,7 @@ std::string read_file_into_string(fs::path const& path) {
     return std::string((std::istreambuf_iterator<char>(file)),
                        std::istreambuf_iterator<char>());
 }
+/*
 
 std::string get_component_name(std::string const& first_line) {
     static const std::size_t declaration_len =
@@ -209,7 +241,8 @@ std::string get_component_name(std::string const& first_line) {
     // Note that the second parameter of substr asks for a length, not a stop
     // index
     return first_line.substr(name_start, name_end - name_start);
-}
+}*/
+/*
 
 bool get_component_default_serialize(std::string const& first_line) {
     if (first_line.find("DEFAULT_SERIALIZE") != std::string::npos) {
@@ -217,6 +250,39 @@ bool get_component_default_serialize(std::string const& first_line) {
     }
 
     return false;
+}
+*/
+
+void get_component_flags_and_name(ComponentData& data,
+                                  std::string first_line,
+                                  std::ifstream& rest_of_file) {
+    // Complete the first line if necessary
+    if (first_line.find(':') == std::string::npos) {
+        std::string line;
+        while (std::getline(rest_of_file, line)) {
+            first_line += line;
+            if (line.find(':' != std::string::npos)) { break; }
+        }
+    }
+
+    // Now, complete the flags
+    const size_t start = first_line.find("struct") + strlen("struct");
+    std::string decl = first_line.substr(start, first_line.find(':') - start);
+    std::vector<std::string> attributes = split(decl, ' ');
+    // Now, the last element of attributes will be the component name, all other
+    // attributes are in the vector as well
+    data.name = attributes.back();
+    data.flags = ComponentData::None;
+    attributes.pop_back();
+    for (auto const& attr : attributes) {
+        if (attr == "DEFAULT_SERIALIZE") {
+            data.flags |= ComponentData::DefaultSerialize;
+        } else if (attr == "EDITOR_ONLY") {
+            data.flags |= ComponentData::EditorOnly;
+        } else if (attr == "HIDE_IN_EDITOR") {
+            data.flags |= ComponentData::HideInEditor;
+        }
+    }
 }
 
 TranslationUnit get_translation_unit(Directories const& dirs,
@@ -315,8 +381,7 @@ ComponentData parse_component(Directories const& dirs,
                               std::string const& first_line,
                               std::ifstream& rest_of_file) {
     ComponentData data;
-    data.name = get_component_name(first_line);
-    data.default_serialize = get_component_default_serialize(first_line);
+    get_component_flags_and_name(data, first_line, rest_of_file);
     auto translation_unit = get_translation_unit(dirs, path);
     data.fields = get_component_fields(translation_unit, data.name);
 
@@ -355,7 +420,7 @@ void add_forward_declarations_data(
 
     data["ForwardDeclarations"] = mustache::data::type::list;
     for (auto const& component : components) {
-        if (component.default_serialize) {
+        if (component.flags & ComponentData::DefaultSerialize) {
             data["ForwardDeclarations"].push_back(
                 mustache::data("ComponentName", component.name));
         }
@@ -368,7 +433,7 @@ void add_function_declarations_data(
     data["FromJsonDecl"] = mustache::data::type::list;
     data["ToJsonDecl"] = mustache::data::type::list;
     for (auto const& component : components) {
-        if (component.default_serialize) {
+        if (component.flags & ComponentData::DefaultSerialize) {
             data["FromJsonDecl"].push_back(
                 mustache::data("ComponentName", component.name));
             data["ToJsonDecl"].push_back(
@@ -422,7 +487,7 @@ void add_from_json_impl_data(mustache::data& data,
     data["FromJsonImpl"] = mustache::data::type::list;
     for (auto const& component : components) {
         // Skip ParticleEmitter for now
-        if (!component.default_serialize) continue;
+        if (!(component.flags & ComponentData::DefaultSerialize)) continue;
 
         mustache::data impl_data = mustache::data::type::object;
         impl_data["ComponentName"] = component.name;
@@ -449,7 +514,7 @@ void add_to_json_impl_data(mustache::data& data,
     data["ToJsonImpl"] = mustache::data::type::list;
     for (auto const& component : components) {
         // Skip ParticleEmitter for now
-        if (!component.default_serialize) continue;
+        if (!(component.flags & ComponentData::DefaultSerialize)) continue;
 
         mustache::data impl_data = mustache::data::type::object;
         impl_data["ComponentName"] = component.name;
@@ -555,7 +620,13 @@ generate_components_meta_info(std::vector<ComponentData> const& components) {
     for (auto const& component : components) {
         mustache::data comp_data = mustache::data::type::object;
         comp_data["ComponentName"] = component.name + " ";
-
+        bool default_serialize =
+            component.flags & ComponentData::DefaultSerialize;
+        bool hide_in_editor = component.flags & ComponentData::HideInEditor;
+        bool editor_only = component.flags & ComponentData::EditorOnly;
+        comp_data["DefaultSerialize"] = bool_str(default_serialize);
+        comp_data["HideInEditor"] = bool_str(hide_in_editor);
+        comp_data["EditorOnly"] = bool_str(editor_only);
         comp_data["ComponentFieldMeta"] = mustache::data::type::list;
         auto& fields_data_list = comp_data["ComponentFieldMeta"];
         for (auto const& [field_name, field_type] : component.fields) {
@@ -655,5 +726,5 @@ int main(int argc, char** argv) {
     write_output_file(output_files.components, components_header);
     write_output_file(output_files.component_list, component_list_header);
     write_output_file(output_files.component_meta_src, meta_source);
-	write_output_file(output_files.component_meta_header, meta_header);
+    write_output_file(output_files.component_meta_header, meta_header);
 }

@@ -22,7 +22,9 @@ struct ComponentInfo {
     // This has a space behind it to avoid problems with UI.
     // #DirtyFixPleaseFixBetter
     std::string name;
-
+	bool hide_in_editor;
+	bool editor_only;
+	bool default_serialize;
     using type_name_t = std::string;
     std::unordered_map<std::string, type_name_t> fields;
 };

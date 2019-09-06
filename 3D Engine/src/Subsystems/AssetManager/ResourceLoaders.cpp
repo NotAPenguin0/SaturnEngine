@@ -2,6 +2,8 @@
 
 #include "Subsystems/Logging/LogSystem.hpp"
 
+#include "Editor/EditorLog.hpp"
+
 #include <fstream>
 
 namespace Saturn {
@@ -9,8 +11,8 @@ namespace Saturn {
 std::unique_ptr<Shader> ResourceLoader<Shader>::load(std::string const& path) {
     std::ifstream file(path);
     if (!file.good()) {
-        LogSystem::write(LogSystem::Severity::Error,
-                         "Failed to load Shader file at path: " + path);
+        log::log(fmt::format("Failed to open shader file at path: {}", path),
+                 Editor::DebugConsole::Error);
         return nullptr;
     }
     Shader::CreateInfo info;
@@ -21,9 +23,7 @@ std::unique_ptr<Shader> ResourceLoader<Shader>::load(std::string const& path) {
     std::string vtx, frag, geom;
     std::getline(file, vtx);
     std::getline(file, frag);
-	if (std::getline(file, geom) && geom != "None") {
-		info.geom_path = geom;
-	}
+    if (std::getline(file, geom) && geom != "None") { info.geom_path = geom; }
 
     info.vtx_path = vtx;
     info.frag_path = frag;
@@ -34,8 +34,8 @@ std::unique_ptr<Shader> ResourceLoader<Shader>::load(std::string const& path) {
 std::unique_ptr<Mesh> ResourceLoader<Mesh>::load(std::string const& path) {
     std::ifstream file(path);
     if (!file.good()) {
-        LogSystem::write(LogSystem::Severity::Error,
-                         "Failed to load Mesh file at path: " + path);
+        log::log(fmt::format("Failed to open mesh file at path: {}", path),
+                 Editor::DebugConsole::Error);
         return nullptr;
     }
 
@@ -180,8 +180,8 @@ std::unique_ptr<Texture>
 ResourceLoader<Texture>::load(std::string const& path) {
     std::ifstream file(path);
     if (!file.good()) {
-        LogSystem::write(LogSystem::Severity::Error,
-                         "Failed to load texture file at path: " + path);
+        log::log(fmt::format("Failed to open texture file at path: {}", path),
+                 Editor::DebugConsole::Error);
         return nullptr;
     }
 

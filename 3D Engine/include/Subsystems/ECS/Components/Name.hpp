@@ -6,10 +6,10 @@
 
 namespace Saturn::Components {
 
-struct COMPONENT DEFAULT_SERIALIZE Name : ComponentBase {
-	std::string name;
+struct COMPONENT DEFAULT_SERIALIZE HIDE_IN_EDITOR Name : ComponentBase {
+    std::string name;
 };
 
-}
+} // namespace Saturn::Components
 
 #endif

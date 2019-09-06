@@ -23,7 +23,7 @@ class ParticleSystem;
 
 namespace Saturn::Components {
 
-struct COMPONENT ParticleEmitter : ComponentBase {
+struct COMPONENT HIDE_IN_EDITOR ParticleEmitter : ComponentBase {
     struct Particle {
         float life_left;
         float velocity;

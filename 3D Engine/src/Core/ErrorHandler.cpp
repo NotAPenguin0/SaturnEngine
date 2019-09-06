@@ -1,4 +1,6 @@
 #include "Core/ErrorHandler.hpp"
+
+#include "Editor/EditorLog.hpp"
 #include "Subsystems/Logging/LogSystem.hpp"
 
 #include <string>
@@ -53,11 +55,26 @@ void GLErrorHandler::gl_error_callback([[maybe_unused]] GLenum source,
 #ifdef NO_PERFORMANCE_LOG
     if (type == GL_DEBUG_TYPE_PERFORMANCE) return;
 #endif
-
+#ifdef WITH_EDITOR
+    Editor::DebugConsole::LogType log_type = Editor::DebugConsole::Info;
+    switch (sev) {
+        case LogSystem::Severity::Warning:
+            log_type = Editor::DebugConsole::Warning;
+            break;
+        case LogSystem::Severity::Error:
+            log_type = Editor::DebugConsole::Error;
+            break;
+        default: break;
+    }
+    log::log(fmt::format("OpenGL Debug Output"), log_type);
+    log::log(fmt::format("Error Type: {}", errtype), log_type);
+    log::log(fmt::format("Message: {}", message), log_type);
+#else
     // Print the error message
     LogSystem::write(sev, "OpenGL Debug Output: ");
     LogSystem::write(sev, "Error type: "s + errtype);
     LogSystem::write(sev, "Message: "s + message);
+#endif
 }
 
 /*

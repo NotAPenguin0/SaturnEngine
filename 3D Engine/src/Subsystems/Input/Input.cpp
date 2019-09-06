@@ -1,6 +1,7 @@
 #include "Subsystems/Input/Input.hpp"
 
 #include "Core/Application.hpp"
+#include "Editor/EditorLog.hpp"
 #include "Subsystems/Time/Time.hpp"
 
 #include <fstream>
@@ -247,9 +248,10 @@ void AxisManager::update_axis_values() {
             }
         } else {
             // No axis found with requested name
-            LogSystem::write(LogSystem::Severity::Warning,
-                             "Invalid axis mapping: No axis exists with name " +
-                                 mapping.name);
+            log::log(
+                fmt::format("Invalid axis mapping: No axis exists with name {}",
+                            mapping.name),
+                Editor::DebugConsole::Warning);
         }
     }
     // Update all axes
@@ -275,8 +277,9 @@ std::size_t AxisManager::get_axis_id(std::string const& name) {
     if (it != name_id_map.end()) {
         return it->second;
     } else {
-        LogSystem::write(LogSystem::Severity::Warning,
-                         "Invalid axis name: No axis exists with name " + name);
+        log::log(
+            fmt::format("Invalid axis name: No axis exists with name {}", name),
+            Editor::DebugConsole::Warning);
         return -1;
     }
 }
@@ -449,10 +452,9 @@ void JoystickInputManager::find_present_joysticks() {
             if (joystick.is_gamepad) {
                 joystick.gamepad_name = glfwGetGamepadName(raw_id);
             }
-            LogSystem::write(LogSystem::Severity::Info,
-                             "Joystick '" + joystick.name +
-                                 "' detected in slot " +
-                                 std::to_string(raw_id - GLFW_JOYSTICK_1));
+            log::log(fmt::format("Joystick '{0}' detected in slot {1}",
+                                 joystick.name, raw_id - GLFW_JOYSTICK_1),
+                     Editor::DebugConsole::Info);
         } else if (present == 0) {
             present_joysticks[id].connected = false;
         }
@@ -469,15 +471,17 @@ void JoystickInputManager::joystick_connection_callback(int raw_id, int event) {
         if (joystick.is_gamepad) {
             joystick.gamepad_name = glfwGetGamepadName(raw_id);
         }
-        LogSystem::write(LogSystem::Severity::Info,
-                         "Joystick '" + joystick.name + "' connected to slot " +
-                             std::to_string(raw_id - GLFW_JOYSTICK_1));
+        log::log(fmt::format("Joystick '{0}' connected to slot {1}",
+                             joystick.name, raw_id - GLFW_JOYSTICK_1));
     } else if (event == GLFW_DISCONNECTED) {
         present_joysticks[id].connected = false;
         LogSystem::write(LogSystem::Severity::Info,
                          "Joystick '" + present_joysticks[id].name +
                              "' disconnected from slot " +
                              std::to_string(raw_id - GLFW_JOYSTICK_1));
+        log::log(fmt::format("Joystick '{0}' disconnected from slot {1}",
+                             present_joysticks[id].name,
+                             raw_id - GLFW_JOYSTICK_1));
     }
 }
 
@@ -545,8 +549,8 @@ float Input::get_axis(std::string const& name) {
         if (axis.id == id) { return axis.value; }
     }
 
-    LogSystem::write(LogSystem::Severity::Warning,
-                     "No axis exists with name " + name);
+    log::log(fmt::format("No axis exists with name {}", name),
+             Editor::DebugConsole::Warning);
     return 0.0f;
 }
 
@@ -556,8 +560,8 @@ float Input::get_axis_raw(std::string const& name) {
     for (auto const& axis : axes) {
         if (axis.id == id) { return axis.raw_value; }
     }
-    LogSystem::write(LogSystem::Severity::Warning,
-                     "No axis exists with name " + name);
+    log::log(fmt::format("No axis exists with name {}", name),
+             Editor::DebugConsole::Warning);
     return 0.0f;
 }
 
@@ -570,7 +574,8 @@ void Input::initialize(Application& program) {
 }
 
 void Input::set_mouse_capture(bool capture) {
-    glfwSetInputMode(app->window(), GLFW_CURSOR, capture ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+    glfwSetInputMode(app->window(), GLFW_CURSOR,
+                     capture ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
 }
 
 void Input::load_config_file(std::string const& path) {
@@ -578,6 +583,9 @@ void Input::load_config_file(std::string const& path) {
     if (!in.good()) {
         LogSystem::write(LogSystem::Severity::Warning,
                          "Failed to open config file at path " + path);
+        log::log(
+            fmt::format("Failed to open input config file at path{}", path),
+            Editor::DebugConsole::Warning);
         return;
     }
     nlohmann::json j;
@@ -592,7 +600,7 @@ void Input::load_config_file(std::string const& path) {
         mapping.key = map["Key"].get<Key>();
         mapping.sensitivity = map["Sensitivity"].get<float>();
         mapping.scale = map["Scale"].get<float>();
-		AxisManager::add_axis_mapping(mapping);
+        AxisManager::add_axis_mapping(mapping);
     }
 }
 

@@ -4,5 +4,7 @@
 #define COMPONENT
 #define SYSTEM
 #define DEFAULT_SERIALIZE
+#define EDITOR_ONLY
+#define HIDE_IN_EDITOR
 
 #endif

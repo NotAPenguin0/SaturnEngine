@@ -121,7 +121,11 @@ void display_component(SceneObject* entity) {
 template<typename C, typename... Cs>
 void display_components(SceneObject* entity) {
     using namespace Components;
-    if (!std::is_same_v<C, Name> && entity->has_component<C>()) {
+    using namespace Meta;
+    using ComponentMeta = ComponentsMeta<COMPONENT_LIST>;
+    ComponentInfo const& meta_info =
+        ComponentMeta::get_component_meta_info<C>();
+    if (!meta_info.hide_in_editor && entity->has_component<C>()) {
         // Temporary
         if constexpr (!std::is_same_v<C, ParticleEmitter>) {
             display_component<C>(entity);
@@ -134,9 +138,10 @@ template<typename C>
 void show_add_component_entry(SceneObject* entity) {
     using namespace ::Saturn::Meta;
     using ComponentMeta = ComponentsMeta<COMPONENT_LIST>;
-
-    std::string name = ComponentMeta::get_component_meta_info<C>().name;
-    if (ImGui::Selectable(("New " + name).c_str())) {
+    ComponentInfo const& meta_info =
+        ComponentMeta::get_component_meta_info<C>();
+    if (meta_info.hide_in_editor) { return; }
+    if (ImGui::Selectable(("New " + meta_info.name).c_str())) {
         if (!entity->has_component<C>()) { entity->add_component<C>(); }
     }
 }
@@ -315,11 +320,7 @@ EntityTree::tree_t::iterator EntityTree::show_self_and_children(
 
 void EntityTree::show_entity_details(SceneObject* entity, Scene& scene) {
     using namespace ::Saturn::Components;
-    using namespace ::Saturn::Meta;
-
-    using ComponentMeta = ComponentsMeta<COMPONENT_LIST>;
-
-    static constexpr std::size_t name_buffer_size = 128;
+    static constexpr std::size_t name_buffer_size = 256;
     std::string& name = entity->get_component<Name>().name;
     name.resize(name_buffer_size);
     ImGui::InputText("Entity name", name.data(), name_buffer_size);

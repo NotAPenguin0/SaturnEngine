@@ -16,7 +16,7 @@ namespace Saturn::Editor {
 
 class DebugConsole : public EditorWidget {
 public:
-    enum LogType { Raw, Debug, Log, Warning, Error };
+    enum LogType { Raw, Debug, Log, Info, Warning, Error };
 
     struct LogEntry {
         std::string data;

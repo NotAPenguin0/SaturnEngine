@@ -7,6 +7,9 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "BoxCollider ";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
 		info.fields["center"] = "glm::vec3";
 		info.fields["half_widths"] = "glm::vec3";
 		data.push_back(info);
@@ -14,6 +17,9 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "Camera ";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
 		info.fields["up"] = "glm::vec3";
 		info.fields["front"] = "glm::vec3";
 		info.fields["fov"] = "float";
@@ -23,6 +29,9 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "CameraZoomController ";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
 		info.fields["zoom_speed"] = "float";
 		info.fields["min_zoom"] = "float";
 		info.fields["max_zoom"] = "float";
@@ -31,6 +40,9 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "DirectionalLight ";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
 		info.fields["ambient"] = "Saturn::color3";
 		info.fields["diffuse"] = "Saturn::color3";
 		info.fields["specular"] = "Saturn::color3";
@@ -40,18 +52,27 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "FPSCameraController ";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
 		info.fields["speed"] = "float";
 		data.push_back(info);
 	}
 	{
 		ComponentInfo info;
 		info.name = "FreeLookController ";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
 		info.fields["mouse_sensitivity"] = "float";
 		data.push_back(info);
 	}
 	{
 		ComponentInfo info;
 		info.name = "Material ";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
 		info.fields["diffuse_map"] = "Resource<Saturn::Texture>";
 		info.fields["shader"] = "Resource<Saturn::Shader>";
 		info.fields["lit"] = "bool";
@@ -62,12 +83,18 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "Name ";
+		info.default_serialize = true;
+		info.hide_in_editor = true;
+		info.editor_only = false;
 		info.fields["name"] = "std::string";
 		data.push_back(info);
 	}
 	{
 		ComponentInfo info;
 		info.name = "ParticleEmitter ";
+		info.default_serialize = false;
+		info.hide_in_editor = true;
+		info.editor_only = false;
 		info.fields["velocity_over_lifetime"] = "Saturn::Components::ParticleEmitter::VelocityOverTimeModule";
 		info.fields["additive"] = "bool";
 		info.fields["main"] = "Saturn::Components::ParticleEmitter::MainModule";
@@ -84,6 +111,9 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "PointLight ";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
 		info.fields["ambient"] = "Saturn::color3";
 		info.fields["diffuse"] = "Saturn::color3";
 		info.fields["specular"] = "Saturn::color3";
@@ -93,6 +123,9 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "Rigidbody ";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
 		info.fields["mass"] = "float";
 		info.fields["locked_axes"] = "glm::bvec3";
 		data.push_back(info);
@@ -100,6 +133,9 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "Rotator ";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
 		info.fields["speed"] = "float";
 		info.fields["euler_angles"] = "glm::vec3";
 		data.push_back(info);
@@ -107,6 +143,9 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "SpotLight ";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
 		info.fields["ambient"] = "Saturn::color3";
 		info.fields["inner_angle"] = "float";
 		info.fields["diffuse"] = "Saturn::color3";
@@ -119,6 +158,9 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "StaticMesh ";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
 		info.fields["mesh"] = "Resource<Saturn::Mesh>";
 		info.fields["face_cull"] = "bool";
 		data.push_back(info);
@@ -126,6 +168,9 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "Transform ";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
 		info.fields["position"] = "glm::vec3";
 		info.fields["rotation"] = "glm::vec3";
 		info.fields["scale"] = "glm::vec3";
