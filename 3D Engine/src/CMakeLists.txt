@@ -13,6 +13,7 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/component_container.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/SystemBase.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/CameraZoomControllerSystem.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/EditorCameraSystem.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/FPSCameraControllerSystem.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/FlashlightSystem.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/FreeLookControllerSystem.cpp"

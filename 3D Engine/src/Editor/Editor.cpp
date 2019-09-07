@@ -58,6 +58,7 @@ SystemUpdateMode Editor::get_update_mode() {
 void Editor::render(Scene& scene) {
     static bool once = true;
     if (once) {
+        // Setup some bindings
         ActionBinding exit_playmode_binding;
         exit_playmode_binding.key = Key::Escape;
         exit_playmode_binding.when = KeyAction::Release;
@@ -66,19 +67,18 @@ void Editor::render(Scene& scene) {
                 playmode_active = false;
                 scene.deserialize_from_file(
                     "resources/playmode_temp/scene.dat");
-                on_scene_reload();
+                on_scene_reload(scene);
+				Input::set_mouse_capture(false);
             }
         };
-
         ActionBindingManager::add_action(exit_playmode_binding);
+        // Setup editor camera
+        create_editor_camera(scene);
+        once = false;
     }
     // #TODO: camera controls in editor
-    // #TODO: specify which ECS systems run in editor and which don't
 
     // Enable mouse capture when space is pressed
-    Input::set_mouse_capture(RawInput::get_key(Key::Space).down);
-    ImGui::GetIO().WantCaptureMouse = false;
-
     static bool show_demo = false;
 
     ImGui_ImplOpenGL3_NewFrame();
@@ -127,7 +127,7 @@ void Editor::show_menu_bar(Scene& scene) {
                 fs::path result = dialog.get_result();
                 result += "/scene.dat";
                 scene.deserialize_from_file(result.string());
-                on_scene_reload();
+                on_scene_reload(scene);
                 log::log(
                     fmt::format("Loaded scene at path: {}", result.string()));
             }
@@ -138,6 +138,7 @@ void Editor::show_menu_bar(Scene& scene) {
         if (ImGui::BeginMenu("Edit")) {
             if (ImGui::Selectable("Enter play mode")) {
                 scene.serialize_to_file("resources/playmode_temp");
+                on_playmode_enter(scene);
                 playmode_active = true;
             }
             if (ImGui::BeginMenu("Entity")) {
@@ -198,9 +199,10 @@ void Editor::show_menu_bar(Scene& scene) {
     if (show_demo_window) ImGui::ShowDemoWindow();
 }
 
-void Editor::on_scene_reload() {
+void Editor::on_scene_reload(Scene& scene) {
     log::log("Reloading scene");
     editor_widgets.entity_tree.reset_selected_entity();
+    create_editor_camera(scene);
 }
 
 void Editor::create_entity(Scene& scene, std::string const& name) {
@@ -210,6 +212,50 @@ void Editor::create_entity(Scene& scene, std::string const& name) {
     name_c.name = name;
     obj.add_component<Transform>();
     log::log(fmt::format("Creating entity with name: {}", name_c.name));
+}
+
+void Editor::create_editor_camera(Scene& scene) {
+	log::log("Creating editor camera");
+    using namespace Components;
+    editor_camera = &scene.create_object();
+    auto& cam_c = scene.get_ecs().get_with_id<Camera>(
+        editor_camera->add_component<Camera>());
+    auto& control_c = scene.get_ecs().get_with_id<EditorCameraController>(
+        editor_camera->add_component<EditorCameraController>());
+    editor_camera->add_component<DoNotSerialize>();
+    auto& trans_c = scene.get_ecs().get_with_id<Transform>(
+        editor_camera->add_component<Transform>());
+    auto& name_c =
+        scene.get_ecs().get_with_id<Name>(editor_camera->add_component<Name>());
+    name_c.name = "EditorCamera";
+    control_c.sensitivity = 0.1f;
+	control_c.speed = 4;
+	control_c.zoom_speed = 100;
+    cam_c.viewport_id = scene_view_viewport_id;
+    cam_c.fov = 45.0f;
+    cam_c.front = glm::vec3(0.5, -0.5, 0.6);
+    cam_c.up = glm::vec3(0, 1, 0);
+    trans_c.position = glm::vec3(-10, 13, -11);
+    trans_c.rotation = glm::vec3(-30, 52, 0);
+    trans_c.scale = glm::vec3(1, 1, 1);
+    app->get_renderer()
+        ->get_viewport(scene_view_viewport_id)
+        .set_camera(cam_c.id);
+}
+
+void Editor::on_playmode_enter(Scene& scene) {
+    using namespace Components;
+	Input::set_mouse_capture(true);
+    for (auto [cam] : scene.get_ecs().select<Camera>()) {
+        if (cam.entity == editor_camera)
+            continue;
+        else {
+            auto vp = cam.viewport_id;
+            app->get_renderer()->get_viewport(vp).set_camera(cam.id);
+        }
+    }
+    scene.destroy_object(editor_camera);
+    editor_camera = nullptr;
 }
 
 void Editor::frame_end() {

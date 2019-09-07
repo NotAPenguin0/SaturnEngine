@@ -38,9 +38,9 @@ Scene::create_object_from_file(std::string_view file_path,
 
 void Scene::destroy_object(SceneObject* object) {
     // #TODO: Actually delete the children too, no idea where they went with the
-    // current implementation 
-    
-	// First, clear out all parents
+    // current implementation
+
+    // First, clear out all parents
     for (auto& obj : objects) {
         if (obj->get_parent_id() == object->get_id()) {
             obj->set_parent(nullptr);
@@ -69,6 +69,7 @@ void Scene::serialize_to_file(std::string_view folder) {
     fs::create_directories(folder.data() + std::string("/entities"));
     std::ofstream file(folder.data() + std::string("/scene.dat"));
     for (std::size_t i = 0; i < objects.size(); ++i) {
+        if (objects[i]->has_component<DoNotSerialize>()) { continue; }
         std::string fname = folder.data() + std::string("/entities/");
         if (objects[i]->has_component<Name>()) {
             fname += (objects[i]->get_component<Name>().name + ".json");

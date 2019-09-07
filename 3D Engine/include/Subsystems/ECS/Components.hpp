@@ -9,6 +9,8 @@
 #include "Components/Camera.hpp"
 #include "Components/CameraZoomController.hpp"
 #include "Components/DirectionalLight.hpp"
+#include "Components/DoNotSerialize.hpp"
+#include "Components/EditorCameraController.hpp"
 #include "Components/FPSCameraController.hpp"
 #include "Components/FreeLookController.hpp"
 #include "Components/Material.hpp"

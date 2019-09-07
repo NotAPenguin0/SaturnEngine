@@ -270,7 +270,10 @@ void get_component_flags_and_name(ComponentData& data,
     std::string decl = first_line.substr(start, first_line.find(':') - start);
     std::vector<std::string> attributes = split(decl, ' ');
     // Now, the last element of attributes will be the component name, all other
-    // attributes are in the vector as well
+    // attributes are in the vector as well. Start by removing all empty strings
+    // though
+    attributes.erase(std::remove(attributes.begin(), attributes.end(), ""),
+                     attributes.end());
     data.name = attributes.back();
     data.flags = ComponentData::None;
     attributes.pop_back();

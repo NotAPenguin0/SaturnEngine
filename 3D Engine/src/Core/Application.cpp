@@ -104,6 +104,9 @@ void Application::run() {
     scene.ecs.register_system<Systems::ParticleSystem>();
     scene.ecs.register_system<Systems::RotatorSystem>();
     scene.ecs.register_system<Systems::FlashlightSystem>();
+#ifdef WITH_EDITOR
+    scene.ecs.register_system<Systems::EditorCameraSystem>();
+#endif
 
 #ifdef WITH_EDITOR
     editor->setup_viewports();

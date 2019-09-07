@@ -58,6 +58,17 @@ void from_json(nlohmann::json const& json, DirectionalLight& component) {
 	}
 }
 
+void from_json(nlohmann::json const& json, EditorCameraController& component) {
+	auto c = json.find("EditorCameraControllerComponent");
+	if (c == json.end()) {
+		throw std::runtime_error("No EditorCameraController component stored even though it was requested");
+	} else {
+		component.speed = (*c)["Speed"].get<float>();
+		component.sensitivity = (*c)["Sensitivity"].get<float>();
+		component.zoom_speed = (*c)["ZoomSpeed"].get<float>();
+	}
+}
+
 void from_json(nlohmann::json const& json, FPSCameraController& component) {
 	auto c = json.find("FPSCameraControllerComponent");
 	if (c == json.end()) {
@@ -135,12 +146,12 @@ void from_json(nlohmann::json const& json, SpotLight& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No SpotLight component stored even though it was requested");
 	} else {
-		component.ambient = (*c)["Ambient"].get<Saturn::color3>();
 		component.inner_angle = (*c)["InnerAngle"].get<float>();
+		component.ambient = (*c)["Ambient"].get<Saturn::color3>();
 		component.diffuse = (*c)["Diffuse"].get<Saturn::color3>();
 		component.specular = (*c)["Specular"].get<Saturn::color3>();
-		component.direction = (*c)["Direction"].get<glm::vec3>();
 		component.intensity = (*c)["Intensity"].get<float>();
+		component.direction = (*c)["Direction"].get<glm::vec3>();
 		component.outer_angle = (*c)["OuterAngle"].get<float>();
 	}
 }
@@ -201,6 +212,15 @@ void to_json(nlohmann::json& json, DirectionalLight const& component) {
 	json["DirectionalLightComponent"]["Diffuse"] = component.diffuse;
 	json["DirectionalLightComponent"]["Specular"] = component.specular;
 	json["DirectionalLightComponent"]["Direction"] = component.direction;
+	// clang-format on
+}
+
+void to_json(nlohmann::json& json, EditorCameraController const& component) {
+	json["EditorCameraControllerComponent"] = nlohmann::json::object();
+	// clang-format off
+	json["EditorCameraControllerComponent"]["Speed"] = component.speed;
+	json["EditorCameraControllerComponent"]["Sensitivity"] = component.sensitivity;
+	json["EditorCameraControllerComponent"]["ZoomSpeed"] = component.zoom_speed;
 	// clang-format on
 }
 
@@ -265,12 +285,12 @@ void to_json(nlohmann::json& json, Rotator const& component) {
 void to_json(nlohmann::json& json, SpotLight const& component) {
 	json["SpotLightComponent"] = nlohmann::json::object();
 	// clang-format off
-	json["SpotLightComponent"]["Ambient"] = component.ambient;
 	json["SpotLightComponent"]["InnerAngle"] = component.inner_angle;
+	json["SpotLightComponent"]["Ambient"] = component.ambient;
 	json["SpotLightComponent"]["Diffuse"] = component.diffuse;
 	json["SpotLightComponent"]["Specular"] = component.specular;
-	json["SpotLightComponent"]["Direction"] = component.direction;
 	json["SpotLightComponent"]["Intensity"] = component.intensity;
+	json["SpotLightComponent"]["Direction"] = component.direction;
 	json["SpotLightComponent"]["OuterAngle"] = component.outer_angle;
 	// clang-format on
 }

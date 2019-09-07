@@ -273,6 +273,9 @@ EntityTree::tree_t::iterator EntityTree::show_self_and_children(
         to_display =
             "Unknown entity with ID " + std::to_string((*entity)->get_id());
     }
+
+    if ((*entity)->has_component<EditorCameraController>()) { return entity + 1; }
+
     auto cur = entity;
 
     bool is_leaf = false;

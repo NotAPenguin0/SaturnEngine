@@ -8,6 +8,8 @@
 ::Saturn::Components::Camera, \
 ::Saturn::Components::CameraZoomController, \
 ::Saturn::Components::DirectionalLight, \
+::Saturn::Components::DoNotSerialize, \
+::Saturn::Components::EditorCameraController, \
 ::Saturn::Components::FPSCameraController, \
 ::Saturn::Components::FreeLookController, \
 ::Saturn::Components::Material, \

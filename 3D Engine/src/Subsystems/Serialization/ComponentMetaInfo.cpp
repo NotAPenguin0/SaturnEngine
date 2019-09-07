@@ -51,6 +51,26 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	}
 	{
 		ComponentInfo info;
+		info.name = "DoNotSerialize ";
+		info.default_serialize = false;
+		info.hide_in_editor = false;
+		info.editor_only = false;
+		
+		data.push_back(info);
+	}
+	{
+		ComponentInfo info;
+		info.name = "EditorCameraController ";
+		info.default_serialize = true;
+		info.hide_in_editor = true;
+		info.editor_only = false;
+		info.fields["speed"] = "float";
+		info.fields["sensitivity"] = "float";
+		info.fields["zoom_speed"] = "float";
+		data.push_back(info);
+	}
+	{
+		ComponentInfo info;
 		info.name = "FPSCameraController ";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
@@ -146,12 +166,12 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
-		info.fields["ambient"] = "Saturn::color3";
 		info.fields["inner_angle"] = "float";
+		info.fields["ambient"] = "Saturn::color3";
 		info.fields["diffuse"] = "Saturn::color3";
 		info.fields["specular"] = "Saturn::color3";
-		info.fields["direction"] = "glm::vec3";
 		info.fields["intensity"] = "float";
+		info.fields["direction"] = "glm::vec3";
 		info.fields["outer_angle"] = "float";
 		data.push_back(info);
 	}

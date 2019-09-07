@@ -143,6 +143,28 @@ public:
 		// return nullptr if the field was not found
 		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
 	}
+    static ComponentFieldPtr get_component_field(Components::DoNotSerialize& comp,
+                                                 std::string_view field_name) {
+		
+		
+		// return nullptr if the field was not found
+		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
+	}
+    static ComponentFieldPtr get_component_field(Components::EditorCameraController& comp,
+                                                 std::string_view field_name) {
+		if (field_name == "speed") {
+			return ComponentFieldPtr(&comp.speed);
+		}
+		if (field_name == "sensitivity") {
+			return ComponentFieldPtr(&comp.sensitivity);
+		}
+		if (field_name == "zoom_speed") {
+			return ComponentFieldPtr(&comp.zoom_speed);
+		}
+		
+		// return nullptr if the field was not found
+		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
+	}
     static ComponentFieldPtr get_component_field(Components::FPSCameraController& comp,
                                                  std::string_view field_name) {
 		if (field_name == "speed") {
@@ -226,11 +248,11 @@ public:
 	}
     static ComponentFieldPtr get_component_field(Components::SpotLight& comp,
                                                  std::string_view field_name) {
-		if (field_name == "ambient") {
-			return ComponentFieldPtr(&comp.ambient);
-		}
 		if (field_name == "inner_angle") {
 			return ComponentFieldPtr(&comp.inner_angle);
+		}
+		if (field_name == "ambient") {
+			return ComponentFieldPtr(&comp.ambient);
 		}
 		if (field_name == "diffuse") {
 			return ComponentFieldPtr(&comp.diffuse);
@@ -238,11 +260,11 @@ public:
 		if (field_name == "specular") {
 			return ComponentFieldPtr(&comp.specular);
 		}
-		if (field_name == "direction") {
-			return ComponentFieldPtr(&comp.direction);
-		}
 		if (field_name == "intensity") {
 			return ComponentFieldPtr(&comp.intensity);
+		}
+		if (field_name == "direction") {
+			return ComponentFieldPtr(&comp.direction);
 		}
 		if (field_name == "outer_angle") {
 			return ComponentFieldPtr(&comp.outer_angle);

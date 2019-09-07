@@ -23,7 +23,7 @@ void CameraZoomControllerSystem::on_update(Scene& scene) {
             cam.fov -=
                 mouse.wheel * zoom_controller.zoom_speed * Time::deltaTime;
         }
-        if (cam.fov <= min) { cam.fov = max; }
+        if (cam.fov <= min) { cam.fov = min; }
         if (cam.fov >= max) { cam.fov = max; }
     }
 }

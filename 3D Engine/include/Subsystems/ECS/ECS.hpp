@@ -45,15 +45,19 @@ public:
             if (mode == SystemUpdateMode::Editor) {
                 if (system->run_in_editor()) { system->on_update(*scene); }
             } else {
-				system->on_update(*scene);
+                if (!system->run_in_editor_only()) {
+                    system->on_update(*scene);
+                }
             }
         }
-		// Now the exact same but for late_update()
-		for (auto& system : systems) {
+        // Now the exact same but for late_update()
+        for (auto& system : systems) {
             if (mode == SystemUpdateMode::Editor) {
                 if (system->run_in_editor()) { system->on_late_update(*scene); }
             } else {
-                system->on_late_update(*scene);
+                if (!system->run_in_editor_only()) {
+                    system->on_late_update(*scene);
+                }
             }
         }
     }

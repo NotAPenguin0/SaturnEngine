@@ -25,11 +25,6 @@ void FPSCameraControllerSystem::on_update(Scene& scene) {
 
         float speed = controller.speed * Time::deltaTime;
 
-        /*
-        if (RawInput::get_mouse_button(MouseButton::Left).down) {
-            speed += 5.0f * Time::deltaTime;
-        }*/
-
         float horizontal = Input::get_axis("Horizontal");
         float vertical = Input::get_axis("Vertical");
 

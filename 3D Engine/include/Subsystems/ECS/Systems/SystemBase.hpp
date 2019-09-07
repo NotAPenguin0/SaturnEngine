@@ -13,6 +13,9 @@ namespace Systems {
 #define SYSTEM_RUN_IN_EDITOR                                                   \
     inline bool run_in_editor() const override { return true; }
 
+#define SYSTEM_EDITOR_ONLY                                                     \
+    inline bool run_in_editor_only() const override { return true; }
+
 class SystemBase {
 public:
     virtual ~SystemBase() = 0;
@@ -22,6 +25,7 @@ public:
     virtual void on_late_update(Scene& scene);
 
     virtual inline bool run_in_editor() const { return false; }
+    virtual inline bool run_in_editor_only() const { return false; }
 };
 
 } // namespace Systems

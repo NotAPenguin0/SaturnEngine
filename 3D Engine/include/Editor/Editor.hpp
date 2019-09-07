@@ -33,10 +33,13 @@ public:
 
 private:
     void show_menu_bar(Scene& scene);
-    void on_scene_reload();
+    void on_scene_reload(Scene& scene);
     void create_entity(Scene& scene, std::string const& name);
+	void create_editor_camera(Scene& scene);
+	void on_playmode_enter(Scene& scene);
 
     Application* app;
+    SceneObject* editor_camera;
     std::size_t scene_view_viewport_id = 0;
 
     struct Widgets {

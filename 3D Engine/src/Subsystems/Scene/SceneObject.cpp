@@ -79,6 +79,20 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
 		j.get_to(c);
 		
 	}
+	// Deserialization for DoNotSerialize component
+	if (auto const& component = j.find("DoNotSerializeComponent"); component != j.end()) {
+		auto& c = obj.get_scene()->get_ecs().get_with_id<DoNotSerialize>(
+			obj.add_component<DoNotSerialize>());
+		j.get_to(c);
+		
+	}
+	// Deserialization for EditorCameraController component
+	if (auto const& component = j.find("EditorCameraControllerComponent"); component != j.end()) {
+		auto& c = obj.get_scene()->get_ecs().get_with_id<EditorCameraController>(
+			obj.add_component<EditorCameraController>());
+		j.get_to(c);
+		
+	}
 	// Deserialization for FPSCameraController component
 	if (auto const& component = j.find("FPSCameraControllerComponent"); component != j.end()) {
 		auto& c = obj.get_scene()->get_ecs().get_with_id<FPSCameraController>(
