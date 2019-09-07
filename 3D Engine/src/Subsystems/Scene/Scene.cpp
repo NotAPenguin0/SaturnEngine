@@ -12,7 +12,7 @@ Scene::Scene(Application* app) : ecs(this), app(app) {}
 
 Scene::~Scene() { clear_scene(); }
 
-void Scene::update_systems() { ecs.update_systems(); }
+void Scene::update_systems(SystemUpdateMode mode) { ecs.update_systems(mode); }
 void Scene::on_start() { ecs.on_start(); }
 
 Application* Scene::get_app() { return app; }

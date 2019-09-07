@@ -20,8 +20,8 @@ PhysicsTickScheduler::PhysicsTickScheduler(PhysicsTickScheduler&& rhs) {
     rhs.physics = nullptr;
 }
 
-PhysicsTickScheduler& PhysicsTickScheduler::
-operator=(PhysicsTickScheduler&& rhs) {
+PhysicsTickScheduler&
+PhysicsTickScheduler::operator=(PhysicsTickScheduler&& rhs) {
     physics = rhs.physics;
     rhs.physics = nullptr;
 
@@ -32,13 +32,16 @@ void PhysicsTickScheduler::set_physics_system(Physics& physics_system) {
     physics = &physics_system;
 }
 
-void PhysicsTickScheduler::update(Scene& scene) {
-    timer += Time::deltaTime;
+void PhysicsTickScheduler::update(SystemUpdateMode mode, Scene& scene) {
+	// Only update physics system when not in editor mode
+    if (mode != SystemUpdateMode::Editor) {
+        timer += Time::deltaTime;
 
-    // While we have time left to do a physics time step
-    while (timer - timestep >= 0) {
-        physics->tick(scene);
-        timer -= timestep;
+        // While we have time left to do a physics time step
+        while (timer - timestep >= 0) {
+            physics->tick(scene);
+            timer -= timestep;
+        }
     }
 }
 

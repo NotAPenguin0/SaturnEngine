@@ -5,7 +5,7 @@
 
 namespace Saturn::Systems {
 
-class FreeLookControllerSystem : public SystemBase {
+class SYSTEM FreeLookControllerSystem : public SystemBase {
 public:
     void on_update(Scene& scene) override;
 };

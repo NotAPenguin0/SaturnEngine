@@ -7,7 +7,7 @@
 namespace Saturn::Systems {
 
 //#TODO: Particles on GPU using compute shaders
-class ParticleSystem : public SystemBase {
+class SYSTEM ParticleSystem : public SystemBase {
 public:
     void on_update(Scene& scene) override;
 

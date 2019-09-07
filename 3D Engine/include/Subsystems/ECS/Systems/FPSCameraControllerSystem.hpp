@@ -7,7 +7,7 @@ namespace Saturn {
 
 namespace Systems {
 
-class FPSCameraControllerSystem : public SystemBase {
+class SYSTEM FPSCameraControllerSystem : public SystemBase {
 public:
     void on_start(Scene&) override;
     void on_update(Scene& scene) override;

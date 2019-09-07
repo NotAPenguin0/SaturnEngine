@@ -79,12 +79,7 @@ Application::~Application() {
 }
 
 void Application::initialize_keybinds() {
-    ActionBinding quit_binding;
-    quit_binding.key = Key::Escape;
-    quit_binding.when = KeyAction::Press;
-    quit_binding.callback = [this]() { quit(); };
-
-    ActionBindingManager::add_action(quit_binding);
+    
 }
 
 static const std::vector<float> particle_quad_vertices = {
@@ -120,17 +115,19 @@ void Application::run() {
         glfwPollEvents();
         Time::update();
         InputEventManager::process_events();
+        SystemUpdateMode system_update_mode = SystemUpdateMode::Play;
 #ifdef WITH_EDITOR
         editor->render(scene);
+        system_update_mode = editor->get_update_mode();
         glViewport(0, 0, window_dimensions.x, window_dimensions.y);
 #endif
         renderer->clear(Color{0.003f, 0.003f, 0.003f, 1.0f});
         glViewport(0, 0, 800, 600);
 
-        scene.update_systems();
+        scene.update_systems(system_update_mode);
         // This updates the timer in the physics scheduler, and runs a physics
         // tick if needed
-        physics_scheduler.update(scene);
+        physics_scheduler.update(system_update_mode, scene);
         renderer->render_scene(scene);
 
         // Copy framebuffer to screen

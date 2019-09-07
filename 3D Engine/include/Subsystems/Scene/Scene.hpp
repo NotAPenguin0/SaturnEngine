@@ -39,7 +39,7 @@ public:
     ~Scene();
 
     void on_start();
-    void update_systems();
+    void update_systems(SystemUpdateMode mode);
 
     SceneObject& create_object(SceneObject* parent = nullptr);
     SceneObject& create_object_from_file(std::string_view file_path,

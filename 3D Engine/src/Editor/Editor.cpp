@@ -5,6 +5,7 @@
 #    include "Editor/SelectFileDialog.hpp"
 #    include "Subsystems/ECS/ComponentList.hpp"
 #    include "Subsystems/ECS/Components.hpp"
+#    include "Subsystems/ECS/ECS.hpp"
 #    include "Subsystems/Input/Input.hpp"
 #    include "Subsystems/Renderer/Viewport.hpp"
 #    include "Subsystems/Scene/Scene.hpp"
@@ -49,7 +50,28 @@ void Editor::setup_viewports() {
     main_view.set_camera(-1);
 }
 
+SystemUpdateMode Editor::get_update_mode() {
+    if (playmode_active) { return SystemUpdateMode::Play; }
+    return SystemUpdateMode::Editor;
+}
+
 void Editor::render(Scene& scene) {
+    static bool once = true;
+    if (once) {
+        ActionBinding exit_playmode_binding;
+        exit_playmode_binding.key = Key::Escape;
+        exit_playmode_binding.when = KeyAction::Release;
+        exit_playmode_binding.callback = [this, &scene]() {
+            if (playmode_active) {
+                playmode_active = false;
+                scene.deserialize_from_file(
+                    "resources/playmode_temp/scene.dat");
+                on_scene_reload();
+            }
+        };
+
+        ActionBindingManager::add_action(exit_playmode_binding);
+    }
     // #TODO: camera controls in editor
     // #TODO: specify which ECS systems run in editor and which don't
 
@@ -66,16 +88,18 @@ void Editor::render(Scene& scene) {
     glClearColor(0, 0, 0, 0);
     glViewport(0, 0, app->window_dimensions.x, app->window_dimensions.y);
     glClear(GL_COLOR_BUFFER_BIT);
-    if (show_demo) { ImGui::ShowDemoWindow(&show_demo); }
+    if (!playmode_active) {
+        if (show_demo) { ImGui::ShowDemoWindow(&show_demo); }
 
-    show_menu_bar(scene);
+        show_menu_bar(scene);
 
-    if (log::get_console().is_shown()) { log::get_console().show(); }
-    if (editor_widgets.entity_tree.is_shown()) {
-        editor_widgets.entity_tree.show(scene);
-    }
-    if (editor_widgets.preferences.is_shown()) {
-        editor_widgets.preferences.show();
+        if (log::get_console().is_shown()) { log::get_console().show(); }
+        if (editor_widgets.entity_tree.is_shown()) {
+            editor_widgets.entity_tree.show(scene);
+        }
+        if (editor_widgets.preferences.is_shown()) {
+            editor_widgets.preferences.show();
+        }
     }
 
     ImGui::Render();
@@ -112,6 +136,10 @@ void Editor::show_menu_bar(Scene& scene) {
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit")) {
+            if (ImGui::Selectable("Enter play mode")) {
+                scene.serialize_to_file("resources/playmode_temp");
+                playmode_active = true;
+            }
             if (ImGui::BeginMenu("Entity")) {
                 if (ImGui::MenuItem("Create new entity")) {
                     open_new_entity_popup = true;

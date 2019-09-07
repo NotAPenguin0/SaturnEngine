@@ -6,6 +6,8 @@ namespace Saturn {
 class Physics;
 class Scene;
 
+enum class SystemUpdateMode;
+
 class PhysicsTickScheduler {
 public:
     PhysicsTickScheduler() = default;
@@ -16,7 +18,7 @@ public:
 
 	void set_physics_system(Physics& physics_system);
 
-	void update(Scene& scene);
+	void update(SystemUpdateMode mode, Scene& scene);
 
 private:
 	Physics* physics = nullptr;

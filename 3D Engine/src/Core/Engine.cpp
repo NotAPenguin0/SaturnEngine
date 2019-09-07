@@ -100,8 +100,6 @@ Application Engine::initialize(CreateInfo create_info) {
 
     Input::initialize(app);
     Input::load_config_file("resources/config/input.config.json");
-    ActionBindingManager::add_action(
-        ActionBinding{Key::Escape, KeyAction::Press, [&app]() { app.quit(); }});
 
     std::thread random_init(Math::RandomEngine::initialize);
 

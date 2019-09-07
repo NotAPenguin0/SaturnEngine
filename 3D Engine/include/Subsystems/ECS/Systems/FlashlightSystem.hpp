@@ -5,7 +5,7 @@
 
 namespace Saturn::Systems {
 
-class FlashlightSystem : public SystemBase {
+class SYSTEM FlashlightSystem : public SystemBase {
 public:
 	void on_update(Scene& scene) override;
 };

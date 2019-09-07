@@ -5,7 +5,7 @@
 
 namespace Saturn::Systems {
 
-class CameraZoomControllerSystem : public SystemBase {
+class SYSTEM CameraZoomControllerSystem : public SystemBase {
 public:
     void on_update(Scene& scene) override;
 };

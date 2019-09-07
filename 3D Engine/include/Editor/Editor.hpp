@@ -12,6 +12,8 @@
 
 namespace Saturn {
 
+enum class SystemUpdateMode;
+
 class Application;
 class Scene;
 class SceneObject;
@@ -23,6 +25,7 @@ public:
     Editor(Application& app);
 
     void setup_viewports();
+    SystemUpdateMode get_update_mode();
 
     // Must be called at the start of the frame
     void render(Scene& scene);
@@ -31,15 +34,17 @@ public:
 private:
     void show_menu_bar(Scene& scene);
     void on_scene_reload();
-	void create_entity(Scene& scene, std::string const& name);
+    void create_entity(Scene& scene, std::string const& name);
 
     Application* app;
     std::size_t scene_view_viewport_id = 0;
 
     struct Widgets {
         EntityTree entity_tree;
-		EditorPreferencesWidget preferences;
+        EditorPreferencesWidget preferences;
     } editor_widgets;
+
+	bool playmode_active = false;
 };
 
 } // namespace Editor

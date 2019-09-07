@@ -11,6 +11,8 @@
 
 namespace Saturn {
 
+enum class SystemUpdateMode { Editor, Play };
+
 class Scene;
 
 template<typename... Cs>
@@ -38,10 +40,22 @@ public:
         if constexpr (sizeof...(Tail) != 0) register_systems<Tail...>();
     }
 
-    void update_systems() {
-        for (auto& system : systems) { system->on_update(*scene); }
-        // Call late_update()
-        for (auto& system : systems) { system->on_late_update(*scene); }
+    void update_systems(SystemUpdateMode mode) {
+        for (auto& system : systems) {
+            if (mode == SystemUpdateMode::Editor) {
+                if (system->run_in_editor()) { system->on_update(*scene); }
+            } else {
+				system->on_update(*scene);
+            }
+        }
+		// Now the exact same but for late_update()
+		for (auto& system : systems) {
+            if (mode == SystemUpdateMode::Editor) {
+                if (system->run_in_editor()) { system->on_late_update(*scene); }
+            } else {
+                system->on_late_update(*scene);
+            }
+        }
     }
 
     // Assumes that ptr is a valid pointer returned from
