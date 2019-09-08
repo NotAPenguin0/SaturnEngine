@@ -146,11 +146,15 @@ void Editor::show_menu_bar(Scene& scene) {
 
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
-            if (ImGui::MenuItem("New scene")) { open_new_scene_popup = true; }
+            if (ImGui::MenuItem("New scene")) {
+                static SelectFileDialog dialog;
+                dialog.show(SelectFileDialog::PickFolders);
+                fs::path result = dialog.get_result();
+                create_new_scene(scene, result);
+            }
             ImGui::Separator();
             if (ImGui::MenuItem(("Save scene to " + cur_open_scene).c_str())) {
-                scene.serialize_to_file("resources/" + cur_open_scene);
-                log::log(fmt::format("Saved scene to {}", cur_open_scene));
+                save_scene(scene);
             }
             if (ImGui::MenuItem("Save as ...")) {
                 static SelectFileDialog dialog;
@@ -165,17 +169,7 @@ void Editor::show_menu_bar(Scene& scene) {
                 static SelectFileDialog dialog;
                 dialog.show(SelectFileDialog::PickFolders);
                 fs::path result = dialog.get_result();
-                editor_widgets.entity_tree.reset_selected_entity();
-                cur_open_scene = get_scene_name_from_path(result.string());
-                cur_open_scene_full_path = result.string();
-                log::log(fmt::format("Scene name is detected to be {}",
-                                     cur_open_scene));
-                result += "/scene.dat";
-                scene.deserialize_from_file(result.string());
-                on_scene_reload(scene);
-                log::log(fmt::format("Loaded scene at path: {}",
-                                     consistent_path_sep(result.string())));
-                set_window_title();
+                load_scene(scene, result);
             }
             ImGui::Separator();
             if (ImGui::MenuItem("Exit")) { app->quit(); }
@@ -243,33 +237,6 @@ void Editor::show_menu_bar(Scene& scene) {
         ImGui::EndPopup();
     }
 
-    if (open_new_scene_popup) { ImGui::OpenPopup("Create new scene..."); }
-    if (ImGui::BeginPopupModal("Create new scene...", nullptr,
-                               ImGuiWindowFlags_AlwaysAutoResize)) {
-        static constexpr std::size_t bufsize = 256;
-        static std::string scene_name_buffer(bufsize, '\0');
-        if (ImGui::InputText("Scene Name", scene_name_buffer.data(), bufsize,
-                             ImGuiInputTextFlags_EnterReturnsTrue)) {
-            create_new_scene(scene_name_buffer);
-            ImGui::CloseCurrentPopup();
-			scene_name_buffer.clear();
-			scene_name_buffer.resize(bufsize);
-        }
-
-		if (ImGui::Button("Create", ImVec2(120, 0))) {
-            create_new_scene(scene_name_buffer);
-            ImGui::CloseCurrentPopup();
-            scene_name_buffer.clear();
-            scene_name_buffer.resize(bufsize);
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Cancel", ImVec2(120, 0))) {
-            ImGui::CloseCurrentPopup();
-            scene_name_buffer.clear();
-            scene_name_buffer.resize(bufsize);
-        }
-    }
-
     if (show_demo_window) ImGui::ShowDemoWindow();
 }
 
@@ -288,8 +255,38 @@ void Editor::create_entity(Scene& scene, std::string const& name) {
     log::log(fmt::format("Creating entity with name: {}", name_c.name));
 }
 
-void Editor::create_new_scene(std::string const& name) {
-	
+void Editor::load_scene(Scene& scene, fs::path path) {
+    editor_widgets.entity_tree.reset_selected_entity();
+    cur_open_scene = get_scene_name_from_path(path.string());
+    cur_open_scene_full_path = path.string();
+    log::log(fmt::format("Scene name is detected to be {}", cur_open_scene));
+    path += "/scene.dat";
+    scene.deserialize_from_file(path.string());
+    on_scene_reload(scene);
+    log::log(fmt::format("Loaded scene at path: {}",
+                         consistent_path_sep(path.string())));
+    set_window_title();
+}
+
+void Editor::save_scene(Scene& scene) {
+    scene.serialize_to_file(cur_open_scene_full_path);
+    log::log(fmt::format("Saved scene to {}",
+                         consistent_path_sep(cur_open_scene_full_path)));
+}
+
+void Editor::create_new_scene(Scene& scene, fs::path path) {
+    // 1. Load empty scene
+    // 2. set paths and scene name to this scene's path
+    // 3. save scene to new path
+
+    load_scene(scene, "resources/empty_scene");
+    cur_open_scene = get_scene_name_from_path(path.string());
+    cur_open_scene_full_path = path.string();
+    save_scene(scene);
+
+    log::log(fmt::format("Created new scene at path {}",
+                         consistent_path_sep(path.string())));
+    set_window_title();
 }
 
 void Editor::create_editor_camera(Scene& scene) {

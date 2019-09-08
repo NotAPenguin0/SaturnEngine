@@ -4,11 +4,14 @@
 #ifdef WITH_EDITOR
 
 #    include <cstddef>
+#    include <filesystem>
 #    include <vector>
 
 #    include "Editor/EditorLog.hpp"
 #    include "Editor/EditorPreferencesWidget.hpp"
 #    include "Editor/EntityTree.hpp"
+
+namespace fs = std::filesystem;
 
 namespace Saturn {
 
@@ -38,7 +41,9 @@ private:
     void create_editor_camera(Scene& scene);
     void on_playmode_enter(Scene& scene);
     void set_window_title();
-    void create_new_scene(std::string const& name);
+    void create_new_scene(Scene& scene, fs::path path);
+    void load_scene(Scene& scene, fs::path path);
+    void save_scene(Scene& scene);
 
     Application* app;
     SceneObject* editor_camera;
