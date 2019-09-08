@@ -89,6 +89,7 @@ private:
                            Components::Transform const& relative_transform);
     void send_material_data(Shader& shader, Components::Material& material);
     void unbind_textures(Components::Material& material);
+	void render_outlines(Scene& scene);
 
     // Utility functions
     std::vector<Components::PointLight*> collect_point_lights(Scene& scene);
@@ -113,6 +114,7 @@ private:
 	Resource<Shader> depth_shader;
     Resource<Shader> collider_shader;
 	Resource<Shader> axis_shader;
+    Resource<Shader> outline_shader;
 	Resource<Mesh> box_collider_mesh;
 	Resource<Mesh> line_mesh;
     std::vector<Viewport> viewports;

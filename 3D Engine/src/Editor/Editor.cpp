@@ -14,10 +14,26 @@
 #    include "imgui/imgui_impl_glfw.h"
 #    include "imgui/imgui_impl_opengl3.h"
 
+#    include <algorithm>
 #    include <fmt/format.h>
 #    include <fmt/ranges.h>
 
 namespace Saturn::Editor {
+
+static std::string get_scene_name_from_path(std::string const& path) {
+    // Path looks a bit like
+    // something/something/more/my_folder
+    // We need my_folder extracted from that
+    const std::size_t last_sep = path.find_last_of('\\');
+    return path.substr(last_sep + 1);
+}
+
+static std::string consistent_path_sep(std::string const& path) {
+    auto copy = path;
+    //    log::log(copy);
+    std::replace(copy.begin(), copy.end(), '\\', '/');
+    return copy;
+}
 
 Editor::Editor(Application& app) : app(&app) {
     this->app->set_editor_instance(this);
@@ -36,6 +52,18 @@ Editor::Editor(Application& app) : app(&app) {
         });
     log::log("The component editor does not support Resource<T> types yet",
              DebugConsole::Warning);
+    cur_open_scene = "scene1";
+    cur_open_scene_full_path = "resources/scene1";
+    log::log(fmt::format("Opening default scene {} on startup", cur_open_scene),
+             DebugConsole::Warning);
+    set_window_title();
+}
+
+void Editor::set_window_title() {
+    glfwSetWindowTitle(
+        this->app->window(),
+        ("SaturnEngine - " + consistent_path_sep(cur_open_scene_full_path))
+            .c_str());
 }
 
 void Editor::setup_viewports() {
@@ -68,7 +96,7 @@ void Editor::render(Scene& scene) {
                 scene.deserialize_from_file(
                     "resources/playmode_temp/scene.dat");
                 on_scene_reload(scene);
-				Input::set_mouse_capture(false);
+                Input::set_mouse_capture(false);
             }
         };
         ActionBindingManager::add_action(exit_playmode_binding);
@@ -114,22 +142,40 @@ void Editor::show_menu_bar(Scene& scene) {
     static bool show_demo_window = false;
 
     bool open_new_entity_popup = false;
+    bool open_new_scene_popup = false;
 
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
-            if (ImGui::MenuItem("Save scene to scene1")) {
-                scene.serialize_to_file("resources/scene1");
-                log::log("Saved scene to scene1");
+            if (ImGui::MenuItem("New scene")) { open_new_scene_popup = true; }
+            ImGui::Separator();
+            if (ImGui::MenuItem(("Save scene to " + cur_open_scene).c_str())) {
+                scene.serialize_to_file("resources/" + cur_open_scene);
+                log::log(fmt::format("Saved scene to {}", cur_open_scene));
             }
+            if (ImGui::MenuItem("Save as ...")) {
+                static SelectFileDialog dialog;
+                dialog.show(SelectFileDialog::PickFolders);
+                fs::path result = dialog.get_result();
+                scene.serialize_to_file(result.string());
+                log::log(fmt::format("Saved scene as {}",
+                                     consistent_path_sep(result.string())));
+            }
+            ImGui::Separator();
             if (ImGui::MenuItem("Open")) {
                 static SelectFileDialog dialog;
                 dialog.show(SelectFileDialog::PickFolders);
                 fs::path result = dialog.get_result();
+                editor_widgets.entity_tree.reset_selected_entity();
+                cur_open_scene = get_scene_name_from_path(result.string());
+                cur_open_scene_full_path = result.string();
+                log::log(fmt::format("Scene name is detected to be {}",
+                                     cur_open_scene));
                 result += "/scene.dat";
                 scene.deserialize_from_file(result.string());
                 on_scene_reload(scene);
-                log::log(
-                    fmt::format("Loaded scene at path: {}", result.string()));
+                log::log(fmt::format("Loaded scene at path: {}",
+                                     consistent_path_sep(result.string())));
+                set_window_title();
             }
             ImGui::Separator();
             if (ImGui::MenuItem("Exit")) { app->quit(); }
@@ -137,6 +183,7 @@ void Editor::show_menu_bar(Scene& scene) {
         }
         if (ImGui::BeginMenu("Edit")) {
             if (ImGui::Selectable("Enter play mode")) {
+                editor_widgets.entity_tree.reset_selected_entity();
                 scene.serialize_to_file("resources/playmode_temp");
                 on_playmode_enter(scene);
                 playmode_active = true;
@@ -196,6 +243,33 @@ void Editor::show_menu_bar(Scene& scene) {
         ImGui::EndPopup();
     }
 
+    if (open_new_scene_popup) { ImGui::OpenPopup("Create new scene..."); }
+    if (ImGui::BeginPopupModal("Create new scene...", nullptr,
+                               ImGuiWindowFlags_AlwaysAutoResize)) {
+        static constexpr std::size_t bufsize = 256;
+        static std::string scene_name_buffer(bufsize, '\0');
+        if (ImGui::InputText("Scene Name", scene_name_buffer.data(), bufsize,
+                             ImGuiInputTextFlags_EnterReturnsTrue)) {
+            create_new_scene(scene_name_buffer);
+            ImGui::CloseCurrentPopup();
+			scene_name_buffer.clear();
+			scene_name_buffer.resize(bufsize);
+        }
+
+		if (ImGui::Button("Create", ImVec2(120, 0))) {
+            create_new_scene(scene_name_buffer);
+            ImGui::CloseCurrentPopup();
+            scene_name_buffer.clear();
+            scene_name_buffer.resize(bufsize);
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+            ImGui::CloseCurrentPopup();
+            scene_name_buffer.clear();
+            scene_name_buffer.resize(bufsize);
+        }
+    }
+
     if (show_demo_window) ImGui::ShowDemoWindow();
 }
 
@@ -214,8 +288,12 @@ void Editor::create_entity(Scene& scene, std::string const& name) {
     log::log(fmt::format("Creating entity with name: {}", name_c.name));
 }
 
+void Editor::create_new_scene(std::string const& name) {
+	
+}
+
 void Editor::create_editor_camera(Scene& scene) {
-	log::log("Creating editor camera");
+    log::log("Creating editor camera");
     using namespace Components;
     editor_camera = &scene.create_object();
     auto& cam_c = scene.get_ecs().get_with_id<Camera>(
@@ -228,11 +306,12 @@ void Editor::create_editor_camera(Scene& scene) {
     auto& name_c =
         scene.get_ecs().get_with_id<Name>(editor_camera->add_component<Name>());
     name_c.name = "EditorCamera";
-    control_c.sensitivity = 0.1f;
-	control_c.speed = 4;
-	control_c.zoom_speed = 100;
+    auto const& prefs = editor_widgets.preferences.get_preferences();
+    control_c.sensitivity = prefs.camera.sensitivity;
+    control_c.speed = prefs.camera.speed;
+    control_c.zoom_speed = prefs.camera.zoom_speed;
     cam_c.viewport_id = scene_view_viewport_id;
-    cam_c.fov = 45.0f;
+    cam_c.fov = prefs.camera.fov;
     cam_c.front = glm::vec3(0.5, -0.5, 0.6);
     cam_c.up = glm::vec3(0, 1, 0);
     trans_c.position = glm::vec3(-10, 13, -11);
@@ -245,7 +324,7 @@ void Editor::create_editor_camera(Scene& scene) {
 
 void Editor::on_playmode_enter(Scene& scene) {
     using namespace Components;
-	Input::set_mouse_capture(true);
+    Input::set_mouse_capture(true);
     for (auto [cam] : scene.get_ecs().select<Camera>()) {
         if (cam.entity == editor_camera)
             continue;

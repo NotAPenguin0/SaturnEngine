@@ -92,6 +92,8 @@ void Renderer::load_default_shaders() {
         AssetManager<Shader>::get_resource("resources/shaders/collider.sh");
     axis_shader =
         AssetManager<Shader>::get_resource("resources/shaders/axis.sh");
+    outline_shader =
+        AssetManager<Shader>::get_resource("resources/shaders/outline.sh");
 }
 
 void Renderer::create_depth_map() {
@@ -350,8 +352,8 @@ void Renderer::render_to_depthmap(Scene& scene) {
 void Renderer::debug_render_colliders(Scene& scene) {
     using namespace Components;
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    for (auto [rel_trans, collider] :
-         scene.ecs.select<Transform, BoxCollider>()) {
+    for (auto [rel_trans, collider, _] :
+         scene.ecs.select<Transform, BoxCollider, ColliderRenderer>()) {
         auto& shader = collider_shader.get();
         auto copy = rel_trans;
         copy.position += collider.center;
@@ -367,6 +369,24 @@ void Renderer::debug_render_colliders(Scene& scene) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
+void Renderer::render_outlines(Scene& scene) {
+    using namespace Components;
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	for (auto[rel_trans, mesh, outline] :
+		scene.ecs.select<Transform, StaticMesh, OutlineRenderer>()) {
+        auto& shader = outline_shader.get();
+		send_model_matrix(shader, rel_trans);
+        bind_guard<Shader> guard(shader);
+		shader.set_vec3(Shader::Uniforms::Color, outline.color);
+		auto& vtx_array = mesh.mesh->get_vertices();
+        bind_guard<VertexArray> vao(vtx_array);
+		glEnable(GL_LINE_SMOOTH);
+		glDrawElements(GL_LINES, vtx_array.index_size(), GL_UNSIGNED_INT, nullptr);
+		glDisable(GL_LINE_SMOOTH);
+	}
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
 void Renderer::render_axes() {
     glm::vec3 rotations[] = {
         glm::vec3(0.0f, 0.0f, 0.0f),  // y axis
@@ -374,11 +394,11 @@ void Renderer::render_axes() {
         glm::vec3(0.0f, 0.0f, 90.0f)  // x axis
     };
     glm::vec3 colors[] = {
-		glm::vec3(0.0f, 1.0f, 0.0f), // y axis
-		glm::vec3(0.0f, 0.0f, 1.0f), // z axis
-		glm::vec3(1.0f, 0.0f, 0.0f)  // x axis
-    }; 
-	auto& shader = axis_shader.get();
+        glm::vec3(0.0f, 1.0f, 0.0f), // y axis
+        glm::vec3(0.0f, 0.0f, 1.0f), // z axis
+        glm::vec3(1.0f, 0.0f, 0.0f)  // x axis
+    };
+    auto& shader = axis_shader.get();
     auto& vertices = line_mesh->get_vertices();
     Components::Transform axis_transform;
     axis_transform.scale = glm::vec3(1.0, 100.0f, 1.0f);
@@ -398,9 +418,9 @@ void Renderer::render_axes() {
         shader.set_mat4(Shader::Uniforms::Model, model);
         bind_guard<VertexArray> vao(vertices);
         auto const& color = colors[i];
-		shader.set_vec3(Shader::Uniforms::Color, color);
+        shader.set_vec3(Shader::Uniforms::Color, color);
         glDrawElements(GL_LINES, vertices.index_size(), GL_UNSIGNED_INT,
-                            nullptr);
+                       nullptr);
     }
 }
 
@@ -415,6 +435,7 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
 
     render_particles(scene);
     debug_render_colliders(scene);
+	render_outlines(scene);
     render_axes();
 
     for (auto [relative_transform, mesh, material] :

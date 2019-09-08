@@ -187,7 +187,10 @@ EntityTree::EntityTree() {
 }
 
 SceneObject* EntityTree::get_selected_entity() const { return selected_entity; }
-void EntityTree::reset_selected_entity() { selected_entity = nullptr; }
+void EntityTree::reset_selected_entity() {
+    if (selected_entity) { on_entity_deselect(selected_entity); }
+    selected_entity = nullptr;
+}
 
 void EntityTree::show(Scene& scene) {
     if (ImGui::Begin("Entity Tree", get_shown_pointer())) {
@@ -274,7 +277,9 @@ EntityTree::tree_t::iterator EntityTree::show_self_and_children(
             "Unknown entity with ID " + std::to_string((*entity)->get_id());
     }
 
-    if ((*entity)->has_component<EditorCameraController>()) { return entity + 1; }
+    if ((*entity)->has_component<EditorCameraController>()) {
+        return entity + 1;
+    }
 
     auto cur = entity;
 
@@ -295,7 +300,11 @@ EntityTree::tree_t::iterator EntityTree::show_self_and_children(
 
     if (ImGui::TreeNodeEx(to_display.c_str(), node_flags)) {
 
-        if (ImGui::IsItemClicked()) { selected_entity = *entity; }
+        if (ImGui::IsItemClicked()) {
+            if (selected_entity) { on_entity_deselect(selected_entity); }
+            selected_entity = *entity;
+            on_entity_select(scene, selected_entity);
+        }
         ++cur;
         // For each next entity, show it if it's parent is the current
         // entity.
@@ -332,6 +341,21 @@ void EntityTree::show_entity_details(SceneObject* entity, Scene& scene) {
     }
     impl::show_entity_actions_popup(scene, entity, selected_entity);
     if (entity) { impl::display_components<COMPONENT_LIST>(entity); }
+}
+
+void EntityTree::on_entity_select(Scene& scene, SceneObject* entity) {
+    using namespace Components;
+    auto& outline = scene.get_ecs().get_with_id<OutlineRenderer>(
+        entity->add_component<OutlineRenderer>());
+    // Set the color to an orange-like color
+    outline.color = color3(0.92, 0.67, 0.2);
+	entity->add_component<ColliderRenderer>();
+}
+
+void EntityTree::on_entity_deselect(SceneObject* entity) {
+    using namespace Components;
+    entity->remove_component<OutlineRenderer>();
+	entity->remove_component<ColliderRenderer>();
 }
 
 } // namespace Saturn::Editor

@@ -7,6 +7,7 @@
 ::Saturn::Components::BoxCollider, \
 ::Saturn::Components::Camera, \
 ::Saturn::Components::CameraZoomController, \
+::Saturn::Components::ColliderRenderer, \
 ::Saturn::Components::DirectionalLight, \
 ::Saturn::Components::DoNotSerialize, \
 ::Saturn::Components::EditorCameraController, \
@@ -14,6 +15,7 @@
 ::Saturn::Components::FreeLookController, \
 ::Saturn::Components::Material, \
 ::Saturn::Components::Name, \
+::Saturn::Components::OutlineRenderer, \
 ::Saturn::Components::ParticleEmitter, \
 ::Saturn::Components::PointLight, \
 ::Saturn::Components::Rigidbody, \

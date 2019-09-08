@@ -46,6 +46,15 @@ void from_json(nlohmann::json const& json, CameraZoomController& component) {
 	}
 }
 
+void from_json(nlohmann::json const& json, ColliderRenderer& component) {
+	auto c = json.find("ColliderRendererComponent");
+	if (c == json.end()) {
+		throw std::runtime_error("No ColliderRenderer component stored even though it was requested");
+	} else {
+		
+	}
+}
+
 void from_json(nlohmann::json const& json, DirectionalLight& component) {
 	auto c = json.find("DirectionalLightComponent");
 	if (c == json.end()) {
@@ -92,8 +101,8 @@ void from_json(nlohmann::json const& json, Material& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No Material component stored even though it was requested");
 	} else {
-		component.diffuse_map = (*c)["DiffuseMap"].get<Resource<Saturn::Texture>>();
 		component.shader = (*c)["Shader"].get<Resource<Saturn::Shader>>();
+		component.diffuse_map = (*c)["DiffuseMap"].get<Resource<Saturn::Texture>>();
 		component.lit = (*c)["Lit"].get<bool>();
 		component.specular_map = (*c)["SpecularMap"].get<Resource<Saturn::Texture>>();
 		component.shininess = (*c)["Shininess"].get<float>();
@@ -106,6 +115,15 @@ void from_json(nlohmann::json const& json, Name& component) {
 		throw std::runtime_error("No Name component stored even though it was requested");
 	} else {
 		component.name = (*c)["Name"].get<std::string>();
+	}
+}
+
+void from_json(nlohmann::json const& json, OutlineRenderer& component) {
+	auto c = json.find("OutlineRendererComponent");
+	if (c == json.end()) {
+		throw std::runtime_error("No OutlineRenderer component stored even though it was requested");
+	} else {
+		component.color = (*c)["Color"].get<Saturn::color3>();
 	}
 }
 
@@ -126,8 +144,8 @@ void from_json(nlohmann::json const& json, Rigidbody& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No Rigidbody component stored even though it was requested");
 	} else {
-		component.mass = (*c)["Mass"].get<float>();
 		component.locked_axes = (*c)["LockedAxes"].get<glm::bvec3>();
+		component.mass = (*c)["Mass"].get<float>();
 	}
 }
 
@@ -205,6 +223,13 @@ void to_json(nlohmann::json& json, CameraZoomController const& component) {
 	// clang-format on
 }
 
+void to_json(nlohmann::json& json, ColliderRenderer const& component) {
+	json["ColliderRendererComponent"] = nlohmann::json::object();
+	// clang-format off
+	
+	// clang-format on
+}
+
 void to_json(nlohmann::json& json, DirectionalLight const& component) {
 	json["DirectionalLightComponent"] = nlohmann::json::object();
 	// clang-format off
@@ -241,8 +266,8 @@ void to_json(nlohmann::json& json, FreeLookController const& component) {
 void to_json(nlohmann::json& json, Material const& component) {
 	json["MaterialComponent"] = nlohmann::json::object();
 	// clang-format off
-	json["MaterialComponent"]["DiffuseMap"] = component.diffuse_map;
 	json["MaterialComponent"]["Shader"] = component.shader;
+	json["MaterialComponent"]["DiffuseMap"] = component.diffuse_map;
 	json["MaterialComponent"]["Lit"] = component.lit;
 	json["MaterialComponent"]["SpecularMap"] = component.specular_map;
 	json["MaterialComponent"]["Shininess"] = component.shininess;
@@ -253,6 +278,13 @@ void to_json(nlohmann::json& json, Name const& component) {
 	json["NameComponent"] = nlohmann::json::object();
 	// clang-format off
 	json["NameComponent"]["Name"] = component.name;
+	// clang-format on
+}
+
+void to_json(nlohmann::json& json, OutlineRenderer const& component) {
+	json["OutlineRendererComponent"] = nlohmann::json::object();
+	// clang-format off
+	json["OutlineRendererComponent"]["Color"] = component.color;
 	// clang-format on
 }
 
@@ -269,8 +301,8 @@ void to_json(nlohmann::json& json, PointLight const& component) {
 void to_json(nlohmann::json& json, Rigidbody const& component) {
 	json["RigidbodyComponent"] = nlohmann::json::object();
 	// clang-format off
-	json["RigidbodyComponent"]["Mass"] = component.mass;
 	json["RigidbodyComponent"]["LockedAxes"] = component.locked_axes;
+	json["RigidbodyComponent"]["Mass"] = component.mass;
 	// clang-format on
 }
 

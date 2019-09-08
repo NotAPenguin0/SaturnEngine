@@ -39,6 +39,15 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	}
 	{
 		ComponentInfo info;
+		info.name = "ColliderRenderer ";
+		info.default_serialize = true;
+		info.hide_in_editor = true;
+		info.editor_only = false;
+		
+		data.push_back(info);
+	}
+	{
+		ComponentInfo info;
 		info.name = "DirectionalLight ";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
@@ -93,8 +102,8 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
-		info.fields["diffuse_map"] = "Resource<Saturn::Texture>";
 		info.fields["shader"] = "Resource<Saturn::Shader>";
+		info.fields["diffuse_map"] = "Resource<Saturn::Texture>";
 		info.fields["lit"] = "bool";
 		info.fields["specular_map"] = "Resource<Saturn::Texture>";
 		info.fields["shininess"] = "float";
@@ -107,6 +116,15 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.hide_in_editor = true;
 		info.editor_only = false;
 		info.fields["name"] = "std::string";
+		data.push_back(info);
+	}
+	{
+		ComponentInfo info;
+		info.name = "OutlineRenderer ";
+		info.default_serialize = true;
+		info.hide_in_editor = true;
+		info.editor_only = false;
+		info.fields["color"] = "Saturn::color3";
 		data.push_back(info);
 	}
 	{
@@ -146,8 +164,8 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
-		info.fields["mass"] = "float";
 		info.fields["locked_axes"] = "glm::bvec3";
+		info.fields["mass"] = "float";
 		data.push_back(info);
 	}
 	{

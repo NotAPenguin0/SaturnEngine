@@ -125,6 +125,13 @@ public:
 		// return nullptr if the field was not found
 		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
 	}
+    static ComponentFieldPtr get_component_field(Components::ColliderRenderer& comp,
+                                                 std::string_view field_name) {
+		
+		
+		// return nullptr if the field was not found
+		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
+	}
     static ComponentFieldPtr get_component_field(Components::DirectionalLight& comp,
                                                  std::string_view field_name) {
 		if (field_name == "ambient") {
@@ -204,6 +211,15 @@ public:
 		// return nullptr if the field was not found
 		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
 	}
+    static ComponentFieldPtr get_component_field(Components::OutlineRenderer& comp,
+                                                 std::string_view field_name) {
+		if (field_name == "color") {
+			return ComponentFieldPtr(&comp.color);
+		}
+		
+		// return nullptr if the field was not found
+		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
+	}
     static ComponentFieldPtr get_component_field(Components::PointLight& comp,
                                                  std::string_view field_name) {
 		if (field_name == "ambient") {
@@ -224,11 +240,11 @@ public:
 	}
     static ComponentFieldPtr get_component_field(Components::Rigidbody& comp,
                                                  std::string_view field_name) {
-		if (field_name == "mass") {
-			return ComponentFieldPtr(&comp.mass);
-		}
 		if (field_name == "locked_axes") {
 			return ComponentFieldPtr(&comp.locked_axes);
+		}
+		if (field_name == "mass") {
+			return ComponentFieldPtr(&comp.mass);
 		}
 		
 		// return nullptr if the field was not found

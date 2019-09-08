@@ -72,6 +72,13 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
 		j.get_to(c);
 		
 	}
+	// Deserialization for ColliderRenderer component
+	if (auto const& component = j.find("ColliderRendererComponent"); component != j.end()) {
+		auto& c = obj.get_scene()->get_ecs().get_with_id<ColliderRenderer>(
+			obj.add_component<ColliderRenderer>());
+		j.get_to(c);
+		
+	}
 	// Deserialization for DirectionalLight component
 	if (auto const& component = j.find("DirectionalLightComponent"); component != j.end()) {
 		auto& c = obj.get_scene()->get_ecs().get_with_id<DirectionalLight>(
@@ -118,6 +125,13 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
 	if (auto const& component = j.find("NameComponent"); component != j.end()) {
 		auto& c = obj.get_scene()->get_ecs().get_with_id<Name>(
 			obj.add_component<Name>());
+		j.get_to(c);
+		
+	}
+	// Deserialization for OutlineRenderer component
+	if (auto const& component = j.find("OutlineRendererComponent"); component != j.end()) {
+		auto& c = obj.get_scene()->get_ecs().get_with_id<OutlineRenderer>(
+			obj.add_component<OutlineRenderer>());
 		j.get_to(c);
 		
 	}

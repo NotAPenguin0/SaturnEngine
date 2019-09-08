@@ -32,6 +32,9 @@ private:
 	tree_t::iterator show_self_and_children(Scene& scene, tree_t& tree, tree_t::iterator entity);
 
 	void show_entity_details(SceneObject* entity, Scene& scene);
+
+	void on_entity_select(Scene& scene, SceneObject* entity);
+	void on_entity_deselect(SceneObject* entity);
 };
 
 } // namespace Saturn::Editor

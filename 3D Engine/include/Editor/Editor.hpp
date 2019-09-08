@@ -35,19 +35,24 @@ private:
     void show_menu_bar(Scene& scene);
     void on_scene_reload(Scene& scene);
     void create_entity(Scene& scene, std::string const& name);
-	void create_editor_camera(Scene& scene);
-	void on_playmode_enter(Scene& scene);
+    void create_editor_camera(Scene& scene);
+    void on_playmode_enter(Scene& scene);
+    void set_window_title();
+    void create_new_scene(std::string const& name);
 
     Application* app;
     SceneObject* editor_camera;
     std::size_t scene_view_viewport_id = 0;
+
+    std::string cur_open_scene;
+    std::string cur_open_scene_full_path;
 
     struct Widgets {
         EntityTree entity_tree;
         EditorPreferencesWidget preferences;
     } editor_widgets;
 
-	bool playmode_active = false;
+    bool playmode_active = false;
 };
 
 } // namespace Editor
