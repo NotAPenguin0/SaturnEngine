@@ -17,6 +17,7 @@
 #    include <algorithm>
 #    include <fmt/format.h>
 #    include <fmt/ranges.h>
+#    include <fstream>
 
 namespace Saturn::Editor {
 
@@ -33,6 +34,11 @@ static std::string consistent_path_sep(std::string const& path) {
     //    log::log(copy);
     std::replace(copy.begin(), copy.end(), '\\', '/');
     return copy;
+}
+
+static bool file_exists(std::string const& path) {
+    std::ifstream file(path);
+    return file.is_open();
 }
 
 Editor::Editor(Application& app) : app(&app) {
@@ -52,11 +58,26 @@ Editor::Editor(Application& app) : app(&app) {
         });
     log::log("The component editor does not support Resource<T> types yet",
              DebugConsole::Warning);
-    cur_open_scene = "scene1";
-    cur_open_scene_full_path = "resources/scene1";
-    log::log(fmt::format("Opening default scene {} on startup", cur_open_scene),
-             DebugConsole::Warning);
+    // Load last opened scene. We find this in
+    // resources/engine_cache/last_scene.txt
+    std::ifstream last_scene_file("resources/engine_cache/last_scene.txt");
+    std::string last_scene;
+    std::getline(last_scene_file, last_scene);
+    cur_open_scene = get_scene_name_from_path(last_scene);
+    cur_open_scene_full_path = last_scene;
+    if (!file_exists(cur_open_scene_full_path + "/scene.dat")) {
+        log::log(fmt::format("Last opened scene {} does not exist anymore. Has "
+                             "it been deleted, renamed or moved?",
+                             cur_open_scene_full_path),
+                 DebugConsole::Warning);
+        can_open_last = false;
+    }
     set_window_title();
+}
+
+Editor::~Editor() {
+    std::ofstream last_scene_cache("resources/engine_cache/last_scene.txt");
+    last_scene_cache << cur_open_scene_full_path;
 }
 
 void Editor::set_window_title() {
@@ -86,6 +107,13 @@ SystemUpdateMode Editor::get_update_mode() {
 void Editor::render(Scene& scene) {
     static bool once = true;
     if (once) {
+        // Load startup scene
+		if (can_open_last)
+        {load_scene(scene, cur_open_scene_full_path);}
+		else {
+			create_new_scene(scene, "resources/temp_scene");
+		}
+
         // Setup some bindings
         ActionBinding exit_playmode_binding;
         exit_playmode_binding.key = Key::Escape;
@@ -153,9 +181,7 @@ void Editor::show_menu_bar(Scene& scene) {
                 create_new_scene(scene, result);
             }
             ImGui::Separator();
-            if (ImGui::MenuItem(("Save scene to " + cur_open_scene).c_str())) {
-                save_scene(scene);
-            }
+            if (ImGui::MenuItem("Save scene")) { save_scene(scene); }
             if (ImGui::MenuItem("Save as ...")) {
                 static SelectFileDialog dialog;
                 dialog.show(SelectFileDialog::PickFolders);

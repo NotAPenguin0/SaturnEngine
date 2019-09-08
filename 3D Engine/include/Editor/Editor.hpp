@@ -26,6 +26,7 @@ namespace Editor {
 class Editor {
 public:
     Editor(Application& app);
+	~Editor();
 
     void setup_viewports();
     SystemUpdateMode get_update_mode();
@@ -51,6 +52,7 @@ private:
 
     std::string cur_open_scene;
     std::string cur_open_scene_full_path;
+    bool can_open_last = true;
 
     struct Widgets {
         EntityTree entity_tree;
