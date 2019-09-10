@@ -1,4 +1,5 @@
 #include "Core/Engine.hpp"
+#include "Subsystems/Sound/SoundEngine.hpp"
 
 #include <thread>
 
@@ -100,6 +101,8 @@ Application Engine::initialize(CreateInfo create_info) {
 
     Input::initialize(app);
     Input::load_config_file("resources/config/input.config.json");
+
+	SoundEngine::init();
 
     std::thread random_init(Math::RandomEngine::initialize);
 

@@ -9,6 +9,7 @@
 #include "Subsystems/Renderer/Viewport.hpp"
 #include "Subsystems/Scene/Scene.hpp"
 #include "Subsystems/Scene/SceneObject.hpp"
+#include "Subsystems/Sound/SoundEngine.hpp"
 #include "Subsystems/Time/Time.hpp"
 #include "Utility/Utility.hpp"
 
@@ -76,11 +77,10 @@ Application::~Application() {
     if (window_handle != nullptr && !window_is_open) {
         glfwSetWindowShouldClose(window_handle, true);
     }
+	SoundEngine::destroy();
 }
 
-void Application::initialize_keybinds() {
-    
-}
+void Application::initialize_keybinds() {}
 
 static const std::vector<float> particle_quad_vertices = {
     -1.0f, 1.0f,  0.0f, 0.0f, 1.0f, // TL

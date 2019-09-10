@@ -439,6 +439,18 @@ GLM_TEST_FORCE_PURE:BOOL=OFF
 //Path to a program.
 HGCOMMAND:FILEPATH=HGCOMMAND-NOTFOUND
 
+//Path to a library.
+Irrklang_IMPORT_LIB:FILEPATH=Irrklang_IMPORT_LIB-NOTFOUND
+
+//Path to a file.
+Irrklang_INCLUDE_DIR:PATH=C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/irrklang/include
+
+//Path to a file.
+Irrklang_LIBRARY:FILEPATH=C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/irrklang/lib/Winx64-visualStudio/irrKlang.lib
+
+//Path to a file.
+Irrklang_ROOT_DIR:PATH=C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/irrklang
+
 //Build the unit tests when BUILD_TESTING is enabled.
 JSON_BuildTests:BOOL=OFF
 
@@ -446,7 +458,7 @@ JSON_BuildTests:BOOL=OFF
 JSON_Coverage:BOOL=OFF
 
 //Install CMake targets during install step.
-JSON_Install:BOOL=ON
+JSON_Install:BOOL=OFF
 
 //Use non-amalgamated version of the library.
 JSON_MultipleHeaders:BOOL=OFF
@@ -725,6 +737,8 @@ DART_TESTING_TIMEOUT-ADVANCED:INTERNAL=1
 DOXYGEN_EXECUTABLE-ADVANCED:INTERNAL=1
 //Details about finding Doxygen
 FIND_PACKAGE_MESSAGE_DETAILS_Doxygen:INTERNAL=[C:/Program Files/doxygen/bin/doxygen.exe][cfound components:  doxygen ][v1.8.14()]
+//Details about finding Irrklang
+FIND_PACKAGE_MESSAGE_DETAILS_Irrklang:INTERNAL=[C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/irrklang/include][C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/irrklang/lib/Winx64-visualStudio/irrKlang.lib][v()]
 //Details about finding OpenGL
 FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[opengl32][cfound components:  OpenGL ][v()]
 //Details about finding Threads
@@ -741,6 +755,12 @@ HAVE_OPEN:INTERNAL=1
 HAVE_STRTOD_L:INTERNAL=1
 //ADVANCED property for variable: HGCOMMAND
 HGCOMMAND-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: Irrklang_IMPORT_LIB
+Irrklang_IMPORT_LIB-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: Irrklang_INCLUDE_DIR
+Irrklang_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: Irrklang_LIBRARY
+Irrklang_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: MAKECOMMAND
 MAKECOMMAND-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: MEMORYCHECK_COMMAND

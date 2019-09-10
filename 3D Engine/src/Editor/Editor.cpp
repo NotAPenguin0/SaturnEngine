@@ -108,11 +108,11 @@ void Editor::render(Scene& scene) {
     static bool once = true;
     if (once) {
         // Load startup scene
-		if (can_open_last)
-        {load_scene(scene, cur_open_scene_full_path);}
-		else {
-			create_new_scene(scene, "resources/temp_scene");
-		}
+        if (can_open_last) {
+            load_scene(scene, cur_open_scene_full_path);
+        } else {
+            create_new_scene(scene, "resources/temp_scene");
+        }
 
         // Setup some bindings
         ActionBinding exit_playmode_binding;
