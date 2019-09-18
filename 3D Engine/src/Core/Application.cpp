@@ -9,9 +9,10 @@
 #include "Subsystems/Renderer/Viewport.hpp"
 #include "Subsystems/Scene/Scene.hpp"
 #include "Subsystems/Scene/SceneObject.hpp"
-#include "Subsystems/Sound/SoundEngine.hpp"
 #include "Subsystems/Time/Time.hpp"
 #include "Utility/Utility.hpp"
+
+#include "audeo/audeo.hpp"
 
 #include <chrono>
 #include <thread>
@@ -52,6 +53,10 @@ Application::Application(CreateInfo create_info) :
 
     physics = std::make_unique<Physics>();
     physics_scheduler.set_physics_system(*physics);
+
+    audeo::InitInfo info;
+    info.effect_channels = 32;
+    audeo::init(info);
 }
 
 Application::Application(Application&& other) :
@@ -77,7 +82,8 @@ Application::~Application() {
     if (window_handle != nullptr && !window_is_open) {
         glfwSetWindowShouldClose(window_handle, true);
     }
-	SoundEngine::destroy();
+
+	audeo::quit();
 }
 
 void Application::initialize_keybinds() {}

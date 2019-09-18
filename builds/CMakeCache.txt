@@ -14,6 +14,9 @@
 # EXTERNAL cache entries
 ########################
 
+//Build the audeo example files
+AUDEO_BUILD_EXAMPLES:BOOL=OFF
+
 //Build shared library
 BUILD_SHARED_LIBS:BOOL=OFF
 
@@ -519,6 +522,12 @@ SaturnEngine_SOURCE_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine
 USE_MSVC_RUNTIME_LIBRARY_DLL:BOOL=ON
 
 //Value Computed by CMake
+audeo_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/audeo
+
+//Value Computed by CMake
+audeo_SOURCE_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/audeo
+
+//Value Computed by CMake
 glad_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/glad
 
 //Value Computed by CMake
@@ -669,7 +678,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO
 CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=13
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=16
 //Platform information initialized
 CMAKE_PLATFORM_INFO_INITIALIZED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_RC_COMPILER

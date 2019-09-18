@@ -75,7 +75,10 @@ add_custom_command(TARGET ${PROJECT_NAME}
 )
 
 set(LINK_LIBRARIES
-	${OPENGL_LIBRARIES} glad glfw nlohmann_json glm fmt
+	"${CMAKE_CURRENT_SOURCE_DIR}/3D Engine/dependencies/audeo/dependencies/sdl/bin/SDL2.lib"
+	"${CMAKE_CURRENT_SOURCE_DIR}/3D Engine/dependencies/audeo/dependencies/sdl/bin/SDL2main.lib"
+	"${CMAKE_CURRENT_SOURCE_DIR}/3D Engine/dependencies/audeo/dependencies/sdl_mixer/lib/x64/SDL2_mixer.lib"
+	${OPENGL_LIBRARIES} glad glfw nlohmann_json glm fmt audeo 	
 )
 
 if (WIN32) 

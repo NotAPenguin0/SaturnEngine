@@ -21,6 +21,11 @@ C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/nlohma
 C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/libfmt/CMakeFiles/INSTALL.dir
 C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/libfmt/CMakeFiles/fmt.dir
 C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/libfmt/CMakeFiles/ALL_BUILD.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/audeo/CMakeFiles/audeo.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/audeo/CMakeFiles/INSTALL.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/audeo/CMakeFiles/ALL_BUILD.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/audeo/include/CMakeFiles/INSTALL.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/audeo/src/CMakeFiles/INSTALL.dir
 C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/include/CMakeFiles/INSTALL.dir
 C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/src/CMakeFiles/INSTALL.dir
 C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/CodeGen/Serialization/CMakeFiles/SerializationCodeGen.dir
