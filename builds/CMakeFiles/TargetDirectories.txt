@@ -31,3 +31,4 @@ C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/include/CMakeFiles/
 C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/src/CMakeFiles/INSTALL.dir
 C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/CodeGen/Serialization/CMakeFiles/SerializationCodeGen.dir
 C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/CodeGen/Serialization/CMakeFiles/INSTALL.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/CodeGen/Serialization/CMakeFiles/ALL_BUILD.dir

@@ -40,10 +40,10 @@ CMAKE_CONFIGURATION_TYPES:STRING=Debug;Release;MinSizeRel;RelWithDebInfo;Editor
 CMAKE_CXX_COMPILER:FILEPATH=C:/Program Files (x86)/LLVM/bin/clang++.exe
 
 //LLVM archiver
-CMAKE_CXX_COMPILER_AR:FILEPATH=C:/Program Files (x86)/LLVM/bin/llvm-ar.exe
+CMAKE_CXX_COMPILER_AR:FILEPATH=CMAKE_CXX_COMPILER_AR-NOTFOUND
 
 //Generate index for LLVM archive
-CMAKE_CXX_COMPILER_RANLIB:FILEPATH=C:/Program Files (x86)/LLVM/bin/llvm-ranlib.exe
+CMAKE_CXX_COMPILER_RANLIB:FILEPATH=CMAKE_CXX_COMPILER_RANLIB-NOTFOUND
 
 //Flags used by the CXX compiler during all build types.
 CMAKE_CXX_FLAGS:STRING=/DWIN32 /D_WINDOWS /W3 /GR /EHsc
@@ -70,10 +70,10 @@ CMAKE_CXX_STANDARD_LIBRARIES:STRING=kernel32.lib user32.lib gdi32.lib winspool.l
 CMAKE_C_COMPILER:FILEPATH=C:/Program Files (x86)/LLVM/bin/clang.exe
 
 //LLVM archiver
-CMAKE_C_COMPILER_AR:FILEPATH=C:/Program Files (x86)/LLVM/bin/llvm-ar.exe
+CMAKE_C_COMPILER_AR:FILEPATH=CMAKE_C_COMPILER_AR-NOTFOUND
 
 //Generate index for LLVM archive
-CMAKE_C_COMPILER_RANLIB:FILEPATH=C:/Program Files (x86)/LLVM/bin/llvm-ranlib.exe
+CMAKE_C_COMPILER_RANLIB:FILEPATH=CMAKE_C_COMPILER_RANLIB-NOTFOUND
 
 //Flags used by the C compiler during all build types.
 CMAKE_C_FLAGS:STRING=/DWIN32 /D_WINDOWS /W3
@@ -492,8 +492,16 @@ SaturnEngine_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/build
 //Value Computed by CMake
 SaturnEngine_SOURCE_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine
 
+//Value Computed by CMake
+Serialization_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/CodeGen/Serialization
+
+//Value Computed by CMake
+Serialization_SOURCE_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/CodeGen/Serialization
+
 //Use MSVC runtime library DLL
 USE_MSVC_RUNTIME_LIBRARY_DLL:BOOL=ON
+
+VS_DEBUGGER_WORKING_DIRECTORY:PATH=C:/Users/michi_000/Desktop/C++/SaturnEngine
 
 //Value Computed by CMake
 audeo_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/audeo
@@ -512,9 +520,6 @@ glm_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engi
 
 //Value Computed by CMake
 glm_SOURCE_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/glm
-
-//The directory containing a CMake configuration file for libclang.
-libclang_DIR:PATH=C:/Users/michi_000/Desktop/C++/SaturnEngine/CodeGen/Serialization/libclang/lib
 
 //Value Computed by CMake
 nlohmann_json_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/nlohmann_json

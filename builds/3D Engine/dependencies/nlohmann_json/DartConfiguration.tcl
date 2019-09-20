@@ -73,7 +73,7 @@ UpdateType: git
 
 # Compiler info
 Compiler: C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.16.27023/bin/Hostx86/x64/cl.exe
-CompilerVersion: 7.0.0
+CompilerVersion: 9.0.0
 
 # Dynamic analysis (MemCheck)
 PurifyCommand: 

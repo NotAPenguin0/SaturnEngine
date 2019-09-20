@@ -67,7 +67,8 @@ target_include_directories(${PROJECT_NAME}
 )
 
 get_filename_component(ABSOLUTE_PROJECT_DIR "3D Engine" ABSOLUTE)
-get_filename_component(ABSOLUTE_CODEGEN_PATH "builds/bin/debug/SerializationCodeGen.exe" ABSOLUTE)
+get_filename_component(ABSOLUTE_CODEGEN_PATH 
+"builds/CodeGen/Serialization/${CMAKE_BUILD_TYPE}/SerializationCodeGen.exe" ABSOLUTE)
 
 add_custom_command(TARGET ${PROJECT_NAME}
 	PRE_BUILD

@@ -19,12 +19,17 @@ namespace Saturn::Editor {
 namespace impl {
 
 struct ComponentFieldVisitor {
-    // Define overloaded visitor for types:
-    // std::size_t, float, int, std::string, glm::vec3, glm::vec4, bool
+
+    // Define overloaded visitor for all types supported in
+    // ComponentMetaInfo.hpp
 
     std::string_view field_name;
 
     void operator()(std::size_t* field) {
+        ImGui::DragScalar(field_name.data(), ImGuiDataType_U64, field, 0.2f);
+    }
+
+    void operator()(unsigned int* field) {
         ImGui::DragScalar(field_name.data(), ImGuiDataType_U64, field, 0.2f);
     }
 
@@ -349,13 +354,13 @@ void EntityTree::on_entity_select(Scene& scene, SceneObject* entity) {
         entity->add_component<OutlineRenderer>());
     // Set the color to an orange-like color
     outline.color = color3(0.92, 0.67, 0.2);
-	entity->add_component<ColliderRenderer>();
+    entity->add_component<ColliderRenderer>();
 }
 
 void EntityTree::on_entity_deselect(SceneObject* entity) {
     using namespace Components;
     entity->remove_component<OutlineRenderer>();
-	entity->remove_component<ColliderRenderer>();
+    entity->remove_component<ColliderRenderer>();
 }
 
 } // namespace Saturn::Editor

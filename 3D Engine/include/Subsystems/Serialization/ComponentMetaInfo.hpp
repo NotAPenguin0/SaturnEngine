@@ -32,9 +32,9 @@ struct ComponentInfo {
 class ComponentFieldPtr {
 public:
 #define SUPPORTED_COMPONENT_FIELD_TYPES                                        \
-    std::size_t, float, int, std::string, glm::vec3, glm::vec4, bool, glm::bvec3, color3, color4
+    std::size_t, float, int, std::string, glm::vec3, glm::vec4, bool, glm::bvec3, color3, color4, unsigned int
 #define SUPPORTED_COMPONENT_FIELD_POINTER_TYPES                                \
-    std::size_t*, float*, int*, std::string*, glm::vec3*, glm::vec4*, bool*, glm::bvec3*, color3*, color4*
+    std::size_t*, float*, int*, std::string*, glm::vec3*, glm::vec4*, bool*, glm::bvec3*, color3*, color4*, unsigned int*
     using field_variant_t =
         std::variant<SUPPORTED_COMPONENT_FIELD_POINTER_TYPES>;
 
