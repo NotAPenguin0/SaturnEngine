@@ -29,10 +29,15 @@ BUILD_TESTING:BOOL=OFF
 //Path to a program.
 BZRCOMMAND:FILEPATH=BZRCOMMAND-NOTFOUND
 
+CMAKE_BUILD_TYPE:STRING=Editor
+
 //Semicolon separated list of supported configuration types, only
 // supports Debug, Release, MinSizeRel, and RelWithDebInfo, anything
 // else will be ignored.
-CMAKE_CONFIGURATION_TYPES:STRING=Editor;Debug;Release;MinSizeRel
+CMAKE_CONFIGURATION_TYPES:STRING=Debug;Release;MinSizeRel;RelWithDebInfo;Editor
+
+//CXX compiler.
+CMAKE_CXX_COMPILER:FILEPATH=C:/Program Files (x86)/LLVM/bin/clang++.exe
 
 //LLVM archiver
 CMAKE_CXX_COMPILER_AR:FILEPATH=C:/Program Files (x86)/LLVM/bin/llvm-ar.exe
@@ -60,6 +65,9 @@ CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=/MD /Zi /O2 /Ob1 /DNDEBUG
 
 //Libraries linked by default with all C++ applications.
 CMAKE_CXX_STANDARD_LIBRARIES:STRING=kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+
+//C compiler.
+CMAKE_C_COMPILER:FILEPATH=C:/Program Files (x86)/LLVM/bin/clang.exe
 
 //LLVM archiver
 CMAKE_C_COMPILER_AR:FILEPATH=C:/Program Files (x86)/LLVM/bin/llvm-ar.exe
@@ -89,7 +97,7 @@ CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=/MD /Zi /O2 /Ob1 /DNDEBUG
 CMAKE_C_STANDARD_LIBRARIES:STRING=kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
 
 //Flags used by the linker during all build types.
-CMAKE_EXE_LINKER_FLAGS:STRING=/machine:X86
+CMAKE_EXE_LINKER_FLAGS:STRING=/machine:x64
 
 //Flags used by the linker during DEBUG builds.
 CMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=/debug /INCREMENTAL
@@ -143,7 +151,7 @@ CMAKE_INSTALL_MANDIR:PATH=
 CMAKE_INSTALL_OLDINCLUDEDIR:PATH=/usr/include
 
 //Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=C:/Program Files (x86)/SaturnEngine
+CMAKE_INSTALL_PREFIX:PATH=C:/Program Files/SaturnEngine
 
 //Run-time variable data (LOCALSTATEDIR/run)
 CMAKE_INSTALL_RUNSTATEDIR:PATH=
@@ -158,11 +166,11 @@ CMAKE_INSTALL_SHAREDSTATEDIR:PATH=com
 CMAKE_INSTALL_SYSCONFDIR:PATH=etc
 
 //Path to a program.
-CMAKE_LINKER:FILEPATH=C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.15.26726/bin/Hostx86/x86/link.exe
+CMAKE_LINKER:FILEPATH=C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.16.27023/bin/Hostx86/x64/link.exe
 
 //Flags used by the linker during the creation of modules during
 // all build types.
-CMAKE_MODULE_LINKER_FLAGS:STRING=/machine:X86
+CMAKE_MODULE_LINKER_FLAGS:STRING=/machine:x64
 
 //Flags used by the linker during the creation of modules during
 // DEBUG builds.
@@ -231,7 +239,7 @@ CMAKE_RC_FLAGS_RELWITHDEBINFO:STRING=
 
 //Flags used by the linker during the creation of shared libraries
 // during all build types.
-CMAKE_SHARED_LINKER_FLAGS:STRING=/machine:X86
+CMAKE_SHARED_LINKER_FLAGS:STRING=/machine:x64
 
 //Flags used by the linker during the creation of shared libraries
 // during DEBUG builds.
@@ -262,7 +270,7 @@ CMAKE_SKIP_RPATH:BOOL=OFF
 
 //Flags used by the linker during the creation of static libraries
 // during all build types.
-CMAKE_STATIC_LINKER_FLAGS:STRING=/machine:X86
+CMAKE_STATIC_LINKER_FLAGS:STRING=/machine:x64
 
 //Flags used by the linker during the creation of static libraries
 // during DEBUG builds.
@@ -312,18 +320,11 @@ CVS_UPDATE_OPTIONS:STRING=-d -A -P
 //Maximum time allowed before CTest will kill the test.
 DART_TESTING_TIMEOUT:STRING=1500
 
-//Path to a library.
-DL_LIBRARY_PATH:FILEPATH=DL_LIBRARY_PATH-NOTFOUND
-
 //Doxygen documentation generation tool (http://www.doxygen.org)
 DOXYGEN_EXECUTABLE:FILEPATH=C:/Program Files/doxygen/bin/doxygen.exe
 
 //Value Computed by CMake
 FMT_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/libfmt
-
-//Installation directory for cmake files, relative to C:/Program
-// Files (x86)/SaturnEngine.
-FMT_CMAKE_DIR:STRING=lib/cmake/fmt
 
 //Generate the doc target.
 FMT_DOC:BOOL=OFF
@@ -331,23 +332,11 @@ FMT_DOC:BOOL=OFF
 //Generate the fuzz target.
 FMT_FUZZ:BOOL=OFF
 
-//Installation directory for include files, relative to C:/Program
-// Files (x86)/SaturnEngine.
-FMT_INC_DIR:STRING=include/fmt
-
 //Generate the install target.
-FMT_INSTALL:BOOL=ON
-
-//Installation directory for libraries, relative to C:/Program
-// Files (x86)/SaturnEngine.
-FMT_LIB_DIR:STRING=lib
+FMT_INSTALL:BOOL=OFF
 
 //Enable extra warnings and expensive tests.
 FMT_PEDANTIC:BOOL=OFF
-
-//Installation directory for pkgconfig (.pc) files, relative to
-// C:/Program Files (x86)/SaturnEngine.
-FMT_PKGCONFIG_DIR:PATH=lib/pkgconfig
 
 //Value Computed by CMake
 FMT_SOURCE_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/libfmt
@@ -374,7 +363,7 @@ GLFW_BUILD_EXAMPLES:BOOL=OFF
 GLFW_BUILD_TESTS:BOOL=OFF
 
 //Generate installation target
-GLFW_INSTALL:BOOL=OFF
+GLFW_INSTALL:BOOL=ON
 
 //Value Computed by CMake
 GLFW_SOURCE_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/glfw
@@ -442,18 +431,6 @@ GLM_TEST_FORCE_PURE:BOOL=OFF
 //Path to a program.
 HGCOMMAND:FILEPATH=HGCOMMAND-NOTFOUND
 
-//Path to a library.
-Irrklang_IMPORT_LIB:FILEPATH=Irrklang_IMPORT_LIB-NOTFOUND
-
-//Path to a file.
-Irrklang_INCLUDE_DIR:PATH=C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/irrklang/include
-
-//Path to a file.
-Irrklang_LIBRARY:FILEPATH=C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/irrklang/lib/Winx64-visualStudio/irrKlang.lib
-
-//Path to a file.
-Irrklang_ROOT_DIR:PATH=C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/irrklang
-
 //Build the unit tests when BUILD_TESTING is enabled.
 JSON_BuildTests:BOOL=OFF
 
@@ -461,7 +438,7 @@ JSON_BuildTests:BOOL=OFF
 JSON_Coverage:BOOL=OFF
 
 //Install CMake targets during install step.
-JSON_Install:BOOL=OFF
+JSON_Install:BOOL=ON
 
 //Use non-amalgamated version of the library.
 JSON_MultipleHeaders:BOOL=OFF
@@ -474,9 +451,6 @@ JSON_Sanitizer:BOOL=OFF
 
 //Execute test suite with Valgrind
 JSON_Valgrind:BOOL=OFF
-
-//Build libclang as a static library (in addition to a shared one)
-LIBCLANG_BUILD_STATIC:BOOL=OFF
 
 //Command to build the project
 MAKECOMMAND:STRING=C:\Users\michi_000\Downloads\cmake-3.13.2-win64-x64\cmake-3.13.2-win64-x64\bin\cmake.exe --build . --config "${CTEST_CONFIGURATION_TYPE}"
@@ -538,6 +512,9 @@ glm_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engi
 
 //Value Computed by CMake
 glm_SOURCE_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/glm
+
+//The directory containing a CMake configuration file for libclang.
+libclang_DIR:PATH=C:/Users/michi_000/Desktop/C++/SaturnEngine/CodeGen/Serialization/libclang/lib
 
 //Value Computed by CMake
 nlohmann_json_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/nlohmann_json
@@ -619,7 +596,7 @@ CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //Name of external makefile project generator.
 CMAKE_EXTRA_GENERATOR:INTERNAL=
 //Name of generator.
-CMAKE_GENERATOR:INTERNAL=Visual Studio 15 2017
+CMAKE_GENERATOR:INTERNAL=Visual Studio 15 2017 Win64
 //Generator instance identifier.
 CMAKE_GENERATOR_INSTANCE:INTERNAL=C:/Program Files (x86)/Microsoft Visual Studio/2017/Community
 //Name of generator platform.
@@ -678,7 +655,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO
 CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=16
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=17
 //Platform information initialized
 CMAKE_PLATFORM_INFO_INITIALIZED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_RC_COMPILER
@@ -746,8 +723,6 @@ DART_TESTING_TIMEOUT-ADVANCED:INTERNAL=1
 DOXYGEN_EXECUTABLE-ADVANCED:INTERNAL=1
 //Details about finding Doxygen
 FIND_PACKAGE_MESSAGE_DETAILS_Doxygen:INTERNAL=[C:/Program Files/doxygen/bin/doxygen.exe][cfound components:  doxygen ][v1.8.14()]
-//Details about finding Irrklang
-FIND_PACKAGE_MESSAGE_DETAILS_Irrklang:INTERNAL=[C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/irrklang/include][C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/irrklang/lib/Winx64-visualStudio/irrKlang.lib][v()]
 //Details about finding OpenGL
 FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[opengl32][cfound components:  OpenGL ][v()]
 //Details about finding Threads
@@ -764,12 +739,6 @@ HAVE_OPEN:INTERNAL=1
 HAVE_STRTOD_L:INTERNAL=1
 //ADVANCED property for variable: HGCOMMAND
 HGCOMMAND-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Irrklang_IMPORT_LIB
-Irrklang_IMPORT_LIB-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Irrklang_INCLUDE_DIR
-Irrklang_INCLUDE_DIR-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Irrklang_LIBRARY
-Irrklang_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: MAKECOMMAND
 MAKECOMMAND-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: MEMORYCHECK_COMMAND
@@ -798,7 +767,7 @@ SUPPORTS_VARIADIC_TEMPLATES:INTERNAL=1
 //ADVANCED property for variable: SVNCOMMAND
 SVNCOMMAND-ADVANCED:INTERNAL=1
 //CMAKE_INSTALL_PREFIX during last run
-_GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=C:/Program Files (x86)/SaturnEngine
+_GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=C:/Program Files/SaturnEngine
 //Test has_std_17_flag
 has_std_17_flag:INTERNAL=
 //Test has_std_1z_flag

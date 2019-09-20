@@ -74,18 +74,15 @@ add_custom_command(TARGET ${PROJECT_NAME}
 	COMMAND ${ABSOLUTE_CODEGEN_PATH} ${ABSOLUTE_PROJECT_DIR}
 )
 
-set(LINK_LIBRARIES
-	"${CMAKE_CURRENT_SOURCE_DIR}/3D Engine/dependencies/audeo/dependencies/sdl/bin/SDL2.lib"
-	"${CMAKE_CURRENT_SOURCE_DIR}/3D Engine/dependencies/audeo/dependencies/sdl/bin/SDL2main.lib"
-	"${CMAKE_CURRENT_SOURCE_DIR}/3D Engine/dependencies/audeo/dependencies/sdl_mixer/lib/x64/SDL2_mixer.lib"
-	${OPENGL_LIBRARIES} glad glfw nlohmann_json glm fmt audeo 	
+set(SATURN_LINK_LIBRARIES
+	${OPENGL_LIBRARIES} glad glfw nlohmann_json glm fmt audeo	
 )
 
 if (WIN32) 
-	set(LINK_LIBRARIES ${LINK_LIBRARIES} shlwapi.lib propsys.lib)
+	set(SATURN_LINK_LIBRARIES ${SATURN_LINK_LIBRARIES} shlwapi.lib propsys.lib)
 endif(WIN32)
 
-target_link_libraries(${PROJECT_NAME} ${LINK_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${SATURN_LINK_LIBRARIES})
 
 # Code Generation projects
 

@@ -1,7 +1,7 @@
-prefix=C:/Program Files (x86)/SaturnEngine
+prefix=C:/Program Files/SaturnEngine
 exec_prefix=${prefix}
-includedir=C:/Program Files (x86)/SaturnEngine/include
-libdir=C:/Program Files (x86)/SaturnEngine/lib
+includedir=C:/Program Files/SaturnEngine/include
+libdir=C:/Program Files/SaturnEngine/lib
 
 Name: GLFW
 Description: A multi-platform library for OpenGL, window and input

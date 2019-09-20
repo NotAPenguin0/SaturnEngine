@@ -1,4 +1,4 @@
-prefix=C:/Program Files (x86)/SaturnEngine
+prefix=C:/Program Files/SaturnEngine
 includedir=${prefix}/include
 
 Name: GLM

@@ -18,6 +18,7 @@ set(SERIALIZATION_SOURCE_FILES
 include_directories(${LIBCLANG_INCLUDE_DIR})
 include_directories(${MUSTACHE_INCLUDE_DIR})
 
+
 # Add targets
 add_executable(SerializationCodeGen
 	${SERIALIZATION_HEADER_FILES}
