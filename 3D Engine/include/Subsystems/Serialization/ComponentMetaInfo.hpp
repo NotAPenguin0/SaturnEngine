@@ -94,11 +94,11 @@ public:
 	}
     static ComponentFieldPtr get_component_field(Components::Camera& comp,
                                                  std::string_view field_name) {
-		if (field_name == "up") {
-			return ComponentFieldPtr(&comp.up);
-		}
 		if (field_name == "front") {
 			return ComponentFieldPtr(&comp.front);
+		}
+		if (field_name == "up") {
+			return ComponentFieldPtr(&comp.up);
 		}
 		if (field_name == "fov") {
 			return ComponentFieldPtr(&comp.fov);
@@ -121,6 +121,13 @@ public:
 		if (field_name == "max_zoom") {
 			return ComponentFieldPtr(&comp.max_zoom);
 		}
+		
+		// return nullptr if the field was not found
+		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
+	}
+    static ComponentFieldPtr get_component_field(Components::ClickEffect& comp,
+                                                 std::string_view field_name) {
+		
 		
 		// return nullptr if the field was not found
 		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
@@ -240,11 +247,11 @@ public:
 	}
     static ComponentFieldPtr get_component_field(Components::Rigidbody& comp,
                                                  std::string_view field_name) {
-		if (field_name == "locked_axes") {
-			return ComponentFieldPtr(&comp.locked_axes);
-		}
 		if (field_name == "mass") {
 			return ComponentFieldPtr(&comp.mass);
+		}
+		if (field_name == "locked_axes") {
+			return ComponentFieldPtr(&comp.locked_axes);
 		}
 		
 		// return nullptr if the field was not found
@@ -257,6 +264,22 @@ public:
 		}
 		if (field_name == "euler_angles") {
 			return ComponentFieldPtr(&comp.euler_angles);
+		}
+		
+		// return nullptr if the field was not found
+		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
+	}
+    static ComponentFieldPtr get_component_field(Components::Sound& comp,
+                                                 std::string_view field_name) {
+		
+		
+		// return nullptr if the field was not found
+		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
+	}
+    static ComponentFieldPtr get_component_field(Components::SoundListener& comp,
+                                                 std::string_view field_name) {
+		if (field_name == "position") {
+			return ComponentFieldPtr(&comp.position);
 		}
 		
 		// return nullptr if the field was not found

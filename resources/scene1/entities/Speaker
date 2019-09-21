@@ -1,0 +1,29 @@
+{
+	"ID": 12,
+	"ParentID": 0,
+	"NameComponent": {
+		"Name": "Speaker"
+	},
+	"TransformComponent": {
+		"Position": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotation": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale": [
+            1.0,
+            1.0,
+            1.0
+        ]
+	},
+	"ClickEffectComponent": {
+		"SoundEffect": {
+			"Resource": "resources/audio/effects/heartbeat.sfx"
+		}
+	}
+}

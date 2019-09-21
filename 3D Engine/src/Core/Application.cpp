@@ -116,6 +116,7 @@ void Application::run() {
     scene.ecs.register_system<Systems::ParticleSystem>();
     scene.ecs.register_system<Systems::RotatorSystem>();
     scene.ecs.register_system<Systems::FlashlightSystem>();
+	scene.ecs.register_system<Systems::ClickEffectSystem>();
 #ifdef WITH_EDITOR
     scene.ecs.register_system<Systems::EditorCameraSystem>();
 #endif

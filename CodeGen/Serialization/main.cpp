@@ -61,6 +61,7 @@ struct Directories {
     fs::path nlohmann;
     fs::path glad;
     fs::path glfw;
+    fs::path audeo;
 };
 
 struct OutputFiles {
@@ -161,6 +162,7 @@ Directories get_directories(fs::path const& main) {
     fs::path nlohmann = dependencies / "nlohmann_json/single_include";
     fs::path glad = dependencies / "glad/include";
     fs::path glfw = dependencies / "glfw/include";
+    fs::path audeo = dependencies / "audeo/include";
     return {main,
             include_directory,
             source_directory,
@@ -169,7 +171,8 @@ Directories get_directories(fs::path const& main) {
             glm,
             nlohmann,
             glad,
-            glfw};
+            glfw,
+            audeo};
 }
 
 OutputFiles get_output_files(Directories const& dirs) {
@@ -297,6 +300,7 @@ TranslationUnit get_translation_unit(Directories const& dirs,
     settings.include_directories.emplace_back(dirs.nlohmann);
     settings.include_directories.emplace_back(dirs.glad);
     settings.include_directories.emplace_back(dirs.glfw);
+	settings.include_directories.emplace_back(dirs.audeo);
     settings.compiler_options.emplace_back("-std=c++17");
 
     TranslationUnit tu(path, settings);
@@ -663,7 +667,9 @@ generate_meta_info_header(std::vector<ComponentData> const& components) {
         auto& field_list = c_data["Field"];
         for (auto const& [field_name, field_type] : component.fields) {
             mustache::data f_data = mustache::data::type::object;
-            if (field_type.find("Resource") != std::string::npos) {
+            if (component.name == "Sound") { std::cout << field_type << "\n"; }
+            if (field_type.find("Resource") != std::string::npos ||
+                field_type.find("Sound") != std::string::npos) {
                 // We don't support these right now
                 continue;
             }

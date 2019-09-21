@@ -1,6 +1,7 @@
 #include "Subsystems/Scene/Scene.hpp"
 
 #include "Core/Application.hpp"
+#include "Editor/EditorLog.hpp"
 #include "Subsystems/Scene/SceneObject.hpp"
 
 #include <filesystem>
@@ -28,6 +29,12 @@ Scene::create_object_from_file(std::string_view file_path,
                                SceneObject* parent /* = nullptr */) {
     auto& object = create_object();
     std::ifstream f(file_path.data());
+    if (!f.good()) {
+        log::log(
+            fmt::format("Failed to open entity file at path: {}", file_path),
+            Editor::DebugConsole::Warning);
+		return create_object(nullptr);
+    }
     nlohmann::json j;
     f >> j;
     j.get_to(object);

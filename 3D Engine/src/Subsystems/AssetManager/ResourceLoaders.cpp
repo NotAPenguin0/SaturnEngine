@@ -245,4 +245,33 @@ ResourceLoader<Texture>::load(std::string const& path) {
     return std::make_unique<Texture>(info);
 }
 
+std::unique_ptr<audeo::SoundSource>
+ResourceLoader<audeo::SoundSource>::load(std::string const& path) {
+    std::ifstream file(path);
+    if (!file.good()) {
+        log::log(
+            fmt::format("Failed to open sound source file at path: {}", path),
+            Editor::DebugConsole::Error);
+        return nullptr;
+    }
+
+    // First line contains the path to the sound source
+    // Second line: Effect or Music
+
+    std::string src_path;
+    std::getline(file, src_path);
+    std::string type_s;
+    file >> type_s;
+
+    audeo::AudioType type = audeo::AudioType::Effect;
+    if (type_s == "Music") { type = audeo::AudioType::Music; }
+
+    audeo::SoundSource source = audeo::load_source(src_path, type);
+    if (audeo::is_valid(source)) {
+        return std::make_unique<audeo::SoundSource>(source);
+    } else {
+        return nullptr;
+    }
+}
+
 } // namespace Saturn

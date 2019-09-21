@@ -4,6 +4,7 @@
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <string>
+#include <type_traits>
 #include <unordered_map>
 
 #include "Resource.hpp"
@@ -15,8 +16,18 @@ namespace Saturn {
 template<typename R>
 class AssetManager {
 public:
-    // If the resource is not loaded yet, this function will load it. Otherwise
-    // it just returns the resource
+    /*template<typename T, typename = void>
+    struct has_create_info {
+        static constexpr bool value = false;
+    };
+
+    template<typename T>
+    struct has_create_info<T, std::void_t<decltype(T::CreateInfo)>> {
+        static constexpr bool value = true;
+    };*/
+
+    // If the resource is not loaded yet, this function will load it.
+    // Otherwise it just returns the resource
     static Resource<R> get_resource(std::string const& path) {
         // Check if the resource has been loaded already
         if (id_map.find(path) != id_map.end()) {
@@ -37,8 +48,11 @@ public:
         }
     }
 
-    static Resource<R> get_resource(typename R::CreateInfo const& info,
-                                    std::string const& name) {
+    template<typename CreateInfoT>
+    static Resource<R> get_resource(CreateInfoT const& info,
+                               std::string const& name) {
+        static_assert(std::is_same_v<CreateInfoT, typename R::CreateInfo>,
+                      "Must be a CreateInfo type");
         auto id = IDGenerator<R>::next();
         std::unique_ptr<R> res = std::make_unique<R>(info);
         if (res == nullptr) {

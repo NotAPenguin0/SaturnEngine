@@ -20,8 +20,8 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
-		info.fields["up"] = "glm::vec3";
 		info.fields["front"] = "glm::vec3";
+		info.fields["up"] = "glm::vec3";
 		info.fields["fov"] = "float";
 		info.fields["viewport_id"] = "unsigned int";
 		data.push_back(info);
@@ -35,6 +35,15 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.fields["zoom_speed"] = "float";
 		info.fields["min_zoom"] = "float";
 		info.fields["max_zoom"] = "float";
+		data.push_back(info);
+	}
+	{
+		ComponentInfo info;
+		info.name = "ClickEffect ";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
+		info.fields["sound_effect"] = "Resource<audeo::SoundSource>";
 		data.push_back(info);
 	}
 	{
@@ -102,8 +111,8 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
-		info.fields["shader"] = "Resource<Saturn::Shader>";
 		info.fields["diffuse_map"] = "Resource<Saturn::Texture>";
+		info.fields["shader"] = "Resource<Saturn::Shader>";
 		info.fields["lit"] = "bool";
 		info.fields["specular_map"] = "Resource<Saturn::Texture>";
 		info.fields["shininess"] = "float";
@@ -164,8 +173,8 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
-		info.fields["locked_axes"] = "glm::bvec3";
 		info.fields["mass"] = "float";
+		info.fields["locked_axes"] = "glm::bvec3";
 		data.push_back(info);
 	}
 	{
@@ -176,6 +185,24 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.editor_only = false;
 		info.fields["speed"] = "float";
 		info.fields["euler_angles"] = "glm::vec3";
+		data.push_back(info);
+	}
+	{
+		ComponentInfo info;
+		info.name = "Sound ";
+		info.default_serialize = false;
+		info.hide_in_editor = true;
+		info.editor_only = false;
+		info.fields["sound"] = "audeo::Sound";
+		data.push_back(info);
+	}
+	{
+		ComponentInfo info;
+		info.name = "SoundListener ";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
+		info.fields["position"] = "glm::vec3";
 		data.push_back(info);
 	}
 	{

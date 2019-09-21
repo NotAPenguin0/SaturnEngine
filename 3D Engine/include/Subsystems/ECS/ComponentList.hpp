@@ -7,6 +7,7 @@
 ::Saturn::Components::BoxCollider, \
 ::Saturn::Components::Camera, \
 ::Saturn::Components::CameraZoomController, \
+::Saturn::Components::ClickEffect, \
 ::Saturn::Components::ColliderRenderer, \
 ::Saturn::Components::DirectionalLight, \
 ::Saturn::Components::DoNotSerialize, \
@@ -20,6 +21,8 @@
 ::Saturn::Components::PointLight, \
 ::Saturn::Components::Rigidbody, \
 ::Saturn::Components::Rotator, \
+::Saturn::Components::Sound, \
+::Saturn::Components::SoundListener, \
 ::Saturn::Components::SpotLight, \
 ::Saturn::Components::StaticMesh, \
 ::Saturn::Components::Transform

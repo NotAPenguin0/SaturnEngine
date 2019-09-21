@@ -72,6 +72,13 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
 		j.get_to(c);
 		
 	}
+	// Deserialization for ClickEffect component
+	if (auto const& component = j.find("ClickEffectComponent"); component != j.end()) {
+		auto& c = obj.get_scene()->get_ecs().get_with_id<ClickEffect>(
+			obj.add_component<ClickEffect>());
+		j.get_to(c);
+		
+	}
 	// Deserialization for ColliderRenderer component
 	if (auto const& component = j.find("ColliderRendererComponent"); component != j.end()) {
 		auto& c = obj.get_scene()->get_ecs().get_with_id<ColliderRenderer>(
@@ -160,6 +167,20 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
 	if (auto const& component = j.find("RotatorComponent"); component != j.end()) {
 		auto& c = obj.get_scene()->get_ecs().get_with_id<Rotator>(
 			obj.add_component<Rotator>());
+		j.get_to(c);
+		
+	}
+	// Deserialization for Sound component
+	if (auto const& component = j.find("SoundComponent"); component != j.end()) {
+		auto& c = obj.get_scene()->get_ecs().get_with_id<Sound>(
+			obj.add_component<Sound>());
+		j.get_to(c);
+		
+	}
+	// Deserialization for SoundListener component
+	if (auto const& component = j.find("SoundListenerComponent"); component != j.end()) {
+		auto& c = obj.get_scene()->get_ecs().get_with_id<SoundListener>(
+			obj.add_component<SoundListener>());
 		j.get_to(c);
 		
 	}

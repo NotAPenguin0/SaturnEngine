@@ -37,6 +37,8 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Components/Rigidbody.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Components/Rotator.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Components/SpotLight.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Components/Sound.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Components/SoundListener.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Components/StaticMesh.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Components/Transform.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/CameraZoomControllerSystem.hpp"
@@ -98,6 +100,11 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_impl_opengl3.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_impl_glfw.h"
+
+# User defined scripts and components
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Components/ClickEffect.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/ClickEffectSystem.hpp"
+
     PARENT_SCOPE
 )
 

@@ -28,8 +28,8 @@ void from_json(nlohmann::json const& json, Camera& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No Camera component stored even though it was requested");
 	} else {
-		component.up = (*c)["Up"].get<glm::vec3>();
 		component.front = (*c)["Front"].get<glm::vec3>();
+		component.up = (*c)["Up"].get<glm::vec3>();
 		component.fov = (*c)["Fov"].get<float>();
 		component.viewport_id = (*c)["ViewportId"].get<unsigned int>();
 	}
@@ -43,6 +43,15 @@ void from_json(nlohmann::json const& json, CameraZoomController& component) {
 		component.zoom_speed = (*c)["ZoomSpeed"].get<float>();
 		component.min_zoom = (*c)["MinZoom"].get<float>();
 		component.max_zoom = (*c)["MaxZoom"].get<float>();
+	}
+}
+
+void from_json(nlohmann::json const& json, ClickEffect& component) {
+	auto c = json.find("ClickEffectComponent");
+	if (c == json.end()) {
+		throw std::runtime_error("No ClickEffect component stored even though it was requested");
+	} else {
+		component.sound_effect = (*c)["SoundEffect"].get<Resource<audeo::SoundSource>>();
 	}
 }
 
@@ -101,8 +110,8 @@ void from_json(nlohmann::json const& json, Material& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No Material component stored even though it was requested");
 	} else {
-		component.shader = (*c)["Shader"].get<Resource<Saturn::Shader>>();
 		component.diffuse_map = (*c)["DiffuseMap"].get<Resource<Saturn::Texture>>();
+		component.shader = (*c)["Shader"].get<Resource<Saturn::Shader>>();
 		component.lit = (*c)["Lit"].get<bool>();
 		component.specular_map = (*c)["SpecularMap"].get<Resource<Saturn::Texture>>();
 		component.shininess = (*c)["Shininess"].get<float>();
@@ -144,8 +153,8 @@ void from_json(nlohmann::json const& json, Rigidbody& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No Rigidbody component stored even though it was requested");
 	} else {
-		component.locked_axes = (*c)["LockedAxes"].get<glm::bvec3>();
 		component.mass = (*c)["Mass"].get<float>();
+		component.locked_axes = (*c)["LockedAxes"].get<glm::bvec3>();
 	}
 }
 
@@ -156,6 +165,15 @@ void from_json(nlohmann::json const& json, Rotator& component) {
 	} else {
 		component.speed = (*c)["Speed"].get<float>();
 		component.euler_angles = (*c)["EulerAngles"].get<glm::vec3>();
+	}
+}
+
+void from_json(nlohmann::json const& json, SoundListener& component) {
+	auto c = json.find("SoundListenerComponent");
+	if (c == json.end()) {
+		throw std::runtime_error("No SoundListener component stored even though it was requested");
+	} else {
+		component.position = (*c)["Position"].get<glm::vec3>();
 	}
 }
 
@@ -207,8 +225,8 @@ void to_json(nlohmann::json& json, BoxCollider const& component) {
 void to_json(nlohmann::json& json, Camera const& component) {
 	json["CameraComponent"] = nlohmann::json::object();
 	// clang-format off
-	json["CameraComponent"]["Up"] = component.up;
 	json["CameraComponent"]["Front"] = component.front;
+	json["CameraComponent"]["Up"] = component.up;
 	json["CameraComponent"]["Fov"] = component.fov;
 	json["CameraComponent"]["ViewportId"] = component.viewport_id;
 	// clang-format on
@@ -220,6 +238,13 @@ void to_json(nlohmann::json& json, CameraZoomController const& component) {
 	json["CameraZoomControllerComponent"]["ZoomSpeed"] = component.zoom_speed;
 	json["CameraZoomControllerComponent"]["MinZoom"] = component.min_zoom;
 	json["CameraZoomControllerComponent"]["MaxZoom"] = component.max_zoom;
+	// clang-format on
+}
+
+void to_json(nlohmann::json& json, ClickEffect const& component) {
+	json["ClickEffectComponent"] = nlohmann::json::object();
+	// clang-format off
+	json["ClickEffectComponent"]["SoundEffect"] = component.sound_effect;
 	// clang-format on
 }
 
@@ -266,8 +291,8 @@ void to_json(nlohmann::json& json, FreeLookController const& component) {
 void to_json(nlohmann::json& json, Material const& component) {
 	json["MaterialComponent"] = nlohmann::json::object();
 	// clang-format off
-	json["MaterialComponent"]["Shader"] = component.shader;
 	json["MaterialComponent"]["DiffuseMap"] = component.diffuse_map;
+	json["MaterialComponent"]["Shader"] = component.shader;
 	json["MaterialComponent"]["Lit"] = component.lit;
 	json["MaterialComponent"]["SpecularMap"] = component.specular_map;
 	json["MaterialComponent"]["Shininess"] = component.shininess;
@@ -301,8 +326,8 @@ void to_json(nlohmann::json& json, PointLight const& component) {
 void to_json(nlohmann::json& json, Rigidbody const& component) {
 	json["RigidbodyComponent"] = nlohmann::json::object();
 	// clang-format off
-	json["RigidbodyComponent"]["LockedAxes"] = component.locked_axes;
 	json["RigidbodyComponent"]["Mass"] = component.mass;
+	json["RigidbodyComponent"]["LockedAxes"] = component.locked_axes;
 	// clang-format on
 }
 
@@ -311,6 +336,13 @@ void to_json(nlohmann::json& json, Rotator const& component) {
 	// clang-format off
 	json["RotatorComponent"]["Speed"] = component.speed;
 	json["RotatorComponent"]["EulerAngles"] = component.euler_angles;
+	// clang-format on
+}
+
+void to_json(nlohmann::json& json, SoundListener const& component) {
+	json["SoundListenerComponent"] = nlohmann::json::object();
+	// clang-format off
+	json["SoundListenerComponent"]["Position"] = component.position;
 	// clang-format on
 }
 

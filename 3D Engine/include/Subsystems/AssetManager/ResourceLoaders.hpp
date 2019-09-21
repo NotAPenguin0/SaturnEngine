@@ -8,6 +8,8 @@
 #include "Subsystems/Renderer/Shader.hpp"
 #include "Subsystems/Renderer/Texture.hpp"
 
+#include <audeo/audeo.hpp>
+
 namespace Saturn {
 
 template<typename R>
@@ -34,6 +36,12 @@ template<>
 class ResourceLoader<Texture> {
 public:
     static std::unique_ptr<Texture> load(std::string const& path);
+};
+
+template<>
+class ResourceLoader<audeo::SoundSource> {
+public:
+	static std::unique_ptr<audeo::SoundSource> load(std::string const& path);
 };
 
 } // namespace Saturn
