@@ -107,6 +107,9 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Components/ClickEffect.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/ClickEffectSystem.hpp"
 
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Components/MusicController.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/MusicSystem.hpp"
+
     PARENT_SCOPE
 )
 

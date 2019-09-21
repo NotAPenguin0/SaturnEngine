@@ -44,6 +44,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.hide_in_editor = false;
 		info.editor_only = false;
 		info.fields["sound_effect"] = "Resource<audeo::SoundSource>";
+		info.fields["max_distance"] = "float";
 		data.push_back(info);
 	}
 	{
@@ -116,6 +117,17 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.fields["lit"] = "bool";
 		info.fields["specular_map"] = "Resource<Saturn::Texture>";
 		info.fields["shininess"] = "float";
+		data.push_back(info);
+	}
+	{
+		ComponentInfo info;
+		info.name = "MusicController ";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
+		info.fields["music"] = "Resource<audeo::SoundSource>";
+		info.fields["loop"] = "bool";
+		info.fields["fade_in_ms"] = "float";
 		data.push_back(info);
 	}
 	{
@@ -202,8 +214,8 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
-		info.fields["position"] = "glm::vec3";
 		info.fields["forward"] = "glm::vec3";
+		info.fields["position"] = "glm::vec3";
 		data.push_back(info);
 	}
 	{

@@ -39,6 +39,7 @@ public:
     ~Scene();
 
     void on_start();
+	void on_exit();
     void update_systems(SystemUpdateMode mode);
 
     SceneObject& create_object(SceneObject* parent = nullptr);

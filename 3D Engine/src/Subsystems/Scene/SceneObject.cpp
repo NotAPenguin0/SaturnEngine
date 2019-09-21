@@ -128,6 +128,13 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
 		j.get_to(c);
 		
 	}
+	// Deserialization for MusicController component
+	if (auto const& component = j.find("MusicControllerComponent"); component != j.end()) {
+		auto& c = obj.get_scene()->get_ecs().get_with_id<MusicController>(
+			obj.add_component<MusicController>());
+		j.get_to(c);
+		
+	}
 	// Deserialization for Name component
 	if (auto const& component = j.find("NameComponent"); component != j.end()) {
 		auto& c = obj.get_scene()->get_ecs().get_with_id<Name>(

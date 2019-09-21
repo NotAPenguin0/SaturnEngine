@@ -1,5 +1,6 @@
 {
     "ClickEffectComponent": {
+        "MaxDistance": 20.0,
         "SoundEffect": {
             "Resource": "resources/audio/effects/heartbeat.sfx"
         }

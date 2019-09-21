@@ -23,6 +23,7 @@ public:
     virtual void on_start(Scene& scene);
     virtual void on_update(Scene& scene) = 0;
     virtual void on_late_update(Scene& scene);
+	virtual void on_exit(Scene& scene) {}
 
     virtual inline bool run_in_editor() const { return false; }
     virtual inline bool run_in_editor_only() const { return false; }

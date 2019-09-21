@@ -117,10 +117,11 @@ void Application::run() {
     scene.ecs.register_system<Systems::RotatorSystem>();
     scene.ecs.register_system<Systems::FlashlightSystem>();
     scene.ecs.register_system<Systems::ClickEffectSystem>();
-	scene.ecs.register_system<Systems::FPSSoundListenerSystem>();
+    scene.ecs.register_system<Systems::FPSSoundListenerSystem>();
     scene.ecs.register_system<Systems::SoundSystem>();
+    scene.ecs.register_system<Systems::MusicSystem>();
 #ifdef WITH_EDITOR
-        scene.ecs.register_system<Systems::EditorCameraSystem>();
+    scene.ecs.register_system<Systems::EditorCameraSystem>();
 #endif
 
 #ifdef WITH_EDITOR
@@ -128,7 +129,9 @@ void Application::run() {
 #endif
 
     scene.deserialize_from_file("resources/scene1/scene.dat");
+#ifndef WITH_EDITOR
     scene.on_start();
+#endif
     while (!glfwWindowShouldClose(window_handle)) {
         glfwPollEvents();
         Time::update();
@@ -155,6 +158,7 @@ void Application::run() {
 #endif
         glfwSwapBuffers(window_handle);
     }
+	scene.on_exit();
 }
 
 void Application::quit() {

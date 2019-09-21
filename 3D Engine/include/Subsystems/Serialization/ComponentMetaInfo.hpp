@@ -127,7 +127,9 @@ public:
 	}
     static ComponentFieldPtr get_component_field(Components::ClickEffect& comp,
                                                  std::string_view field_name) {
-		
+		if (field_name == "max_distance") {
+			return ComponentFieldPtr(&comp.max_distance);
+		}
 		
 		// return nullptr if the field was not found
 		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
@@ -209,6 +211,18 @@ public:
 		// return nullptr if the field was not found
 		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
 	}
+    static ComponentFieldPtr get_component_field(Components::MusicController& comp,
+                                                 std::string_view field_name) {
+		if (field_name == "loop") {
+			return ComponentFieldPtr(&comp.loop);
+		}
+		if (field_name == "fade_in_ms") {
+			return ComponentFieldPtr(&comp.fade_in_ms);
+		}
+		
+		// return nullptr if the field was not found
+		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
+	}
     static ComponentFieldPtr get_component_field(Components::Name& comp,
                                                  std::string_view field_name) {
 		if (field_name == "name") {
@@ -278,11 +292,11 @@ public:
 	}
     static ComponentFieldPtr get_component_field(Components::SoundListener& comp,
                                                  std::string_view field_name) {
-		if (field_name == "position") {
-			return ComponentFieldPtr(&comp.position);
-		}
 		if (field_name == "forward") {
 			return ComponentFieldPtr(&comp.forward);
+		}
+		if (field_name == "position") {
+			return ComponentFieldPtr(&comp.position);
 		}
 		
 		// return nullptr if the field was not found

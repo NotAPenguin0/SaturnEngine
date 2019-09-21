@@ -121,6 +121,7 @@ void Editor::render(Scene& scene) {
         exit_playmode_binding.callback = [this, &scene]() {
             if (playmode_active) {
                 playmode_active = false;
+				scene.on_exit();
                 scene.deserialize_from_file(
                     "resources/playmode_temp/scene.dat");
                 on_scene_reload(scene);
@@ -357,6 +358,7 @@ void Editor::on_playmode_enter(Scene& scene) {
     }
     scene.destroy_object(editor_camera);
     editor_camera = nullptr;
+	scene.on_start();
 }
 
 void Editor::frame_end() {

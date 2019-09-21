@@ -52,6 +52,7 @@ void from_json(nlohmann::json const& json, ClickEffect& component) {
 		throw std::runtime_error("No ClickEffect component stored even though it was requested");
 	} else {
 		component.sound_effect = (*c)["SoundEffect"].get<Resource<audeo::SoundSource>>();
+		component.max_distance = (*c)["MaxDistance"].get<float>();
 	}
 }
 
@@ -118,6 +119,17 @@ void from_json(nlohmann::json const& json, Material& component) {
 	}
 }
 
+void from_json(nlohmann::json const& json, MusicController& component) {
+	auto c = json.find("MusicControllerComponent");
+	if (c == json.end()) {
+		throw std::runtime_error("No MusicController component stored even though it was requested");
+	} else {
+		component.music = (*c)["Music"].get<Resource<audeo::SoundSource>>();
+		component.loop = (*c)["Loop"].get<bool>();
+		component.fade_in_ms = (*c)["FadeInMs"].get<float>();
+	}
+}
+
 void from_json(nlohmann::json const& json, Name& component) {
 	auto c = json.find("NameComponent");
 	if (c == json.end()) {
@@ -173,8 +185,8 @@ void from_json(nlohmann::json const& json, SoundListener& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No SoundListener component stored even though it was requested");
 	} else {
-		component.position = (*c)["Position"].get<glm::vec3>();
 		component.forward = (*c)["Forward"].get<glm::vec3>();
+		component.position = (*c)["Position"].get<glm::vec3>();
 	}
 }
 
@@ -246,6 +258,7 @@ void to_json(nlohmann::json& json, ClickEffect const& component) {
 	json["ClickEffectComponent"] = nlohmann::json::object();
 	// clang-format off
 	json["ClickEffectComponent"]["SoundEffect"] = component.sound_effect;
+	json["ClickEffectComponent"]["MaxDistance"] = component.max_distance;
 	// clang-format on
 }
 
@@ -300,6 +313,15 @@ void to_json(nlohmann::json& json, Material const& component) {
 	// clang-format on
 }
 
+void to_json(nlohmann::json& json, MusicController const& component) {
+	json["MusicControllerComponent"] = nlohmann::json::object();
+	// clang-format off
+	json["MusicControllerComponent"]["Music"] = component.music;
+	json["MusicControllerComponent"]["Loop"] = component.loop;
+	json["MusicControllerComponent"]["FadeInMs"] = component.fade_in_ms;
+	// clang-format on
+}
+
 void to_json(nlohmann::json& json, Name const& component) {
 	json["NameComponent"] = nlohmann::json::object();
 	// clang-format off
@@ -343,8 +365,8 @@ void to_json(nlohmann::json& json, Rotator const& component) {
 void to_json(nlohmann::json& json, SoundListener const& component) {
 	json["SoundListenerComponent"] = nlohmann::json::object();
 	// clang-format off
-	json["SoundListenerComponent"]["Position"] = component.position;
 	json["SoundListenerComponent"]["Forward"] = component.forward;
+	json["SoundListenerComponent"]["Position"] = component.position;
 	// clang-format on
 }
 

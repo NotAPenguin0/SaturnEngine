@@ -12,6 +12,7 @@ namespace Saturn::Components {
 
 struct COMPONENT DEFAULT_SERIALIZE ClickEffect : ComponentBase {
     Resource<audeo::SoundSource> sound_effect;
+	float max_distance = 10.0f;
 };
 
 } // namespace Saturn::Components

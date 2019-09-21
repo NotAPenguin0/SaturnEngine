@@ -29,6 +29,10 @@ public:
         for (auto& system : systems) { system->on_start(*scene); }
     }
 
+    void on_exit() {
+        for (auto& system : systems) { system->on_exit(*scene);}
+    }
+
     template<typename S>
     void register_system() {
         systems.push_back(std::make_unique<S>());

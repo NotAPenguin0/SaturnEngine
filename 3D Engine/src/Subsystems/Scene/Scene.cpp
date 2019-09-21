@@ -15,6 +15,7 @@ Scene::~Scene() { clear_scene(); }
 
 void Scene::update_systems(SystemUpdateMode mode) { ecs.update_systems(mode); }
 void Scene::on_start() { ecs.on_start(); }
+void Scene::on_exit() {ecs.on_exit();}
 
 Application* Scene::get_app() { return app; }
 

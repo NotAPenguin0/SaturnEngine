@@ -15,6 +15,7 @@
 ::Saturn::Components::FPSCameraController, \
 ::Saturn::Components::FreeLookController, \
 ::Saturn::Components::Material, \
+::Saturn::Components::MusicController, \
 ::Saturn::Components::Name, \
 ::Saturn::Components::OutlineRenderer, \
 ::Saturn::Components::ParticleEmitter, \

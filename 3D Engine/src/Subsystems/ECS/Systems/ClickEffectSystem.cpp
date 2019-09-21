@@ -29,8 +29,8 @@ void ClickEffectSystem::on_update(Scene& scene) {
         }
 
         // Only if the left mouse button was just pressed
-        if (RawInput::get_key(Key::C).down &&
-            RawInput::get_key(Key::C).has_changed) {
+        if (RawInput::get_mouse_button(MouseButton::Left).down &&
+            RawInput::get_mouse_button(MouseButton::Left).has_changed) {
 
             // If it already has a sound component, override it with the new one
             if (eff.entity->has_component<Sound>()) {
@@ -38,7 +38,7 @@ void ClickEffectSystem::on_update(Scene& scene) {
             }
 
             audeo::Sound sound = audeo::play_sound(eff.sound_effect.get());
-            audeo::set_distance_range_max(sound, 50.0f);
+            audeo::set_distance_range_max(sound, eff.max_distance);
 
             // Add the sound to the entity so we can refer to it later.
             auto& snd_comp = scene.get_ecs().get_with_id<Sound>(

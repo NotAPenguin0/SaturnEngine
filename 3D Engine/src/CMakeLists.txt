@@ -66,5 +66,7 @@ set(ENGINE_SOURCE_FILES
 # User defined scripts and systems
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/ClickEffectSystem.cpp"
 
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/MusicSystem.cpp"
+
     PARENT_SCOPE
 )

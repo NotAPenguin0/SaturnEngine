@@ -283,7 +283,7 @@ EntityTree::tree_t::iterator EntityTree::show_self_and_children(
     }
 
     if ((*entity)->has_component<EditorCameraController>()) {
-        return entity + 1;
+        return entity;
     }
 
     auto cur = entity;

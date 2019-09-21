@@ -1,6 +1,7 @@
 #ifndef SATURN_SYSTEMS_HPP_
 #define SATURN_SYSTEMS_HPP_
 
+#include "Subsystems/ECS/Systems/MusicSystem.hpp"
 #include "Subsystems/ECS/Systems/CameraZoomControllerSystem.hpp"
 #include "Subsystems/ECS/Systems/ClickEffectSystem.hpp"
 #include "Subsystems/ECS/Systems/EditorCameraSystem.hpp"
