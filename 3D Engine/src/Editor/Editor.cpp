@@ -128,8 +128,6 @@ void Editor::render(Scene& scene) {
             }
         };
         ActionBindingManager::add_action(exit_playmode_binding);
-        // Setup editor camera
-        create_editor_camera(scene);
         once = false;
     }
     // #TODO: camera controls in editor

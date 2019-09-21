@@ -47,7 +47,7 @@ private:
     void save_scene(Scene& scene);
 
     Application* app;
-    SceneObject* editor_camera;
+    SceneObject* editor_camera = nullptr;
     std::size_t scene_view_viewport_id = 0;
 
     std::string cur_open_scene;

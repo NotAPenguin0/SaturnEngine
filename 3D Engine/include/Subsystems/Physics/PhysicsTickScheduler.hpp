@@ -22,7 +22,7 @@ public:
 
 private:
 	Physics* physics = nullptr;
-    float timer;
+    float timer = 0;
 };
 
 } // namespace Saturn

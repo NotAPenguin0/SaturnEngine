@@ -10,6 +10,8 @@
 
 #include "Subsystems/Renderer/OpenGL.hpp"
 
+#include "Editor/EditorLog.hpp"
+
 namespace Saturn {
 
 namespace Systems {

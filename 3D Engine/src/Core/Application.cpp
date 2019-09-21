@@ -17,6 +17,8 @@
 #include <chrono>
 #include <thread>
 
+#include "Editor/EditorLog.hpp"
+
 #ifdef WITH_EDITOR
 #    include "Editor/Editor.hpp"
 #endif
@@ -56,7 +58,11 @@ Application::Application(CreateInfo create_info) :
 
     audeo::InitInfo info;
     info.effect_channels = 32;
-    audeo::init(info);
+    if (audeo::init(info)) {
+        log::log("Initialized audeo");
+    } else {
+        log::log("Failed to initialize audeo", Editor::DebugConsole::Error);
+    }
 }
 
 Application::Application(Application&& other) :
@@ -83,7 +89,7 @@ Application::~Application() {
         glfwSetWindowShouldClose(window_handle, true);
     }
 
-	audeo::quit();
+    audeo::quit();
 }
 
 void Application::initialize_keybinds() {}

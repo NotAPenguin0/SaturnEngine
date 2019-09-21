@@ -33,7 +33,7 @@ void PhysicsTickScheduler::set_physics_system(Physics& physics_system) {
 }
 
 void PhysicsTickScheduler::update(SystemUpdateMode mode, Scene& scene) {
-	// Only update physics system when not in editor mode
+    // Only update physics system when not in editor mode
     if (mode != SystemUpdateMode::Editor) {
         timer += Time::deltaTime;
 
@@ -42,6 +42,10 @@ void PhysicsTickScheduler::update(SystemUpdateMode mode, Scene& scene) {
             physics->tick(scene);
             timer -= timestep;
         }
+    } else {
+        // If we're in editor mode, reset the timer so that it will always be
+        // correct when entering play mode
+        timer = 0;
     }
 }
 
