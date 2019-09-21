@@ -124,6 +124,7 @@ void Editor::render(Scene& scene) {
                 scene.deserialize_from_file(
                     "resources/playmode_temp/scene.dat");
                 on_scene_reload(scene);
+				// Disable mouse capture in editor
                 Input::set_mouse_capture(false);
             }
         };
