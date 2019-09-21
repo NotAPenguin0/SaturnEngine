@@ -174,6 +174,7 @@ void from_json(nlohmann::json const& json, SoundListener& component) {
 		throw std::runtime_error("No SoundListener component stored even though it was requested");
 	} else {
 		component.position = (*c)["Position"].get<glm::vec3>();
+		component.forward = (*c)["Forward"].get<glm::vec3>();
 	}
 }
 
@@ -343,6 +344,7 @@ void to_json(nlohmann::json& json, SoundListener const& component) {
 	json["SoundListenerComponent"] = nlohmann::json::object();
 	// clang-format off
 	json["SoundListenerComponent"]["Position"] = component.position;
+	json["SoundListenerComponent"]["Forward"] = component.forward;
 	// clang-format on
 }
 

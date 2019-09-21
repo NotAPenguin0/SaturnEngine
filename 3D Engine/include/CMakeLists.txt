@@ -49,6 +49,8 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/ParticleSystem.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/RotatorSystem.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/SystemBase.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/SoundSystem.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/FPSSoundListenerSystem.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Input/Input.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Logging/LogSystem.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Logging/rang.hpp"

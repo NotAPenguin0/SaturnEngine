@@ -19,6 +19,8 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/FreeLookControllerSystem.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/RotatorSystem.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/ParticleSystem.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/SoundSystem.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/Systems/FPSSoundListenerSystem.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Logging/LogSystem.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Input/Input.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Math/CoordConversions.cpp"

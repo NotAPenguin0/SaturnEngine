@@ -203,6 +203,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.hide_in_editor = false;
 		info.editor_only = false;
 		info.fields["position"] = "glm::vec3";
+		info.fields["forward"] = "glm::vec3";
 		data.push_back(info);
 	}
 	{

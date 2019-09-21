@@ -10,6 +10,8 @@ namespace Saturn::Components {
 struct COMPONENT DEFAULT_SERIALIZE SoundListener : ComponentBase {
     // position (relative to the entity's position)
     glm::vec3 position;
+	// forward vector
+	glm::vec3 forward;
 };
 
 } // namespace Saturn::Components

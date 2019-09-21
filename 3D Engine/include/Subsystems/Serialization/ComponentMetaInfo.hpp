@@ -281,6 +281,9 @@ public:
 		if (field_name == "position") {
 			return ComponentFieldPtr(&comp.position);
 		}
+		if (field_name == "forward") {
+			return ComponentFieldPtr(&comp.forward);
+		}
 		
 		// return nullptr if the field was not found
 		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
