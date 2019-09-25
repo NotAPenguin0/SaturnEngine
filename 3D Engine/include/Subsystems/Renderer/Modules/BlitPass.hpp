@@ -17,6 +17,8 @@ public:
     void init() override;
     void process(Scene& scene, Framebuffer& source) override;
 
+	~BlitPass() = default;
+
 private:
     VertexArray screen_vao;
     Resource<Shader> blit_shader;

@@ -17,8 +17,6 @@ public:
     virtual void init() {}
     // Called every frame, in the correct order
     virtual void process(Scene& scene, Viewport& viewport, Framebuffer& target) = 0;
-    // Called at the end of each frame, again in the rendering order
-    virtual void end_frame(Scene& scene, Framebuffer& target) {}
 
     virtual ~RenderModule() = default;
 };

@@ -13,6 +13,7 @@
 // #Temp, testing
 #include "Subsystems/Renderer/Modules/BlitPass.hpp"
 #include "Subsystems/Renderer/Modules/DepthMapPass.hpp"
+#include "Subsystems/Renderer/Modules/ParticleModule.hpp"
 #include "Subsystems/Renderer/Modules/TransferModule.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -42,8 +43,6 @@ void Renderer::load_default_shaders() {
 
     no_shader_error =
         AssetManager<Shader>::get_resource("resources/shaders/default.sh");
-    particle_shader =
-        AssetManager<Shader>::get_resource("resources/shaders/particle.sh");
     collider_shader =
         AssetManager<Shader>::get_resource("resources/shaders/collider.sh");
     axis_shader =
@@ -63,6 +62,7 @@ Renderer::Renderer(CreateInfo create_info) :
     // #Temp, #RefactorTesting
     add_pre_render_stage(std::make_unique<RenderModules::DepthMapPass>());
     add_render_module(std::make_unique<RenderModules::TransferModule>());
+    add_render_module(std::make_unique<RenderModules::ParticleModule>());
     add_post_render_stage(std::make_unique<RenderModules::BlitPass>());
 
     box_collider_mesh =
@@ -229,7 +229,6 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
     auto cam_id = vp.get_camera();
     auto& cam = scene.ecs.get_with_id<Components::Camera>(cam_id);
 
-    render_particles(scene);
     debug_render_colliders(scene);
     render_outlines(scene);
     render_axes();
@@ -276,47 +275,6 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
         DepthMap::unbind_texture();
     }
 }
-
-void Renderer::render_particles(Scene& scene) {
-    using namespace Components;
-    Shader::bind(particle_shader.get());
-
-    Resource<Texture> default_texture =
-        AssetManager<Texture>::get_resource("resources/textures/white.tex");
-
-    glDisable(GL_CULL_FACE);
-    for (auto [emitter] : scene.ecs.select<ParticleEmitter>()) {
-        if (emitter.additive) { glBlendFunc(GL_SRC_ALPHA, GL_ONE); }
-        // Bind VAO
-        VertexArray::bind(emitter.particle_vao.get());
-
-        //            particle_shader->set_vec3(Shader::Uniforms::Position,
-        //                                      particle.position);
-        //            particle_shader->set_vec3(
-        //                Shader::Uniforms::Scale,
-        //                glm::vec3(particle.size.x, particle.size.y, 0.0f));
-        auto& texture = emitter.texture.is_loaded() ? emitter.texture.get()
-                                                    : default_texture.get();
-        //            particle_shader->set_vec4(Shader::Uniforms::Color,
-        //            particle.color);
-        Texture::bind(texture);
-        particle_shader->set_int(Shader::Uniforms::Texture,
-                                 texture.unit() - GL_TEXTURE0);
-
-        glDrawElementsInstanced(
-            GL_TRIANGLES, emitter.particle_vao->index_size(), GL_UNSIGNED_INT,
-            nullptr, emitter.particles.size());
-
-        Texture::unbind(texture);
-
-        if (emitter.additive) {
-            // reset blend function to old one
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        }
-    }
-    glEnable(GL_CULL_FACE);
-}
-
 
 Viewport& Renderer::get_viewport(std::size_t index) {
     if (index >= viewports.size()) {

@@ -14,6 +14,8 @@ public:
     void
     process(Scene& scene, Viewport& viewport, Framebuffer& target) override;
 
+	~TransferModule() = default;
+
 private:
     void transfer_camera_data(Scene& scene, Viewport& vp);
     void transfer_lighting_data(Scene& scene);

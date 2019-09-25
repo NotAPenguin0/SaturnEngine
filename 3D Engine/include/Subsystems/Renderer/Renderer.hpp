@@ -73,7 +73,6 @@ private:
 
     // Rendering functions
     void render_viewport(Scene& scene, Viewport& vp);
-    void render_particles(Scene& scene);
     void debug_render_colliders(Scene& scene);
     void render_axes();
 
@@ -86,8 +85,6 @@ private:
     WindowDim screen_size;
     Framebuffer framebuf;
     Resource<Shader> no_shader_error;
-    // #MaybeTODO: Move this to ParticleEmitter?
-    Resource<Shader> particle_shader;
     Resource<Shader> collider_shader;
     Resource<Shader> axis_shader;
     Resource<Shader> outline_shader;
