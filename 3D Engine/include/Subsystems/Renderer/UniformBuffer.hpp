@@ -1,8 +1,6 @@
 #ifndef SATURN_UNIFORM_BUFFER_HPP_
 #define SATURN_UNIFORM_BUFFER_HPP_
 
-#include "Utility/bind_guard.hpp"
-
 #include <glm/glm.hpp>
 #include <cstddef>
 

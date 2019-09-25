@@ -8,7 +8,6 @@
 #include "Subsystems/Logging/LogSystem.hpp"
 #include "Subsystems/Renderer/OpenGL.hpp"
 
-#include "Utility/bind_guard.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 

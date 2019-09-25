@@ -9,7 +9,6 @@
 #include "Subsystems/Scene/Scene.hpp"
 #include "Utility/Exceptions.hpp"
 #include "Utility/Utility.hpp"
-#include "Utility/bind_guard.hpp"
 
 // #Temp, testing
 #include "Subsystems/Renderer/Modules/BlitPass.hpp"
@@ -153,7 +152,7 @@ void Renderer::debug_render_colliders(Scene& scene) {
         send_model_matrix(shader, copy);
         Shader::bind(shader);
         auto& vtx_array = box_collider_mesh->get_vertices();
-        bind_guard<VertexArray> vao(vtx_array);
+        VertexArray::bind(vtx_array);
         glDrawElements(GL_LINES, vtx_array.index_size(), GL_UNSIGNED_INT,
                        nullptr);
         Shader::unbind();
@@ -174,7 +173,7 @@ void Renderer::render_outlines(Scene& scene) {
         Shader::bind(shader);
         shader.set_vec3(Shader::Uniforms::Color, outline.color);
         auto& vtx_array = mesh.mesh->get_vertices();
-        bind_guard<VertexArray> vao(vtx_array);
+        VertexArray::bind(vtx_array);
         glEnable(GL_LINE_SMOOTH);
         glDrawElements(GL_LINES, vtx_array.index_size(), GL_UNSIGNED_INT,
                        nullptr);
@@ -289,7 +288,7 @@ void Renderer::render_particles(Scene& scene) {
     for (auto [emitter] : scene.ecs.select<ParticleEmitter>()) {
         if (emitter.additive) { glBlendFunc(GL_SRC_ALPHA, GL_ONE); }
         // Bind VAO
-        bind_guard<VertexArray> vao_guard(emitter.particle_vao.get());
+        VertexArray::bind(emitter.particle_vao.get());
 
         //            particle_shader->set_vec3(Shader::Uniforms::Position,
         //                                      particle.position);

@@ -65,7 +65,6 @@ enum class TextureFormat {
     SRGBAlpha = GL_SRGB_ALPHA
 };
 
-/*Do NOT use the bind_guard for the texture class.*/
 class Texture {
 public:
     struct ParameterInfo {

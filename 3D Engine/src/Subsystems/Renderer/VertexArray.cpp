@@ -2,7 +2,6 @@
 
 #include "Subsystems/Logging/LogSystem.hpp"
 #include "Subsystems/Renderer/OpenGL.hpp"
-#include "Utility/bind_guard.hpp"
 
 #include <cassert>
 #include <numeric>
@@ -88,9 +87,9 @@ void VertexArray::do_create(CreateInfo const& create_info) {
 
     indices_size = indices.size();
 
-    bind_guard vao_guard(vao);
-    bind_guard vbo_guard(*buffers[0]);
-    bind_guard ebo_guard(ebo);
+    Vao::bind(vao);
+    Vbo<BufferTarget::ArrayBuffer>::bind(*buffers[0]);
+    Vbo<BufferTarget::ElementArrayBuffer>::bind(ebo);
 
     // Fill VBO
     glBufferData(GL_ARRAY_BUFFER, create_info.vertices.size() * sizeof(float),
@@ -127,8 +126,8 @@ std::size_t VertexArray::add_buffer(BufferInfo const& info) {
         case BufferMode::DataStream: mode = GL_STREAM_DRAW; break;
     }
 
-    bind_guard vao_guard(vao);
-    bind_guard vbo_guard(*buffers.back());
+    Vao::bind(vao);
+    Vbo<BufferTarget::ArrayBuffer>::bind(*buffers.back());
 
     glBufferData(GL_ARRAY_BUFFER, info.data.size() * sizeof(float),
                  info.data.data(), mode);
@@ -141,7 +140,7 @@ std::size_t VertexArray::add_buffer(BufferInfo const& info) {
         glVertexAttribPointer(attr.location_in_shader, attr.num_components,
                               GL_FLOAT, GL_FALSE, vertex_size_in_bytes,
                               (void*)(offset * sizeof(float)));
-		glVertexAttribDivisor(attr.location_in_shader, attr.divisor);
+        glVertexAttribDivisor(attr.location_in_shader, attr.divisor);
         glEnableVertexAttribArray(attr.location_in_shader);
         offset += attr.num_components;
     }
@@ -150,12 +149,12 @@ std::size_t VertexArray::add_buffer(BufferInfo const& info) {
 }
 
 void VertexArray::update_buffer_data(std::size_t buffer_index,
-	float* data,
-	std::size_t count) {
-	auto& buf = *buffers[buffer_index];
-    bind_guard vao_guard(vao);
-	bind_guard vbo_guard(buf);
-	glBufferData(GL_ARRAY_BUFFER, count * sizeof(float), data, GL_STREAM_DRAW);
+                                     float* data,
+                                     std::size_t count) {
+    auto& buf = *buffers[buffer_index];
+    Vao::bind(vao);
+    Vbo<BufferTarget::ArrayBuffer>::bind(buf);
+    glBufferData(GL_ARRAY_BUFFER, count * sizeof(float), data, GL_STREAM_DRAW);
 }
 
 } // namespace Saturn
