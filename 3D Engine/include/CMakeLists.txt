@@ -82,6 +82,8 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/UniformBuffer.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/VertexArray.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Viewport.hpp"
+    #Render Modules
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/RenderStage.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Scene/Scene.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Scene/SceneObject.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Serialization/CodeGenDefinitions.hpp"
