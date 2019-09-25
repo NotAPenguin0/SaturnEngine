@@ -189,9 +189,6 @@ void Renderer::send_lighting_data(Scene& scene) {
                                     sizeof(glm::vec3));
     }
 
-    // TODO: Same for DirectionalLights and SpotLights, but with previous data
-    // size added to offset
-
     constexpr std::size_t PointLightBaseOffset =
         (sizeof(int) + sizeof(int) + sizeof(int) +
          LightSizesBytes::PaddingAfterSizeVars +
@@ -269,12 +266,16 @@ void Renderer::send_material_data(Shader& shader,
     bind_guard<Shader> guard(shader);
 
     if (material.lit) {
-        Texture::bind(material.diffuse_map.get());
-        shader.set_int(Shader::Uniforms::Material::DiffuseMap,
-                       material.diffuse_map->unit() - GL_TEXTURE0);
-        Texture::bind(material.specular_map.get());
-        shader.set_int(Shader::Uniforms::Material::SpecularMap,
-                       material.specular_map->unit() - GL_TEXTURE0);
+        if (material.diffuse_map.is_loaded()) {
+            Texture::bind(material.diffuse_map.get());
+            shader.set_int(Shader::Uniforms::Material::DiffuseMap,
+                           material.diffuse_map->unit() - GL_TEXTURE0);
+        }
+        if (material.specular_map.is_loaded()) {
+            Texture::bind(material.specular_map.get());
+            shader.set_int(Shader::Uniforms::Material::SpecularMap,
+                           material.specular_map->unit() - GL_TEXTURE0);
+        }
         shader.set_float(Shader::Uniforms::Material::Shininess,
                          material.shininess);
     }
@@ -282,8 +283,12 @@ void Renderer::send_material_data(Shader& shader,
 
 void Renderer::unbind_textures(Components::Material& material) {
     if (material.lit) {
-        Texture::unbind(material.diffuse_map.get());
-        Texture::unbind(material.specular_map.get());
+        if (material.diffuse_map.is_loaded()) {
+            Texture::unbind(material.diffuse_map.get());
+        }
+        if (material.specular_map.is_loaded()) {
+            Texture::unbind(material.specular_map.get());
+        }
     }
 }
 
@@ -327,6 +332,9 @@ void Renderer::render_to_depthmap(Scene& scene) {
     auto lightspace = get_lightspace_matrix(scene);
 
     for (auto [transform, mesh] : scene.ecs.select<Transform, StaticMesh>()) {
+
+        if (!mesh.mesh.is_loaded()) { continue; }
+
         // Send model matrix
         send_model_matrix(depth_shader.get(), transform);
 
@@ -372,18 +380,22 @@ void Renderer::debug_render_colliders(Scene& scene) {
 void Renderer::render_outlines(Scene& scene) {
     using namespace Components;
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	for (auto[rel_trans, mesh, outline] :
-		scene.ecs.select<Transform, StaticMesh, OutlineRenderer>()) {
+    for (auto [rel_trans, mesh, outline] :
+         scene.ecs.select<Transform, StaticMesh, OutlineRenderer>()) {
+
+		if (!mesh.mesh.is_loaded()) {continue;}
+
         auto& shader = outline_shader.get();
-		send_model_matrix(shader, rel_trans);
+        send_model_matrix(shader, rel_trans);
         bind_guard<Shader> guard(shader);
-		shader.set_vec3(Shader::Uniforms::Color, outline.color);
-		auto& vtx_array = mesh.mesh->get_vertices();
+        shader.set_vec3(Shader::Uniforms::Color, outline.color);
+        auto& vtx_array = mesh.mesh->get_vertices();
         bind_guard<VertexArray> vao(vtx_array);
-		glEnable(GL_LINE_SMOOTH);
-		glDrawElements(GL_LINES, vtx_array.index_size(), GL_UNSIGNED_INT, nullptr);
-		glDisable(GL_LINE_SMOOTH);
-	}
+        glEnable(GL_LINE_SMOOTH);
+        glDrawElements(GL_LINES, vtx_array.index_size(), GL_UNSIGNED_INT,
+                       nullptr);
+        glDisable(GL_LINE_SMOOTH);
+    }
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
@@ -435,12 +447,15 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
 
     render_particles(scene);
     debug_render_colliders(scene);
-	render_outlines(scene);
+    render_outlines(scene);
     render_axes();
 
     for (auto [relative_transform, mesh, material] :
          scene.ecs.select<Components::Transform, Components::StaticMesh,
                           Components::Material>()) {
+
+		if (!mesh.mesh.is_loaded()) { continue; }
+
         auto& shader = material.shader.is_loaded() ? material.shader.get()
                                                    : no_shader_error.get();
 

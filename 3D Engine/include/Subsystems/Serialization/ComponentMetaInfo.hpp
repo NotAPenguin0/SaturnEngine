@@ -13,6 +13,11 @@
 #include "Subsystems/ECS/component_index.hpp"
 #include "Utility/Utility.hpp"
 #include "Utility/Color.hpp"
+#include "Subsystems/Renderer/Shader.hpp"
+#include "Subsystems/Renderer/Texture.hpp"
+#include "Subsystems/Renderer/Mesh.hpp"
+
+#include <audeo/SoundSource.hpp>
 
 namespace Saturn {
 
@@ -32,9 +37,11 @@ struct ComponentInfo {
 class ComponentFieldPtr {
 public:
 #define SUPPORTED_COMPONENT_FIELD_TYPES                                        \
-    std::size_t, float, int, std::string, glm::vec3, glm::vec4, bool, glm::bvec3, color3, color4, unsigned int
+    std::size_t, float, int, std::string, glm::vec3, glm::vec4, bool, glm::bvec3, color3, color4, unsigned int, \
+	Resource<Shader>, Resource<Texture>, Resource<Mesh>, Resource<audeo::SoundSource>
 #define SUPPORTED_COMPONENT_FIELD_POINTER_TYPES                                \
-    std::size_t*, float*, int*, std::string*, glm::vec3*, glm::vec4*, bool*, glm::bvec3*, color3*, color4*, unsigned int*
+    std::size_t*, float*, int*, std::string*, glm::vec3*, glm::vec4*, bool*, glm::bvec3*, color3*, color4*, unsigned int*, \
+	Resource<Shader>*, Resource<Texture>*, Resource<Mesh>*, Resource<audeo::SoundSource>*
     using field_variant_t =
         std::variant<SUPPORTED_COMPONENT_FIELD_POINTER_TYPES>;
 
@@ -127,6 +134,9 @@ public:
 	}
     static ComponentFieldPtr get_component_field(Components::ClickEffect& comp,
                                                  std::string_view field_name) {
+		if (field_name == "sound_effect") {
+			return ComponentFieldPtr(&comp.sound_effect);
+		}
 		if (field_name == "max_distance") {
 			return ComponentFieldPtr(&comp.max_distance);
 		}
@@ -201,8 +211,17 @@ public:
 	}
     static ComponentFieldPtr get_component_field(Components::Material& comp,
                                                  std::string_view field_name) {
+		if (field_name == "diffuse_map") {
+			return ComponentFieldPtr(&comp.diffuse_map);
+		}
+		if (field_name == "shader") {
+			return ComponentFieldPtr(&comp.shader);
+		}
 		if (field_name == "lit") {
 			return ComponentFieldPtr(&comp.lit);
+		}
+		if (field_name == "specular_map") {
+			return ComponentFieldPtr(&comp.specular_map);
 		}
 		if (field_name == "shininess") {
 			return ComponentFieldPtr(&comp.shininess);
@@ -213,6 +232,9 @@ public:
 	}
     static ComponentFieldPtr get_component_field(Components::MusicController& comp,
                                                  std::string_view field_name) {
+		if (field_name == "music") {
+			return ComponentFieldPtr(&comp.music);
+		}
 		if (field_name == "loop") {
 			return ComponentFieldPtr(&comp.loop);
 		}
@@ -331,6 +353,9 @@ public:
 	}
     static ComponentFieldPtr get_component_field(Components::StaticMesh& comp,
                                                  std::string_view field_name) {
+		if (field_name == "mesh") {
+			return ComponentFieldPtr(&comp.mesh);
+		}
 		if (field_name == "face_cull") {
 			return ComponentFieldPtr(&comp.face_cull);
 		}

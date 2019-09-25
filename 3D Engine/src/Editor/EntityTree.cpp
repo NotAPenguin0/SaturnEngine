@@ -3,6 +3,9 @@
 #ifdef WITH_EDITOR
 
 #    include "Editor/EditorLog.hpp"
+#    include "Editor/SelectFileDialog.hpp"
+#    include "Subsystems/AssetManager/AssetManager.hpp"
+#    include "Subsystems/AssetManager/Resource.hpp"
 #    include "Subsystems/ECS/ComponentList.hpp"
 #    include "Subsystems/ECS/Components.hpp"
 #    include "Subsystems/Scene/Scene.hpp"
@@ -76,6 +79,22 @@ struct ComponentFieldVisitor {
         ImGui::ColorEdit4((std::string(field_name) + " color").c_str(),
                           &field->x);
     }
+
+    template<typename R>
+    void operator()(Resource<R>* field) {
+        ImGui::Text("%s:", field_name.data());
+        ImGui::SameLine();
+        ImGui::Text("%s", fs::path(field->get_path()).stem().string().c_str());
+        ImGui::SameLine();
+        if (ImGui::SmallButton(("...##" + std::string(field_name)).c_str())) {
+            SelectFileDialog dialog;
+            dialog.show(SelectFileDialog::PickFiles);
+            fs::path result = dialog.get_result();
+            if (result != "") {
+                *field = AssetManager<R>::get_resource(result.string());
+            }
+        }
+    }
 };
 
 template<typename C>
@@ -110,10 +129,6 @@ void display_component(SceneObject* entity) {
         }
 
         for (auto const& [field_name, field_type] : component_meta.fields) {
-            if (field_type.find("Resource") != std::string::npos) {
-                continue; // unsupported for now, this will be added once we
-                          // have an asset browser
-            }
             ComponentFieldPtr field_info =
                 ComponentMeta::get_component_field(comp, field_name);
             // Check if pointer isn't null
@@ -282,9 +297,7 @@ EntityTree::tree_t::iterator EntityTree::show_self_and_children(
             "Unknown entity with ID " + std::to_string((*entity)->get_id());
     }
 
-    if ((*entity)->has_component<EditorCameraController>()) {
-        return entity;
-    }
+    if ((*entity)->has_component<EditorCameraController>()) { return entity; }
 
     auto cur = entity;
 

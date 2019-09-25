@@ -503,7 +503,7 @@ void add_from_json_impl_data(mustache::data& data,
         // Add fields
         for (auto const& [field, type] : component.fields) {
             mustache::data field_data = mustache::data::type::object;
-
+			if (type == "audeo::Sound") continue;
             field_data["FieldName"] = field;
             field_data["FieldType"] = type;
             field_data["FieldNameJson"] = snake_case_to_pascal_case(field);
@@ -637,6 +637,7 @@ generate_components_meta_info(std::vector<ComponentData> const& components) {
         comp_data["ComponentFieldMeta"] = mustache::data::type::list;
         auto& fields_data_list = comp_data["ComponentFieldMeta"];
         for (auto const& [field_name, field_type] : component.fields) {
+			if (field_type == "audeo::Sound") continue;
             mustache::data field_data = mustache::data::type::object;
             field_data["FieldName"] = field_name;
             field_data["FieldType"] = field_type;
@@ -666,13 +667,8 @@ generate_meta_info_header(std::vector<ComponentData> const& components) {
         c_data["Field"] = mustache::data::type::list;
         auto& field_list = c_data["Field"];
         for (auto const& [field_name, field_type] : component.fields) {
+            if (field_type == "audeo::Sound") continue;
             mustache::data f_data = mustache::data::type::object;
-            if (component.name == "Sound") { std::cout << field_type << "\n"; }
-            if (field_type.find("Resource") != std::string::npos ||
-                field_type.find("Sound") != std::string::npos) {
-                // We don't support these right now
-                continue;
-            }
             f_data["FieldName"] = field_name;
             field_list.push_back(f_data);
         }

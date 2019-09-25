@@ -205,7 +205,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.default_serialize = false;
 		info.hide_in_editor = true;
 		info.editor_only = false;
-		info.fields["sound"] = "audeo::Sound";
+		
 		data.push_back(info);
 	}
 	{

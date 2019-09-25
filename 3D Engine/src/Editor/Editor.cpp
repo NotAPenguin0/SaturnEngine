@@ -56,8 +56,6 @@ Editor::Editor(Application& app) : app(&app) {
         "log", [&console](DebugConsole::CommandContext const& context) {
             console.add_entry(fmt::format("{}", join(context.args)));
         });
-    log::log("The component editor does not support Resource<T> types yet",
-             DebugConsole::Warning);
     // Load last opened scene. We find this in
     // resources/engine_cache/last_scene.txt
     std::ifstream last_scene_file("resources/engine_cache/last_scene.txt");
