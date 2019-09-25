@@ -15,6 +15,7 @@
 #include "Subsystems/Renderer/Modules/DepthMapPass.hpp"
 #include "Subsystems/Renderer/Modules/ParticleModule.hpp"
 #include "Subsystems/Renderer/Modules/TransferModule.hpp"
+#include "Subsystems/Renderer/Modules/DebugModule.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -63,6 +64,7 @@ Renderer::Renderer(CreateInfo create_info) :
     add_pre_render_stage(std::make_unique<RenderModules::DepthMapPass>());
     add_render_module(std::make_unique<RenderModules::TransferModule>());
     add_render_module(std::make_unique<RenderModules::ParticleModule>());
+    add_render_module(std::make_unique<RenderModule::DebugModule>());
     add_post_render_stage(std::make_unique<RenderModules::BlitPass>());
 
     box_collider_mesh =

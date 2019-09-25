@@ -1,5 +1,5 @@
-#ifndef SATURN_PARTICLE_MODULE_HPP_
-#define SATURN_PARTICLE_MODULE_HPP_
+#ifndef SATURN_DEBUG_MODULE_HPP_
+#define SATURN_DEBUG_MODULE_HPP_
 
 #include "RenderModule.hpp"
 
@@ -8,17 +8,13 @@
 
 namespace Saturn::RenderModules {
 
-class ParticleModule : public RenderModule {
+class DebugModule : public RenderModule {
 public:
-    ParticleModule();
+    DebugModule();
 
     void init() override;
     void
     process(Scene& scene, Viewport& viewport, Framebuffer& target) override;
-
-private:
-    Resource<Shader> particle_shader;
-    Resource<Texture> default_texture;
 };
 
 } // namespace Saturn::RenderModules
