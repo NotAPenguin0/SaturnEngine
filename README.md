@@ -17,16 +17,18 @@ Currently, I am working on this project alone.
 - CPU Particle System
 - Very rudimentary gravity system
 - Basic AABB collision detection
+- Editor (WIP)
+- Sound System (based on my sound library [audeo](https://github.com/NotAPenguin0/audeo))
 
 # Planned 
 
 - Terrain Engine
 - Physics Engine
 - GPU Particle system
-- Editor
-- Sound Engine
 - Node based shader and material editor
 - ... and much more
+
+https://trello.com/b/sKmbK4PU/saturnengine
 
 # Special thanks
 
