@@ -12,7 +12,9 @@
 #include "VertexArray.hpp"
 #include "Viewport.hpp"
 
+#include "Modules/PostRenderStage.hpp"
 #include "Modules/PreRenderStage.hpp"
+#include "Modules/RenderModule.hpp"
 
 #include "glad/glad.h"
 
@@ -43,8 +45,6 @@ public:
 
     void render_scene(Scene& scene);
 
-    void update_screen();
-
     // /brief Returns a reference to the viewport with specified index.
     // /param index: The index of the viewport to return. Viewport 0 is
     // initialized to be the full window
@@ -59,6 +59,8 @@ public:
     // unique_ptr passed in
     void
     add_pre_render_stage(std::unique_ptr<RenderModules::PreRenderStage> stage);
+    void add_post_render_stage(
+        std::unique_ptr<RenderModules::PostRenderStage> stage);
 
     static constexpr std::size_t MaxLightsPerType = 15;
 
@@ -103,9 +105,6 @@ private:
     std::reference_wrapper<Application> app;
     WindowDim screen_size;
     Framebuffer framebuf;
-    ///< default constructed framebuffer means screen
-    Framebuffer screen_framebuf;
-    VertexArray screen;
     UniformBuffer matrix_buffer;
     UniformBuffer lights_buffer;
     UniformBuffer camera_buffer;
@@ -121,6 +120,8 @@ private:
 
     std::vector<std::unique_ptr<RenderModules::PreRenderStage>>
         pre_render_stages;
+    std::vector<std::unique_ptr<RenderModules::PostRenderStage>>
+        post_render_stages;
 };
 
 } // namespace Saturn

@@ -151,8 +151,6 @@ void Application::run() {
         physics_scheduler.update(system_update_mode, scene);
         renderer->render_scene(scene);
 
-        // Copy framebuffer to screen
-        renderer->update_screen();
 #ifdef WITH_EDITOR
         editor->frame_end();
 #endif

@@ -11,31 +11,18 @@
 #include "Utility/Utility.hpp"
 #include "Utility/bind_guard.hpp"
 
-// Temp, testing
+// #Temp, testing
+#include "Subsystems/Renderer/Modules/BlitPass.hpp"
 #include "Subsystems/Renderer/Modules/DepthMapPass.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Saturn {
 
-static std::vector<float> screen_vertices = {
-    // Vertices	        Texture coords
-    -1.0f, 1.0f,  0.0f, 0.0f, 1.0f, // TL
-    -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, // BL
-    1.0f,  -1.0f, 0.0f, 1.0f, 0.0f, // BR
-    1.0f,  1.0f,  0.0f, 1.0f, 1.0f, // TR
-};
-
 void Renderer::setup_framebuffer(CreateInfo const& create_info) {
     Framebuffer::CreateInfo framebuf_info;
     framebuf_info.size = screen_size;
     framebuf.assign(framebuf_info);
-
-    std::vector<VertexAttribute> screen_attributes;
-    screen_attributes.push_back({0, 3}); // Position is a vec3
-    screen_attributes.push_back({1, 2}); // TexCoords is a vec2
-
-    screen.assign({screen_attributes, screen_vertices, {0, 1, 2, 0, 3, 2}});
 }
 
 void Renderer::create_default_viewport(CreateInfo const& create_info) {
@@ -109,6 +96,7 @@ Renderer::Renderer(CreateInfo create_info) :
 
     // #Temp, #RefactorTesting
     add_pre_render_stage(std::make_unique<RenderModules::DepthMapPass>());
+    add_post_render_stage(std::make_unique<RenderModules::BlitPass>());
 
     box_collider_mesh =
         AssetManager<Mesh>::get_resource("resources/meshes/box_collider.mesh");
@@ -141,6 +129,14 @@ void Renderer::render_scene(Scene& scene) {
         Framebuffer::bind(framebuf);
 
         render_viewport(scene, vp);
+
+        Framebuffer* next_source = &framebuf;
+        for (auto& stage : post_render_stages) {
+            stage->process(scene, *next_source);
+            // Chain post render stages together by having each of them operate
+            // on the result of the previous one
+            next_source = &stage->get_framebuffer();
+        }
     }
 }
 
@@ -245,7 +241,6 @@ void Renderer::send_lighting_data(Scene& scene) {
     }
 }
 
-
 void Renderer::send_material_data(Shader& shader,
                                   Components::Material& material) {
 
@@ -277,8 +272,6 @@ void Renderer::unbind_textures(Components::Material& material) {
         }
     }
 }
-
-
 
 void Renderer::debug_render_colliders(Scene& scene) {
     using namespace Components;
@@ -395,7 +388,7 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
             if (RenderModules::DepthMapPass::last_depthmap) {
                 // Set shadow map in shader
                 glActiveTexture(GL_TEXTURE2);
-                DepthMap::bind_texture(    
+                DepthMap::bind_texture(
                     *RenderModules::DepthMapPass::last_depthmap);
                 shader.set_int(Shader::Uniforms::DepthMap, 2);
             }
@@ -484,40 +477,6 @@ Renderer::collect_spot_lights(Scene& scene) {
     return result;
 }
 
-void Renderer::update_screen() {
-    bind_guard<Framebuffer> framebuf_guard(screen_framebuf);
-
-    Viewport::set_active(get_viewport(0));
-
-    // Bind VAO
-    bind_guard<VertexArray> screen_guard(screen);
-    bind_guard<Ebo> ebo_guard(screen.ebo);
-
-    // Temporarily disable some GL functionality
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_CULL_FACE);
-
-    // Enable gamma correction
-    glEnable(GL_FRAMEBUFFER_SRGB);
-
-    // Set (postprocessing) shader
-    Shader::bind(PostProcessing::get_instance().get_active().get());
-
-    // Render framebuffer texture to the screen
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, framebuf.texture);
-
-    PostProcessing::get_instance().get_active()->set_int(
-        Shader::Uniforms::Texture, 0);
-    glDrawElements(GL_TRIANGLES, screen.index_size(), GL_UNSIGNED_INT, nullptr);
-
-    // Re enable functionality
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-
-    // Disable gamma correction
-    glDisable(GL_FRAMEBUFFER_SRGB);
-}
 
 Viewport& Renderer::get_viewport(std::size_t index) {
     if (index >= viewports.size()) {
@@ -540,6 +499,16 @@ void Renderer::add_pre_render_stage(
     pre_render_stages.back()->init();
     // re-sort the render stages
     std::sort(pre_render_stages.begin(), pre_render_stages.end(),
+              [](auto const& lhs, auto const& rhs) { return *lhs < *rhs; });
+}
+
+void Renderer::add_post_render_stage(
+    std::unique_ptr<RenderModules::PostRenderStage> stage) {
+    post_render_stages.push_back(std::move(stage));
+    // Initialize the render stage
+    post_render_stages.back()->init();
+    // re-sort the render stages
+    std::sort(post_render_stages.begin(), post_render_stages.end(),
               [](auto const& lhs, auto const& rhs) { return *lhs < *rhs; });
 }
 

@@ -51,6 +51,7 @@ set(ENGINE_SOURCE_FILES
     # Render Modules
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/RenderStage.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/DepthMapPass.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/BlitPass.cpp"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Scene/Scene.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Scene/SceneObject.cpp"
