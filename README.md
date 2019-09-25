@@ -18,7 +18,7 @@ Currently, I am working on this project alone.
 - Very rudimentary gravity system
 - Basic AABB collision detection
 - Editor (WIP)
-- Sound System (based on my sound library [audeo](https://github.com/NotAPenguin0/audeo)
+- Sound System (based on my sound library [audeo](https://github.com/NotAPenguin0/audeo))
 
 # Planned 
 
