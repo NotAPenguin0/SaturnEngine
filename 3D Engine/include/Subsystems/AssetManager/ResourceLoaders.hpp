@@ -41,7 +41,37 @@ public:
 template<>
 class ResourceLoader<audeo::SoundSource> {
 public:
-	static std::unique_ptr<audeo::SoundSource> load(std::string const& path);
+    static std::unique_ptr<audeo::SoundSource> load(std::string const& path);
+};
+
+// File types
+
+template<typename R>
+struct FileTypes;
+
+struct FileType {
+    const wchar_t* name;
+	const wchar_t* filter;
+};
+
+template<>
+struct FileTypes<Shader> {
+    static std::vector<FileType> types;
+};
+
+template<>
+struct FileTypes<Mesh> {
+    static std::vector<FileType> types;
+};
+
+template<>
+struct FileTypes<Texture> {
+    static std::vector<FileType> types;
+};
+
+template<>
+struct FileTypes<audeo::SoundSource> {
+    static std::vector<FileType> types;
 };
 
 } // namespace Saturn

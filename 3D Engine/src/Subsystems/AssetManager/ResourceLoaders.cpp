@@ -274,4 +274,15 @@ ResourceLoader<audeo::SoundSource>::load(std::string const& path) {
     }
 }
 
+// File types definitions
+
+std::vector<FileType> FileTypes<Shader>::types = {
+    {L"Shader file (*.sh)", L"*.sh"}};
+std::vector<FileType> FileTypes<Mesh>::types = {
+    {L"Mesh file (*.mesh)", L"*.mesh"}};
+std::vector<FileType> FileTypes<Texture>::types = {
+    {L"Texture file (*.tex)", L"*tex"}};
+std::vector<FileType> FileTypes<audeo::SoundSource>::types = {
+    {L"SoundSource file (*.sfx)", L"*.sfx"}};
+
 } // namespace Saturn

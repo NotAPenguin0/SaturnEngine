@@ -187,7 +187,9 @@ HRESULT CDialogEventHandler_CreateInstance(REFIID riid, void** ppv) {
     return hr;
 }
 
-static HRESULT win32_show_file_dialog(fs::path& path, DWORD user_flags) {
+static HRESULT win32_show_file_dialog(fs::path& path,
+                                      DWORD user_flags,
+                                      std::vector<FileType> const& filetypes) {
     IFileDialog* file_dialog = nullptr;
     // Create the window
     HRESULT hr =
@@ -211,6 +213,18 @@ static HRESULT win32_show_file_dialog(fs::path& path, DWORD user_flags) {
 
     hr = file_dialog->SetOptions(flags | user_flags);
     if (!SUCCEEDED(hr)) return hr;
+
+    // Set file types if needed
+    if (!filetypes.empty()) {
+        hr = file_dialog->SetFileTypes(
+            filetypes.size(),
+            // Wonky reinterpret_cast, watch this man. #Danger
+            reinterpret_cast<COMDLG_FILTERSPEC const*>(filetypes.data()));
+        if (!SUCCEEDED(hr)) return hr;
+		// Default to first file type
+		hr = file_dialog->SetFileTypeIndex(0);
+        if (!SUCCEEDED(hr)) return hr;
+    }
 
     hr = file_dialog->Show(nullptr);
     if (!SUCCEEDED(hr)) return hr;
@@ -237,14 +251,15 @@ static HRESULT win32_show_file_dialog(fs::path& path, DWORD user_flags) {
 #endif
 } // namespace impl
 
-bool SelectFileDialog::show(Flags flags) {
+bool SelectFileDialog::show(Flags flags, std::vector<FileType> filetypes) {
 #ifdef _WIN32
 
     DWORD user_flags = 0;
     if (flags & Flags::PickFiles) { user_flags |= FOS_FORCEFILESYSTEM; }
     if (flags & Flags::PickFolders) { user_flags |= FOS_PICKFOLDERS; }
 
-    HRESULT hresult = impl::win32_show_file_dialog(result, user_flags);
+    HRESULT hresult =
+        impl::win32_show_file_dialog(result, user_flags, filetypes);
     return SUCCEEDED(hresult);
 #endif
 }

@@ -713,6 +713,7 @@ int main(int argc, char** argv) {
                 .count();
         std::cout << "Parsed component: " << components.back().name << " in "
                   << elapsed << " ms\n";
+		std::cout.flush();
     }
 
     std::string header = generate_header(components);

@@ -88,7 +88,7 @@ struct ComponentFieldVisitor {
         ImGui::SameLine();
         if (ImGui::SmallButton(("...##" + std::string(field_name)).c_str())) {
             SelectFileDialog dialog;
-            dialog.show(SelectFileDialog::PickFiles);
+            dialog.show(SelectFileDialog::PickFiles, FileTypes<R>::types);
             fs::path result = dialog.get_result();
             if (result != "") {
                 *field = AssetManager<R>::get_resource(result.string());
