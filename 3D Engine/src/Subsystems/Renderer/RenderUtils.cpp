@@ -5,19 +5,10 @@
 
 namespace Saturn {
 
-static std::vector<Components::DirectionalLight*>
-collect_directional_lights(Scene& scene) {
-    std::vector<Components::DirectionalLight*> result;
-    for (auto [light] :
-         scene.get_ecs().select<Components::DirectionalLight>()) {
-        result.push_back(&light);
-    }
-    return result;
-}
-
 glm::mat4 get_lightspace_matrix(Scene& scene) {
     // For now, we only support one directional light for shadows
-    auto dirlights = collect_directional_lights(scene);
+    auto dirlights =
+        collect_component_pointers<Components::DirectionalLight>(scene);
     if (dirlights.empty())
         throw std::runtime_error("There must be a light"); // Temporary
     auto& light = *dirlights[0];
@@ -36,7 +27,7 @@ glm::mat4 get_lightspace_matrix(Scene& scene) {
 }
 
 void send_model_matrix(Shader& shader,
-                      Components::Transform const& relative_transform) {
+                       Components::Transform const& relative_transform) {
     // Make sure to get absolute transform
     auto transform = make_absolute_transform(relative_transform);
 

@@ -90,6 +90,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/PostRenderStage.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/DepthMapPass.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/BlitPass.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/TransferModule.hpp"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Scene/Scene.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Scene/SceneObject.hpp"

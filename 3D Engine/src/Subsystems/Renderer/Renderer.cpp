@@ -14,6 +14,7 @@
 // #Temp, testing
 #include "Subsystems/Renderer/Modules/BlitPass.hpp"
 #include "Subsystems/Renderer/Modules/DepthMapPass.hpp"
+#include "Subsystems/Renderer/Modules/TransferModule.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -38,39 +39,6 @@ void Renderer::initialize_postprocessing() {
     PostProcessing::get_instance().set_active("none");
 }
 
-void Renderer::create_uniform_buffers() {
-    // View + Projection matrix buffer
-    UniformBuffer::CreateInfo matrix_info;
-    matrix_info.binding_point = 0;
-    matrix_info.dynamic = true; // View/Projection matrices can change
-    matrix_info.size_in_bytes = 2 * sizeof(glm::mat4);
-    matrix_buffer.assign(matrix_info);
-
-    // Lights buffer
-    UniformBuffer::CreateInfo lights_info;
-    lights_info.binding_point = 1;
-    lights_info.dynamic =
-        false; // for now, we assume lights are mostly static #CHECK
-    lights_info.size_in_bytes =
-        sizeof(int) +                           // point_light_count
-        sizeof(int) +                           // directional_light_count
-        sizeof(int) +                           // spot_light_count
-        LightSizesBytes::PaddingAfterSizeVars + // padding
-        MaxLightsPerType * (LightSizesBytes::PointLightGLSL +
-                            LightSizesBytes::DirectionalLightGLSL +
-                            LightSizesBytes::SpotLightGLSL);
-    lights_buffer.assign(lights_info);
-
-    // Camera data buffer
-    UniformBuffer::CreateInfo camera_info;
-    camera_info.binding_point = 2;
-    camera_info.dynamic = true; // Camera data changes
-    camera_info.size_in_bytes =
-        sizeof(glm::vec4); // vec3 padded to the size of a vec4 because of
-                           // std140 layout
-    camera_buffer.assign(camera_info);
-}
-
 void Renderer::load_default_shaders() {
 
     no_shader_error =
@@ -91,11 +59,11 @@ Renderer::Renderer(CreateInfo create_info) :
     setup_framebuffer(create_info);
     create_default_viewport(create_info);
     initialize_postprocessing();
-    create_uniform_buffers();
     load_default_shaders();
 
     // #Temp, #RefactorTesting
     add_pre_render_stage(std::make_unique<RenderModules::DepthMapPass>());
+    add_render_module(std::make_unique<RenderModules::TransferModule>());
     add_post_render_stage(std::make_unique<RenderModules::BlitPass>());
 
     box_collider_mesh =
@@ -109,7 +77,7 @@ void Renderer::clear(
     Color clear_color,
     GLenum flags /*= GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT*/) {
 
-    bind_guard<Framebuffer> framebuf_guard(framebuf);
+    Framebuffer::bind(framebuf);
 
     glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
     glClear(flags);
@@ -137,107 +105,6 @@ void Renderer::render_scene(Scene& scene) {
             // on the result of the previous one
             next_source = &stage->get_framebuffer();
         }
-    }
-}
-
-void Renderer::send_camera_matrices(Scene& scene,
-                                    Viewport& vp,
-                                    Components::Camera& camera) {
-    auto& cam_trans = camera.entity->get_component<Components::Transform>();
-    auto projection = glm::perspective(
-        glm::radians(camera.fov),
-        (float)vp.dimensions().x / (float)vp.dimensions().y, 0.1f, 100.0f);
-
-    auto view = glm::lookAt(cam_trans.position,
-                            cam_trans.position + camera.front, camera.up);
-
-    bind_guard<UniformBuffer> matrix_guard(matrix_buffer);
-    matrix_buffer.set_mat4(projection, 0);
-    matrix_buffer.set_mat4(view, sizeof(glm::mat4));
-
-    bind_guard<UniformBuffer> cam_guard(camera_buffer);
-    camera_buffer.set_vec3(cam_trans.position, 0);
-}
-
-void Renderer::send_lighting_data(Scene& scene) {
-    bind_guard<UniformBuffer> lights_guard(lights_buffer);
-    auto point_lights = collect_point_lights(scene);
-    lights_buffer.set_int(point_lights.size(), 0);
-    for (std::size_t i = 0; i < point_lights.size(); ++i) {
-        auto lightpos = point_lights[i]
-                            ->entity->get_component<Components::Transform>()
-                            .position;
-        // clang-format off
-        const auto point_light_offset =
-            sizeof(int) + // point_light_count
-			sizeof(int) + // directional_light_count
-			sizeof(int) + // spot_light_count
-			LightSizesBytes::PaddingAfterSizeVars +
-            i * (LightSizesBytes::PointLightGLSL); // point_lights array
-        // clang-format on
-        lights_buffer.set_vec3(point_lights[i]->ambient, point_light_offset);
-        lights_buffer.set_vec3(point_lights[i]->diffuse,
-                               point_light_offset + sizeof(glm::vec4));
-        lights_buffer.set_vec3(point_lights[i]->specular,
-                               point_light_offset + 2 * sizeof(glm::vec4));
-        lights_buffer.set_vec3(lightpos,
-                               point_light_offset + 3 * sizeof(glm::vec4));
-        lights_buffer.set_float(point_lights[i]->intensity,
-                                point_light_offset + 3 * sizeof(glm::vec4) +
-                                    sizeof(glm::vec3));
-    }
-
-    constexpr std::size_t PointLightBaseOffset =
-        (sizeof(int) + sizeof(int) + sizeof(int) +
-         LightSizesBytes::PaddingAfterSizeVars +
-         MaxLightsPerType * (LightSizesBytes::PointLightGLSL));
-
-    auto directional_lights = collect_directional_lights(scene);
-    lights_buffer.set_int(directional_lights.size(), sizeof(int));
-    for (std::size_t i = 0; i < directional_lights.size(); ++i) {
-        const auto offset =
-            PointLightBaseOffset + i * (LightSizesBytes::DirectionalLightGLSL);
-        lights_buffer.set_vec3(directional_lights[i]->ambient, offset);
-        lights_buffer.set_vec3(directional_lights[i]->diffuse,
-                               offset + sizeof(glm::vec4));
-        lights_buffer.set_vec3(directional_lights[i]->specular,
-                               offset + 2 * sizeof(glm::vec4));
-        lights_buffer.set_vec3(directional_lights[i]->direction,
-                               offset + 3 * sizeof(glm::vec4));
-    }
-
-    constexpr std::size_t DirectionalLightBaseOffset =
-        MaxLightsPerType * LightSizesBytes::DirectionalLightGLSL;
-    constexpr std::size_t OffsetBeforeSpotLights =
-        PointLightBaseOffset + DirectionalLightBaseOffset;
-
-    auto spot_lights = collect_spot_lights(scene);
-    lights_buffer.set_int(spot_lights.size(), 2 * sizeof(int));
-    for (std::size_t i = 0; i < spot_lights.size(); ++i) {
-        const auto offset =
-            OffsetBeforeSpotLights + i * LightSizesBytes::SpotLightGLSL;
-        auto lightpos = spot_lights[i]
-                            ->entity->get_component<Components::Transform>()
-                            .position;
-        lights_buffer.set_vec3(spot_lights[i]->ambient, offset);
-        lights_buffer.set_vec3(spot_lights[i]->diffuse,
-                               offset + sizeof(glm::vec4));
-        lights_buffer.set_vec3(spot_lights[i]->specular,
-                               offset + 2 * sizeof(glm::vec4));
-        lights_buffer.set_vec3(lightpos, offset + 3 * sizeof(glm::vec4));
-        lights_buffer.set_vec3(spot_lights[i]->direction,
-                               offset + 4 * sizeof(glm::vec4));
-        lights_buffer.set_float(
-            spot_lights[i]->intensity,
-            offset + 4 * sizeof(glm::vec4) +
-                sizeof(glm::vec3)); // the first float is packed against the
-                                    // previous vec3
-        lights_buffer.set_float(
-            glm::cos(glm::radians(spot_lights[i]->inner_angle)),
-            offset + 5 * sizeof(glm::vec4));
-        lights_buffer.set_float(
-            glm::cos(glm::radians(spot_lights[i]->outer_angle)),
-            offset + 5 * sizeof(glm::vec4) + sizeof(float));
     }
 }
 
@@ -345,22 +212,23 @@ void Renderer::render_axes() {
         // Send to shader
         Shader::bind(shader);
         shader.set_mat4(Shader::Uniforms::Model, model);
-        bind_guard<VertexArray> vao(vertices);
+        VertexArray::bind(vertices);
         auto const& color = colors[i];
         shader.set_vec3(Shader::Uniforms::Color, color);
         glDrawElements(GL_LINES, vertices.index_size(), GL_UNSIGNED_INT,
                        nullptr);
+        VertexArray::unbind();
     }
 }
 
 void Renderer::render_viewport(Scene& scene, Viewport& vp) {
     Viewport::set_active(vp);
 
+    // Process render modules
+    for (auto& mod : render_modules) { mod->process(scene, vp, framebuf); }
+
     auto cam_id = vp.get_camera();
     auto& cam = scene.ecs.get_with_id<Components::Camera>(cam_id);
-    send_camera_matrices(scene, vp, cam);
-
-    send_lighting_data(scene);
 
     render_particles(scene);
     debug_render_colliders(scene);
@@ -398,7 +266,7 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
         // render_mesh() or something)
         auto& vtx_array = mesh.mesh->get_vertices();
 
-        bind_guard<VertexArray> vao_guard(vtx_array);
+        VertexArray::bind(vtx_array);
         if (!mesh.face_cull) { glDisable(GL_CULL_FACE); }
         glDrawElements(GL_TRIANGLES, vtx_array.index_size(), GL_UNSIGNED_INT,
                        nullptr);
@@ -450,33 +318,6 @@ void Renderer::render_particles(Scene& scene) {
     glEnable(GL_CULL_FACE);
 }
 
-std::vector<Components::PointLight*>
-Renderer::collect_point_lights(Scene& scene) {
-    std::vector<Components::PointLight*> result;
-    for (auto [light] : scene.ecs.select<Components::PointLight>()) {
-        result.push_back(&light);
-    }
-    return result;
-}
-
-std::vector<Components::DirectionalLight*>
-Renderer::collect_directional_lights(Scene& scene) {
-    std::vector<Components::DirectionalLight*> result;
-    for (auto [light] : scene.ecs.select<Components::DirectionalLight>()) {
-        result.push_back(&light);
-    }
-    return result;
-}
-
-std::vector<Components::SpotLight*>
-Renderer::collect_spot_lights(Scene& scene) {
-    std::vector<Components::SpotLight*> result;
-    for (auto [light] : scene.ecs.select<Components::SpotLight>()) {
-        result.push_back(&light);
-    }
-    return result;
-}
-
 
 Viewport& Renderer::get_viewport(std::size_t index) {
     if (index >= viewports.size()) {
@@ -499,6 +340,16 @@ void Renderer::add_pre_render_stage(
     pre_render_stages.back()->init();
     // re-sort the render stages
     std::sort(pre_render_stages.begin(), pre_render_stages.end(),
+              [](auto const& lhs, auto const& rhs) { return *lhs < *rhs; });
+}
+
+void Renderer::add_render_module(
+    std::unique_ptr<RenderModules::RenderModule> module) {
+    render_modules.push_back(std::move(module));
+    // Initialize the render stage
+    render_modules.back()->init();
+    // re-sort the render stages
+    std::sort(render_modules.begin(), render_modules.end(),
               [](auto const& lhs, auto const& rhs) { return *lhs < *rhs; });
 }
 

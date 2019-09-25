@@ -59,27 +59,16 @@ public:
     // unique_ptr passed in
     void
     add_pre_render_stage(std::unique_ptr<RenderModules::PreRenderStage> stage);
+    void add_render_module(std::unique_ptr<RenderModules::RenderModule> module);
     void add_post_render_stage(
         std::unique_ptr<RenderModules::PostRenderStage> stage);
 
-    static constexpr std::size_t MaxLightsPerType = 15;
-
 private:
-    struct LightSizesBytes {
-        static constexpr std::size_t PaddingAfterSizeVars = 4;
-        static constexpr std::size_t PointLightGLSL = 4 * sizeof(glm::vec4);
-        static constexpr std::size_t DirectionalLightGLSL =
-            4 * sizeof(glm::vec4);
-        static constexpr std::size_t SpotLightGLSL = 6 * sizeof(glm::vec4);
-    };
-
-    static constexpr std::size_t DepthMapPrecision = 1024;
-
     // Initialization
     void setup_framebuffer(CreateInfo const& create_info);
     void create_default_viewport(CreateInfo const& create_info);
     void initialize_postprocessing();
-    void create_uniform_buffers();
+
     void load_default_shaders();
 
     // Rendering functions
@@ -87,27 +76,15 @@ private:
     void render_particles(Scene& scene);
     void debug_render_colliders(Scene& scene);
     void render_axes();
-    void send_camera_matrices(Scene& scene,
-                              Viewport& vp,
-                              Components::Camera& camera);
-    void send_lighting_data(Scene& scene);
+
     void send_material_data(Shader& shader, Components::Material& material);
     void unbind_textures(Components::Material& material);
     void render_outlines(Scene& scene);
-
-    // Utility functions
-    std::vector<Components::PointLight*> collect_point_lights(Scene& scene);
-    std::vector<Components::DirectionalLight*>
-    collect_directional_lights(Scene& scene);
-    std::vector<Components::SpotLight*> collect_spot_lights(Scene& scene);
 
     // Member variables
     std::reference_wrapper<Application> app;
     WindowDim screen_size;
     Framebuffer framebuf;
-    UniformBuffer matrix_buffer;
-    UniformBuffer lights_buffer;
-    UniformBuffer camera_buffer;
     Resource<Shader> no_shader_error;
     // #MaybeTODO: Move this to ParticleEmitter?
     Resource<Shader> particle_shader;
@@ -120,6 +97,7 @@ private:
 
     std::vector<std::unique_ptr<RenderModules::PreRenderStage>>
         pre_render_stages;
+    std::vector<std::unique_ptr<RenderModules::RenderModule>> render_modules;
     std::vector<std::unique_ptr<RenderModules::PostRenderStage>>
         post_render_stages;
 };
