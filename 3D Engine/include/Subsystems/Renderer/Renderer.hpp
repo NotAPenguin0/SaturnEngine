@@ -73,12 +73,11 @@ private:
 
     // Rendering functions
     void render_viewport(Scene& scene, Viewport& vp);
-    void debug_render_colliders(Scene& scene);
-    void render_axes();
+    
 
     void send_material_data(Shader& shader, Components::Material& material);
     void unbind_textures(Components::Material& material);
-    void render_outlines(Scene& scene);
+
 
     // Member variables
     std::reference_wrapper<Application> app;

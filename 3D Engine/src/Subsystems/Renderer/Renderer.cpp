@@ -16,6 +16,7 @@
 #include "Subsystems/Renderer/Modules/ParticleModule.hpp"
 #include "Subsystems/Renderer/Modules/TransferModule.hpp"
 #include "Subsystems/Renderer/Modules/DebugModule.hpp"
+#include "Subsystems/Renderer/Modules/EditorModule.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -65,6 +66,7 @@ Renderer::Renderer(CreateInfo create_info) :
     add_render_module(std::make_unique<RenderModules::TransferModule>());
     add_render_module(std::make_unique<RenderModules::ParticleModule>());
     add_render_module(std::make_unique<RenderModules::DebugModule>());
+	add_render_module(std::make_unique<RenderModules::EditorModule>());
     add_post_render_stage(std::make_unique<RenderModules::BlitPass>());
 
     box_collider_mesh =
@@ -141,86 +143,6 @@ void Renderer::unbind_textures(Components::Material& material) {
     }
 }
 
-void Renderer::debug_render_colliders(Scene& scene) {
-    using namespace Components;
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    for (auto [rel_trans, collider, _] :
-         scene.ecs.select<Transform, BoxCollider, ColliderRenderer>()) {
-        auto& shader = collider_shader.get();
-        auto copy = rel_trans;
-        copy.position += collider.center;
-        copy.scale = collider.half_widths;
-        copy.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-        send_model_matrix(shader, copy);
-        Shader::bind(shader);
-        auto& vtx_array = box_collider_mesh->get_vertices();
-        VertexArray::bind(vtx_array);
-        glDrawElements(GL_LINES, vtx_array.index_size(), GL_UNSIGNED_INT,
-                       nullptr);
-        Shader::unbind();
-    }
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-}
-
-void Renderer::render_outlines(Scene& scene) {
-    using namespace Components;
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    for (auto [rel_trans, mesh, outline] :
-         scene.ecs.select<Transform, StaticMesh, OutlineRenderer>()) {
-
-        if (!mesh.mesh.is_loaded()) { continue; }
-
-        auto& shader = outline_shader.get();
-        send_model_matrix(shader, rel_trans);
-        Shader::bind(shader);
-        shader.set_vec3(Shader::Uniforms::Color, outline.color);
-        auto& vtx_array = mesh.mesh->get_vertices();
-        VertexArray::bind(vtx_array);
-        glEnable(GL_LINE_SMOOTH);
-        glDrawElements(GL_LINES, vtx_array.index_size(), GL_UNSIGNED_INT,
-                       nullptr);
-        glDisable(GL_LINE_SMOOTH);
-    }
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-}
-
-void Renderer::render_axes() {
-    glm::vec3 rotations[] = {
-        glm::vec3(0.0f, 0.0f, 0.0f),  // y axis
-        glm::vec3(90.0f, 0.0f, 0.0f), // z axis
-        glm::vec3(0.0f, 0.0f, 90.0f)  // x axis
-    };
-    glm::vec3 colors[] = {
-        glm::vec3(0.0f, 1.0f, 0.0f), // y axis
-        glm::vec3(0.0f, 0.0f, 1.0f), // z axis
-        glm::vec3(1.0f, 0.0f, 0.0f)  // x axis
-    };
-    auto& shader = axis_shader.get();
-    auto& vertices = line_mesh->get_vertices();
-    Components::Transform axis_transform;
-    axis_transform.scale = glm::vec3(1.0, 100.0f, 1.0f);
-    axis_transform.position = glm::vec3(0.0f, 0.0f, 0.0f);
-    // There are 3 axes
-    for (int i = 0; i < 3; ++i) {
-        axis_transform.rotation = rotations[i];
-        auto model = glm::mat4(1.0f);
-        // Apply transformations
-        model = glm::translate(model, axis_transform.position);
-        model = glm::rotate(model, {glm::radians(axis_transform.rotation.x),
-                                    glm::radians(axis_transform.rotation.y),
-                                    glm::radians(axis_transform.rotation.z)});
-        model = glm::scale(model, axis_transform.scale);
-        // Send to shader
-        Shader::bind(shader);
-        shader.set_mat4(Shader::Uniforms::Model, model);
-        VertexArray::bind(vertices);
-        auto const& color = colors[i];
-        shader.set_vec3(Shader::Uniforms::Color, color);
-        glDrawElements(GL_LINES, vertices.index_size(), GL_UNSIGNED_INT,
-                       nullptr);
-        VertexArray::unbind();
-    }
-}
 
 void Renderer::render_viewport(Scene& scene, Viewport& vp) {
     Viewport::set_active(vp);
@@ -230,10 +152,6 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
 
     auto cam_id = vp.get_camera();
     auto& cam = scene.ecs.get_with_id<Components::Camera>(cam_id);
-
-    debug_render_colliders(scene);
-    render_outlines(scene);
-    render_axes();
 
     for (auto [relative_transform, mesh, material] :
          scene.ecs.select<Components::Transform, Components::StaticMesh,

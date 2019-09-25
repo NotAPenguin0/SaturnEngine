@@ -2,7 +2,7 @@
 
 namespace Saturn::RenderModules {
 
-void DebugModule::DebugModule() : RenderModule(2) {}
+DebugModule::DebugModule() : RenderModule(2) {}
 
 void DebugModule::init() {}
 void DebugModule::process(Scene& scene,
