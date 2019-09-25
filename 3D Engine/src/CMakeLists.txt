@@ -47,8 +47,11 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/UniformBuffer.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/VertexArray.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Viewport.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/RenderUtils.cpp"
     # Render Modules
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/RenderStage.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/DepthMapPass.cpp"
+
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Scene/Scene.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Scene/SceneObject.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Serialization/ComponentMetaInfo.cpp"

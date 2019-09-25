@@ -5,10 +5,14 @@
 #include "Subsystems/Logging/LogSystem.hpp"
 #include "Subsystems/Math/Math.hpp"
 #include "Subsystems/Renderer/PostProcessing.hpp"
+#include "Subsystems/Renderer/RenderUtils.hpp"
 #include "Subsystems/Scene/Scene.hpp"
 #include "Utility/Exceptions.hpp"
 #include "Utility/Utility.hpp"
 #include "Utility/bind_guard.hpp"
+
+// Temp, testing
+#include "Subsystems/Renderer/Modules/DepthMapPass.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -86,20 +90,12 @@ void Renderer::load_default_shaders() {
         AssetManager<Shader>::get_resource("resources/shaders/default.sh");
     particle_shader =
         AssetManager<Shader>::get_resource("resources/shaders/particle.sh");
-    depth_shader =
-        AssetManager<Shader>::get_resource("resources/shaders/depth_map.sh");
     collider_shader =
         AssetManager<Shader>::get_resource("resources/shaders/collider.sh");
     axis_shader =
         AssetManager<Shader>::get_resource("resources/shaders/axis.sh");
     outline_shader =
         AssetManager<Shader>::get_resource("resources/shaders/outline.sh");
-}
-
-void Renderer::create_depth_map() {
-    DepthMap::CreateInfo info;
-    info.dimensions = {DepthMapPrecision, DepthMapPrecision};
-    shadow_depth_map.assign(info);
 }
 
 Renderer::Renderer(CreateInfo create_info) :
@@ -110,7 +106,9 @@ Renderer::Renderer(CreateInfo create_info) :
     initialize_postprocessing();
     create_uniform_buffers();
     load_default_shaders();
-    create_depth_map();
+
+    // #Temp, #RefactorTesting
+    add_pre_render_stage(std::make_unique<RenderModules::DepthMapPass>());
 
     box_collider_mesh =
         AssetManager<Mesh>::get_resource("resources/meshes/box_collider.mesh");
@@ -130,14 +128,18 @@ void Renderer::clear(
 }
 
 void Renderer::render_scene(Scene& scene) {
-    bind_guard<Framebuffer> framebuf_guard(framebuf);
-
     // Render every viewport
     for (auto& vp : viewports) {
         if (!vp.has_camera()) continue;
-        // Render to depth map
-        render_to_depthmap(scene);
-        // Render viewport with depth map
+
+        // First, execute all pre-render stages
+        for (auto& stage : pre_render_stages) {
+            Framebuffer::bind(framebuf);
+            stage->process(scene);
+        }
+
+        Framebuffer::bind(framebuf);
+
         render_viewport(scene, vp);
     }
 }
@@ -243,28 +245,11 @@ void Renderer::send_lighting_data(Scene& scene) {
     }
 }
 
-void Renderer::send_model_matrix(
-    Shader& shader, Components::Transform const& relative_transform) {
-    // Make sure to get absolute transform
-    auto transform = make_absolute_transform(relative_transform);
-
-    auto model = glm::mat4(1.0f);
-    // Apply transformations
-    model = glm::translate(model, transform.position);
-    model = glm::rotate(model, {glm::radians(transform.rotation.x),
-                                glm::radians(transform.rotation.y),
-                                glm::radians(transform.rotation.z)});
-    model = glm::scale(model, transform.scale);
-    // Send to shader
-    bind_guard<Shader> guard(shader);
-    shader.set_mat4(Shader::Uniforms::Model, model);
-}
 
 void Renderer::send_material_data(Shader& shader,
                                   Components::Material& material) {
 
-    bind_guard<Shader> guard(shader);
-
+    Shader::bind(shader);
     if (material.lit) {
         if (material.diffuse_map.is_loaded()) {
             Texture::bind(material.diffuse_map.get());
@@ -279,6 +264,7 @@ void Renderer::send_material_data(Shader& shader,
         shader.set_float(Shader::Uniforms::Material::Shininess,
                          material.shininess);
     }
+    Shader::unbind();
 }
 
 void Renderer::unbind_textures(Components::Material& material) {
@@ -292,70 +278,7 @@ void Renderer::unbind_textures(Components::Material& material) {
     }
 }
 
-glm::mat4 Renderer::get_lightspace_matrix(Scene& scene) {
-    // For now, we only support one directional light for shadows
-    auto dirlights = collect_directional_lights(scene);
-    if (dirlights.empty())
-        throw std::runtime_error("There must be a light"); // Temporary
-    auto& light = *dirlights[0];
-    static constexpr float near_plane = 0.00001f;
-    static constexpr float far_plane = 100.0f;
-    // Orthographic projection for light
-    glm::mat4 light_projection =
-        glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-    static constexpr float distance = 10.0f;
-    glm::vec3 light_pos = glm::vec3(0.0f, 0.0f, 0.0f) +
-                          distance * glm::normalize(-light.direction);
-    glm::mat4 light_view = glm::lookAt(light_pos, glm::vec3(0.0f, 0.0f, 0.0f),
-                                       glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 lightspace_mat = light_projection * light_view;
-    return lightspace_mat;
-}
 
-void Renderer::render_to_depthmap(Scene& scene) {
-    using namespace Components;
-    DepthMap::bind_framebuffer(shadow_depth_map);
-    glActiveTexture(GL_TEXTURE2);
-    DepthMap::bind_texture(shadow_depth_map);
-    // Clear the depth buffer
-    glClear(GL_DEPTH_BUFFER_BIT);
-    // Create a viewport for the depth map
-    static Viewport depthmap_vp =
-        Viewport(0, 0, DepthMapPrecision, DepthMapPrecision);
-
-    // Render the scene to the depth map
-
-    // We set the cull face to front for the depth map
-    glCullFace(GL_FRONT);
-
-    Viewport::set_active(depthmap_vp);
-    auto lightspace = get_lightspace_matrix(scene);
-
-    for (auto [transform, mesh] : scene.ecs.select<Transform, StaticMesh>()) {
-
-        if (!mesh.mesh.is_loaded()) { continue; }
-
-        // Send model matrix
-        send_model_matrix(depth_shader.get(), transform);
-
-        // Do the rendering
-        auto& vtx_array = mesh.mesh->get_vertices();
-        bind_guard<VertexArray> vao_guard(vtx_array);
-        bind_guard<Shader> shader_guard(depth_shader.get());
-        depth_shader->set_mat4(Shader::Uniforms::LightSpaceMatrix, lightspace);
-        glDrawElements(GL_TRIANGLES, vtx_array.index_size(), GL_UNSIGNED_INT,
-                       nullptr);
-    }
-
-    // Reset cull face
-    glCullFace(GL_BACK);
-
-    DepthMap::unbind_texture();
-    glActiveTexture(GL_TEXTURE0);
-    // Rebind other framebuffer afterwards to make sure the bind_guard from
-    // render_scene() doesn't break
-    Framebuffer::bind(framebuf);
-}
 
 void Renderer::debug_render_colliders(Scene& scene) {
     using namespace Components;
@@ -368,11 +291,12 @@ void Renderer::debug_render_colliders(Scene& scene) {
         copy.scale = collider.half_widths;
         copy.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
         send_model_matrix(shader, copy);
-        bind_guard<Shader> guard(shader);
+        Shader::bind(shader);
         auto& vtx_array = box_collider_mesh->get_vertices();
         bind_guard<VertexArray> vao(vtx_array);
         glDrawElements(GL_LINES, vtx_array.index_size(), GL_UNSIGNED_INT,
                        nullptr);
+        Shader::unbind();
     }
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
@@ -383,11 +307,11 @@ void Renderer::render_outlines(Scene& scene) {
     for (auto [rel_trans, mesh, outline] :
          scene.ecs.select<Transform, StaticMesh, OutlineRenderer>()) {
 
-		if (!mesh.mesh.is_loaded()) {continue;}
+        if (!mesh.mesh.is_loaded()) { continue; }
 
         auto& shader = outline_shader.get();
         send_model_matrix(shader, rel_trans);
-        bind_guard<Shader> guard(shader);
+        Shader::bind(shader);
         shader.set_vec3(Shader::Uniforms::Color, outline.color);
         auto& vtx_array = mesh.mesh->get_vertices();
         bind_guard<VertexArray> vao(vtx_array);
@@ -426,7 +350,7 @@ void Renderer::render_axes() {
                                     glm::radians(axis_transform.rotation.z)});
         model = glm::scale(model, axis_transform.scale);
         // Send to shader
-        bind_guard<Shader> guard(shader);
+        Shader::bind(shader);
         shader.set_mat4(Shader::Uniforms::Model, model);
         bind_guard<VertexArray> vao(vertices);
         auto const& color = colors[i];
@@ -454,7 +378,7 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
          scene.ecs.select<Components::Transform, Components::StaticMesh,
                           Components::Material>()) {
 
-		if (!mesh.mesh.is_loaded()) { continue; }
+        if (!mesh.mesh.is_loaded()) { continue; }
 
         auto& shader = material.shader.is_loaded() ? material.shader.get()
                                                    : no_shader_error.get();
@@ -464,14 +388,17 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
         send_material_data(shader, material);
 
         // Set lightspace matrix in shader
-        bind_guard<Shader> guard(shader);
+        Shader::bind(shader);
         if (material.lit) {
             auto lightspace = get_lightspace_matrix(scene);
             shader.set_mat4(Shader::Uniforms::LightSpaceMatrix, lightspace);
-            // Set shadow map in shader
-            glActiveTexture(GL_TEXTURE2);
-            DepthMap::bind_texture(shadow_depth_map);
-            shader.set_int(Shader::Uniforms::DepthMap, 2);
+            if (RenderModules::DepthMapPass::last_depthmap) {
+                // Set shadow map in shader
+                glActiveTexture(GL_TEXTURE2);
+                DepthMap::bind_texture(    
+                    *RenderModules::DepthMapPass::last_depthmap);
+                shader.set_int(Shader::Uniforms::DepthMap, 2);
+            }
         }
 
         // Do the actual rendering (maybe put this in another function
@@ -492,7 +419,7 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
 
 void Renderer::render_particles(Scene& scene) {
     using namespace Components;
-    bind_guard<Shader> shader_guard(particle_shader.get());
+    Shader::bind(particle_shader.get());
 
     Resource<Texture> default_texture =
         AssetManager<Texture>::get_resource("resources/textures/white.tex");
@@ -574,8 +501,7 @@ void Renderer::update_screen() {
     glEnable(GL_FRAMEBUFFER_SRGB);
 
     // Set (postprocessing) shader
-    bind_guard<Shader> shader_guard(
-        PostProcessing::get_instance().get_active().get());
+    Shader::bind(PostProcessing::get_instance().get_active().get());
 
     // Render framebuffer texture to the screen
     glActiveTexture(GL_TEXTURE0);
@@ -604,6 +530,17 @@ Viewport& Renderer::get_viewport(std::size_t index) {
 std::size_t Renderer::add_viewport(Viewport vp) {
     viewports.push_back(vp);
     return viewports.size() - 1;
+}
+
+void Renderer::add_pre_render_stage(
+    std::unique_ptr<RenderModules::PreRenderStage> stage) {
+
+    pre_render_stages.push_back(std::move(stage));
+    // Initialize the render stage
+    pre_render_stages.back()->init();
+    // re-sort the render stages
+    std::sort(pre_render_stages.begin(), pre_render_stages.end(),
+              [](auto const& lhs, auto const& rhs) { return *lhs < *rhs; });
 }
 
 } // namespace Saturn
