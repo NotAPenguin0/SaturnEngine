@@ -9,6 +9,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Editor/EditorWidget.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Editor/EntityTree.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Editor/DebugConsole.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Editor/RenderPipelineWidget.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Editor/SelectFileDialog.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/AssetManager/AssetManager.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/AssetManager/Resource.hpp"

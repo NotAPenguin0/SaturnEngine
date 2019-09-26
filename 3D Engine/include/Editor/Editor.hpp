@@ -10,6 +10,7 @@
 #    include "Editor/EditorLog.hpp"
 #    include "Editor/EditorPreferencesWidget.hpp"
 #    include "Editor/EntityTree.hpp"
+#    include "Editor/RenderPipelineWidget.hpp"
 
 namespace fs = std::filesystem;
 
@@ -26,7 +27,7 @@ namespace Editor {
 class Editor {
 public:
     Editor(Application& app);
-	~Editor();
+    ~Editor();
 
     void setup_viewports();
     SystemUpdateMode get_update_mode();
@@ -57,6 +58,7 @@ private:
     struct Widgets {
         EntityTree entity_tree;
         EditorPreferencesWidget preferences;
+		RenderPipelineWidget render_pipeline;
     } editor_widgets;
 
     bool playmode_active = false;

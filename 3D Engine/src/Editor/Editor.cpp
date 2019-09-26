@@ -14,13 +14,6 @@
 #    include "imgui/imgui_impl_glfw.h"
 #    include "imgui/imgui_impl_opengl3.h"
 
-#    include "Subsystems/Renderer/Modules/BlitPass.hpp"
-#    include "Subsystems/Renderer/Modules/DebugModule.hpp"
-#    include "Subsystems/Renderer/Modules/DepthMapPass.hpp"
-#    include "Subsystems/Renderer/Modules/EditorModule.hpp"
-#    include "Subsystems/Renderer/Modules/MeshRenderModule.hpp"
-#    include "Subsystems/Renderer/Modules/ParticleModule.hpp"
-#    include "Subsystems/Renderer/Modules/TransferModule.hpp"
 
 #    include <algorithm>
 #    include <fmt/format.h>
@@ -162,46 +155,15 @@ void Editor::render(Scene& scene) {
         if (editor_widgets.preferences.is_shown()) {
             editor_widgets.preferences.show();
         }
+        if (editor_widgets.render_pipeline.is_shown()) {
+            editor_widgets.render_pipeline.show(*app);
+        }
     }
 
     ImGui::Render();
     Viewport::set_active(
         app->get_renderer()->get_viewport(scene_view_viewport_id));
     glViewport(0, 0, 800, 600);
-}
-
-using namespace RenderModules;
-
-template<typename V>
-static void
-add_render_stage(V const& v, Application* app, std::string_view stage) {
-    // Make sure not to add any duplicates
-    if (std::find_if(v.begin(), v.end(), [stage](auto& s) {
-            return s->str_id() == stage;
-        }) != v.end()) {
-        return;
-    }
-    if (stage == "DepthMapPass") {
-        app->get_renderer()->add_pre_render_stage(
-            std::make_unique<DepthMapPass>());
-    } else if (stage == "DebugModule") {
-        app->get_renderer()->add_render_module(std::make_unique<DebugModule>());
-    } else if (stage == "EditorModule") {
-        app->get_renderer()->add_render_module(
-            std::make_unique<EditorModule>());
-    } else if (stage == "MeshRenderModule") {
-        app->get_renderer()->add_render_module(
-            std::make_unique<MeshRenderModule>());
-    } else if (stage == "ParticleModule") {
-        app->get_renderer()->add_render_module(
-            std::make_unique<ParticleModule>());
-    } else if (stage == "TransferModule") {
-        app->get_renderer()->add_render_module(
-            std::make_unique<TransferModule>());
-    } else if (stage == "BlitPass") {
-        app->get_renderer()->add_post_render_stage(
-            std::make_unique<BlitPass>());
-    }
 }
 
 void Editor::show_menu_bar(Scene& scene) {
@@ -211,8 +173,6 @@ void Editor::show_menu_bar(Scene& scene) {
 
     bool open_new_entity_popup = false;
     bool open_new_scene_popup = false;
-    bool open_add_render_stage_popup = false;
-    bool open_list_stages_popup = false;
 
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
@@ -270,109 +230,16 @@ void Editor::show_menu_bar(Scene& scene) {
         }
         if (ImGui::BeginMenu("Options")) {
             if (ImGui::BeginMenu("Rendering")) {
-                if (ImGui::BeginMenu("Pipeline")) {
-                    if (ImGui::MenuItem("List Render stages")) {
-                        open_list_stages_popup = true;
-                    }
-                    if (ImGui::MenuItem("Add render stage")) {
-                        open_add_render_stage_popup = true;
-                    }
-                    ImGui::EndMenu();
-                }
+                ImGui::MenuItem(
+                    "Pipeline", nullptr,
+                    editor_widgets.render_pipeline.get_shown_pointer());
+
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();
         }
 
         ImGui::EndMainMenuBar();
-    }
-
-    if (open_list_stages_popup) { ImGui::OpenPopup("Render stages"); }
-    if (ImGui::BeginPopupModal("Render stages")) {
-
-        ImGui::Text("Pre-Render stages:");
-		ImGui::Text("");
-        for (auto& stage : app->get_renderer()->get_pre_render_stages()) {
-            ImGui::Text("%s", stage->str_id().data());
-        }
-        ImGui::Separator();
-        ImGui::Text("Render modules: ");
-        ImGui::Text("");
-        for (auto& stage : app->get_renderer()->get_render_modules()) {
-            ImGui::Text("%s", stage->str_id().data());
-        }
-        ImGui::Separator();
-        ImGui::Text("Post-Render stages: ");
-        ImGui::Text("");
-        for (auto& stage : app->get_renderer()->get_post_render_stages()) {
-            ImGui::Text("%s", stage->str_id().data());
-        }
-        ImGui::Separator();
-		if (ImGui::Button("Done")) {
-			ImGui::CloseCurrentPopup();
-		}
-
-        ImGui::EndPopup();
-    }
-
-    if (open_add_render_stage_popup) {
-        ImGui::OpenPopup("Add render stage...");
-    }
-    if (ImGui::BeginPopupModal("Add render stage...", nullptr,
-                               ImGuiWindowFlags_AlwaysAutoResize)) {
-
-        static int stage_type = -1;
-        ImGui::Combo("Stage type ", &stage_type,
-                     "PreRenderStage\0RenderModule\0PostRenderStage\0");
-
-        static const char* pre_stages[] = {"DepthPass"};
-        static const char* modules[] = {"DebugModule", "EditorModule",
-                                        "MeshRenderModule", "ParticleModule",
-                                        "TransferModule"};
-        static const char* post_stages[] = {"BlitPass"};
-
-        static int stage_index = -1;
-        switch (stage_type) {
-            case 0:
-                ImGui::Combo("Stage ", &stage_index, pre_stages,
-                             sizeof(pre_stages) / sizeof(const char*));
-                if (ImGui::Button("Add##RenderStage")) {
-                    if (stage_index >= 0) {
-                        add_render_stage(
-                            app->get_renderer()->get_pre_render_stages(), app,
-                            pre_stages[stage_index]);
-                    }
-                    ImGui::CloseCurrentPopup();
-                }
-                break;
-            case 1:
-                ImGui::Combo("Module ", &stage_index, modules,
-                             sizeof(modules) / sizeof(const char*));
-                if (ImGui::Button("Add##RenderStage")) {
-                    if (stage_index >= 0) {
-                        add_render_stage(
-                            app->get_renderer()->get_render_modules(), app,
-                            modules[stage_index]);
-                    }
-                    ImGui::CloseCurrentPopup();
-                }
-                break;
-            case 2:
-                ImGui::Combo("Post-Render Stage ", &stage_index, post_stages,
-                             sizeof(post_stages) / sizeof(const char*));
-                if (ImGui::Button("Add##RenderStage")) {
-
-                    if (stage_index >= 0) {
-                        add_render_stage(
-                            app->get_renderer()->get_post_render_stages(), app,
-                            post_stages[stage_index]);
-                    }
-                    ImGui::CloseCurrentPopup();
-                }
-                break;
-        }
-
-        ImGui::EndPopup();
     }
 
     if (open_new_entity_popup) { ImGui::OpenPopup("New..."); }
