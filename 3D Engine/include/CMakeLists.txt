@@ -93,6 +93,8 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/TransferModule.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/ParticleModule.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/DebugModule.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/EditorModule.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/MeshRenderModule.hpp"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Scene/Scene.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Scene/SceneObject.hpp"

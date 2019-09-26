@@ -55,6 +55,8 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/TransferModule.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/ParticleModule.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/DebugModule.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/EditorModule.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Renderer/Modules/MeshRenderModule.cpp"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Scene/Scene.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/Scene/SceneObject.cpp"

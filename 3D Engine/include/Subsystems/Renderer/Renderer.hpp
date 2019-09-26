@@ -69,26 +69,13 @@ private:
     void create_default_viewport(CreateInfo const& create_info);
     void initialize_postprocessing();
 
-    void load_default_shaders();
-
     // Rendering functions
     void render_viewport(Scene& scene, Viewport& vp);
-    
-
-    void send_material_data(Shader& shader, Components::Material& material);
-    void unbind_textures(Components::Material& material);
-
 
     // Member variables
     std::reference_wrapper<Application> app;
     WindowDim screen_size;
     Framebuffer framebuf;
-    Resource<Shader> no_shader_error;
-    Resource<Shader> collider_shader;
-    Resource<Shader> axis_shader;
-    Resource<Shader> outline_shader;
-    Resource<Mesh> box_collider_mesh;
-    Resource<Mesh> line_mesh;
     std::vector<Viewport> viewports;
 
     std::vector<std::unique_ptr<RenderModules::PreRenderStage>>
