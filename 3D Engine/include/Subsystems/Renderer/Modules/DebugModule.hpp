@@ -13,6 +13,11 @@ public:
     DebugModule();
 
     std::string_view str_id() const override { return "DebugModule"; }
+    std::string_view description() const override {
+        return "Category: Render module\n\n"
+               "This module takes care of potential debug rendering. You "
+               "should probably disable this module in release builds";
+    }
 
     void init() override;
     void

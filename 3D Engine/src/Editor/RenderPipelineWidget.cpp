@@ -176,6 +176,8 @@ void RenderPipelineWidget::display_stage_info(Application& app) {
 
     ImGui::Text("%s", selected->str_id().data());
 
+    ImGui::TextWrapped("%s", selected->description().data());
+
     if (ImGui::Button("Remove stage")) {
         static auto remove_stage = [this](auto& vec) -> bool {
             auto it = std::find_if(vec.begin(), vec.end(), [this](auto& elem) {

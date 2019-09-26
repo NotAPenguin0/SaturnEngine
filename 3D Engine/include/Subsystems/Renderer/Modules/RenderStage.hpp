@@ -17,6 +17,7 @@ public:
     virtual size_t get_ordering() const final;
 
     virtual std::string_view str_id() const = 0;
+	virtual std::string_view description() const = 0;
 
     // Used for sorting the render stages in order
 

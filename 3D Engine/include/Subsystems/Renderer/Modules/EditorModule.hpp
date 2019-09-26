@@ -12,7 +12,15 @@ class EditorModule : public RenderModule {
 public:
     EditorModule();
 
-	std::string_view str_id() const override { return "EditorModule"; }
+    std::string_view str_id() const override { return "EditorModule"; }
+    std::string_view description() const override {
+        return "Category: Render module\n\n"
+               "This modules takes care of editor-specific rendering (in the "
+               "scene view, disabling this will not remove the UI). "
+               "Editor-specific "
+               "rendering includes axes, colliders and outlines for selected "
+               "entities.";
+    }
 
     void init() override;
 
@@ -20,8 +28,7 @@ public:
     process(Scene& scene, Viewport& viewport, Framebuffer& target) override;
 
 private:
-
-	void render_colliders(Scene& scene);
+    void render_colliders(Scene& scene);
     void render_axes();
     void render_outlines(Scene& scene);
 
@@ -29,8 +36,8 @@ private:
     Resource<Shader> axis_shader;
     Resource<Shader> outline_shader;
 
-	Resource<Mesh> box_collider_mesh;
-	Resource<Mesh> line_mesh;
+    Resource<Mesh> box_collider_mesh;
+    Resource<Mesh> line_mesh;
 };
 
 } // namespace Saturn::RenderModules

@@ -10,14 +10,20 @@ class TransferModule : public RenderModule {
 public:
     TransferModule();
 
-	std::string_view str_id() const override { return "TransferModule"; }
+    std::string_view str_id() const override { return "TransferModule"; }
+    std::string_view description() const override {
+        return "Category: Render module\n\n"
+               "This render module is ran first. It transfers rendering data "
+               "to the GPU to be used there. This data includes camera data "
+               "and lighting info.";
+    }
 
     void init() override;
 
     void
     process(Scene& scene, Viewport& viewport, Framebuffer& target) override;
 
-	~TransferModule() = default;
+    ~TransferModule() = default;
 
 private:
     void transfer_camera_data(Scene& scene, Viewport& vp);

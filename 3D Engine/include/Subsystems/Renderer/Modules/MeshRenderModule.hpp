@@ -12,7 +12,12 @@ class MeshRenderModule : public RenderModule {
 public:
     MeshRenderModule();
 
-	std::string_view str_id() const override { return "MeshRenderModule"; }
+    std::string_view str_id() const override { return "MeshRenderModule"; }
+    std::string_view description() const override {
+        return "Category: Render module\n\n"
+               "This module renders all meshes in the scene. You can safely "
+               "remove this to disable mesh rendering.";
+    }
 
     void init() override;
 
@@ -20,10 +25,10 @@ public:
     process(Scene& scene, Viewport& viewport, Framebuffer& target) override;
 
 private:
-	void unbind_textures(Components::Material& material);
+    void unbind_textures(Components::Material& material);
     void send_material_data(Shader& shader, Components::Material& material);
-    
-	Resource<Shader> no_shader_error;
+
+    Resource<Shader> no_shader_error;
 };
 
 } // namespace Saturn::RenderModules

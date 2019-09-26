@@ -13,12 +13,18 @@ class DepthMapPass : public PreRenderStage {
 public:
     DepthMapPass();
 
-	std::string_view str_id() const override { return "DepthMapPass"; }
+    std::string_view str_id() const override { return "DepthMapPass"; }
+    std::string_view description() const override {
+        return "Category: Pre-render stage\n\n"
+               "This render stage is run first. It generates shadow maps to be "
+               "used when rendering shadows. Disabling this is still a bit "
+               "buggy.";
+    }
 
     void init() override final;
     void process(Scene& scene) override final;
 
-	virtual ~DepthMapPass() override;
+    virtual ~DepthMapPass() override;
 
     static DepthMap* last_depthmap;
 

@@ -12,7 +12,12 @@ class ParticleModule : public RenderModule {
 public:
     ParticleModule();
 
-	std::string_view str_id() const override { return "ParticleModule"; }
+    std::string_view str_id() const override { return "ParticleModule"; }
+    std::string_view description() const override {
+        return "Category: Render module\n\n"
+               "This module renders all particles in the scene. Removing this "
+               "will disable any particle rendering.";
+    }
 
     void init() override;
     void
