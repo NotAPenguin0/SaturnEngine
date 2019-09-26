@@ -8,7 +8,6 @@
 #include "Subsystems/Logging/LogSystem.hpp"
 #include "Subsystems/Renderer/OpenGL.hpp"
 
-#include "Utility/bind_guard.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -169,57 +168,47 @@ void Shader::assign(CreateInfo create_info) {
 unsigned int Shader::handle() { return program; }
 
 void Shader::set_int(std::string_view name, int value) {
-    bind_guard<Shader> guard(*this);
     glUniform1i(location(name), value);
 }
 
 void Shader::set_float(std::string_view name, float value) {
-    bind_guard<Shader> guard(*this);
     glUniform1f(location(name), value);
 }
 
 void Shader::set_vec3(std::string_view name, glm::vec3 const& value) {
-    bind_guard<Shader> guard(*this);
     glUniform3fv(location(name), 1, glm::value_ptr(value));
 }
 
 void Shader::set_vec4(std::string_view name, glm::vec4 const& value) {
-    bind_guard<Shader> guard(*this);
     glUniform4fv(location(name), 1, glm::value_ptr(value));
 }
 
 void Shader::set_mat4(std::string_view name, glm::mat4 const& value) {
-    bind_guard<Shader> guard(*this);
     glUniformMatrix4fv(location(name), 1, GL_FALSE, glm::value_ptr(value));
 }
 
 void Shader::set_int(int loc, int value) {
     assert(loc != -1);
-    bind_guard<Shader> guard(*this);
     glUniform1i(loc, value);
 }
 
 void Shader::set_float(int loc, float value) {
     assert(loc != -1);
-    bind_guard<Shader> guard(*this);
     glUniform1f(loc, value);
 }
 
 void Shader::set_vec3(int loc, glm::vec3 const& value) {
     assert(loc != -1);
-    bind_guard<Shader> guard(*this);
     glUniform3fv(loc, 1, glm::value_ptr(value));
 }
 
 void Shader::set_vec4(int loc, glm::vec4 const& value) {
     assert(loc != -1);
-    bind_guard<Shader> guard(*this);
     glUniform4fv(loc, 1, glm::value_ptr(value));
 }
 
 void Shader::set_mat4(int loc, glm::mat4 const& value) {
     assert(loc != -1);
-    bind_guard<Shader> guard(*this);
     glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(value));
 }
 

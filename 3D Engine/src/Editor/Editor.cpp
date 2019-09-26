@@ -14,6 +14,7 @@
 #    include "imgui/imgui_impl_glfw.h"
 #    include "imgui/imgui_impl_opengl3.h"
 
+
 #    include <algorithm>
 #    include <fmt/format.h>
 #    include <fmt/ranges.h>
@@ -119,11 +120,11 @@ void Editor::render(Scene& scene) {
         exit_playmode_binding.callback = [this, &scene]() {
             if (playmode_active) {
                 playmode_active = false;
-				scene.on_exit();
+                scene.on_exit();
                 scene.deserialize_from_file(
                     "resources/playmode_temp/scene.dat");
                 on_scene_reload(scene);
-				// Disable mouse capture in editor.
+                // Disable mouse capture in editor.
                 Input::set_mouse_capture(false);
             }
         };
@@ -153,6 +154,9 @@ void Editor::render(Scene& scene) {
         }
         if (editor_widgets.preferences.is_shown()) {
             editor_widgets.preferences.show();
+        }
+        if (editor_widgets.render_pipeline.is_shown()) {
+            editor_widgets.render_pipeline.show(*app);
         }
     }
 
@@ -225,7 +229,13 @@ void Editor::show_menu_bar(Scene& scene) {
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Options")) {
-            ImGui::MenuItem("Nothing here yet");
+            if (ImGui::BeginMenu("Rendering")) {
+                ImGui::MenuItem(
+                    "Pipeline", nullptr,
+                    editor_widgets.render_pipeline.get_shown_pointer());
+
+                ImGui::EndMenu();
+            }
             ImGui::EndMenu();
         }
 
@@ -356,7 +366,7 @@ void Editor::on_playmode_enter(Scene& scene) {
     }
     scene.destroy_object(editor_camera);
     editor_camera = nullptr;
-	scene.on_start();
+    scene.on_start();
 }
 
 void Editor::frame_end() {

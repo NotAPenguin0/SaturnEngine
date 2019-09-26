@@ -3,8 +3,6 @@
 #include "Subsystems/Logging/LogSystem.hpp"
 #include "Subsystems/Renderer/OpenGL.hpp"
 
-#include "Utility/bind_guard.hpp"
-
 namespace Saturn {
 
 Framebuffer::Framebuffer(CreateInfo create_info) : size(create_info.size) {
@@ -12,14 +10,13 @@ Framebuffer::Framebuffer(CreateInfo create_info) : size(create_info.size) {
     // Create the framebuffer and bind it
     create_fbo();
 
-    bind_guard<Framebuffer> guard(*this);
-    {
-        create_texture();
-        // Attach the texture to the framebuffer
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                               GL_TEXTURE_2D, texture, 0);
-        create_rbo();
-    }
+    bind(*this);
+
+    create_texture();
+    // Attach the texture to the framebuffer
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                           texture, 0);
+    create_rbo();
 }
 
 Framebuffer::~Framebuffer() {
@@ -41,14 +38,13 @@ void Framebuffer::assign(CreateInfo create_info) {
     // Create the framebuffer and bind it
     create_fbo();
 
-    bind_guard<Framebuffer> guard(*this);
-    {
-        create_texture();
-        // Attach the texture to the framebuffer
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                               GL_TEXTURE_2D, texture, 0);
-        create_rbo();
-    }
+    bind(*this);
+
+    create_texture();
+    // Attach the texture to the framebuffer
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                           texture, 0);
+    create_rbo();
 }
 
 void Framebuffer::bind(Framebuffer& buf) {
@@ -90,7 +86,7 @@ void Framebuffer::create_texture() {
 }
 
 void Framebuffer::check_complete() {
-    bind_guard<Framebuffer> guard(*this);
+    bind(*this);
     auto framebuffer_status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if (framebuffer_status == GL_FRAMEBUFFER_COMPLETE) {
         return;

@@ -1,1 +1,1 @@
-C:\Users\michi_000\Desktop\C++\SaturnEngine\resources\full_in_editor
+C:\Users\michi_000\Desktop\C++\SaturnEngine\resources\scene1

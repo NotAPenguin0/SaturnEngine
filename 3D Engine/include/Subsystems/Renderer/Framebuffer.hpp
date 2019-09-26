@@ -12,7 +12,7 @@ public:
         ImgDim size;
     };
 
-	Framebuffer() = default;
+    Framebuffer() = default;
     Framebuffer(CreateInfo create_info);
     Framebuffer(Framebuffer&& other) = delete;
 
@@ -20,17 +20,19 @@ public:
 
     ~Framebuffer();
 
-	void assign(CreateInfo create_info);
+    void assign(CreateInfo create_info);
 
     static void bind(Framebuffer& buf);
     static void unbind();
 
     ImgDim dimensions() const;
 
-	void check_complete();
+    void check_complete();
+
+    unsigned int get_texture() { return texture; }
 
 private:
-	friend class Renderer;
+    friend class Renderer;
 
     // OpenGL Framebuffer object
     unsigned int fbo = 0;
@@ -45,7 +47,7 @@ private:
     void create_rbo();
     void create_texture();
 
-	static inline unsigned int currently_bound = 0;
+    static inline unsigned int currently_bound = 0;
 };
 
 } // namespace Saturn
