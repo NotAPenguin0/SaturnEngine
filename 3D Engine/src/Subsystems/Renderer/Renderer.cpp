@@ -55,7 +55,7 @@ Renderer::Renderer(CreateInfo create_info) :
     add_render_module(std::make_unique<RenderModules::ParticleModule>());
     add_render_module(std::make_unique<RenderModules::DebugModule>());
     add_render_module(std::make_unique<RenderModules::EditorModule>());
-//    add_render_module(std::make_unique<RenderModules::MeshRenderModule>());
+    add_render_module(std::make_unique<RenderModules::MeshRenderModule>());
     add_post_render_stage(std::make_unique<RenderModules::BlitPass>());
 }
 

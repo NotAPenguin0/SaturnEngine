@@ -212,7 +212,7 @@ void Editor::show_menu_bar(Scene& scene) {
     bool open_new_entity_popup = false;
     bool open_new_scene_popup = false;
     bool open_add_render_stage_popup = false;
-	bool open_list_stages_popup = false;
+    bool open_list_stages_popup = false;
 
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
@@ -271,9 +271,9 @@ void Editor::show_menu_bar(Scene& scene) {
         if (ImGui::BeginMenu("Options")) {
             if (ImGui::BeginMenu("Rendering")) {
                 if (ImGui::BeginMenu("Pipeline")) {
-					if (ImGui::MenuItem("List Render stages")) {
+                    if (ImGui::MenuItem("List Render stages")) {
                         open_list_stages_popup = true;
-					}
+                    }
                     if (ImGui::MenuItem("Add render stage")) {
                         open_add_render_stage_popup = true;
                     }
@@ -285,6 +285,34 @@ void Editor::show_menu_bar(Scene& scene) {
         }
 
         ImGui::EndMainMenuBar();
+    }
+
+    if (open_list_stages_popup) { ImGui::OpenPopup("Render stages"); }
+    if (ImGui::BeginPopupModal("Render stages")) {
+
+        ImGui::Text("Pre-Render stages:");
+		ImGui::Text("");
+        for (auto& stage : app->get_renderer()->get_pre_render_stages()) {
+            ImGui::Text("%s", stage->str_id().data());
+        }
+        ImGui::Separator();
+        ImGui::Text("Render modules: ");
+        ImGui::Text("");
+        for (auto& stage : app->get_renderer()->get_render_modules()) {
+            ImGui::Text("%s", stage->str_id().data());
+        }
+        ImGui::Separator();
+        ImGui::Text("Post-Render stages: ");
+        ImGui::Text("");
+        for (auto& stage : app->get_renderer()->get_post_render_stages()) {
+            ImGui::Text("%s", stage->str_id().data());
+        }
+        ImGui::Separator();
+		if (ImGui::Button("Done")) {
+			ImGui::CloseCurrentPopup();
+		}
+
+        ImGui::EndPopup();
     }
 
     if (open_add_render_stage_popup) {
