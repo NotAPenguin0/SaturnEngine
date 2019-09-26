@@ -13,6 +13,8 @@ class DepthMapPass : public PreRenderStage {
 public:
     DepthMapPass();
 
+	std::string_view str_id() const override { return "DepthMapPass"; }
+
     void init() override final;
     void process(Scene& scene) override final;
 

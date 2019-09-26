@@ -63,6 +63,10 @@ public:
     void add_post_render_stage(
         std::unique_ptr<RenderModules::PostRenderStage> stage);
 
+    auto& get_pre_render_stages() { return pre_render_stages; }
+    auto& get_render_modules() { return render_modules; }
+    auto& get_post_render_stages() { return post_render_stages; }
+
 private:
     // Initialization
     void setup_framebuffer(CreateInfo const& create_info);

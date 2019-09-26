@@ -12,6 +12,8 @@ class EditorModule : public RenderModule {
 public:
     EditorModule();
 
+	std::string_view str_id() const override { return "EditorModule"; }
+
     void init() override;
 
     void

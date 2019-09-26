@@ -12,6 +12,8 @@ class DebugModule : public RenderModule {
 public:
     DebugModule();
 
+    std::string_view str_id() const override { return "DebugModule"; }
+
     void init() override;
     void
     process(Scene& scene, Viewport& viewport, Framebuffer& target) override;

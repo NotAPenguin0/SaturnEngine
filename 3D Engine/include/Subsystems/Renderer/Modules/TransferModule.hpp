@@ -9,6 +9,9 @@ namespace Saturn::RenderModules {
 class TransferModule : public RenderModule {
 public:
     TransferModule();
+
+	std::string_view str_id() const override { return "TransferModule"; }
+
     void init() override;
 
     void

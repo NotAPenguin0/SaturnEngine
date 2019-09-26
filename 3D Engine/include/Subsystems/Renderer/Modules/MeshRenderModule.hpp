@@ -12,6 +12,8 @@ class MeshRenderModule : public RenderModule {
 public:
     MeshRenderModule();
 
+	std::string_view str_id() const override { return "MeshRenderModule"; }
+
     void init() override;
 
     void

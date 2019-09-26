@@ -2,6 +2,7 @@
 #define SATURN_RENDER_STAGE_HPP_
 
 #include <cstddef>
+#include <string_view>
 
 namespace Saturn {
 
@@ -14,6 +15,8 @@ public:
     virtual ~RenderStage() = default;
 
     virtual size_t get_ordering() const final;
+
+    virtual std::string_view str_id() const = 0;
 
     // Used for sorting the render stages in order
 

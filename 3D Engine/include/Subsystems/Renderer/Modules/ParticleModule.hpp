@@ -12,6 +12,8 @@ class ParticleModule : public RenderModule {
 public:
     ParticleModule();
 
+	std::string_view str_id() const override { return "ParticleModule"; }
+
     void init() override;
     void
     process(Scene& scene, Viewport& viewport, Framebuffer& target) override;

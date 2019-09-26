@@ -14,6 +14,9 @@ namespace Saturn::RenderModules {
 class BlitPass : public PostRenderStage {
 public:
     BlitPass();
+
+	std::string_view str_id() const override { return "BlitPass"; }
+
     void init() override;
     void process(Scene& scene, Framebuffer& source) override;
 
