@@ -15,6 +15,8 @@ public:
             float speed = 4.0f;
             float zoom_speed = 100.0f;
             float fov = 45.0f;
+			bool invert_x = false;
+			bool invert_y = false;
 		} camera;
     };
 

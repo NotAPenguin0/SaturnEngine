@@ -85,6 +85,8 @@ void from_json(nlohmann::json const& json, EditorCameraController& component) {
 		component.speed = (*c)["Speed"].get<float>();
 		component.sensitivity = (*c)["Sensitivity"].get<float>();
 		component.zoom_speed = (*c)["ZoomSpeed"].get<float>();
+		component.invert_x = (*c)["InvertX"].get<bool>();
+		component.invert_y = (*c)["InvertY"].get<bool>();
 	}
 }
 
@@ -285,6 +287,8 @@ void to_json(nlohmann::json& json, EditorCameraController const& component) {
 	json["EditorCameraControllerComponent"]["Speed"] = component.speed;
 	json["EditorCameraControllerComponent"]["Sensitivity"] = component.sensitivity;
 	json["EditorCameraControllerComponent"]["ZoomSpeed"] = component.zoom_speed;
+	json["EditorCameraControllerComponent"]["InvertX"] = component.invert_x;
+	json["EditorCameraControllerComponent"]["InvertY"] = component.invert_y;
 	// clang-format on
 }
 

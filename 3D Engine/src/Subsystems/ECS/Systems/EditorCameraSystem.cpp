@@ -63,12 +63,12 @@ void EditorCameraSystem::movement(
 
     float speed = controller.speed * Time::deltaTime;
 
-    float horizontal = RawInput::get_mouse().xoffset;
-    float vertical = RawInput::get_mouse().yoffset;
+    float horizontal = RawInput::get_mouse().xoffset * pow(-1, controller.invert_x);
+    float vertical = RawInput::get_mouse().yoffset * pow(-1, controller.invert_y);
 
     glm::vec3 cam_right = glm::normalize(glm::cross(cam.front, cam.up));
-    trans.position += (speed * cam.front * vertical);
-    trans.position += (speed * cam_right * horizontal);
+    trans.position -= (speed * cam.front * vertical);
+    trans.position -= (speed * cam_right * horizontal);
 }
 
 void EditorCameraSystem::zoom(Components::Camera& cam,

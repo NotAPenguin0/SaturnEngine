@@ -86,6 +86,8 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.fields["speed"] = "float";
 		info.fields["sensitivity"] = "float";
 		info.fields["zoom_speed"] = "float";
+		info.fields["invert_x"] = "bool";
+		info.fields["invert_y"] = "bool";
 		data.push_back(info);
 	}
 	{

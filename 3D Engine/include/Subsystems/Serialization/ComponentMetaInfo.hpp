@@ -187,6 +187,12 @@ public:
 		if (field_name == "zoom_speed") {
 			return ComponentFieldPtr(&comp.zoom_speed);
 		}
+		if (field_name == "invert_x") {
+			return ComponentFieldPtr(&comp.invert_x);
+		}
+		if (field_name == "invert_y") {
+			return ComponentFieldPtr(&comp.invert_y);
+		}
 		
 		// return nullptr if the field was not found
 		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
