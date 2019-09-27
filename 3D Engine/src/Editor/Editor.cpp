@@ -14,7 +14,6 @@
 #    include "imgui/imgui_impl_glfw.h"
 #    include "imgui/imgui_impl_opengl3.h"
 
-
 #    include <algorithm>
 #    include <fmt/format.h>
 #    include <fmt/ranges.h>
@@ -158,6 +157,9 @@ void Editor::render(Scene& scene) {
         if (editor_widgets.render_pipeline.is_shown()) {
             editor_widgets.render_pipeline.show(*app);
         }
+        if (editor_widgets.fps_overlay.is_shown()) {
+            editor_widgets.fps_overlay.show();
+        }
     }
 
     ImGui::Render();
@@ -225,6 +227,8 @@ void Editor::show_menu_bar(Scene& scene) {
                             log::get_console().get_shown_pointer());
             ImGui::MenuItem("Editor Preferences", nullptr,
                             editor_widgets.preferences.get_shown_pointer());
+            ImGui::MenuItem("FPS overlay", nullptr,
+                            editor_widgets.fps_overlay.get_shown_pointer());
             ImGui::MenuItem("ImGui Demo Window", nullptr, &show_demo_window);
             ImGui::EndMenu();
         }
@@ -341,8 +345,8 @@ void Editor::create_editor_camera(Scene& scene) {
     control_c.sensitivity = prefs.camera.sensitivity;
     control_c.speed = prefs.camera.speed;
     control_c.zoom_speed = prefs.camera.zoom_speed;
-	control_c.invert_x = prefs.camera.invert_x;
-	control_c.invert_y = prefs.camera.invert_y;
+    control_c.invert_x = prefs.camera.invert_x;
+    control_c.invert_y = prefs.camera.invert_y;
     cam_c.viewport_id = scene_view_viewport_id;
     cam_c.fov = prefs.camera.fov;
     cam_c.front = glm::vec3(0.5, -0.5, 0.6);
