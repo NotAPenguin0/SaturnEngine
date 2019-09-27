@@ -48,6 +48,9 @@ Editor::Editor(Application& app) : app(&app) {
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(this->app->window_handle, true);
     ImGui_ImplOpenGL3_Init("#version 430");
+	auto& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigDockingWithShift = false;
     // Initialize components metadata
     Meta::ComponentsMeta<COMPONENT_LIST>::init();
     auto& console = log::get_console();
