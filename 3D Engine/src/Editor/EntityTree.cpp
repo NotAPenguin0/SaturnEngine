@@ -21,6 +21,48 @@ namespace Saturn::Editor {
 
 namespace impl {
 
+// #TODO: extract this into meta info using a CATEGORY("some_category") macro
+template<typename C>
+std::string_view get_component_category() {
+    using namespace ::Saturn::Components;
+#    define CAT(comp, str_id)                                                  \
+        if constexpr (std::is_same_v<C, ::Saturn::Components::comp>) {         \
+            return str_id;                                                     \
+        }
+
+    CAT(BoxCollider, "Physics")
+    CAT(Camera, "Camera")
+    CAT(CameraZoomController, "Camera")
+    CAT(ClickEffect, "User-defined")
+    CAT(ColliderRenderer, "Editor-only")
+    CAT(DirectionalLight, "Light")
+    CAT(EditorCameraController, "Editor-only")
+    CAT(FPSCameraController, "Camera")
+    CAT(FreeLookController, "Camera")
+    CAT(Material, "Rendering")
+    CAT(MusicController, "Sound")
+    CAT(Name, "Editor-only")
+    CAT(OutlineRenderer, "Editor-only")
+    CAT(ParticleEmitter, "Particle System")
+    CAT(PointLight, "Light")
+    CAT(Rigidbody, "Physics")
+    CAT(Rotator, "User-defined")
+    CAT(Sound, "Sound")
+    CAT(SoundListener, "Sound")
+    CAT(SpotLight, "Light")
+    CAT(StaticMesh, "Rendering")
+    CAT(Transform, "Rendering")
+
+#    undef CAT
+
+    return "Category-Unknown";
+}
+
+std::vector<std::string_view> get_component_categories() {
+    return {"Camera",  "Editor-only", "Light", "Particle System",
+            "Physics", "Rendering",   "Sound", "User-defined"};
+}
+
 struct ComponentFieldVisitor {
 
     // Define overloaded visitor for all types supported in
@@ -168,20 +210,21 @@ void show_add_component_entry(SceneObject* entity) {
     ComponentInfo const& meta_info =
         ComponentMeta::get_component_meta_info<C>();
     if (meta_info.hide_in_editor) { return; }
-    if (ImGui::Selectable(("New " + meta_info.name).c_str())) {
+    if (ImGui::Selectable((meta_info.name + "##AddComponent").c_str())) {
         if (!entity->has_component<C>()) { entity->add_component<C>(); }
     }
 }
 
 template<typename C, typename... Cs>
-void show_add_component_list(SceneObject* entity) {
+void show_add_component_list(SceneObject* entity, std::string_view cat) {
     using namespace ::Saturn::Components;
-    if (!std::is_same_v<C, Name> && !std::is_same_v<C, ParticleEmitter>) {
+    if (!std::is_same_v<C, Name> && !std::is_same_v<C, ParticleEmitter> &&
+        cat == get_component_category<C>()) {
         show_add_component_entry<C>(entity);
     }
 
     if constexpr (sizeof...(Cs) != 0) {
-        show_add_component_list<Cs...>(entity);
+        show_add_component_list<Cs...>(entity, cat);
     }
 }
 
@@ -199,7 +242,12 @@ void show_entity_actions_popup(Scene& scene,
             ImGui::CloseCurrentPopup();
         }
         if (ImGui::BeginMenu("Add Component")) {
-            impl::show_add_component_list<COMPONENT_LIST>(entity);
+            for (auto cat : impl::get_component_categories()) {
+                if (ImGui::BeginMenu(cat.data())) {
+                    impl::show_add_component_list<COMPONENT_LIST>(entity, cat);
+                    ImGui::EndMenu();
+                }
+            }
             ImGui::EndMenu();
         }
         ImGui::EndPopup();
