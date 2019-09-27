@@ -85,6 +85,13 @@ struct ComponentFieldVisitor {
         ImGui::Text("%s:", field_name.data());
         ImGui::SameLine();
         ImGui::Text("%s", fs::path(field->get_path()).stem().string().c_str());
+        if (ImGui::IsItemHovered()) {
+            ImGui::BeginTooltip();
+            ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+            ImGui::TextUnformatted(field->get_path().c_str());
+            ImGui::PopTextWrapPos();
+            ImGui::EndTooltip();
+        }
         ImGui::SameLine();
         if (ImGui::SmallButton(("...##" + std::string(field_name)).c_str())) {
             SelectFileDialog dialog;

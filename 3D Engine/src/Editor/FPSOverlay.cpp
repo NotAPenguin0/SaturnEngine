@@ -34,13 +34,10 @@ void FPSOverlay::show() {
         frame_times.push_back(fps);
         sum += fps;
 
-		// Truncate average fps
+        // Truncate average fps so we don't get decimals changing every frame
+        // causing trouble for the users with epilepsy out there ;)
         int average = sum / frame_times.size();
-
         std::string overlay = "average: " + std::to_string(average) + " fps";
-
-        ImGui::DragScalar("No. of frames", ImGuiDataType_U64, &num_frames,
-                          0.4f);
 
         ImGui::PlotLines("##FPSPlot", frame_times.data(), frame_times.size(), 0,
                          overlay.c_str(), 0, 2 * average, ImVec2(300, 80));
