@@ -11,7 +11,8 @@
 namespace Saturn::Editor {
 
 void FPSOverlay::show() {
-    ImGui::SetNextWindowPos(ImVec2(15, 25));
+    ImGui::SetNextWindowPos(ImVec2(ImGui::GetMainViewport()->Pos.x + 15,
+                                   ImGui::GetMainViewport()->Pos.y + 25));
     ImGui::SetNextWindowBgAlpha(0.25f);
     if (ImGui::Begin(
             "FPS##Overlay", &shown,

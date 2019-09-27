@@ -46,11 +46,12 @@ Editor::Editor(Application& app) : app(&app) {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(this->app->window_handle, true);
-    ImGui_ImplOpenGL3_Init("#version 430");
-	auto& io = ImGui::GetIO();
+    auto& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigDockingWithShift = false;
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+    ImGui_ImplGlfw_InitForOpenGL(this->app->window_handle, true);
+    ImGui_ImplOpenGL3_Init("#version 430");
     // Initialize components metadata
     Meta::ComponentsMeta<COMPONENT_LIST>::init();
     auto& console = log::get_console();
@@ -380,6 +381,13 @@ void Editor::on_playmode_enter(Scene& scene) {
 
 void Editor::frame_end() {
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    auto& io = ImGui::GetIO();
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+        GLFWwindow* backup_current_context = glfwGetCurrentContext();
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+        glfwMakeContextCurrent(backup_current_context);
+    }
 }
 
 } // namespace Saturn::Editor
