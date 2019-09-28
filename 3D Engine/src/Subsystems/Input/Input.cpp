@@ -248,10 +248,9 @@ void AxisManager::update_axis_values() {
             }
         } else {
             // No axis found with requested name
-            log::log(
-                fmt::format("Invalid axis mapping: No axis exists with name {}",
-                            mapping.name),
-                Editor::DebugConsole::Warning);
+            log::warn(
+                "Invalid axis mapping: No axis exists with name {}",
+                            mapping.name);
         }
     }
     // Update all axes
@@ -277,9 +276,7 @@ std::size_t AxisManager::get_axis_id(std::string const& name) {
     if (it != name_id_map.end()) {
         return it->second;
     } else {
-        log::log(
-            fmt::format("Invalid axis name: No axis exists with name {}", name),
-            Editor::DebugConsole::Warning);
+        log::warn("Invalid axis name: No axis exists with name {}", name);
         return -1;
     }
 }
@@ -452,9 +449,8 @@ void JoystickInputManager::find_present_joysticks() {
             if (joystick.is_gamepad) {
                 joystick.gamepad_name = glfwGetGamepadName(raw_id);
             }
-            log::log(fmt::format("Joystick '{0}' detected in slot {1}",
-                                 joystick.name, raw_id - GLFW_JOYSTICK_1),
-                     Editor::DebugConsole::Info);
+            log::log("Joystick '{0}' detected in slot {1}", joystick.name,
+                     raw_id - GLFW_JOYSTICK_1);
         } else if (present == 0) {
             present_joysticks[id].connected = false;
         }
@@ -471,8 +467,8 @@ void JoystickInputManager::joystick_connection_callback(int raw_id, int event) {
         if (joystick.is_gamepad) {
             joystick.gamepad_name = glfwGetGamepadName(raw_id);
         }
-        log::log(fmt::format("Joystick '{0}' connected to slot {1}",
-                             joystick.name, raw_id - GLFW_JOYSTICK_1));
+        log::log("Joystick '{0}' connected to slot {1}", joystick.name,
+                 raw_id - GLFW_JOYSTICK_1);
     } else if (event == GLFW_DISCONNECTED) {
         present_joysticks[id].connected = false;
         LogSystem::write(LogSystem::Severity::Info,
@@ -549,8 +545,7 @@ float Input::get_axis(std::string const& name) {
         if (axis.id == id) { return axis.value; }
     }
 
-    log::log(fmt::format("No axis exists with name {}", name),
-             Editor::DebugConsole::Warning);
+    log::warn("No axis exists with name {}", name);
     return 0.0f;
 }
 
@@ -560,8 +555,7 @@ float Input::get_axis_raw(std::string const& name) {
     for (auto const& axis : axes) {
         if (axis.id == id) { return axis.raw_value; }
     }
-    log::log(fmt::format("No axis exists with name {}", name),
-             Editor::DebugConsole::Warning);
+    log::warn("No axis exists with name {}", name);
     return 0.0f;
 }
 
@@ -581,11 +575,8 @@ void Input::set_mouse_capture(bool capture) {
 void Input::load_config_file(std::string const& path) {
     std::ifstream in(path);
     if (!in.good()) {
-        LogSystem::write(LogSystem::Severity::Warning,
-                         "Failed to open config file at path " + path);
-        log::log(
-            fmt::format("Failed to open input config file at path{}", path),
-            Editor::DebugConsole::Warning);
+
+        log::warn("Failed to open input config file at path {}", path);
         return;
     }
     nlohmann::json j;

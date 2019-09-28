@@ -68,10 +68,9 @@ Editor::Editor(Application& app) : app(&app) {
     cur_open_scene = get_scene_name_from_path(last_scene);
     cur_open_scene_full_path = last_scene;
     if (!file_exists(cur_open_scene_full_path + "/scene.dat")) {
-        log::log(fmt::format("Last opened scene {} does not exist anymore. Has "
-                             "it been deleted, renamed or moved?",
-                             cur_open_scene_full_path),
-                 DebugConsole::Warning);
+        log::warn("Last opened scene {} does not exist anymore. Has "
+                  "it been deleted, renamed or moved?",
+                  cur_open_scene_full_path);
         can_open_last = false;
     }
     set_window_title();
@@ -195,8 +194,8 @@ void Editor::show_menu_bar(Scene& scene) {
                 dialog.show(SelectFileDialog::PickFolders);
                 fs::path result = dialog.get_result();
                 scene.serialize_to_file(result.string());
-                log::log(fmt::format("Saved scene as {}",
-                                     consistent_path_sep(result.string())));
+                log::log("Saved scene as {}",
+                         consistent_path_sep(result.string()));
             }
             ImGui::Separator();
             if (ImGui::MenuItem("Open")) {
@@ -294,26 +293,25 @@ void Editor::create_entity(Scene& scene, std::string const& name) {
     auto& name_c = scene.get_ecs().get_with_id<Name>(obj.add_component<Name>());
     name_c.name = name;
     obj.add_component<Transform>();
-    log::log(fmt::format("Creating entity with name: {}", name_c.name));
+    log::log("Creating entity with name: {}", name_c.name);
 }
 
 void Editor::load_scene(Scene& scene, fs::path path) {
     editor_widgets.entity_tree.reset_selected_entity();
     cur_open_scene = get_scene_name_from_path(path.string());
     cur_open_scene_full_path = path.string();
-    log::log(fmt::format("Scene name is detected to be {}", cur_open_scene));
+    log::log("Scene name is detected to be {}", cur_open_scene);
     path += "/scene.dat";
     scene.deserialize_from_file(path.string());
     on_scene_reload(scene);
-    log::log(fmt::format("Loaded scene at path: {}",
-                         consistent_path_sep(path.string())));
+    log::log("Loaded scene at path: {}", consistent_path_sep(path.string()));
     set_window_title();
 }
 
 void Editor::save_scene(Scene& scene) {
     scene.serialize_to_file(cur_open_scene_full_path);
-    log::log(fmt::format("Saved scene to {}",
-                         consistent_path_sep(cur_open_scene_full_path)));
+    log::log("Saved scene to {}",
+             consistent_path_sep(cur_open_scene_full_path));
 }
 
 void Editor::create_new_scene(Scene& scene, fs::path path) {
@@ -326,8 +324,8 @@ void Editor::create_new_scene(Scene& scene, fs::path path) {
     cur_open_scene_full_path = path.string();
     save_scene(scene);
 
-    log::log(fmt::format("Created new scene at path {}",
-                         consistent_path_sep(path.string())));
+    log::log("Created new scene at path {}",
+             consistent_path_sep(path.string()));
     set_window_title();
 }
 

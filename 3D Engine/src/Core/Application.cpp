@@ -61,7 +61,7 @@ Application::Application(CreateInfo create_info) :
     if (audeo::init(info)) {
         log::log("Initialized audeo");
     } else {
-        log::log("Failed to initialize audeo", Editor::DebugConsole::Error);
+        log::error("Failed to initialize audeo");
     }
 }
 
@@ -159,7 +159,7 @@ void Application::run() {
             glfwSwapBuffers(window_handle);
 		}
 		catch (std::exception const& e) {
-			log::log(e.what(), Editor::DebugConsole::Warning);
+			log::warn(e.what());
 		}
     }
     scene.on_exit();

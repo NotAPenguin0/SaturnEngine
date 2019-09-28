@@ -15,7 +15,7 @@ Scene::~Scene() { clear_scene(); }
 
 void Scene::update_systems(SystemUpdateMode mode) { ecs.update_systems(mode); }
 void Scene::on_start() { ecs.on_start(); }
-void Scene::on_exit() {ecs.on_exit();}
+void Scene::on_exit() { ecs.on_exit(); }
 
 Application* Scene::get_app() { return app; }
 
@@ -31,10 +31,8 @@ Scene::create_object_from_file(std::string_view file_path,
     auto& object = create_object();
     std::ifstream f(file_path.data());
     if (!f.good()) {
-        log::log(
-            fmt::format("Failed to open entity file at path: {}", file_path),
-            Editor::DebugConsole::Warning);
-		return create_object(nullptr);
+        log::warn("Failed to open entity file at path: {}", file_path);
+        return create_object(nullptr);
     }
     nlohmann::json j;
     f >> j;

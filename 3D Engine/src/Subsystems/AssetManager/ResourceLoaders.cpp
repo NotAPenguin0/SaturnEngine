@@ -11,8 +11,7 @@ namespace Saturn {
 std::unique_ptr<Shader> ResourceLoader<Shader>::load(std::string const& path) {
     std::ifstream file(path);
     if (!file.good()) {
-        log::log(fmt::format("Failed to open shader file at path: {}", path),
-                 Editor::DebugConsole::Error);
+        log::error("Failed to open shader file at path: {}", path);
         return nullptr;
     }
     Shader::CreateInfo info;
@@ -34,8 +33,7 @@ std::unique_ptr<Shader> ResourceLoader<Shader>::load(std::string const& path) {
 std::unique_ptr<Mesh> ResourceLoader<Mesh>::load(std::string const& path) {
     std::ifstream file(path);
     if (!file.good()) {
-        log::log(fmt::format("Failed to open mesh file at path: {}", path),
-                 Editor::DebugConsole::Error);
+        log::error("Failed to open mesh file at path: {}", path);
         return nullptr;
     }
 
@@ -180,8 +178,7 @@ std::unique_ptr<Texture>
 ResourceLoader<Texture>::load(std::string const& path) {
     std::ifstream file(path);
     if (!file.good()) {
-        log::log(fmt::format("Failed to open texture file at path: {}", path),
-                 Editor::DebugConsole::Error);
+        log::error("Failed to open texture file at path: {}", path);
         return nullptr;
     }
 
@@ -249,9 +246,7 @@ std::unique_ptr<audeo::SoundSource>
 ResourceLoader<audeo::SoundSource>::load(std::string const& path) {
     std::ifstream file(path);
     if (!file.good()) {
-        log::log(
-            fmt::format("Failed to open sound source file at path: {}", path),
-            Editor::DebugConsole::Error);
+        log::error("Failed to open sound source file at path: {}", path);
         return nullptr;
     }
 

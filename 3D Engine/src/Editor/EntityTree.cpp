@@ -21,7 +21,10 @@ namespace Saturn::Editor {
 
 namespace impl {
 
-// #TODO: extract this into meta info using a CATEGORY("some_category") macro
+const char* entity_payload_id = "p_entity";
+
+// #TODO: extract this into meta info using a CATEGORY("some_category")
+// macro
 template<typename C>
 std::string_view get_component_category() {
     using namespace ::Saturn::Components;
@@ -166,9 +169,9 @@ void display_component(SceneObject* entity) {
 
         if (ImGui::BeginPopup(popup_name.c_str())) {
             if (ImGui::Selectable("Delete component")) {
-                log::log(fmt::format("Deleting component: {0}from entity: {1}",
-                                     component_meta.name,
-                                     entity->get_component<Name>().name));
+                log::log("Deleting component: {0}from entity: {1}",
+                         component_meta.name,
+                         entity->get_component<Name>().name);
                 entity->remove_component<C>();
                 ImGui::CloseCurrentPopup();
                 ImGui::EndPopup();
@@ -228,19 +231,52 @@ void show_add_component_list(SceneObject* entity, std::string_view cat) {
     }
 }
 
+template<typename C>
+void do_component_copy(Scene& scene, SceneObject* src, SceneObject* dest) {
+    auto& new_c = scene.get_ecs().get_with_id<C>(dest->add_component<C>());
+    auto id = new_c.id;
+    new_c = src->get_component<C>();
+    new_c.id = id;
+    new_c.entity = dest;
+}
+
+template<typename C, typename... Cs>
+void copy_components(Scene& scene, SceneObject* src, SceneObject* dest) {
+
+    if (get_component_category<C>() != "Editor-only" &&
+        src->has_component<C>()) {
+        do_component_copy<C>(scene, src, dest);
+    }
+
+    if constexpr (sizeof...(Cs) != 0) {
+        copy_components<Cs...>(scene, src, dest);
+    }
+}
+
+void clone_entity(Scene& scene, SceneObject* entity) {
+    using namespace Components;
+    std::string new_name = "Duplicate of " + entity->get_component<Name>().name;
+    auto& new_entity = scene.create_object(entity->parent());
+    scene.get_ecs().get_with_id<Name>(new_entity.add_component<Name>()).name =
+        std::move(new_name);
+    copy_components<COMPONENT_LIST>(scene, entity, &new_entity);
+}
+
 void show_entity_actions_popup(Scene& scene,
                                SceneObject*& entity,
                                SceneObject*& selected_entity,
                                const char* popup_name) {
     using namespace Components;
     if (ImGui::BeginPopup(popup_name)) {
-        if (ImGui::Selectable("Delete entity")) {
-            log::log(fmt::format("Deleting entity: {}",
-                                 entity->get_component<Name>().name));
+        if (ImGui::MenuItem("Delete entity")) {
+            log::log("Deleting entity: {}", entity->get_component<Name>().name);
             scene.destroy_object(selected_entity);
             selected_entity = nullptr;
             entity = nullptr;
             ImGui::CloseCurrentPopup();
+        }
+        if (ImGui::MenuItem("Duplicate entity")) {
+            clone_entity(scene, selected_entity);
         }
         if (ImGui::BeginMenu("Add Component")) {
             for (auto cat : impl::get_component_categories()) {
@@ -374,6 +410,27 @@ EntityTree::tree_t::iterator EntityTree::show_self_and_children(
 
     if (ImGui::TreeNodeEx(to_display.c_str(), node_flags)) {
 
+        // Our entity is a drag-drop source and a drag-drop target
+        if (ImGui::BeginDragDropSource()) {
+            ImGui::SetDragDropPayload(impl::entity_payload_id, &*entity,
+                                      sizeof(*entity));
+            ImGui::EndDragDropSource();
+        }
+
+        if (ImGui::BeginDragDropTarget()) {
+            if (const ImGuiPayload* payload =
+                    ImGui::AcceptDragDropPayload(impl::entity_payload_id)) {
+
+                assert(payload->DataSize == sizeof(&*entity));
+                // Set the parent of the drag-drop payload to the current entity
+                SceneObject* new_child =
+                    *reinterpret_cast<SceneObject**>(payload->Data);
+                new_child->set_parent(*entity);
+                new_child->set_parent_id((*entity)->get_id());
+            }
+            ImGui::EndDragDropTarget();
+        }
+
         if (ImGui::IsItemClicked()) {
             if (selected_entity) { on_entity_deselect(selected_entity); }
             selected_entity = *entity;
@@ -387,9 +444,8 @@ EntityTree::tree_t::iterator EntityTree::show_self_and_children(
             on_entity_select(scene, selected_entity);
             ImGui::OpenPopup(popup_name.c_str());
         }
-        //        impl::show_entity_actions_popup(scene, *entity,
-        //        selected_entity,
-        //                                        popup_name.c_str());
+        impl::show_entity_actions_popup(scene, *entity, selected_entity,
+                                        popup_name.c_str());
         ++cur;
         // For each next entity, show it if it's parent is the current
         // entity.
@@ -421,12 +477,6 @@ void EntityTree::show_entity_details(SceneObject* entity, Scene& scene) {
     std::string& name = entity->get_component<Name>().name;
     name.resize(name_buffer_size);
     ImGui::InputText("Entity name", name.data(), name_buffer_size);
-    std::string popup_name = "Entity actions##" + name;
-    if (ImGui::Button("Entity actions ...", ImVec2(150, 0))) {
-        ImGui::OpenPopup(popup_name.c_str());
-    }
-    impl::show_entity_actions_popup(scene, entity, selected_entity,
-                                    popup_name.c_str());
     if (entity) { impl::display_components<COMPONENT_LIST>(entity); }
 }
 

@@ -56,19 +56,24 @@ void GLErrorHandler::gl_error_callback([[maybe_unused]] GLenum source,
     if (type == GL_DEBUG_TYPE_PERFORMANCE) return;
 #endif
 #ifdef WITH_EDITOR
-    Editor::DebugConsole::LogType log_type = Editor::DebugConsole::Info;
     switch (sev) {
         case LogSystem::Severity::Warning:
-            log_type = Editor::DebugConsole::Warning;
+            log::warn("OpenGL Debug Output");
+            log::warn("Error Type: {}", errtype);
+            log::warn("Message: {}", message);
             break;
         case LogSystem::Severity::Error:
-            log_type = Editor::DebugConsole::Error;
+            log::error("OpenGL Debug Output");
+            log::error("Error Type: {}", errtype);
+            log::error("Message: {}", message);
             break;
-        default: break;
+        default:
+            log::log("OpenGL Debug Output");
+            log::log("Error Type: {}", errtype);
+            log::log("Message: {}", message);
+            break;
     }
-    log::log(fmt::format("OpenGL Debug Output"), log_type);
-    log::log(fmt::format("Error Type: {}", errtype), log_type);
-    log::log(fmt::format("Message: {}", message), log_type);
+
 #else
     // Print the error message
     LogSystem::write(sev, "OpenGL Debug Output: ");

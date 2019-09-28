@@ -92,8 +92,9 @@ void TransferModule::transfer_lighting_data(Scene& scene) {
     auto point_lights = collect_component_pointers<PointLight>(scene);
     lights_buffer.set_int(point_lights.size(), 0);
     for (std::size_t i = 0; i < point_lights.size(); ++i) {
-        auto lightpos =
-            point_lights[i]->entity->get_component<Transform>().position;
+        auto lightpos = make_absolute_transform(
+                            point_lights[i]->entity->get_component<Transform>())
+                            .position;
         // clang-format off
         const auto point_light_offset =
             sizeof(int) + // point_light_count
@@ -144,8 +145,9 @@ void TransferModule::transfer_lighting_data(Scene& scene) {
     for (std::size_t i = 0; i < spot_lights.size(); ++i) {
         const auto offset =
             OffsetBeforeSpotLights + i * LightSizesBytes::SpotLightGLSL;
-        auto lightpos =
-            spot_lights[i]->entity->get_component<Transform>().position;
+        auto lightpos = make_absolute_transform(
+                            spot_lights[i]->entity->get_component<Transform>())
+                            .position;
         lights_buffer.set_vec3(spot_lights[i]->ambient, offset);
         lights_buffer.set_vec3(spot_lights[i]->diffuse,
                                offset + sizeof(glm::vec4));

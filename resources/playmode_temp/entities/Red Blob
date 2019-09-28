@@ -22,14 +22,6 @@
             0.6419405937194824
         ]
     },
-    "RotatorComponent": {
-        "EulerAngles": [
-            0.0,
-            0.0,
-            90.0
-        ],
-        "Speed": 1.0
-    },
     "TransformComponent": {
         "Position": [
             0.0,
