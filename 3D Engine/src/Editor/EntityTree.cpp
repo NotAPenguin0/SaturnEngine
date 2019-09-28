@@ -428,6 +428,8 @@ EntityTree::tree_t::iterator EntityTree::show_self_and_children(
         if (ImGui::BeginDragDropSource()) {
             ImGui::SetDragDropPayload(impl::entity_payload_id, &*entity,
                                       sizeof(*entity));
+			// Preview
+			ImGui::Text("%s", (*entity)->get_component<Name>().name.c_str());
             ImGui::EndDragDropSource();
         }
 
