@@ -133,30 +133,36 @@ void Application::run() {
     scene.on_start();
 #endif
     while (!glfwWindowShouldClose(window_handle)) {
-        glfwPollEvents();
-        Time::update();
-        InputEventManager::process_events();
-        SystemUpdateMode system_update_mode = SystemUpdateMode::Play;
-#ifdef WITH_EDITOR
-        editor->render(scene);
-        system_update_mode = editor->get_update_mode();
-        glViewport(0, 0, window_dimensions.x, window_dimensions.y);
-#endif
-        renderer->clear(Color{0.003f, 0.003f, 0.003f, 1.0f});
-        glViewport(0, 0, 800, 600);
+        try {
 
-        scene.update_systems(system_update_mode);
-        // This updates the timer in the physics scheduler, and runs a physics
-        // tick if needed
-        physics_scheduler.update(system_update_mode, scene);
-        renderer->render_scene(scene);
+            glfwPollEvents();
+            Time::update();
+            InputEventManager::process_events();
+            SystemUpdateMode system_update_mode = SystemUpdateMode::Play;
+#ifdef WITH_EDITOR
+            editor->render(scene);
+            system_update_mode = editor->get_update_mode();
+            glViewport(0, 0, window_dimensions.x, window_dimensions.y);
+#endif
+            renderer->clear(Color{0.003f, 0.003f, 0.003f, 1.0f});
+            glViewport(0, 0, 800, 600);
+
+            scene.update_systems(system_update_mode);
+            // This updates the timer in the physics scheduler, and runs a
+            // physics tick if needed
+            physics_scheduler.update(system_update_mode, scene);
+            renderer->render_scene(scene);
 
 #ifdef WITH_EDITOR
-        editor->frame_end();
+            editor->frame_end();
 #endif
-        glfwSwapBuffers(window_handle);
+            glfwSwapBuffers(window_handle);
+		}
+		catch (std::exception const& e) {
+			log::log(e.what(), Editor::DebugConsole::Warning);
+		}
     }
-	scene.on_exit();
+    scene.on_exit();
 }
 
 void Application::quit() {

@@ -156,17 +156,17 @@ void display_component(SceneObject* entity) {
         ComponentMeta::get_component_meta_info<C>();
     static constexpr int imgui_mouse_right_button = 1;
 
+    std::string popup_name = "Component Actions##" + component_meta.name;
+
     if (ImGui::CollapsingHeader(component_meta.name.c_str())) {
         if (ImGui::IsItemClicked(imgui_mouse_right_button)) {
             // Show popup menu containing actions to delete this component
-            if (!ImGui::IsPopupOpen("Component Actions")) {
-                ImGui::OpenPopup("Component Actions");
-            }
+            ImGui::OpenPopup(popup_name.c_str());
         }
 
-        if (ImGui::BeginPopup("Component Actions")) {
+        if (ImGui::BeginPopup(popup_name.c_str())) {
             if (ImGui::Selectable("Delete component")) {
-                log::log(fmt::format("Deleting component: {0} from entity: {1}",
+                log::log(fmt::format("Deleting component: {0}from entity: {1}",
                                      component_meta.name,
                                      entity->get_component<Name>().name));
                 entity->remove_component<C>();
@@ -230,9 +230,10 @@ void show_add_component_list(SceneObject* entity, std::string_view cat) {
 
 void show_entity_actions_popup(Scene& scene,
                                SceneObject*& entity,
-                               SceneObject*& selected_entity) {
+                               SceneObject*& selected_entity,
+                               const char* popup_name) {
     using namespace Components;
-    if (ImGui::BeginPopup("Entity actions")) {
+    if (ImGui::BeginPopup(popup_name)) {
         if (ImGui::Selectable("Delete entity")) {
             log::log(fmt::format("Deleting entity: {}",
                                  entity->get_component<Name>().name));
@@ -378,6 +379,17 @@ EntityTree::tree_t::iterator EntityTree::show_self_and_children(
             selected_entity = *entity;
             on_entity_select(scene, selected_entity);
         }
+        // 1 is right click
+        std::string popup_name = "Entity actions##" + to_display;
+        if (ImGui::IsItemClicked(1)) {
+            if (selected_entity) { on_entity_deselect(selected_entity); }
+            selected_entity = *entity;
+            on_entity_select(scene, selected_entity);
+            ImGui::OpenPopup(popup_name.c_str());
+        }
+        //        impl::show_entity_actions_popup(scene, *entity,
+        //        selected_entity,
+        //                                        popup_name.c_str());
         ++cur;
         // For each next entity, show it if it's parent is the current
         // entity.
@@ -409,10 +421,12 @@ void EntityTree::show_entity_details(SceneObject* entity, Scene& scene) {
     std::string& name = entity->get_component<Name>().name;
     name.resize(name_buffer_size);
     ImGui::InputText("Entity name", name.data(), name_buffer_size);
+    std::string popup_name = "Entity actions##" + name;
     if (ImGui::Button("Entity actions ...", ImVec2(150, 0))) {
-        ImGui::OpenPopup("Entity actions");
+        ImGui::OpenPopup(popup_name.c_str());
     }
-    impl::show_entity_actions_popup(scene, entity, selected_entity);
+    impl::show_entity_actions_popup(scene, entity, selected_entity,
+                                    popup_name.c_str());
     if (entity) { impl::display_components<COMPONENT_LIST>(entity); }
 }
 
