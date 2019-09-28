@@ -370,6 +370,20 @@ void EntityTree::show_entity_tree(tree_t& enttree, Scene& scene) {
 
         if (entity_it == enttree.end()) break;
     }
+    ImGui::Selectable("##MakeRootEntity");
+    if (ImGui::BeginDragDropTarget()) {
+        if (const ImGuiPayload* payload =
+                ImGui::AcceptDragDropPayload(impl::entity_payload_id)) {
+
+            assert(payload->DataSize == sizeof(SceneObject**));
+            // Set the parent of the drag-drop payload to the current entity
+            SceneObject* new_child =
+                *reinterpret_cast<SceneObject**>(payload->Data);
+            new_child->set_parent(nullptr);
+            new_child->set_parent_id(0);
+        }
+        ImGui::EndDragDropTarget();
+    }
 }
 
 bool EntityTree::has_child(tree_t& tree, tree_t::iterator entity) {
@@ -422,7 +436,8 @@ EntityTree::tree_t::iterator EntityTree::show_self_and_children(
                     ImGui::AcceptDragDropPayload(impl::entity_payload_id)) {
 
                 assert(payload->DataSize == sizeof(&*entity));
-                // Set the parent of the drag-drop payload to the current entity
+                // Set the parent of the drag-drop payload to the current
+                // entity
                 SceneObject* new_child =
                     *reinterpret_cast<SceneObject**>(payload->Data);
                 new_child->set_parent(*entity);
@@ -457,10 +472,10 @@ EntityTree::tree_t::iterator EntityTree::show_self_and_children(
                 cur = show_self_and_children(scene, tree, cur);
             } else {
                 // If the parent is not the current entity, we are in the
-                // next section of our tree, so break out of the loop. We have
-                // to increment until we encounter the first element that is
-                // either a root entity or has the current entity as parent, and
-                // then decrement once so it is next in the loop
+                // next section of our tree, so break out of the loop. We
+                // have to increment until we encounter the first element
+                // that is either a root entity or has the current entity as
+                // parent, and then decrement once so it is next in the loop
 
                 auto depth = [](SceneObject* s) -> int {
                     int d = 0;
