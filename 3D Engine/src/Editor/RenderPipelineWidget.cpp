@@ -165,6 +165,10 @@ void RenderPipelineWidget::show_add_stage_popup(Application& app) {
                     ImGui::CloseCurrentPopup();
                 }
                 break;
+            default:
+                if (ImGui::Button("Cancel##RenderStage")) {
+                    ImGui::CloseCurrentPopup();
+                }
         }
 
         ImGui::EndPopup();

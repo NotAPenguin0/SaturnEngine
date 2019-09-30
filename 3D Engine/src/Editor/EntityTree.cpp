@@ -477,48 +477,14 @@ EntityTree::tree_t::iterator EntityTree::show_self_and_children(
                     --cur;
                     break;
                 }
-                // If the parent is not the current entity, we are in the
-                // next section of our tree, so break out of the loop. We
-                // have to increment until we encounter the first element
-                // that is either a root entity or has the current entity as
-                // parent, and then decrement once so it is next in the loop
 
-                auto depth = [](SceneObject* s) -> int {
-                    int d = 0;
-                    auto parent = s->parent();
-                    while (parent) {
-                        ++d;
-                        parent = parent->parent();
-                    }
-                    return d;
-                };
-                /*
-                 auto prev = cur;
-                 while (cur != tree.end()) {
-                     prev = cur;
-                     ++cur;
-                     if (cur == tree.end()) break;
-                     auto dcur = depth(*cur), dprev = depth(*prev);
-                     if (dcur == 0 || dprev == 0 || dcur >= dprev) {
-                         // Should not have incremented
-                         --cur;
-                         break;
-                     }
-                 }*/
+                while (cur != tree.end() &&
+                       (*cur)->get_parent_id() != (*entity)->get_id() &&
+                       (*cur)->get_parent_id() != 0) {
+                    ++cur;
+                }
 
-                auto is_child_of_entity = [entity](SceneObject* s) -> bool {
-                    auto parent = s;
-                    while (parent) {
-                        if (s->get_parent_id() == (*entity)->get_id()) {
-                            return true;
-                        }
-                        parent = parent->parent();
-                    }
-                    return false;
-                };
-
-                while (cur != tree.end() && is_child_of_entity(*cur)) { ++cur; }
-
+                --cur;
                 --cur;
                 break;
             }
