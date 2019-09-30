@@ -428,8 +428,8 @@ EntityTree::tree_t::iterator EntityTree::show_self_and_children(
         if (ImGui::BeginDragDropSource()) {
             ImGui::SetDragDropPayload(impl::entity_payload_id, &*entity,
                                       sizeof(*entity));
-			// Preview
-			ImGui::Text("%s", (*entity)->get_component<Name>().name.c_str());
+            // Preview
+            ImGui::Text("%s", (*entity)->get_component<Name>().name.c_str());
             ImGui::EndDragDropSource();
         }
 
@@ -470,9 +470,13 @@ EntityTree::tree_t::iterator EntityTree::show_self_and_children(
             const std::size_t parent = (*cur)->get_parent_id();
             // If the parent is the current entity's ID, show it and its
             // children.
-            if (parent == (*entity)->get_id()) {
+            if ((*entity) && parent == (*entity)->get_id()) {
                 cur = show_self_and_children(scene, tree, cur);
             } else {
+                if (!(*entity)) {
+                    --cur;
+                    break;
+                }
                 // If the parent is not the current entity, we are in the
                 // next section of our tree, so break out of the loop. We
                 // have to increment until we encounter the first element

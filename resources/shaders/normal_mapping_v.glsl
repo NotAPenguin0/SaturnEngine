@@ -9,6 +9,7 @@ out vec2 TexCoords;
 out vec3 Normal;
 out vec3 FragPos;
 out vec4 FragPosLightSpace;
+out mat3 TBN;
 
 layout (std140, binding = 0) uniform Matrices {
     mat4 projection;
@@ -19,6 +20,11 @@ layout(location = 2) uniform mat4 model;
 layout(location = 9) uniform mat4 lightspace_matrix;
 
 void main() {
+    vec3 T = normalize(vec3(model * vec4(iTangent, 0.0)));
+    vec3 N = normalize(vec3(model * vec4(iNormal, 0.0)));
+    vec3 B = cross(N, T);
+    TBN = mat3(T, B, N);
+
     TexCoords = iTexCoords;
     // calculate this matrix on cpu for efficiency later
     Normal = mat3(transpose(inverse(model))) * iNormal;

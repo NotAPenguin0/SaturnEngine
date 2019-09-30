@@ -6,6 +6,7 @@ in vec2 TexCoords;
 in vec3 Normal;
 in vec3 FragPos;
 in vec4 FragPosLightSpace;
+in mat3 TBN;
 
 struct PointLight {
     vec3 ambient;        
@@ -167,6 +168,7 @@ float calc_shadow() {
 
 void main() {
     vec3 norm = normalize(texture(normal_map, TexCoords).rgb * 2.0 - 1.0);
+    norm = normalize(TBN * norm); 
     vec3 light_result = vec3(0.0f);
     float shadow = calc_shadow();
     // Optimize: calculate certain vectors only once!
