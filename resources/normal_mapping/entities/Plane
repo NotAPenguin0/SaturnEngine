@@ -1,12 +1,16 @@
 {
+    "ColliderRendererComponent": {},
     "ID": 9,
     "MaterialComponent": {
         "DiffuseMap": {
-            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\textures\\wood_floor.tex"
+            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\textures\\brickwall.tex"
         },
         "Lit": true,
+        "NormalMap": {
+            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\textures\\brickwall_normal.tex"
+        },
         "Shader": {
-            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\shaders\\shadow.sh"
+            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\shaders\\normal_mapping.sh"
         },
         "Shininess": 0.0,
         "SpecularMap": {
@@ -16,11 +20,18 @@
     "NameComponent": {
         "Name": "Plane\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
     },
+    "OutlineRendererComponent": {
+        "Color": [
+            0.9200000166893005,
+            0.6700000166893005,
+            0.20000000298023224
+        ]
+    },
     "ParentID": 0,
     "StaticMeshComponent": {
         "FaceCull": false,
         "Mesh": {
-            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\meshes\\scaled_plane.mesh"
+            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\meshes\\my_plane.mesh"
         }
     },
     "TransformComponent": {
@@ -30,8 +41,8 @@
             0.0
         ],
         "Rotation": [
-            90.0,
             0.0,
+            45.0,
             0.0
         ],
         "Scale": [

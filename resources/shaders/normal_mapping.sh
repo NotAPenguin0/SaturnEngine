@@ -1,0 +1,3 @@
+resources/shaders/normal_mapping_v.glsl
+resources/shaders/normal_mapping_f.glsl
+None

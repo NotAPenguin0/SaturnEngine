@@ -68,11 +68,14 @@ void MeshRenderModule::process(Scene& scene,
 void MeshRenderModule::unbind_textures(Material& material) {
     if (material.lit) {
         if (material.diffuse_map.is_loaded()) {
-            Texture::unbind(material.diffuse_map.get());
+            Texture::unbind(*material.diffuse_map);
         }
         if (material.specular_map.is_loaded()) {
-            Texture::unbind(material.specular_map.get());
+            Texture::unbind(*material.specular_map);
         }
+		if (material.normal_map.is_loaded()) {
+            Texture::unbind(*material.normal_map);
+		}
     }
 }
 
@@ -80,14 +83,19 @@ void MeshRenderModule::send_material_data(Shader& shader, Material& material) {
     Shader::bind(shader);
     if (material.lit) {
         if (material.diffuse_map.is_loaded()) {
-            Texture::bind(material.diffuse_map.get());
+            Texture::bind(*material.diffuse_map);
             shader.set_int(Shader::Uniforms::Material::DiffuseMap,
                            material.diffuse_map->unit() - GL_TEXTURE0);
         }
         if (material.specular_map.is_loaded()) {
-            Texture::bind(material.specular_map.get());
+            Texture::bind(*material.specular_map);
             shader.set_int(Shader::Uniforms::Material::SpecularMap,
                            material.specular_map->unit() - GL_TEXTURE0);
+        }
+        if (material.normal_map.is_loaded()) {
+            Texture::bind(*material.normal_map);
+            shader.set_int(Shader::Uniforms::Material::NormalMap,
+                           material.normal_map->unit() - GL_TEXTURE0);
         }
         shader.set_float(Shader::Uniforms::Material::Shininess,
                          material.shininess);

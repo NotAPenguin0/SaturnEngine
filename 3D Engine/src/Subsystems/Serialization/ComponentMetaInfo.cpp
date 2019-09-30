@@ -118,6 +118,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.fields["shader"] = "Resource<Saturn::Shader>";
 		info.fields["lit"] = "bool";
 		info.fields["specular_map"] = "Resource<Saturn::Texture>";
+		info.fields["normal_map"] = "Resource<Saturn::Texture>";
 		info.fields["shininess"] = "float";
 		data.push_back(info);
 	}

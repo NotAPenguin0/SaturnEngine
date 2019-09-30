@@ -1,0 +1,43 @@
+{
+    "ID": 14,
+    "MaterialComponent": {
+        "DiffuseMap": {
+            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\textures\\container2.tex"
+        },
+        "Lit": true,
+        "Shader": {
+            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\shaders\\shadow.sh"
+        },
+        "Shininess": 1.0,
+        "SpecularMap": {
+            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\textures\\container2_specular.tex"
+        }
+    },
+    "NameComponent": {
+        "Name": "Box4\u0000cate of Box1\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+    },
+    "ParentID": 11,
+    "StaticMeshComponent": {
+        "FaceCull": true,
+        "Mesh": {
+            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\meshes\\my_cube.mesh"
+        }
+    },
+    "TransformComponent": {
+        "Position": [
+            -8.0,
+            8.0,
+            -3.0
+        ],
+        "Rotation": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale": [
+            1.0,
+            1.0,
+            1.0
+        ]
+    }
+}

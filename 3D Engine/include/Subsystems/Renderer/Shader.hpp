@@ -54,12 +54,12 @@ public:
         struct Material {
             static constexpr int DiffuseMap = 6;
             static constexpr int SpecularMap = 7;
-			static constexpr int Shininess = 8;
+            static constexpr int Shininess = 8;
+            static constexpr int NormalMap = 11;
         };
 		
 		static constexpr int LightSpaceMatrix = 9;
 		static constexpr int DepthMap = 10;
-        static constexpr int NormalMap = 11;
     };
 
 private:

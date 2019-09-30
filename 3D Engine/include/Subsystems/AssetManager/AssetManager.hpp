@@ -50,7 +50,7 @@ public:
 
     template<typename CreateInfoT>
     static Resource<R> get_resource(CreateInfoT const& info,
-                               std::string const& name) {
+                                    std::string const& name) {
         static_assert(std::is_same_v<CreateInfoT, typename R::CreateInfo>,
                       "Must be a CreateInfo type");
         auto id = IDGenerator<R>::next();
@@ -81,8 +81,10 @@ private:
 
 template<typename R>
 void from_json(nlohmann::json const& j, Resource<R>& res) {
-    auto path = j["Resource"];
-    res = AssetManager<R>::get_resource(path);
+    if (auto r = j.find("Resource"); r != j.end()) {
+        auto path = j["Resource"];
+        res = AssetManager<R>::get_resource(path);
+    }
 }
 
 template<typename R>

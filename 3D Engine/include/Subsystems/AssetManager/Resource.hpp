@@ -38,6 +38,9 @@ public:
 
     R const* operator->() const { return ptr; }
 
+    R& operator*() { return *ptr; };
+    R const& operator*() const { return *ptr; }
+
     std::string get_path() const { return path; }
 
 private:

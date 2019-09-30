@@ -18,8 +18,12 @@ void from_json(nlohmann::json const& json, BoxCollider& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No BoxCollider component stored even though it was requested");
 	} else {
-		component.center = (*c)["Center"].get<glm::vec3>();
-		component.half_widths = (*c)["HalfWidths"].get<glm::vec3>();
+		if (auto x = (*c).find("Center"); x != (*c).end()) {
+			component.center = (*x).get<glm::vec3>();
+		}
+		if (auto x = (*c).find("HalfWidths"); x != (*c).end()) {
+			component.half_widths = (*x).get<glm::vec3>();
+		}
 	}
 }
 
@@ -28,10 +32,18 @@ void from_json(nlohmann::json const& json, Camera& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No Camera component stored even though it was requested");
 	} else {
-		component.front = (*c)["Front"].get<glm::vec3>();
-		component.up = (*c)["Up"].get<glm::vec3>();
-		component.fov = (*c)["Fov"].get<float>();
-		component.viewport_id = (*c)["ViewportId"].get<unsigned int>();
+		if (auto x = (*c).find("Front"); x != (*c).end()) {
+			component.front = (*x).get<glm::vec3>();
+		}
+		if (auto x = (*c).find("Up"); x != (*c).end()) {
+			component.up = (*x).get<glm::vec3>();
+		}
+		if (auto x = (*c).find("Fov"); x != (*c).end()) {
+			component.fov = (*x).get<float>();
+		}
+		if (auto x = (*c).find("ViewportId"); x != (*c).end()) {
+			component.viewport_id = (*x).get<unsigned int>();
+		}
 	}
 }
 
@@ -40,9 +52,15 @@ void from_json(nlohmann::json const& json, CameraZoomController& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No CameraZoomController component stored even though it was requested");
 	} else {
-		component.zoom_speed = (*c)["ZoomSpeed"].get<float>();
-		component.min_zoom = (*c)["MinZoom"].get<float>();
-		component.max_zoom = (*c)["MaxZoom"].get<float>();
+		if (auto x = (*c).find("ZoomSpeed"); x != (*c).end()) {
+			component.zoom_speed = (*x).get<float>();
+		}
+		if (auto x = (*c).find("MinZoom"); x != (*c).end()) {
+			component.min_zoom = (*x).get<float>();
+		}
+		if (auto x = (*c).find("MaxZoom"); x != (*c).end()) {
+			component.max_zoom = (*x).get<float>();
+		}
 	}
 }
 
@@ -51,8 +69,12 @@ void from_json(nlohmann::json const& json, ClickEffect& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No ClickEffect component stored even though it was requested");
 	} else {
-		component.sound_effect = (*c)["SoundEffect"].get<Resource<audeo::SoundSource>>();
-		component.max_distance = (*c)["MaxDistance"].get<float>();
+		if (auto x = (*c).find("SoundEffect"); x != (*c).end()) {
+			component.sound_effect = (*x).get<Resource<audeo::SoundSource>>();
+		}
+		if (auto x = (*c).find("MaxDistance"); x != (*c).end()) {
+			component.max_distance = (*x).get<float>();
+		}
 	}
 }
 
@@ -70,10 +92,18 @@ void from_json(nlohmann::json const& json, DirectionalLight& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No DirectionalLight component stored even though it was requested");
 	} else {
-		component.ambient = (*c)["Ambient"].get<Saturn::color3>();
-		component.diffuse = (*c)["Diffuse"].get<Saturn::color3>();
-		component.specular = (*c)["Specular"].get<Saturn::color3>();
-		component.direction = (*c)["Direction"].get<glm::vec3>();
+		if (auto x = (*c).find("Ambient"); x != (*c).end()) {
+			component.ambient = (*x).get<Saturn::color3>();
+		}
+		if (auto x = (*c).find("Diffuse"); x != (*c).end()) {
+			component.diffuse = (*x).get<Saturn::color3>();
+		}
+		if (auto x = (*c).find("Specular"); x != (*c).end()) {
+			component.specular = (*x).get<Saturn::color3>();
+		}
+		if (auto x = (*c).find("Direction"); x != (*c).end()) {
+			component.direction = (*x).get<glm::vec3>();
+		}
 	}
 }
 
@@ -82,11 +112,21 @@ void from_json(nlohmann::json const& json, EditorCameraController& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No EditorCameraController component stored even though it was requested");
 	} else {
-		component.speed = (*c)["Speed"].get<float>();
-		component.sensitivity = (*c)["Sensitivity"].get<float>();
-		component.zoom_speed = (*c)["ZoomSpeed"].get<float>();
-		component.invert_x = (*c)["InvertX"].get<bool>();
-		component.invert_y = (*c)["InvertY"].get<bool>();
+		if (auto x = (*c).find("Speed"); x != (*c).end()) {
+			component.speed = (*x).get<float>();
+		}
+		if (auto x = (*c).find("Sensitivity"); x != (*c).end()) {
+			component.sensitivity = (*x).get<float>();
+		}
+		if (auto x = (*c).find("ZoomSpeed"); x != (*c).end()) {
+			component.zoom_speed = (*x).get<float>();
+		}
+		if (auto x = (*c).find("InvertX"); x != (*c).end()) {
+			component.invert_x = (*x).get<bool>();
+		}
+		if (auto x = (*c).find("InvertY"); x != (*c).end()) {
+			component.invert_y = (*x).get<bool>();
+		}
 	}
 }
 
@@ -95,7 +135,9 @@ void from_json(nlohmann::json const& json, FPSCameraController& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No FPSCameraController component stored even though it was requested");
 	} else {
-		component.speed = (*c)["Speed"].get<float>();
+		if (auto x = (*c).find("Speed"); x != (*c).end()) {
+			component.speed = (*x).get<float>();
+		}
 	}
 }
 
@@ -104,7 +146,9 @@ void from_json(nlohmann::json const& json, FreeLookController& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No FreeLookController component stored even though it was requested");
 	} else {
-		component.mouse_sensitivity = (*c)["MouseSensitivity"].get<float>();
+		if (auto x = (*c).find("MouseSensitivity"); x != (*c).end()) {
+			component.mouse_sensitivity = (*x).get<float>();
+		}
 	}
 }
 
@@ -113,11 +157,24 @@ void from_json(nlohmann::json const& json, Material& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No Material component stored even though it was requested");
 	} else {
-		component.diffuse_map = (*c)["DiffuseMap"].get<Resource<Saturn::Texture>>();
-		component.shader = (*c)["Shader"].get<Resource<Saturn::Shader>>();
-		component.lit = (*c)["Lit"].get<bool>();
-		component.specular_map = (*c)["SpecularMap"].get<Resource<Saturn::Texture>>();
-		component.shininess = (*c)["Shininess"].get<float>();
+		if (auto x = (*c).find("DiffuseMap"); x != (*c).end()) {
+			component.diffuse_map = (*x).get<Resource<Saturn::Texture>>();
+		}
+		if (auto x = (*c).find("Shader"); x != (*c).end()) {
+			component.shader = (*x).get<Resource<Saturn::Shader>>();
+		}
+		if (auto x = (*c).find("Lit"); x != (*c).end()) {
+			component.lit = (*x).get<bool>();
+		}
+		if (auto x = (*c).find("SpecularMap"); x != (*c).end()) {
+			component.specular_map = (*x).get<Resource<Saturn::Texture>>();
+		}
+		if (auto x = (*c).find("NormalMap"); x != (*c).end()) {
+			component.normal_map = (*x).get<Resource<Saturn::Texture>>();
+		}
+		if (auto x = (*c).find("Shininess"); x != (*c).end()) {
+			component.shininess = (*x).get<float>();
+		}
 	}
 }
 
@@ -126,9 +183,15 @@ void from_json(nlohmann::json const& json, MusicController& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No MusicController component stored even though it was requested");
 	} else {
-		component.music = (*c)["Music"].get<Resource<audeo::SoundSource>>();
-		component.loop = (*c)["Loop"].get<bool>();
-		component.fade_in_ms = (*c)["FadeInMs"].get<float>();
+		if (auto x = (*c).find("Music"); x != (*c).end()) {
+			component.music = (*x).get<Resource<audeo::SoundSource>>();
+		}
+		if (auto x = (*c).find("Loop"); x != (*c).end()) {
+			component.loop = (*x).get<bool>();
+		}
+		if (auto x = (*c).find("FadeInMs"); x != (*c).end()) {
+			component.fade_in_ms = (*x).get<float>();
+		}
 	}
 }
 
@@ -137,7 +200,9 @@ void from_json(nlohmann::json const& json, Name& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No Name component stored even though it was requested");
 	} else {
-		component.name = (*c)["Name"].get<std::string>();
+		if (auto x = (*c).find("Name"); x != (*c).end()) {
+			component.name = (*x).get<std::string>();
+		}
 	}
 }
 
@@ -146,7 +211,9 @@ void from_json(nlohmann::json const& json, OutlineRenderer& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No OutlineRenderer component stored even though it was requested");
 	} else {
-		component.color = (*c)["Color"].get<Saturn::color3>();
+		if (auto x = (*c).find("Color"); x != (*c).end()) {
+			component.color = (*x).get<Saturn::color3>();
+		}
 	}
 }
 
@@ -155,10 +222,18 @@ void from_json(nlohmann::json const& json, PointLight& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No PointLight component stored even though it was requested");
 	} else {
-		component.ambient = (*c)["Ambient"].get<Saturn::color3>();
-		component.diffuse = (*c)["Diffuse"].get<Saturn::color3>();
-		component.specular = (*c)["Specular"].get<Saturn::color3>();
-		component.intensity = (*c)["Intensity"].get<float>();
+		if (auto x = (*c).find("Ambient"); x != (*c).end()) {
+			component.ambient = (*x).get<Saturn::color3>();
+		}
+		if (auto x = (*c).find("Diffuse"); x != (*c).end()) {
+			component.diffuse = (*x).get<Saturn::color3>();
+		}
+		if (auto x = (*c).find("Specular"); x != (*c).end()) {
+			component.specular = (*x).get<Saturn::color3>();
+		}
+		if (auto x = (*c).find("Intensity"); x != (*c).end()) {
+			component.intensity = (*x).get<float>();
+		}
 	}
 }
 
@@ -167,8 +242,12 @@ void from_json(nlohmann::json const& json, Rigidbody& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No Rigidbody component stored even though it was requested");
 	} else {
-		component.mass = (*c)["Mass"].get<float>();
-		component.locked_axes = (*c)["LockedAxes"].get<glm::bvec3>();
+		if (auto x = (*c).find("Mass"); x != (*c).end()) {
+			component.mass = (*x).get<float>();
+		}
+		if (auto x = (*c).find("LockedAxes"); x != (*c).end()) {
+			component.locked_axes = (*x).get<glm::bvec3>();
+		}
 	}
 }
 
@@ -177,8 +256,12 @@ void from_json(nlohmann::json const& json, Rotator& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No Rotator component stored even though it was requested");
 	} else {
-		component.speed = (*c)["Speed"].get<float>();
-		component.euler_angles = (*c)["EulerAngles"].get<glm::vec3>();
+		if (auto x = (*c).find("Speed"); x != (*c).end()) {
+			component.speed = (*x).get<float>();
+		}
+		if (auto x = (*c).find("EulerAngles"); x != (*c).end()) {
+			component.euler_angles = (*x).get<glm::vec3>();
+		}
 	}
 }
 
@@ -187,8 +270,12 @@ void from_json(nlohmann::json const& json, SoundListener& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No SoundListener component stored even though it was requested");
 	} else {
-		component.forward = (*c)["Forward"].get<glm::vec3>();
-		component.position = (*c)["Position"].get<glm::vec3>();
+		if (auto x = (*c).find("Forward"); x != (*c).end()) {
+			component.forward = (*x).get<glm::vec3>();
+		}
+		if (auto x = (*c).find("Position"); x != (*c).end()) {
+			component.position = (*x).get<glm::vec3>();
+		}
 	}
 }
 
@@ -197,13 +284,27 @@ void from_json(nlohmann::json const& json, SpotLight& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No SpotLight component stored even though it was requested");
 	} else {
-		component.inner_angle = (*c)["InnerAngle"].get<float>();
-		component.ambient = (*c)["Ambient"].get<Saturn::color3>();
-		component.diffuse = (*c)["Diffuse"].get<Saturn::color3>();
-		component.specular = (*c)["Specular"].get<Saturn::color3>();
-		component.intensity = (*c)["Intensity"].get<float>();
-		component.direction = (*c)["Direction"].get<glm::vec3>();
-		component.outer_angle = (*c)["OuterAngle"].get<float>();
+		if (auto x = (*c).find("InnerAngle"); x != (*c).end()) {
+			component.inner_angle = (*x).get<float>();
+		}
+		if (auto x = (*c).find("Ambient"); x != (*c).end()) {
+			component.ambient = (*x).get<Saturn::color3>();
+		}
+		if (auto x = (*c).find("Diffuse"); x != (*c).end()) {
+			component.diffuse = (*x).get<Saturn::color3>();
+		}
+		if (auto x = (*c).find("Specular"); x != (*c).end()) {
+			component.specular = (*x).get<Saturn::color3>();
+		}
+		if (auto x = (*c).find("Intensity"); x != (*c).end()) {
+			component.intensity = (*x).get<float>();
+		}
+		if (auto x = (*c).find("Direction"); x != (*c).end()) {
+			component.direction = (*x).get<glm::vec3>();
+		}
+		if (auto x = (*c).find("OuterAngle"); x != (*c).end()) {
+			component.outer_angle = (*x).get<float>();
+		}
 	}
 }
 
@@ -212,8 +313,12 @@ void from_json(nlohmann::json const& json, StaticMesh& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No StaticMesh component stored even though it was requested");
 	} else {
-		component.mesh = (*c)["Mesh"].get<Resource<Saturn::Mesh>>();
-		component.face_cull = (*c)["FaceCull"].get<bool>();
+		if (auto x = (*c).find("Mesh"); x != (*c).end()) {
+			component.mesh = (*x).get<Resource<Saturn::Mesh>>();
+		}
+		if (auto x = (*c).find("FaceCull"); x != (*c).end()) {
+			component.face_cull = (*x).get<bool>();
+		}
 	}
 }
 
@@ -222,9 +327,15 @@ void from_json(nlohmann::json const& json, Transform& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No Transform component stored even though it was requested");
 	} else {
-		component.position = (*c)["Position"].get<glm::vec3>();
-		component.rotation = (*c)["Rotation"].get<glm::vec3>();
-		component.scale = (*c)["Scale"].get<glm::vec3>();
+		if (auto x = (*c).find("Position"); x != (*c).end()) {
+			component.position = (*x).get<glm::vec3>();
+		}
+		if (auto x = (*c).find("Rotation"); x != (*c).end()) {
+			component.rotation = (*x).get<glm::vec3>();
+		}
+		if (auto x = (*c).find("Scale"); x != (*c).end()) {
+			component.scale = (*x).get<glm::vec3>();
+		}
 	}
 }
 
@@ -313,6 +424,7 @@ void to_json(nlohmann::json& json, Material const& component) {
 	json["MaterialComponent"]["Shader"] = component.shader;
 	json["MaterialComponent"]["Lit"] = component.lit;
 	json["MaterialComponent"]["SpecularMap"] = component.specular_map;
+	json["MaterialComponent"]["NormalMap"] = component.normal_map;
 	json["MaterialComponent"]["Shininess"] = component.shininess;
 	// clang-format on
 }

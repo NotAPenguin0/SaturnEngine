@@ -17,6 +17,7 @@ struct COMPONENT DEFAULT_SERIALIZE Material : public ComponentBase {
     // Lighting data
     Resource<Texture> diffuse_map;
     Resource<Texture> specular_map;
+	Resource<Texture> normal_map;
 	float shininess;
 };
 

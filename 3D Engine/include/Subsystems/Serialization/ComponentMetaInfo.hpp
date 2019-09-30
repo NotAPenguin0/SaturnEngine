@@ -229,6 +229,9 @@ public:
 		if (field_name == "specular_map") {
 			return ComponentFieldPtr(&comp.specular_map);
 		}
+		if (field_name == "normal_map") {
+			return ComponentFieldPtr(&comp.normal_map);
+		}
 		if (field_name == "shininess") {
 			return ComponentFieldPtr(&comp.shininess);
 		}
