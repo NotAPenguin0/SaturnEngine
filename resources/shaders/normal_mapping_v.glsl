@@ -6,7 +6,6 @@ layout(location = 2) in vec3 iNormal;
 layout(location = 3) in vec3 iTangent;
 
 out vec2 TexCoords;
-out vec3 Normal;
 out vec3 FragPos;
 out vec4 FragPosLightSpace;
 out mat3 TBN;
@@ -26,8 +25,6 @@ void main() {
     TBN = mat3(T, B, N);
 
     TexCoords = iTexCoords;
-    // calculate this matrix on cpu for efficiency later
-    Normal = mat3(transpose(inverse(model))) * iNormal;
     FragPos = vec3(model * vec4(iPos, 1.0));
     FragPosLightSpace = lightspace_matrix * vec4(FragPos, 1.0);
     gl_Position = projection * view * model * vec4(iPos, 1.0);

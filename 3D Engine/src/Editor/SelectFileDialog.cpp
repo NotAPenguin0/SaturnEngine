@@ -2,6 +2,7 @@
 
 #ifdef _WIN32
 #    include <Windows.h>
+#    include <shlobj_core.h>
 #    include <shlwapi.h>
 #    include <shobjidl.h>
 #endif
@@ -187,7 +188,10 @@ HRESULT CDialogEventHandler_CreateInstance(REFIID riid, void** ppv) {
     return hr;
 }
 
+// https://docs.microsoft.com/en-us/windows/win32/learnwin32/example--the-open-dialog-box
+// https://github.com/microsoft/Windows-classic-samples/blob/master/Samples/Win7Samples/winui/shell/appplatform/commonfiledialog/CommonFileDialogApp.cpp
 static HRESULT win32_show_file_dialog(fs::path& path,
+                                      fs::path const& dir,
                                       DWORD user_flags,
                                       std::vector<FileType> const& filetypes) {
     IFileDialog* file_dialog = nullptr;
@@ -196,6 +200,8 @@ static HRESULT win32_show_file_dialog(fs::path& path,
         CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_INPROC_SERVER,
                          IID_PPV_ARGS(&file_dialog));
     if (!SUCCEEDED(hr)) return hr;
+
+    //	lpstrInitialDir
 
     // Create event handler object and hook it up
     IFileDialogEvents* file_dialog_events = nullptr;
@@ -214,6 +220,19 @@ static HRESULT win32_show_file_dialog(fs::path& path,
     hr = file_dialog->SetOptions(flags | user_flags);
     if (!SUCCEEDED(hr)) return hr;
 
+    // Set folder stuff. Temporary for testing
+    PIDLIST_ABSOLUTE pidl;
+    hr = ::SHParseDisplayName(dir.wstring().c_str(), 0, &pidl, SFGAO_FOLDER, 0);
+    if (!SUCCEEDED(hr)) return hr;
+    IShellItem* psi;
+    hr = ::SHCreateShellItem(nullptr, nullptr, pidl, &psi);
+    if (!SUCCEEDED(hr)) {
+        ILFree(pidl);
+        return hr;
+    }
+    file_dialog->SetFolder(psi);
+    ILFree(pidl);
+
     // Set file types if needed
     if (!filetypes.empty()) {
         hr = file_dialog->SetFileTypes(
@@ -221,8 +240,8 @@ static HRESULT win32_show_file_dialog(fs::path& path,
             // Wonky reinterpret_cast, watch this man. #Danger
             reinterpret_cast<COMDLG_FILTERSPEC const*>(filetypes.data()));
         if (!SUCCEEDED(hr)) return hr;
-		// Default to first file type
-		hr = file_dialog->SetFileTypeIndex(0);
+        // Default to first file type
+        hr = file_dialog->SetFileTypeIndex(0);
         if (!SUCCEEDED(hr)) return hr;
     }
 
@@ -251,7 +270,9 @@ static HRESULT win32_show_file_dialog(fs::path& path,
 #endif
 } // namespace impl
 
-bool SelectFileDialog::show(Flags flags, std::vector<FileType> filetypes) {
+bool SelectFileDialog::show(Flags flags,
+                            fs::path dir,
+                            std::vector<FileType> filetypes) {
 #ifdef _WIN32
 
     DWORD user_flags = 0;
@@ -259,7 +280,7 @@ bool SelectFileDialog::show(Flags flags, std::vector<FileType> filetypes) {
     if (flags & Flags::PickFolders) { user_flags |= FOS_PICKFOLDERS; }
 
     HRESULT hresult =
-        impl::win32_show_file_dialog(result, user_flags, filetypes);
+        impl::win32_show_file_dialog(result, dir, user_flags, filetypes);
     return SUCCEEDED(hresult);
 #endif
 }

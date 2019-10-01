@@ -3,7 +3,6 @@
 #define MAX_LIGHTS_PER_TYPE 15
 
 in vec2 TexCoords;
-in vec3 Normal;
 in vec3 FragPos;
 in vec4 FragPosLightSpace;
 in mat3 TBN;

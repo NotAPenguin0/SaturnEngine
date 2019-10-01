@@ -60,6 +60,10 @@ Editor::Editor(Application& app) : app(&app) {
         "log", [&console](DebugConsole::CommandContext const& context) {
             console.add_entry(fmt::format("{}", join(context.args)));
         });
+    // Load preferences
+	log::log("Loading preferences");
+    editor_widgets.preferences.load("resources/engine_cache/settings.json");
+
     // Load last opened scene. We find this in
     // resources/engine_cache/last_scene.txt
     std::ifstream last_scene_file("resources/engine_cache/last_scene.txt");
@@ -79,6 +83,7 @@ Editor::Editor(Application& app) : app(&app) {
 Editor::~Editor() {
     std::ofstream last_scene_cache("resources/engine_cache/last_scene.txt");
     last_scene_cache << cur_open_scene_full_path;
+    editor_widgets.preferences.save("resources/engine_cache/settings.json");
 }
 
 void Editor::set_window_title() {
@@ -183,26 +188,32 @@ void Editor::show_menu_bar(Scene& scene) {
         if (ImGui::BeginMenu("File")) {
             if (ImGui::MenuItem("New scene")) {
                 static SelectFileDialog dialog;
-                dialog.show(SelectFileDialog::PickFolders);
+                dialog.show(SelectFileDialog::PickFolders,
+                            fs::absolute(fs::path("resources/")));
+
                 fs::path result = dialog.get_result();
-                create_new_scene(scene, result);
+                if (result != "") { create_new_scene(scene, result); }
             }
             ImGui::Separator();
             if (ImGui::MenuItem("Save scene")) { save_scene(scene); }
             if (ImGui::MenuItem("Save as ...")) {
                 static SelectFileDialog dialog;
-                dialog.show(SelectFileDialog::PickFolders);
+                dialog.show(SelectFileDialog::PickFolders,
+                            fs::absolute(fs::path("resources/")));
                 fs::path result = dialog.get_result();
-                scene.serialize_to_file(result.string());
-                log::log("Saved scene as {}",
-                         consistent_path_sep(result.string()));
+                if (result != "") {
+                    scene.serialize_to_file(result.string());
+                    log::log("Saved scene as {}",
+                             consistent_path_sep(result.string()));
+                }
             }
             ImGui::Separator();
             if (ImGui::MenuItem("Open")) {
                 static SelectFileDialog dialog;
-                dialog.show(SelectFileDialog::PickFolders);
+                dialog.show(SelectFileDialog::PickFolders,
+                            fs::absolute(fs::path("resources/")));
                 fs::path result = dialog.get_result();
-                load_scene(scene, result);
+                if (result != "") { load_scene(scene, result); }
             }
             ImGui::Separator();
             if (ImGui::MenuItem("Exit")) { app->quit(); }

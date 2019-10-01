@@ -50,6 +50,18 @@ private:
     std::string path;
 };
 
+namespace impl {
+template<typename R>
+struct last_open_path_holder {
+    static inline std::string path = "resources/";
+};
+} // namespace impl
+
+template<typename R>
+std::string& last_open_path() {
+    return impl::last_open_path_holder<R>::path;
+}
+
 } // namespace Saturn
 
 #endif

@@ -3,6 +3,8 @@
 #include "Subsystems/Logging/LogSystem.hpp"
 #include "Subsystems/Renderer/stb_image.h"
 
+#include "Editor/EditorLog.hpp"
+
 namespace Saturn {
 
 Texture::Texture() :
@@ -23,9 +25,8 @@ void Texture::assign(CreateInfo const& create_info) {
     unsigned char* image_data = stbi_load(create_info.image_path.data(), &w, &h,
                                           &channels, desired_channel_count);
     if (image_data == nullptr) {
-        LogSystem::write(LogSystem::Severity::Error,
-                         "Failed to open file at path: " +
-                             std::string(create_info.image_path));
+        log::error(fmt::format("Failed to open file at path: {}",
+                               create_info.image_path));
         return;
     }
 

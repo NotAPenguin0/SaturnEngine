@@ -18,7 +18,7 @@ public:
 		PickFolders = 2
     };
 
-    bool show(Flags flags, std::vector<FileType> filetypes = {});
+    bool show(Flags flags, fs::path dir, std::vector<FileType> filetypes = {});
     fs::path get_result() const;
 
 private:

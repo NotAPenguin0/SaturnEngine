@@ -8,6 +8,7 @@
 #include "Subsystems/Logging/LogSystem.hpp"
 #include "Subsystems/Renderer/OpenGL.hpp"
 
+#include "Editor//EditorLog.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -21,10 +22,9 @@ static unsigned int create_shader(const char* vtx_path,
     std::fstream file(vtx_path);
 
     if (!file.good()) {
-        LogSystem::write(
-            LogSystem::Severity::Error,
-            "[SHADER::VERTEX]: failed to open vertex shader source file at path"s +
-                vtx_path);
+        log::error(fmt::format("[SHADER::VERTEX]: failed to open vertex shader "
+                               "source file at path {}",
+                               vtx_path));
         return 0;
     }
 
@@ -38,10 +38,10 @@ static unsigned int create_shader(const char* vtx_path,
     file.open(frag_path);
 
     if (!file.good()) {
-        LogSystem::write(
-            LogSystem::Severity::Error,
-            "[SHADER::FRAGMENT]: failed to open fragment shader source file at path"s +
-                frag_path);
+        log::error(fmt::format(
+            "[SHADER::FRAGMENT]: failed to open fragment shader source file at "
+            "path {}",
+            frag_path));
         return 0;
     }
 
@@ -55,10 +55,9 @@ static unsigned int create_shader(const char* vtx_path,
     if (geom_path != nullptr) {
         file.open(geom_path);
         if (!file.good()) {
-            LogSystem::write(
-                LogSystem::Severity::Error,
-                "[SHADER::GEOMETRY]: failed to open geometry shader source file at path"s +
-                    frag_path);
+            log::error(fmt::format("[SHADER::GEOMETRY]: failed to open "
+                                   "geometry shader source file at path {}",
+                                   frag_path));
             return 0;
         }
         buf << file.rdbuf();
@@ -78,12 +77,10 @@ static unsigned int create_shader(const char* vtx_path,
         glGetShaderiv(geom_shader, GL_COMPILE_STATUS, &success);
         if (!success) {
             glGetShaderInfoLog(geom_shader, 512, nullptr, infolog);
-            LogSystem::write(LogSystem::Severity::Error,
-                             "Failed to compile geometry shader at path: "s +
-                                 vtx_path);
-            LogSystem::write(LogSystem::Severity::Error,
-                             "[SHADER::GEOMETRY::COMPILATION_FAILED]: "s +
-                                 infolog);
+            log::error(fmt::format(
+                "Failed to compile geometry shader at path: {}", vtx_path));
+            log::error(fmt::format("[SHADER::GEOMETRY::COMPILATION_FAILED]: {}",
+                                   infolog));
             throw "";
             return 0;
         }
@@ -106,11 +103,10 @@ static unsigned int create_shader(const char* vtx_path,
     glGetShaderiv(vtx_shader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(vtx_shader, 512, nullptr, infolog);
-        LogSystem::write(LogSystem::Severity::Error,
-                         "Failed to compile vertex shader at path: "s +
-                             vtx_path);
-        LogSystem::write(LogSystem::Severity::Error,
-                         "[SHADER::VERTEX::COMPILATION_FAILED]: "s + infolog);
+        log::error(fmt::format("Failed to compile vertex shader at path: {}",
+                               vtx_path));
+        log::error(
+            fmt::format("[SHADER::VERTEX::COMPILATION_FAILED]: {}", infolog));
         throw "";
         return 0;
     }
@@ -119,11 +115,10 @@ static unsigned int create_shader(const char* vtx_path,
     glGetShaderiv(frag_shader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(frag_shader, 512, nullptr, infolog);
-        LogSystem::write(LogSystem::Severity::Error,
-                         "Failed to compile fragment shader at path: "s +
-                             frag_path);
-        LogSystem::write(LogSystem::Severity::Error,
-                         "[SHADER::FRAGMENT::COMPILATION_FAILED]: "s + infolog);
+        log::error(fmt::format("Failed to compile fragment shader at path: {}",
+                               vtx_path));
+        log::error(
+            fmt::format("[SHADER::FRAGMENT::COMPILATION_FAILED]: {}", infolog));
         throw ""; //#UGLYANDMUSTREMOVELATER
         return 0;
     }
@@ -139,11 +134,10 @@ static unsigned int create_shader(const char* vtx_path,
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
     if (!success) {
         glGetProgramInfoLog(shaderProgram, 512, nullptr, infolog);
-        LogSystem::write(LogSystem::Severity::Error,
-                         "Failed to link shader. Vertex\n: "s + vtx_path +
-                             "\nFragment: "s + frag_path);
-        LogSystem::write(LogSystem::Severity::Error,
-                         "[SHADER::LINK_FAILED]: "s + infolog);
+        log::error(
+            fmt::format("Failed to link shader. Vertex\n: {}\nFragment: {}",
+                        vtx_path, frag_path));
+        log::error(fmt::format("[SHADER::LINK_FAILED]: ", infolog));
         throw "";
         return 0;
     }

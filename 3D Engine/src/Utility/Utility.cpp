@@ -20,7 +20,8 @@ make_absolute_transform(Components::Transform const& old_transform) {
         Components::Transform new_trans = old_transform;
         new_trans.position += parent_trans.position;
         new_trans.rotation += parent_trans.rotation;
-        new_trans.scale *= parent_trans.scale;
+        // Parenting should not affect scale
+        //        new_trans.scale *= parent_trans.scale;
 
         return new_trans;
     }
