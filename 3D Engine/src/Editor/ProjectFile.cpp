@@ -11,12 +11,14 @@ namespace Saturn::Editor {
 std::vector<fs::path> ProjectFile::scene_paths;
 fs::path ProjectFile::self_dir;
 std::string ProjectFile::self_name;
+std::vector<ProjectFile::RenderStageData> ProjectFile::render_stages;
 
 void ProjectFile::load(fs::path path) {
 
     self_name = "";
     self_dir = "";
     scene_paths.clear();
+	render_stages.clear();
 
     std::ifstream file(path);
     if (!file.good()) {
@@ -34,6 +36,13 @@ void ProjectFile::load(fs::path path) {
     while (scene_count-- > 0 && std::getline(file, scene_path)) {
         scene_paths.emplace_back(fs::absolute(self_dir / scene_path));
     }
+    size_t stage_count;
+    file >> stage_count;
+    file.ignore(32767, '\n');
+    std::string type, stage;
+    while (stage_count-- > 0 && file >> type >> stage) {
+        render_stages.push_back(RenderStageData{std::move(type), std::move(stage)});
+    }
 }
 
 fs::path ProjectFile::main_scene() {
@@ -49,7 +58,14 @@ fs::path ProjectFile::root_path() { return self_dir; }
 
 fs::path ProjectFile::name() { return self_name; }
 
-std::string ProjectFile::path() { return (root_path() / name()).string() + ".seproj"; }
+std::string ProjectFile::path() {
+    return (root_path() / name()).string() + ".seproj";
+}
+
+std::vector<ProjectFile::RenderStageData> const&
+ProjectFile::get_render_stages() {
+	return render_stages;
+}
 
 } // namespace Saturn::Editor
 

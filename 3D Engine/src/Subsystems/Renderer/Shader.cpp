@@ -8,7 +8,7 @@
 #include "Subsystems/Logging/LogSystem.hpp"
 #include "Subsystems/Renderer/OpenGL.hpp"
 
-#include "Editor//EditorLog.hpp"
+#include "Editor/EditorLog.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -157,6 +157,9 @@ void Shader::assign(CreateInfo create_info) {
     program =
         create_shader(create_info.vtx_path.data(), create_info.frag_path.data(),
                       create_info.geom_path.data());
+	if (!program) {
+		std::cout << create_info.vtx_path << " " << create_info.frag_path << "\n";
+	}
 }
 
 unsigned int Shader::handle() { return program; }

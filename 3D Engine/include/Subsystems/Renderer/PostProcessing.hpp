@@ -13,7 +13,7 @@ namespace Saturn {
 class PostProcessing {
 public:
     static constexpr const char* vertex_path =
-        "resources/shaders/postprocessing/default_v.glsl";
+        "config/resources/shaders/postprocessing/default_v.glsl";
 
     void load_shaders(const char* fname);
 

@@ -11,15 +11,15 @@ EditorModule::EditorModule() : RenderModule(3) {}
 
 void EditorModule::init() {
     collider_shader =
-        AssetManager<Shader>::get_resource("resources/shaders/collider.sh", true);
+        AssetManager<Shader>::get_resource("config/resources/shaders/collider.sh", true);
     axis_shader =
-        AssetManager<Shader>::get_resource("resources/shaders/axis.sh", true);
+        AssetManager<Shader>::get_resource("config/resources/shaders/axis.sh", true);
     outline_shader =
-        AssetManager<Shader>::get_resource("resources/shaders/outline.sh", true);
+        AssetManager<Shader>::get_resource("config/resources/shaders/outline.sh", true);
 
     box_collider_mesh =
-        AssetManager<Mesh>::get_resource("resources/meshes/box_collider.mesh", true);
-    line_mesh = AssetManager<Mesh>::get_resource("resources/meshes/line.mesh", true);
+        AssetManager<Mesh>::get_resource("config/resources/meshes/box_collider.mesh", true);
+    line_mesh = AssetManager<Mesh>::get_resource("config/resources/meshes/line.mesh", true);
 }
 
 void EditorModule::process(Scene& scene,

@@ -11,9 +11,9 @@ ParticleModule::ParticleModule() : RenderModule(1) {}
 
 void ParticleModule::init() {
     particle_shader =
-        AssetManager<Shader>::get_resource("resources/shaders/particle.sh", true);
+        AssetManager<Shader>::get_resource("config/resources/shaders/particle.sh", true);
     default_texture =
-        AssetManager<Texture>::get_resource("resources/textures/white.tex", true);
+        AssetManager<Texture>::get_resource("config/resources/textures/white.tex", true);
 }
 
 void ParticleModule::process(Scene& scene,

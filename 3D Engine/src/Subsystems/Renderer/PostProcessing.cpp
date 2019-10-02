@@ -23,7 +23,7 @@ void PostProcessing::load_shaders(const char* fname) {
         std::string frag_path;
         file >> frag_path;
         std::string outname =
-            "resources/shaders/postprocessing/" + name + ".sh";
+            "config/resources/shaders/postprocessing/" + name + ".sh";
         std::ofstream out(outname);
         out << vertex_path << "\n" << frag_path;
         out.close();

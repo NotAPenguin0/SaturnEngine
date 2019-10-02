@@ -79,6 +79,11 @@ Editor::Editor(Application& app) : app(&app) {
                   cur_open_scene_full_path);
         can_open_last = false;
     }
+	
+	// Load render stages
+	for (auto const& stage_data : ProjectFile::get_render_stages()) {
+		editor_widgets.render_pipeline.add_stage(app, stage_data.type, stage_data.stage);
+	}
 
     set_window_title();
 }
@@ -140,9 +145,7 @@ void Editor::render(Scene& scene) {
         ActionBindingManager::add_action(exit_playmode_binding);
         once = false;
     }
-    // #TODO: camera controls in editor
 
-    // Enable mouse capture when space is pressed
     static bool show_demo = false;
 
     ImGui_ImplOpenGL3_NewFrame();

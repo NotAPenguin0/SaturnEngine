@@ -3,6 +3,7 @@
 #    include "Editor/RenderPipelineWidget.hpp"
 
 #    include "Core/Application.hpp"
+#    include "Editor/EditorLog.hpp"
 #    include "imgui/imgui.h"
 
 #    include "Subsystems/Renderer/Modules/BlitPass.hpp"
@@ -73,6 +74,22 @@ void RenderPipelineWidget::show(Application& app) {
     ImGui::Columns();
 
     ImGui::End();
+}
+
+void RenderPipelineWidget::add_stage(Application& app,
+                                     std::string_view type,
+                                     std::string_view stage) {
+    if (type == "PreRenderStage") {
+        add_render_stage(app.get_renderer()->get_pre_render_stages(), &app,
+                         stage);
+    } else if (type == "PostRenderStage") {
+        add_render_stage(app.get_renderer()->get_post_render_stages(), &app,
+                         stage);
+    } else if (type == "RenderModule") {
+        add_render_stage(app.get_renderer()->get_render_modules(), &app, stage);
+    } else {
+        log::warn("Unknown render stage type {}", type);
+    }
 }
 
 void RenderPipelineWidget::list_render_stages(Application& app) {

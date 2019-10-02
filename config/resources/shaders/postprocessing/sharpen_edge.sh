@@ -1,0 +1,2 @@
+config/resources/shaders/postprocessing/default_v.glsl
+config/resources/shaders/postprocessing/sharpen_edge_f.glsl

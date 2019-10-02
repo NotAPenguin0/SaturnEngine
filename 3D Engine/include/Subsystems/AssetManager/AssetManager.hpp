@@ -38,7 +38,7 @@ public:
 
         auto id = IDGenerator<R>::next();
         std::unique_ptr<R> res = ResourceLoader<R>::load(
-            new_p, Editor::ProjectFile::root_path().string());
+            new_p, use_engine_path ? "" : Editor::ProjectFile::root_path().string());
         if (res == nullptr) {
             return Resource<R>(nullptr, -1, false, new_p);
         } else {

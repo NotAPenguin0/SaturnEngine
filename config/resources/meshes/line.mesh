@@ -1,0 +1,6 @@
+attributes: 1
+Position 0 3
+vertices: 2
+0.0, 1.0, 0.0,
+0.0, -1.0, 0.0,
+indices: 0

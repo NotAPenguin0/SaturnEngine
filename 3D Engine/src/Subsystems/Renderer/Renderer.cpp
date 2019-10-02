@@ -10,14 +10,6 @@
 #include "Utility/Exceptions.hpp"
 #include "Utility/Utility.hpp"
 
-// #Temp, testing
-#include "Subsystems/Renderer/Modules/BlitPass.hpp"
-#include "Subsystems/Renderer/Modules/DebugModule.hpp"
-#include "Subsystems/Renderer/Modules/DepthMapPass.hpp"
-#include "Subsystems/Renderer/Modules/EditorModule.hpp"
-#include "Subsystems/Renderer/Modules/MeshRenderModule.hpp"
-#include "Subsystems/Renderer/Modules/ParticleModule.hpp"
-#include "Subsystems/Renderer/Modules/TransferModule.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -38,7 +30,7 @@ void Renderer::create_default_viewport(CreateInfo const& create_info) {
 
 void Renderer::initialize_postprocessing() {
     PostProcessing::get_instance().load_shaders(
-        "resources/shaders/postprocessing/postprocessing_effects.ppe");
+        "config/resources/shaders/postprocessing/postprocessing_effects.ppe");
     PostProcessing::get_instance().set_active("none");
 }
 
@@ -49,14 +41,6 @@ Renderer::Renderer(CreateInfo create_info) :
     create_default_viewport(create_info);
     initialize_postprocessing();
 
-    // #Temp, #RefactorTesting
-    add_pre_render_stage(std::make_unique<RenderModules::DepthMapPass>());
-    add_render_module(std::make_unique<RenderModules::TransferModule>());
-    add_render_module(std::make_unique<RenderModules::ParticleModule>());
-    add_render_module(std::make_unique<RenderModules::DebugModule>());
-    add_render_module(std::make_unique<RenderModules::EditorModule>());
-    add_render_module(std::make_unique<RenderModules::MeshRenderModule>());
-    add_post_render_stage(std::make_unique<RenderModules::BlitPass>());
 }
 
 Renderer::~Renderer() {}

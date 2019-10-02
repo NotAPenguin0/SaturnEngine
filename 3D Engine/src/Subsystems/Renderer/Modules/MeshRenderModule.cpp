@@ -16,7 +16,7 @@ MeshRenderModule::MeshRenderModule() : RenderModule(10) {}
 void MeshRenderModule::init() {
 
     no_shader_error =
-        AssetManager<Shader>::get_resource("resources/shaders/default.sh", true);
+        AssetManager<Shader>::get_resource("config/resources/shaders/default.sh", true);
 }
 
 void MeshRenderModule::process(Scene& scene,

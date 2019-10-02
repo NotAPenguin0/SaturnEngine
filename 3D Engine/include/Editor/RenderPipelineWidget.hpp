@@ -5,6 +5,8 @@
 
 #    include "EditorWidget.hpp"
 
+#include <string_view>
+
 namespace Saturn {
 class Application;
 
@@ -19,6 +21,8 @@ namespace Saturn::Editor {
 class RenderPipelineWidget : public EditorWidget {
 public:
     void show(Application& app);
+
+	void add_stage(Application& app, std::string_view type, std::string_view stage);
 
 private:
     void list_render_stages(Application& app);

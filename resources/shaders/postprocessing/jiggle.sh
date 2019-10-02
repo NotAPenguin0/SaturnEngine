@@ -1,2 +1,2 @@
 resources/shaders/postprocessing/default_v.glsl
-resources/shaders/postprocessing/jiggle_f.glsl
+config/resources/shaders/postprocessing/jiggle_f.glsl
