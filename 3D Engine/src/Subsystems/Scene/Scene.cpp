@@ -2,10 +2,13 @@
 
 #include "Core/Application.hpp"
 #include "Editor/EditorLog.hpp"
+#include "Editor/ProjectFile.hpp"
 #include "Subsystems/Scene/SceneObject.hpp"
 
 #include <filesystem>
 #include <fstream>
+
+namespace fs = std::filesystem;
 
 namespace Saturn {
 
@@ -78,7 +81,10 @@ void Scene::serialize_to_file(std::string_view folder) {
         if (objects[i]->has_component<DoNotSerialize>()) { continue; }
         std::string fname = folder.data() + std::string("/entities/");
         if (objects[i]->has_component<Name>()) {
-            fname += (objects[i]->get_component<Name>().name + ".json");
+            auto& name_dat = objects[i]->get_component<Name>().name;
+            std::string clean_name =
+                name_dat.substr(0, name_dat.find_first_of('\0'));
+            fname += (clean_name + ".json");
         } else {
             fname += std::to_string(i) + ".json";
         }
@@ -91,7 +97,10 @@ void Scene::deserialize_from_file(std::string_view path) {
     clear_scene();
     std::ifstream file(path.data());
     std::string fname;
-    while (std::getline(file, fname)) { create_object_from_file(fname); }
+    while (std::getline(file, fname)) {
+        create_object_from_file(
+            fs::absolute(Editor::ProjectFile::root_path() / fname).string());
+    }
     resolve_parent_pointers();
     set_id_generator_value();
 }

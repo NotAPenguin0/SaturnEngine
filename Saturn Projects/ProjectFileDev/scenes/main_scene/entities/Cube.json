@@ -1,0 +1,46 @@
+{
+    "ID": 15,
+    "MaterialComponent": {
+        "DiffuseMap": {
+            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\textures\\brickwall.tex"
+        },
+        "Lit": true,
+        "NormalMap": {
+            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\textures\\brickwall_normal.tex"
+        },
+        "Shader": {
+            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\shaders\\normal_mapping.sh"
+        },
+        "Shininess": 100.0,
+        "SpecularMap": {
+            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\textures\\brickwall_specular.tex"
+        }
+    },
+    "NameComponent": {
+        "Name": "Cube\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+    },
+    "ParentID": 0,
+    "StaticMeshComponent": {
+        "FaceCull": true,
+        "Mesh": {
+            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\meshes\\my_cube.mesh"
+        }
+    },
+    "TransformComponent": {
+        "Position": [
+            -8.0,
+            13.0,
+            -8.0
+        ],
+        "Rotation": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale": [
+            1.0,
+            1.0,
+            1.0
+        ]
+    }
+}

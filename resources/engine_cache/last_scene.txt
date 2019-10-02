@@ -1,1 +1,1 @@
-resources/normal_mapping
+C:\Users\michi_000\Desktop\C++\SaturnEngine\Saturn Projects\ProjectFileDev\scenes\main_scene

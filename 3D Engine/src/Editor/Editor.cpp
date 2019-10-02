@@ -1,7 +1,8 @@
 #ifdef WITH_EDITOR
-
 #    include "Editor/Editor.hpp"
+
 #    include "Core/Application.hpp"
+#    include "Editor/ProjectFile.hpp"
 #    include "Editor/SelectFileDialog.hpp"
 #    include "Subsystems/ECS/ComponentList.hpp"
 #    include "Subsystems/ECS/Components.hpp"
@@ -61,22 +62,24 @@ Editor::Editor(Application& app) : app(&app) {
             console.add_entry(fmt::format("{}", join(context.args)));
         });
     // Load preferences
-	log::log("Loading preferences");
+    log::log("Loading preferences");
     editor_widgets.preferences.load("resources/engine_cache/settings.json");
 
-    // Load last opened scene. We find this in
-    // resources/engine_cache/last_scene.txt
-    std::ifstream last_scene_file("resources/engine_cache/last_scene.txt");
-    std::string last_scene;
-    std::getline(last_scene_file, last_scene);
-    cur_open_scene = get_scene_name_from_path(last_scene);
-    cur_open_scene_full_path = last_scene;
-    if (!file_exists(cur_open_scene_full_path + "/scene.dat")) {
+    // Load last opened project
+    std::ifstream last_project_file("resources/engine_cache/last_project.txt");
+    std::string last_project;
+    std::getline(last_project_file, last_project);
+	ProjectFile::load(last_project);
+	cur_open_scene = get_scene_name_from_path(ProjectFile::main_scene().string());
+	cur_open_scene_full_path = fs::absolute(ProjectFile::main_scene()).string();
+	if (!file_exists(cur_open_scene_full_path + "/scene.dat")) {
         log::warn("Last opened scene {} does not exist anymore. Has "
                   "it been deleted, renamed or moved?",
                   cur_open_scene_full_path);
         can_open_last = false;
-    }
+	}
+
+
     set_window_title();
 }
 

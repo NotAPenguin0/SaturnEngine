@@ -128,7 +128,6 @@ void Application::run() {
     editor->setup_viewports();
 #endif
 
-    scene.deserialize_from_file("resources/scene1/scene.dat");
 #ifndef WITH_EDITOR
     scene.on_start();
 #endif
@@ -157,10 +156,10 @@ void Application::run() {
             editor->frame_end();
 #endif
             glfwSwapBuffers(window_handle);
-		}
-		catch (std::exception const& e) {
-			log::warn(e.what());
-		}
+        } catch (std::exception const& e) {
+            log::warn(e.what());
+            editor->frame_end();
+        }
     }
     scene.on_exit();
 }
