@@ -18,7 +18,7 @@ void ProjectFile::load(fs::path path) {
     self_name = "";
     self_dir = "";
     scene_paths.clear();
-	render_stages.clear();
+    render_stages.clear();
 
     std::ifstream file(path);
     if (!file.good()) {
@@ -41,8 +41,41 @@ void ProjectFile::load(fs::path path) {
     file.ignore(32767, '\n');
     std::string type, stage;
     while (stage_count-- > 0 && file >> type >> stage) {
-        render_stages.push_back(RenderStageData{std::move(type), std::move(stage)});
+        render_stages.push_back(
+            RenderStageData{std::move(type), std::move(stage)});
     }
+}
+
+void ProjectFile::save() {
+    std::ofstream file(path());
+
+    file << scene_paths.size() << "\n";
+    for (auto const& path : scene_paths) { file << fs::relative(path, root_path()).string() << "\n"; }
+    file << render_stages.size() << "\n";
+    for (auto const& stage : render_stages) {
+        file << stage.type << " " << stage.stage << "\n";
+    }
+}
+
+void ProjectFile::render_stage_removed(std::string_view type,
+                                       std::string_view stage) {
+    for (auto it = render_stages.begin(); it != render_stages.end(); ++it) {
+        if (it->stage == stage && it->type == type) {
+            render_stages.erase(it);
+            break;
+        }
+    }
+}
+
+void ProjectFile::render_stage_added(std::string_view type,
+                                     std::string_view stage) {
+    if (std::find(render_stages.begin(), render_stages.end(),
+                  RenderStageData{std::string(type), std::string(stage)}) !=
+        render_stages.end()) {
+        return;
+    }
+    render_stages.push_back(
+        RenderStageData{std::string(type), std::string(stage)});
 }
 
 fs::path ProjectFile::main_scene() {
@@ -64,7 +97,7 @@ std::string ProjectFile::path() {
 
 std::vector<ProjectFile::RenderStageData> const&
 ProjectFile::get_render_stages() {
-	return render_stages;
+    return render_stages;
 }
 
 } // namespace Saturn::Editor

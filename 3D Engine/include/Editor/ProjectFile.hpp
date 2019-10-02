@@ -4,6 +4,7 @@
 #ifdef WITH_EDITOR
 
 #    include <filesystem>
+#    include <string_view>
 #    include <vector>
 
 namespace fs = std::filesystem;
@@ -14,9 +15,20 @@ public:
     struct RenderStageData {
         std::string type;
         std::string stage;
+
+        friend bool operator==(RenderStageData const& a,
+                               RenderStageData const& b) {
+            return a.stage == b.stage && a.type == b.type;
+        }
     };
 
     static void load(fs::path path);
+    static void save();
+
+    static void render_stage_removed(std::string_view type,
+                                     std::string_view stage);
+    static void render_stage_added(std::string_view type,
+                                   std::string_view stage);
 
     static fs::path main_scene();
     static fs::path root_path();

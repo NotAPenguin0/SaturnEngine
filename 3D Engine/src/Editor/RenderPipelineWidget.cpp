@@ -141,6 +141,8 @@ void RenderPipelineWidget::show_add_stage_popup(Application& app) {
                         add_render_stage(
                             app.get_renderer()->get_pre_render_stages(), &app,
                             pre_stages[stage_index]);
+                        ProjectFile::render_stage_added(
+                            "PreRenderStage", pre_stages[stage_index]);
                     }
                     ImGui::CloseCurrentPopup();
                 }
@@ -157,6 +159,8 @@ void RenderPipelineWidget::show_add_stage_popup(Application& app) {
                         add_render_stage(
                             app.get_renderer()->get_render_modules(), &app,
                             modules[stage_index]);
+                        ProjectFile::render_stage_added("RenderModule",
+                                                        modules[stage_index]);
                     }
                     ImGui::CloseCurrentPopup();
                 }
@@ -174,6 +178,8 @@ void RenderPipelineWidget::show_add_stage_popup(Application& app) {
                         add_render_stage(
                             app.get_renderer()->get_post_render_stages(), &app,
                             post_stages[stage_index]);
+                        ProjectFile::render_stage_added(
+                            "PostRenderStage", post_stages[stage_index]);
                     }
                     ImGui::CloseCurrentPopup();
                 }
@@ -210,15 +216,21 @@ void RenderPipelineWidget::display_stage_info(Application& app) {
             return true;
         };
 
+        auto str_id = selected->str_id();
+
         if (remove_stage(app.get_renderer()->get_pre_render_stages())) {
+            ProjectFile::render_stage_removed("PreRenderStage", str_id);
             selected = nullptr;
+
             return;
         }
         if (remove_stage(app.get_renderer()->get_render_modules())) {
+            ProjectFile::render_stage_removed("RenderModule", str_id);
             selected = nullptr;
             return;
         }
         if (remove_stage(app.get_renderer()->get_post_render_stages())) {
+            ProjectFile::render_stage_removed("PostRenderStage", str_id);
             selected = nullptr;
             return;
         }

@@ -1,10 +1,10 @@
 1
-scenes/main_scene
+scenes\main_scene
 7
 PreRenderStage DepthMapPass
 RenderModule DebugModule
-RenderModule EditorModule
 RenderModule MeshRenderModule
 RenderModule ParticleModule
 RenderModule TransferModule
 PostRenderStage BlitPass
+RenderModule EditorModule

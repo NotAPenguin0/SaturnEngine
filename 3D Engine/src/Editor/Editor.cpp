@@ -201,7 +201,7 @@ void Editor::show_menu_bar(Scene& scene) {
             }
             ImGui::Separator();
             if (ImGui::MenuItem("Save scene")) { save_scene(scene); }
-            if (ImGui::MenuItem("Save as ...")) {
+            if (ImGui::MenuItem("Save scene as ...")) {
                 static SelectFileDialog dialog;
                 dialog.show(SelectFileDialog::PickFolders,
                             fs::absolute(fs::path("resources/")));
@@ -213,7 +213,7 @@ void Editor::show_menu_bar(Scene& scene) {
                 }
             }
             ImGui::Separator();
-            if (ImGui::MenuItem("Open")) {
+            if (ImGui::MenuItem("Open scene")) {
                 static SelectFileDialog dialog;
                 dialog.show(SelectFileDialog::PickFolders,
                             fs::absolute(ProjectFile::root_path()));
@@ -221,6 +221,11 @@ void Editor::show_menu_bar(Scene& scene) {
                 if (result != "") { load_scene(scene, result); }
             }
             ImGui::Separator();
+			if (ImGui::MenuItem("Save project")) {
+				save_scene(scene);
+				ProjectFile::save();
+			}
+			ImGui::Separator();
             if (ImGui::MenuItem("Exit")) { app->quit(); }
             ImGui::EndMenu();
         }

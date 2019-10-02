@@ -2,18 +2,18 @@
     "ID": 15,
     "MaterialComponent": {
         "DiffuseMap": {
-            "Resource": "assets/textures/brickwall.tex"
+            "Resource": "assets\\textures\\brickwall.tex"
         },
         "Lit": true,
         "NormalMap": {
-            "Resource": "assets/textures/brickwall_normal.tex"
+            "Resource": "assets\\textures\\brickwall_normal.tex"
         },
         "Shader": {
-            "Resource": "assets/shaders/normal_mapping.sh"
+            "Resource": "assets\\shaders\\normal_mapping.sh"
         },
         "Shininess": 100.0,
         "SpecularMap": {
-            "Resource": "assets/textures/brickwall_specular.tex"
+            "Resource": "assets\\textures\\brickwall_specular.tex"
         }
     },
     "NameComponent": {
@@ -23,7 +23,7 @@
     "StaticMeshComponent": {
         "FaceCull": true,
         "Mesh": {
-            "Resource": "assets/meshes/my_cube.mesh"
+            "Resource": "assets\\meshes\\my_cube.mesh"
         }
     },
     "TransformComponent": {
