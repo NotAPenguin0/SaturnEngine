@@ -20,7 +20,7 @@ void DepthMapPass::init() {
     depth_map.assign(info);
     // Create depth shader
     depth_shader =
-        AssetManager<Shader>::get_resource("resources/shaders/depth_map.sh");
+        AssetManager<Shader>::get_resource("resources/shaders/depth_map.sh", true);
     last_depthmap = &depth_map;
 }
 

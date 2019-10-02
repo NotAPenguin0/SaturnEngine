@@ -8,10 +8,12 @@
 
 namespace Saturn {
 
-std::unique_ptr<Shader> ResourceLoader<Shader>::load(std::string const& path) {
+std::unique_ptr<Shader>
+ResourceLoader<Shader>::load(std::string const& path,
+                             std::string const& root_dir) {
     std::ifstream file(path);
     if (!file.good()) {
-        log::error("Failed to open shader file at path: {}", path);
+        log::error("Failed to open shader file at path: {}/{}", root_dir, path);
         return nullptr;
     }
     Shader::CreateInfo info;
@@ -22,18 +24,22 @@ std::unique_ptr<Shader> ResourceLoader<Shader>::load(std::string const& path) {
     std::string vtx, frag, geom;
     std::getline(file, vtx);
     std::getline(file, frag);
-    if (std::getline(file, geom) && geom != "None") { info.geom_path = geom; }
-
+    if (std::getline(file, geom) && geom != "None") {
+        info.geom_path = root_dir + "/" + geom;
+    }
+    vtx = root_dir + vtx;
+    frag = root_dir + frag;
     info.vtx_path = vtx;
     info.frag_path = frag;
 
     return std::make_unique<Shader>(info);
 }
 
-std::unique_ptr<Mesh> ResourceLoader<Mesh>::load(std::string const& path) {
+std::unique_ptr<Mesh> ResourceLoader<Mesh>::load(std::string const& path,
+                                                 std::string const& root_dir) {
     std::ifstream file(path);
     if (!file.good()) {
-        log::error("Failed to open mesh file at path: {}", path);
+        log::error("Failed to open mesh file at path: {}/{}", root_dir, path);
         return nullptr;
     }
 
@@ -175,10 +181,12 @@ static TextureParameterValue value_from_string(std::string const& str) {
 }
 
 std::unique_ptr<Texture>
-ResourceLoader<Texture>::load(std::string const& path) {
+ResourceLoader<Texture>::load(std::string const& path,
+                              std::string const& root_dir) {
     std::ifstream file(path);
     if (!file.good()) {
-        log::error("Failed to open texture file at path: {}", path);
+        log::error("Failed to open texture file at path: {}/{}", root_dir,
+                   path);
         return nullptr;
     }
 
@@ -230,6 +238,8 @@ ResourceLoader<Texture>::load(std::string const& path) {
         param.value = value_from_string(str);
     }
 
+	path_to_file = root_dir + path_to_file;
+
     Texture::CreateInfo info;
     info.flip_y = flip_y;
     info.format = format;
@@ -243,10 +253,12 @@ ResourceLoader<Texture>::load(std::string const& path) {
 }
 
 std::unique_ptr<audeo::SoundSource>
-ResourceLoader<audeo::SoundSource>::load(std::string const& path) {
+ResourceLoader<audeo::SoundSource>::load(std::string const& path,
+                                         std::string const& root_dir) {
     std::ifstream file(path);
     if (!file.good()) {
-        log::error("Failed to open sound source file at path: {}", path);
+        log::error("Failed to open sound source file at path: {}/{}", root_dir,
+                   path);
         return nullptr;
     }
 
@@ -261,7 +273,8 @@ ResourceLoader<audeo::SoundSource>::load(std::string const& path) {
     audeo::AudioType type = audeo::AudioType::Effect;
     if (type_s == "Music") { type = audeo::AudioType::Music; }
 
-    audeo::SoundSource source = audeo::load_source(src_path, type);
+    audeo::SoundSource source =
+        audeo::load_source(root_dir +  src_path, type);
     if (audeo::is_valid(source)) {
         return std::make_unique<audeo::SoundSource>(source);
     } else {

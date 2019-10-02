@@ -15,7 +15,7 @@ namespace Saturn {
 template<typename R>
 class ResourceLoader {
 public:
-    static std::unique_ptr<R> load(std::string const& path) {
+    static std::unique_ptr<R> load(std::string const& path, std::string const& root_dir) {
         static_assert("No resource loader found for specified type.");
     }
 };
@@ -23,25 +23,25 @@ public:
 template<>
 class ResourceLoader<Shader> {
 public:
-    static std::unique_ptr<Shader> load(std::string const& path);
+    static std::unique_ptr<Shader> load(std::string const& path, std::string const& root_dir);
 };
 
 template<>
 class ResourceLoader<Mesh> {
 public:
-    static std::unique_ptr<Mesh> load(std::string const& path);
+    static std::unique_ptr<Mesh> load(std::string const& path, std::string const& root_dir);
 };
 
 template<>
 class ResourceLoader<Texture> {
 public:
-    static std::unique_ptr<Texture> load(std::string const& path);
+    static std::unique_ptr<Texture> load(std::string const& path, std::string const& root_dir);
 };
 
 template<>
 class ResourceLoader<audeo::SoundSource> {
 public:
-    static std::unique_ptr<audeo::SoundSource> load(std::string const& path);
+    static std::unique_ptr<audeo::SoundSource> load(std::string const& path, std::string const& root_dir);
 };
 
 // File types

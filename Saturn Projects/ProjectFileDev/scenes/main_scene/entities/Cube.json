@@ -2,18 +2,18 @@
     "ID": 15,
     "MaterialComponent": {
         "DiffuseMap": {
-            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\textures\\brickwall.tex"
+            "Resource": "assets/textures/brickwall.tex"
         },
         "Lit": true,
         "NormalMap": {
-            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\textures\\brickwall_normal.tex"
+            "Resource": "assets/textures/brickwall_normal.tex"
         },
         "Shader": {
-            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\shaders\\normal_mapping.sh"
+            "Resource": "assets/shaders/normal_mapping.sh"
         },
         "Shininess": 100.0,
         "SpecularMap": {
-            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\textures\\brickwall_specular.tex"
+            "Resource": "assets/textures/brickwall_specular.tex"
         }
     },
     "NameComponent": {
@@ -23,7 +23,7 @@
     "StaticMeshComponent": {
         "FaceCull": true,
         "Mesh": {
-            "Resource": "C:\\Users\\michi_000\\Desktop\\C++\\SaturnEngine\\resources\\meshes\\my_cube.mesh"
+            "Resource": "assets/meshes/my_cube.mesh"
         }
     },
     "TransformComponent": {

@@ -14,7 +14,7 @@ void PostProcessing::load_shaders(const char* fname) {
 
     /*A PostProcessingShader file contains of entries like:
       [effect_name] path_to_fragment_shader
-      [effect_name2] pat_to_other_fragment_shader
+      [effect_name2] path_to_other_fragment_shader
       ...etch
     */
 
@@ -27,7 +27,7 @@ void PostProcessing::load_shaders(const char* fname) {
         std::ofstream out(outname);
         out << vertex_path << "\n" << frag_path;
         out.close();
-        shaders[name] = AssetManager<Shader>::get_resource(outname);
+        shaders[name] = AssetManager<Shader>::get_resource(outname, true);
     }
 }
 

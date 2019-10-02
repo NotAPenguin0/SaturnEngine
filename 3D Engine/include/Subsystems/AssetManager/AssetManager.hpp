@@ -1,50 +1,51 @@
 #ifndef SATURN_ASSET_MANAGER_HPP_
 #define SATURN_ASSET_MANAGER_HPP_
 
+#include <filesystem>
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <type_traits>
 #include <unordered_map>
 
+namespace fs = std::filesystem;
+
 #include "Resource.hpp"
 #include "ResourceLoaders.hpp"
 #include "Utility/IDGenerator.hpp"
+
+#include "Editor/ProjectFile.hpp"
 
 namespace Saturn {
 
 template<typename R>
 class AssetManager {
 public:
-    /*template<typename T, typename = void>
-    struct has_create_info {
-        static constexpr bool value = false;
-    };
-
-    template<typename T>
-    struct has_create_info<T, std::void_t<decltype(T::CreateInfo)>> {
-        static constexpr bool value = true;
-    };*/
-
     // If the resource is not loaded yet, this function will load it.
     // Otherwise it just returns the resource
-    static Resource<R> get_resource(std::string const& path) {
+    static Resource<R> get_resource(std::string const& path,
+                                    bool use_engine_path = false) {
+        std::string new_p = path;
+        if (!use_engine_path) {
+            new_p = (Editor::ProjectFile::root_path() / path).string();
+        }
         // Check if the resource has been loaded already
-        if (id_map.find(path) != id_map.end()) {
-            auto id = id_map[path];
+        if (id_map.find(new_p) != id_map.end()) {
+            auto id = id_map[new_p];
             R* raw = resources[id].get();
-            return Resource<R>(raw, id, true, path);
+            return Resource<R>(raw, id, true, new_p);
         }
 
         auto id = IDGenerator<R>::next();
-        std::unique_ptr<R> res = ResourceLoader<R>::load(path);
+        std::unique_ptr<R> res = ResourceLoader<R>::load(
+            new_p, Editor::ProjectFile::root_path().string());
         if (res == nullptr) {
-            return Resource<R>(nullptr, -1, false, path);
+            return Resource<R>(nullptr, -1, false, new_p);
         } else {
-            id_map[path] = id;
+            id_map[new_p] = id;
             R* raw = res.get();
             resources[id] = std::move(res);
-            return Resource<R>(raw, id, true, path);
+            return Resource<R>(raw, id, true, new_p);
         }
     }
 
@@ -89,7 +90,8 @@ void from_json(nlohmann::json const& j, Resource<R>& res) {
 
 template<typename R>
 void to_json(nlohmann::json& j, Resource<R> const& res) {
-    j["Resource"] = res.get_path();
+    j["Resource"] =
+        fs::relative(res.get_path(), Editor::ProjectFile::root_path()).string();
 }
 
 } // namespace Saturn

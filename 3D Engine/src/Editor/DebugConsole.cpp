@@ -52,7 +52,9 @@ void DebugConsole::add_entry(std::string_view entry, LogType type) {
     log_entry.type = type;
     log_entries.push_back(log_entry);
 
-    if (auto_open) { shown = true; }
+    if (auto_open) {
+        shown = true;
+    }
 }
 
 void DebugConsole::add_command(std::string command,
