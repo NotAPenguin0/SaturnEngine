@@ -1,0 +1,62 @@
+{
+    "Axes": [
+        {"Name": "Horizontal"},
+        {"Name": "Vertical"},
+        {"Name": "Up"},
+        {"Name": "MouseHorizontal"},
+        {"Name": "MouseVertical"}
+    ],
+    "AxisMappings": [
+        {
+            "Axis": "Vertical",
+            "Key": "W",
+            "Sensitivity": 1.0,
+            "Scale": 1.0
+        }, {
+            "Axis": "Vertical",
+            "Key": "S",
+            "Sensitivity": -1.0,
+            "Scale": 1.0
+        }, {
+            "Axis": "Horizontal",
+            "Key": "A",
+            "Sensitivity": -1.0,
+            "Scale": 1.0
+        }, {
+            "Axis": "Horizontal",
+            "Key": "D",
+            "Sensitivity": 1.0,
+            "Scale": 1.0
+        }, {
+            "Axis": "Up",
+            "Key": "GamepadRightThumb",
+            "Sensitivity": 1.0,
+            "Scale": 1.0
+        }, {
+            "Axis": "Up",
+            "Key": "GamepadLeftThumb",
+            "Sensitivity": -1.0,
+            "Scale": 1.0
+        }, {
+            "Axis": "Vertical",
+            "Key": "GamepadLeftYAxis",
+            "Sensitivity": -1.0,
+            "Scale": 1.0
+        }, {
+            "Axis": "Horizontal",
+            "Key": "GamepadLeftXAxis",
+            "Sensitivity": 1.0,
+            "Scale": 1.0
+        }, {
+            "Axis": "MouseHorizontal", 
+            "Key": "GamepadRightXAxis",
+            "Sensitivity": 1.0,
+            "Scale": 5.0
+        }, {
+            "Axis": "MouseVertical",
+            "Key": "GamepadRightYAxis",
+            "Sensitivity": -1.0,
+            "Scale": 5.0
+        }
+    ]
+}

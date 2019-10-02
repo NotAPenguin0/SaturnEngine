@@ -63,29 +63,29 @@ Editor::Editor(Application& app) : app(&app) {
         });
     // Load preferences
     log::log("Loading preferences");
-    editor_widgets.preferences.load("resources/engine_cache/settings.json");
+    editor_widgets.preferences.load("config/settings.json");
 
     // Load last opened project
-    std::ifstream last_project_file("resources/engine_cache/last_project.txt");
+    std::ifstream last_project_file("config/last_project.ini");
     std::string last_project;
     std::getline(last_project_file, last_project);
-	ProjectFile::load(last_project);
-	cur_open_scene = get_scene_name_from_path(ProjectFile::main_scene().string());
-	cur_open_scene_full_path = fs::absolute(ProjectFile::main_scene()).string();
-	if (!file_exists(cur_open_scene_full_path + "/scene.dat")) {
+    ProjectFile::load(last_project);
+    cur_open_scene =
+        get_scene_name_from_path(ProjectFile::main_scene().string());
+    cur_open_scene_full_path = fs::absolute(ProjectFile::main_scene()).string();
+    if (!file_exists(cur_open_scene_full_path + "/scene.dat")) {
         log::warn("Last opened scene {} does not exist anymore. Has "
                   "it been deleted, renamed or moved?",
                   cur_open_scene_full_path);
         can_open_last = false;
-	}
-
+    }
 
     set_window_title();
 }
 
 Editor::~Editor() {
-    std::ofstream last_scene_cache("resources/engine_cache/last_scene.txt");
-    last_scene_cache << cur_open_scene_full_path;
+    std::ofstream last_project_cache("config/last_project.ini");
+    last_project_cache << ProjectFile::path();
     editor_widgets.preferences.save("resources/engine_cache/settings.json");
 }
 
@@ -131,8 +131,7 @@ void Editor::render(Scene& scene) {
             if (playmode_active) {
                 playmode_active = false;
                 scene.on_exit();
-                scene.deserialize_from_file(
-                    "resources/playmode_temp/scene.dat");
+                scene.deserialize_from_file("config/temp/playmode/scene.dat");
                 on_scene_reload(scene);
                 // Disable mouse capture in editor.
                 Input::set_mouse_capture(false);
@@ -214,7 +213,7 @@ void Editor::show_menu_bar(Scene& scene) {
             if (ImGui::MenuItem("Open")) {
                 static SelectFileDialog dialog;
                 dialog.show(SelectFileDialog::PickFolders,
-                            fs::absolute(fs::path("resources/")));
+                            fs::absolute(ProjectFile::root_path()));
                 fs::path result = dialog.get_result();
                 if (result != "") { load_scene(scene, result); }
             }
@@ -225,7 +224,7 @@ void Editor::show_menu_bar(Scene& scene) {
         if (ImGui::BeginMenu("Edit")) {
             if (ImGui::Selectable("Enter play mode")) {
                 editor_widgets.entity_tree.reset_selected_entity();
-                scene.serialize_to_file("resources/playmode_temp");
+                scene.serialize_to_file("config/temp/playmode");
                 on_playmode_enter(scene);
                 playmode_active = true;
             }

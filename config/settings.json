@@ -1,0 +1,12 @@
+{
+    "Preferences": {
+        "Camera": {
+            "FOV": 45.0,
+            "InvertX": false,
+            "InvertY": false,
+            "Sensitivity": 0.10000000149011612,
+            "Speed": 4.0,
+            "ZoomSpeed": 100.0
+        }
+    }
+}

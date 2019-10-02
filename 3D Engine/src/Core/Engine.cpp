@@ -99,7 +99,7 @@ Application Engine::initialize(CreateInfo create_info) {
     // Initialize subsystems. This process is multithreaded for all subsystems.
 
     Input::initialize(app);
-    Input::load_config_file("resources/config/input.config.json");
+    Input::load_config_file("config/input.config.json");
 
     std::thread random_init(Math::RandomEngine::initialize);
 

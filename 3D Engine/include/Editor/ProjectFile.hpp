@@ -16,6 +16,7 @@ public:
 	static fs::path main_scene();
 	static fs::path root_path();
 	static fs::path name();
+	static std::string path();
 
 private:
     static std::vector<fs::path> scene_paths;

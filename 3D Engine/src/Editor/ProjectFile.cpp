@@ -31,7 +31,7 @@ void ProjectFile::load(fs::path path) {
     file >> scene_count;
     std::string scene_path;
     file.ignore(32767, '\n');
-    while (scene_count --> 0 && std::getline(file, scene_path)) {
+    while (scene_count-- > 0 && std::getline(file, scene_path)) {
         scene_paths.emplace_back(fs::absolute(self_dir / scene_path));
     }
 }
@@ -48,6 +48,8 @@ fs::path ProjectFile::main_scene() {
 fs::path ProjectFile::root_path() { return self_dir; }
 
 fs::path ProjectFile::name() { return self_name; }
+
+std::string ProjectFile::path() { return (root_path() / name()).string() + ".seproj"; }
 
 } // namespace Saturn::Editor
 
