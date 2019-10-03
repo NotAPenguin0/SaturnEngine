@@ -116,6 +116,25 @@ void ProjectFile::save() {
     }
 }
 
+void ProjectFile::create_and_load(fs::path folder) {
+    auto project_name = folder.stem().generic_string() + ".seproj";
+    std::ofstream file(folder / project_name);
+
+    fs::create_directories(folder / "scenes");
+    fs::create_directories(folder / "assets");
+    fs::create_directories(folder / "scenes" / "main_scene");
+
+    file << 1 << "\nscenes/main_scene\n";
+    file << "7\n"
+            "PreRenderStage DepthMapPass\nRenderModule DebugModule\n"
+            "RenderModule MeshRenderModule\nRenderModule ParticleModule\n"
+            "RenderModule TransferModule\nPostRenderStage BlitPass\n"
+            "RenderModule EditorModule\n";
+    file.close();
+    load(folder / project_name);
+    log::log("Successfully created project {}", project_name);
+}
+
 void ProjectFile::render_stage_removed(std::string_view type,
                                        std::string_view stage) {
     for (auto it = render_stages.begin(); it != render_stages.end(); ++it) {

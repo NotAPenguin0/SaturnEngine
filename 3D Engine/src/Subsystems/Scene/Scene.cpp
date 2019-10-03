@@ -93,13 +93,20 @@ void Scene::serialize_to_file(std::string_view folder) {
     }
 }
 
-void Scene::deserialize_from_file(std::string_view path) {
-    clear_scene();
+void Scene::deserialize_from_file(std::string_view path, bool use_project_dir) {
     std::ifstream file(path.data());
+    if (!file.good()) {
+        log::error("Failed to open scene at path {}", path);
+        return;
+    }
+    clear_scene();
     std::string fname;
     while (std::getline(file, fname)) {
-        create_object_from_file(
-            fs::absolute(Editor::ProjectFile::root_path() / fname).string());
+        fname = use_project_dir
+                    ? fs::absolute(Editor::ProjectFile::root_path() / fname)
+                          .string()
+                    : fname;
+        create_object_from_file(fname);
     }
     resolve_parent_pointers();
     set_id_generator_value();

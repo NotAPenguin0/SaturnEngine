@@ -52,7 +52,7 @@ public:
     ECS<COMPONENT_LIST>& get_ecs();
 
     void serialize_to_file(std::string_view folder);
-    void deserialize_from_file(std::string_view path);
+    void deserialize_from_file(std::string_view path, bool use_project_dir = true);
 	void clear_scene();
 
     Application* get_app();

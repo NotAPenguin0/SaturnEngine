@@ -25,6 +25,8 @@ public:
     static void load(fs::path path);
     static void save();
 
+	static void create_and_load(fs::path folder);
+
     static void render_stage_removed(std::string_view type,
                                      std::string_view stage);
     static void render_stage_added(std::string_view type,

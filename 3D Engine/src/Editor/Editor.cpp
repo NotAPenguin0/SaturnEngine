@@ -211,7 +211,7 @@ void Editor::render(Scene& scene) {
             if (playmode_active) {
                 playmode_active = false;
                 scene.on_exit();
-                scene.deserialize_from_file("config/temp/playmode/scene.dat");
+                scene.deserialize_from_file("config/temp/playmode/scene.dat", false);
                 on_scene_reload(scene);
                 // Disable mouse capture in editor.
                 Input::set_mouse_capture(false);
@@ -295,6 +295,32 @@ void Editor::show_menu_bar(Scene& scene) {
                 if (result != "") { load_scene(scene, result); }
             }
             ImGui::Separator();
+            if (ImGui::MenuItem("New project")) {
+                static SelectFileDialog dialog;
+                dialog.show(
+                    SelectFileDialog::PickFolders,
+                    fs::absolute(ProjectFile::root_path()).parent_path());
+                fs::path result = dialog.get_result();
+                if (result != "") {
+                    ProjectFile::create_and_load(result);
+                    create_new_scene(scene, ProjectFile::main_scene());
+                }
+            }
+
+            if (ImGui::MenuItem("Open project")) {
+                static SelectFileDialog dialog;
+                dialog.show(
+                    SelectFileDialog::PickFiles,
+                    fs::absolute(ProjectFile::root_path()).parent_path(),
+                    {FileType{L"Saturn Engine Project (*.seproj)",
+                              L"*.seproj"}});
+                fs::path result = dialog.get_result();
+                if (result != "") {
+                    ProjectFile::load(result);
+                    load_scene(scene, ProjectFile::main_scene());
+                }
+            }
+
             if (ImGui::MenuItem("Save project")) {
                 save_scene(scene);
                 ProjectFile::save();
@@ -391,7 +417,7 @@ void Editor::create_entity(Scene& scene, std::string const& name) {
     log::log("Creating entity with name: {}", name_c.name);
 }
 
-void Editor::load_scene(Scene& scene, fs::path path) {
+void Editor::load_scene(Scene& scene, fs::path path, bool use_project_dir) {
 
     do_imports();
 
@@ -400,7 +426,7 @@ void Editor::load_scene(Scene& scene, fs::path path) {
     cur_open_scene_full_path = path.string();
     log::log("Scene name is detected to be {}", cur_open_scene);
     path += "/scene.dat";
-    scene.deserialize_from_file(path.string());
+    scene.deserialize_from_file(path.string(), use_project_dir);
     on_scene_reload(scene);
     log::log("Loaded scene at path: {}", path.generic_string());
     set_window_title();
@@ -417,7 +443,7 @@ void Editor::create_new_scene(Scene& scene, fs::path path) {
     // 2. set paths and scene name to this scene's path
     // 3. save scene to new path
 
-    load_scene(scene, "resources/empty_scene");
+    load_scene(scene, fs::absolute("resources/empty_scene").generic_string(), false);
     cur_open_scene = get_scene_name_from_path(path.string());
     cur_open_scene_full_path = path.string();
     save_scene(scene);

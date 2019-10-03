@@ -45,7 +45,7 @@ private:
     void on_playmode_enter(Scene& scene);
     void set_window_title();
     void create_new_scene(Scene& scene, fs::path path);
-    void load_scene(Scene& scene, fs::path path);
+    void load_scene(Scene& scene, fs::path path, bool use_project_dir = true);
     void save_scene(Scene& scene);
 
     Application* app;
