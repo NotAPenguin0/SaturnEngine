@@ -8,3 +8,8 @@ RenderModule ParticleModule
 RenderModule TransferModule
 PostRenderStage BlitPass
 RenderModule EditorModule
+asset shader assets/shaders/normal_mapping.sh
+asset texture assets/textures/brickwall.tex
+asset texture assets/textures/brickwall_normal.tex
+asset texture assets/textures/brickwall_specular.tex
+asset mesh assets/meshes/my_cube.mesh

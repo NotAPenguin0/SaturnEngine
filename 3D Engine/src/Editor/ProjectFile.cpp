@@ -6,6 +6,13 @@
 
 #    include "Editor/EditorLog.hpp"
 
+#    include "Subsystems/Renderer/Mesh.hpp"
+#    include "Subsystems/Renderer/Shader.hpp"
+#    include "Subsystems/Renderer/Texture.hpp"
+#    include <audeo/SoundSource.hpp>
+
+#    include "Subsystems/AssetManager/AssetManager.hpp"
+
 namespace Saturn::Editor {
 
 std::vector<fs::path> ProjectFile::scene_paths;
@@ -14,7 +21,7 @@ std::string ProjectFile::self_name;
 std::vector<ProjectFile::RenderStageData> ProjectFile::render_stages;
 
 void ProjectFile::load(fs::path path) {
-
+    // Reset
     self_name = "";
     self_dir = "";
     scene_paths.clear();
@@ -44,16 +51,68 @@ void ProjectFile::load(fs::path path) {
         render_stages.push_back(
             RenderStageData{std::move(type), std::move(stage)});
     }
+
+    // Submit asset import lists
+    std::string id, asset_type, asset_path;
+    while (file >> id && id == "asset" && file >> asset_type &&
+           std::getline(file, asset_path)) {
+        asset_path = asset_path.substr(1);
+        if (asset_type == "shader") {
+            AssetManager<Shader>::queue_import(asset_path);
+        }
+        if (asset_type == "texture") {
+            AssetManager<Texture>::queue_import(asset_path);
+        }
+        if (asset_type == "mesh") {
+            AssetManager<Mesh>::queue_import(asset_path);
+        }
+        if (asset_type == "sound") {
+            AssetManager<audeo::SoundSource>::queue_import(asset_path);
+        }
+    }
 }
+
+namespace {
+
+struct ExportedAsset {
+    fs::path path;
+    std::string type;
+};
+
+template<typename T>
+void export_assets(std::vector<ExportedAsset>& assets, std::string_view type) {
+
+    for (auto const& [id, asset] : AssetManager<T>::resource_list()) {
+        if (asset.imported) {
+            assets.push_back(ExportedAsset{asset.path, std::string(type)});
+        }
+    }
+}
+
+} // namespace
 
 void ProjectFile::save() {
     std::ofstream file(path());
 
     file << scene_paths.size() << "\n";
-    for (auto const& path : scene_paths) { file << fs::relative(path, root_path()).string() << "\n"; }
+    for (auto const& path : scene_paths) {
+        file << fs::relative(path, root_path()).string() << "\n";
+    }
     file << render_stages.size() << "\n";
     for (auto const& stage : render_stages) {
         file << stage.type << " " << stage.stage << "\n";
+    }
+
+    std::vector<ExportedAsset> assets;
+    export_assets<Shader>(assets, "shader");
+    export_assets<Texture>(assets, "texture");
+    export_assets<Mesh>(assets, "mesh");
+    export_assets<audeo::SoundSource>(assets, "sound");
+
+    // Write exported assets to file
+    for (auto& exported_asset : assets) {
+        file << "asset " << exported_asset.type << " "
+             << exported_asset.path.generic_string() << "\n";
     }
 }
 

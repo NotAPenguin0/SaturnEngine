@@ -17,6 +17,7 @@
 
 #    include <algorithm>
 #    include <fmt/format.h>
+#    include <fmt/ostream.h>
 #    include <fmt/ranges.h>
 #    include <fstream>
 
@@ -42,6 +43,24 @@ static bool file_exists(std::string const& path) {
     return file.is_open();
 }
 
+template<typename R>
+static void log_resources(bool show_editor) {
+    for (auto const& [id, asset] : AssetManager<R>::resource_list()) {
+        if (asset.imported || show_editor) {
+            log::log("resource with id {} loaded from path {}", id,
+                     asset.path.generic_string());
+        }
+    }
+}
+
+static void do_imports() {
+    // Import required assets
+    AssetManager<Shader>::do_imports();
+    AssetManager<Texture>::do_imports();
+    AssetManager<Mesh>::do_imports();
+    AssetManager<audeo::SoundSource>::do_imports();
+}
+
 Editor::Editor(Application& app) : app(&app) {
     this->app->set_editor_instance(this);
     IMGUI_CHECKVERSION();
@@ -61,6 +80,58 @@ Editor::Editor(Application& app) : app(&app) {
         "log", [&console](DebugConsole::CommandContext const& context) {
             console.add_entry(fmt::format("{}", join(context.args)));
         });
+
+    console.add_command(
+        "clear", [&console](DebugConsole::CommandContext const& context) {
+            console.clear();
+        });
+
+    console.add_command("assets", [](DebugConsole::CommandContext context) {
+        if (context.args.empty() || context.args.size() > 2) {
+            log::error("Invalid argument count for command 'assets'. "
+                       "Expected 1 or 2, found {}",
+                       context.args.size());
+            return;
+        }
+
+        bool show_non_imported = false;
+
+        if (context.args.size() >= 2) {
+            auto& import_mod = context.args[1];
+            import_mod = import_mod.substr(0, import_mod.find_first_of('\0'));
+            if (import_mod == "imported") {
+                show_non_imported = false;
+            } else if (import_mod == "editor") {
+                show_non_imported = true;
+            } else {
+                log::error(
+                    "Invalid argument (2) for command 'assets'. Expected "
+                    "either 'imported' or 'editor', found {}",
+                    import_mod);
+            }
+        }
+
+        auto& type = context.args[0];
+        type = type.substr(0, type.find_first_of('\0'));
+        using namespace std::literals::string_literals;
+        if (type == "shader"s) {
+            log_resources<Shader>(show_non_imported);
+            return;
+        }
+        if (type == "texture"s) {
+            log_resources<Texture>(show_non_imported);
+            return;
+        }
+        if (type == "mesh"s) {
+            log_resources<Mesh>(show_non_imported);
+            return;
+        }
+        if (type == "sound"s) {
+            log_resources<audeo::SoundSource>(show_non_imported);
+            return;
+        }
+    });
+
     // Load preferences
     log::log("Loading preferences");
     editor_widgets.preferences.load("config/settings.json");
@@ -72,21 +143,25 @@ Editor::Editor(Application& app) : app(&app) {
     ProjectFile::load(last_project);
     cur_open_scene =
         get_scene_name_from_path(ProjectFile::main_scene().string());
-    cur_open_scene_full_path = fs::absolute(ProjectFile::main_scene()).string();
+    cur_open_scene_full_path =
+        fs::absolute(ProjectFile::main_scene()).generic_string();
     if (!file_exists(cur_open_scene_full_path + "/scene.dat")) {
         log::warn("Last opened scene {} does not exist anymore. Has "
                   "it been deleted, renamed or moved?",
                   cur_open_scene_full_path);
         can_open_last = false;
     }
-	
-	// Load render stages
-	for (auto const& stage_data : ProjectFile::get_render_stages()) {
-		editor_widgets.render_pipeline.add_stage(app, stage_data.type, stage_data.stage);
-	}
+
+    // Load render stages
+    for (auto const& stage_data : ProjectFile::get_render_stages()) {
+        editor_widgets.render_pipeline.add_stage(app, stage_data.type,
+                                                 stage_data.stage);
+    }
+
+    do_imports();
 
     set_window_title();
-}
+} // namespace Saturn::Editor
 
 Editor::~Editor() {
     std::ofstream last_project_cache("config/last_project.ini");
@@ -208,8 +283,7 @@ void Editor::show_menu_bar(Scene& scene) {
                 fs::path result = dialog.get_result();
                 if (result != "") {
                     scene.serialize_to_file(result.string());
-                    log::log("Saved scene as {}",
-                             consistent_path_sep(result.string()));
+                    log::log("Saved scene as {}", result.generic_string());
                 }
             }
             ImGui::Separator();
@@ -221,11 +295,11 @@ void Editor::show_menu_bar(Scene& scene) {
                 if (result != "") { load_scene(scene, result); }
             }
             ImGui::Separator();
-			if (ImGui::MenuItem("Save project")) {
-				save_scene(scene);
-				ProjectFile::save();
-			}
-			ImGui::Separator();
+            if (ImGui::MenuItem("Save project")) {
+                save_scene(scene);
+                ProjectFile::save();
+            }
+            ImGui::Separator();
             if (ImGui::MenuItem("Exit")) { app->quit(); }
             ImGui::EndMenu();
         }
@@ -318,6 +392,9 @@ void Editor::create_entity(Scene& scene, std::string const& name) {
 }
 
 void Editor::load_scene(Scene& scene, fs::path path) {
+
+    do_imports();
+
     editor_widgets.entity_tree.reset_selected_entity();
     cur_open_scene = get_scene_name_from_path(path.string());
     cur_open_scene_full_path = path.string();
@@ -325,7 +402,7 @@ void Editor::load_scene(Scene& scene, fs::path path) {
     path += "/scene.dat";
     scene.deserialize_from_file(path.string());
     on_scene_reload(scene);
-    log::log("Loaded scene at path: {}", consistent_path_sep(path.string()));
+    log::log("Loaded scene at path: {}", path.generic_string());
     set_window_title();
 }
 
@@ -345,8 +422,7 @@ void Editor::create_new_scene(Scene& scene, fs::path path) {
     cur_open_scene_full_path = path.string();
     save_scene(scene);
 
-    log::log("Created new scene at path {}",
-             consistent_path_sep(path.string()));
+    log::log("Created new scene at path {}", path.generic_string());
     set_window_title();
 }
 
