@@ -211,7 +211,8 @@ void Editor::render(Scene& scene) {
             if (playmode_active) {
                 playmode_active = false;
                 scene.on_exit();
-                scene.deserialize_from_file("config/temp/playmode/scene.dat", false);
+                scene.deserialize_from_file("config/temp/playmode/scene.dat",
+                                            false);
                 on_scene_reload(scene);
                 // Disable mouse capture in editor.
                 Input::set_mouse_capture(false);
@@ -247,6 +248,9 @@ void Editor::render(Scene& scene) {
         }
         if (editor_widgets.fps_overlay.is_shown()) {
             editor_widgets.fps_overlay.show();
+        }
+        if (editor_widgets.project_menu.is_shown()) {
+            editor_widgets.project_menu.show();
         }
     }
 
@@ -349,6 +353,8 @@ void Editor::show_menu_bar(Scene& scene) {
                             editor_widgets.entity_tree.get_shown_pointer());
             ImGui::MenuItem("Debug Console", nullptr,
                             log::get_console().get_shown_pointer());
+            ImGui::MenuItem("Project settings", nullptr,
+                            editor_widgets.project_menu.get_shown_pointer());
             ImGui::MenuItem("Editor Preferences", nullptr,
                             editor_widgets.preferences.get_shown_pointer());
             ImGui::MenuItem("FPS overlay", nullptr,
@@ -443,7 +449,8 @@ void Editor::create_new_scene(Scene& scene, fs::path path) {
     // 2. set paths and scene name to this scene's path
     // 3. save scene to new path
 
-    load_scene(scene, fs::absolute("resources/empty_scene").generic_string(), false);
+    load_scene(scene, fs::absolute("resources/empty_scene").generic_string(),
+               false);
     cur_open_scene = get_scene_name_from_path(path.string());
     cur_open_scene_full_path = path.string();
     save_scene(scene);

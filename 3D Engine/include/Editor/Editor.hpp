@@ -12,6 +12,7 @@
 #    include "Editor/EntityTree.hpp"
 #    include "Editor/FPSOverlay.hpp"
 #    include "Editor/RenderPipelineWidget.hpp"
+#    include "ProjectMenuWidget.hpp"
 
 namespace fs = std::filesystem;
 
@@ -61,6 +62,7 @@ private:
         EditorPreferencesWidget preferences;
         RenderPipelineWidget render_pipeline;
         FPSOverlay fps_overlay;
+        ProjectMenuWidget project_menu;
     } editor_widgets;
 
     bool playmode_active = false;

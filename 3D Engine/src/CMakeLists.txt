@@ -9,6 +9,7 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Editor/RenderPipelineWidget.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Editor/ProjectFile.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Editor/FPSOverlay.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Editor/ProjectMenuWidget.cpp"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/Core/Application.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Core/Engine.cpp"
