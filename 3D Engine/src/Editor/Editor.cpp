@@ -154,7 +154,7 @@ Editor::Editor(Application& app) : app(&app) {
 
     // Load render stages
     for (auto const& stage_data : ProjectFile::get_render_stages()) {
-        editor_widgets.render_pipeline.add_stage(app, stage_data.type,
+        editor_widgets.project_menu.pipeline_settings.add_stage(app, stage_data.type,
                                                  stage_data.stage);
     }
 
@@ -243,14 +243,11 @@ void Editor::render(Scene& scene) {
         if (editor_widgets.preferences.is_shown()) {
             editor_widgets.preferences.show();
         }
-        if (editor_widgets.render_pipeline.is_shown()) {
-            editor_widgets.render_pipeline.show(*app);
-        }
         if (editor_widgets.fps_overlay.is_shown()) {
             editor_widgets.fps_overlay.show();
         }
         if (editor_widgets.project_menu.is_shown()) {
-            editor_widgets.project_menu.show();
+            editor_widgets.project_menu.show(*app, this, scene);
         }
     }
 
@@ -362,16 +359,7 @@ void Editor::show_menu_bar(Scene& scene) {
             ImGui::MenuItem("ImGui Demo Window", nullptr, &show_demo_window);
             ImGui::EndMenu();
         }
-        if (ImGui::BeginMenu("Options")) {
-            if (ImGui::BeginMenu("Rendering")) {
-                ImGui::MenuItem(
-                    "Pipeline", nullptr,
-                    editor_widgets.render_pipeline.get_shown_pointer());
-
-                ImGui::EndMenu();
-            }
-            ImGui::EndMenu();
-        }
+        if (ImGui::BeginMenu("Options")) { ImGui::EndMenu(); }
 
         ImGui::EndMainMenuBar();
     }

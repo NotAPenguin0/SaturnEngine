@@ -178,6 +178,8 @@ ProjectFile::get_render_stages() {
     return render_stages;
 }
 
+std::vector<fs::path>& ProjectFile::get_scene_paths() { return scene_paths; }
+
 } // namespace Saturn::Editor
 
 #endif

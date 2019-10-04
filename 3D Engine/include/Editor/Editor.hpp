@@ -11,7 +11,6 @@
 #    include "Editor/EditorPreferencesWidget.hpp"
 #    include "Editor/EntityTree.hpp"
 #    include "Editor/FPSOverlay.hpp"
-#    include "Editor/RenderPipelineWidget.hpp"
 #    include "ProjectMenuWidget.hpp"
 
 namespace fs = std::filesystem;
@@ -38,6 +37,10 @@ public:
     void render(Scene& scene);
     void frame_end();
 
+	void create_new_scene(Scene& scene, fs::path path);
+    void load_scene(Scene& scene, fs::path path, bool use_project_dir = true);
+    void save_scene(Scene& scene);
+
 private:
     void show_menu_bar(Scene& scene);
     void on_scene_reload(Scene& scene);
@@ -45,9 +48,7 @@ private:
     void create_editor_camera(Scene& scene);
     void on_playmode_enter(Scene& scene);
     void set_window_title();
-    void create_new_scene(Scene& scene, fs::path path);
-    void load_scene(Scene& scene, fs::path path, bool use_project_dir = true);
-    void save_scene(Scene& scene);
+   
 
     Application* app;
     SceneObject* editor_camera = nullptr;
@@ -60,7 +61,6 @@ private:
     struct Widgets {
         EntityTree entity_tree;
         EditorPreferencesWidget preferences;
-        RenderPipelineWidget render_pipeline;
         FPSOverlay fps_overlay;
         ProjectMenuWidget project_menu;
     } editor_widgets;

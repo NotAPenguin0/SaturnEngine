@@ -37,6 +37,7 @@ public:
     static fs::path name();
     static std::string path();
     static std::vector<RenderStageData> const& get_render_stages();
+	static std::vector<fs::path>& get_scene_paths();
 
 private:
     static std::vector<fs::path> scene_paths;

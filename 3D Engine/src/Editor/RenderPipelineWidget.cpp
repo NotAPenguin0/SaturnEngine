@@ -51,7 +51,7 @@ add_render_stage(V const& v, Application* app, std::string_view stage) {
 }
 
 void RenderPipelineWidget::show(Application& app) {
-    ImGui::Begin("Render pipeline", &shown);
+//    ImGui::Begin("Render pipeline", &shown);
 
     ImGui::Columns(2);
 
@@ -73,7 +73,7 @@ void RenderPipelineWidget::show(Application& app) {
     display_stage_info(app);
     ImGui::Columns();
 
-    ImGui::End();
+//    ImGui::End();
 }
 
 void RenderPipelineWidget::add_stage(Application& app,
