@@ -154,8 +154,8 @@ Editor::Editor(Application& app) : app(&app) {
 
     // Load render stages
     for (auto const& stage_data : ProjectFile::get_render_stages()) {
-        editor_widgets.project_menu.pipeline_settings.add_stage(app, stage_data.type,
-                                                 stage_data.stage);
+        editor_widgets.project_menu.pipeline_settings.add_stage(
+            app, stage_data.type, stage_data.stage);
     }
 
     do_imports();
@@ -248,6 +248,9 @@ void Editor::render(Scene& scene) {
         }
         if (editor_widgets.project_menu.is_shown()) {
             editor_widgets.project_menu.show(*app, this, scene);
+        }
+        if (editor_widgets.asset_browser.is_shown()) {
+            editor_widgets.asset_browser.show();
         }
     }
 
@@ -356,6 +359,8 @@ void Editor::show_menu_bar(Scene& scene) {
                             editor_widgets.preferences.get_shown_pointer());
             ImGui::MenuItem("FPS overlay", nullptr,
                             editor_widgets.fps_overlay.get_shown_pointer());
+            ImGui::MenuItem("Asset Browser", nullptr,
+                            editor_widgets.asset_browser.get_shown_pointer());
             ImGui::MenuItem("ImGui Demo Window", nullptr, &show_demo_window);
             ImGui::EndMenu();
         }

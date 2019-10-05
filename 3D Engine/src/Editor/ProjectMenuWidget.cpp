@@ -55,6 +55,8 @@ void info() {
 }
 
 void render_pipeline(RenderPipelineWidget& widget, Application& app) {
+	ImGui::TextWrapped("%s", "Render Pipeline");
+	ImGui::Separator();
     // ember render pipeline widget in project settings menu. Note that we
     // disabled the ImGui::Begin() and ImGui::End() calls in this widget to make
     // this possible

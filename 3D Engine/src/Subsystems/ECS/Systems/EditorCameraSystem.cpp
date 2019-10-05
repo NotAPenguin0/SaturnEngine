@@ -24,7 +24,9 @@ void EditorCameraSystem::on_update(Scene& scene) {
             RawInput::get_key(Key::Space).down) {
             movement(transform, cam, controller);
         }
-		zoom(cam, controller);
+        if (RawInput::get_mouse_button(MouseButton::Left).down) {
+            zoom(cam, controller);
+        }
     }
 }
 
@@ -63,8 +65,10 @@ void EditorCameraSystem::movement(
 
     float speed = controller.speed * Time::deltaTime;
 
-    float horizontal = RawInput::get_mouse().xoffset * pow(-1, controller.invert_x);
-    float vertical = RawInput::get_mouse().yoffset * pow(-1, controller.invert_y);
+    float horizontal =
+        RawInput::get_mouse().xoffset * pow(-1, controller.invert_x);
+    float vertical =
+        RawInput::get_mouse().yoffset * pow(-1, controller.invert_y);
 
     glm::vec3 cam_right = glm::normalize(glm::cross(cam.front, cam.up));
     trans.position -= (speed * cam.front * vertical);
@@ -72,7 +76,7 @@ void EditorCameraSystem::movement(
 }
 
 void EditorCameraSystem::zoom(Components::Camera& cam,
-                             Components::EditorCameraController& controller) {
+                              Components::EditorCameraController& controller) {
     auto mouse = RawInput::get_mouse();
 
     auto min = 1.0f;
@@ -81,7 +85,7 @@ void EditorCameraSystem::zoom(Components::Camera& cam,
     if (cam.fov >= min && cam.fov <= max) {
         cam.fov -= mouse.wheel * controller.zoom_speed * Time::deltaTime;
     }
-    if (cam.fov <= min) { cam.fov = min;}
+    if (cam.fov <= min) { cam.fov = min; }
     if (cam.fov >= max) { cam.fov = max; }
 }
 

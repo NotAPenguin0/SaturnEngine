@@ -7,11 +7,12 @@
 #    include <filesystem>
 #    include <vector>
 
+#    include "Editor/AssetBrowser.hpp"
 #    include "Editor/EditorLog.hpp"
 #    include "Editor/EditorPreferencesWidget.hpp"
 #    include "Editor/EntityTree.hpp"
 #    include "Editor/FPSOverlay.hpp"
-#    include "ProjectMenuWidget.hpp"
+#    include "Editor/ProjectMenuWidget.hpp"
 
 namespace fs = std::filesystem;
 
@@ -37,7 +38,7 @@ public:
     void render(Scene& scene);
     void frame_end();
 
-	void create_new_scene(Scene& scene, fs::path path);
+    void create_new_scene(Scene& scene, fs::path path);
     void load_scene(Scene& scene, fs::path path, bool use_project_dir = true);
     void save_scene(Scene& scene);
 
@@ -48,7 +49,6 @@ private:
     void create_editor_camera(Scene& scene);
     void on_playmode_enter(Scene& scene);
     void set_window_title();
-   
 
     Application* app;
     SceneObject* editor_camera = nullptr;
@@ -63,6 +63,7 @@ private:
         EditorPreferencesWidget preferences;
         FPSOverlay fps_overlay;
         ProjectMenuWidget project_menu;
+        AssetBrowser asset_browser;
     } editor_widgets;
 
     bool playmode_active = false;
