@@ -90,6 +90,24 @@ AssetBrowser::AssetBrowser() {
     impl::for_each_asset<fill_asset_types>(asset_types);
 }
 
+template<typename AssetT>
+void display_preview(AssetT const& asset, ImVec2 size) {
+    // Default preview: an image saying no preview is available
+    Resource<Texture> no_preview_tex = AssetManager<Texture>::get_resource(
+        "config/resources/textures/no_preview.tex", true);
+    ImGui::Image(reinterpret_cast<ImTextureID>(no_preview_tex->handle()), size);
+}
+
+template<>
+void display_preview(AssetManager<Texture>::Asset const& asset, ImVec2 size) {
+    ImGui::Image(reinterpret_cast<ImTextureID>(asset.ptr->handle()), size);
+}
+
+template<>
+void display_preview(AssetManager<Shader>::Asset const& asset, ImVec2 size) {
+    ImGui::TextWrapped("Shader preview");
+}
+
 template<typename A>
 struct show_asset_tab {
     static constexpr size_t index = impl::asset_index<A>();
@@ -120,8 +138,10 @@ struct show_asset_tab {
     void show_asset_grid() {
         ImVec2 grid_size = get_grid_size();
         // #TODO: Add slider to adjust this setting
-        const ImVec2 preview_size = ImVec2(50, 50);
+
         const ImVec2 pad = ImGui::GetStyle().FramePadding;
+        const float text_h = ImGui::GetFrameHeightWithSpacing();
+        const ImVec2 preview_size = ImVec2(100, 100 + text_h + 2 * pad.y);
 
         const int max_cols = get_column_count(grid_size, preview_size, pad);
 
@@ -134,9 +154,17 @@ struct show_asset_tab {
         size_t idx = 0;
         for (auto const& [id, asset] : assets) {
             //            if (!asset.imported) { continue; }
+            auto asset_name = get_asset_name(asset.path);
             if (ImGui::BeginChild(
-                    fmt::format("##{}", asset.path.generic_string()).c_str(),
-                    preview_size, true)) {}
+                    fmt::format("AssetPreviewFrame##{}", asset_name).c_str(),
+                    preview_size, true,
+                    ImGuiWindowFlags_NoScrollbar |
+                        ImGuiWindowFlags_NoScrollWithMouse)) {
+
+                display_preview(asset, ImVec2(80, 80));
+
+                ImGui::TextWrapped("%s", asset_name.c_str());
+            }
             ImGui::EndChild();
 
             // Put the next widget on the same line if we're not at the end of a

@@ -35,13 +35,15 @@ public:
                                     bool imported = false) {
         std::string new_p = path;
         if (!use_engine_path) {
-            new_p = (Editor::ProjectFile::root_path() / path).string();
+            new_p = (Editor::ProjectFile::root_path() / path).generic_string();
         }
         // Check if the resource has been loaded already
-        if (id_map.find(new_p) != id_map.end()) {
-            auto id = id_map[new_p];
+        if (id_map.find(fs::absolute(fs::path(new_p)).generic_string()) !=
+            id_map.end()) {
+            auto id = id_map[fs::absolute(fs::path(new_p)).generic_string()];
             R* raw = resources[id].ptr.get();
-            return Resource<R>(raw, id, true, new_p);
+            return Resource<R>(raw, id, true,
+                               fs::absolute(fs::path(new_p)).generic_string());
         }
 
         auto id = IDGenerator<R>::next();
@@ -51,12 +53,13 @@ public:
         if (res == nullptr) {
             return Resource<R>(nullptr, -1, false, new_p);
         } else {
-            id_map[new_p] = id;
+            id_map[fs::absolute(fs::path(new_p)).generic_string()] = id;
             R* raw = res.get();
             resources[id].ptr = std::move(res);
-            resources[id].path = path;
+            resources[id].path = fs::absolute(fs::path(new_p));
             resources[id].imported = imported;
-            return Resource<R>(raw, id, true, new_p);
+            return Resource<R>(raw, id, true,
+                               fs::absolute(fs::path(new_p)).generic_string());
         }
     }
 
@@ -70,19 +73,20 @@ public:
         if (res == nullptr) {
             return Resource<R>(nullptr, -1, false, "");
         } else {
-            id_map[name] = id;
+            id_map[fs::absolute(fs::path(name)).generic_string()] = id;
             R* raw = res.get();
             resources[id].ptr = std::move(res);
-            resources[id].path = "";
+            resources[id].path = fs::absolute(fs::path(name));
             resources[id].imported = false;
-            return Resource<R>(raw, id, true, name);
+            return Resource<R>(raw, id, true,
+                               fs::absolute(fs::path(name)).generic_string());
         }
     }
 
     // Resource must be loaded already.
     static Resource<R> get_loaded_resource(std::size_t id) {
         auto& res = resources.at(id);
-        return Resource<R>(res.ptr.get(), id, true, res.path);
+        return Resource<R>(res.ptr.get(), id, true, res.path.generic_string());
     }
 
     static void unload(std::size_t id) { resources.erase(resources.find(id)); }
@@ -98,8 +102,8 @@ public:
             auto const& path = import_list.front();
             // load the resource, but discard the handle. This should never use
             // the engine path since engine assets will not be imported this way
-            [[maybe_unused]] auto unused = AssetManager<R>::get_resource(path.string(),
-                false, true);
+            [[maybe_unused]] auto unused =
+                AssetManager<R>::get_resource(path.string(), false, true);
             import_list.pop();
         }
     }
