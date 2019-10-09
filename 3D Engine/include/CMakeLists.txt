@@ -15,6 +15,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Editor/ProjectFile.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Editor/ProjectMenuWidget.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Editor/AssetBrowser.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Editor/PreviewRendering.hpp"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/AssetManager/AssetManager.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/AssetManager/Resource.hpp"

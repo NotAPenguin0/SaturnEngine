@@ -55,6 +55,17 @@ void Framebuffer::unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
 ImgDim Framebuffer::dimensions() const { return size; }
 
+void Framebuffer::delete_texture() {
+    if (texture != 0) { glDeleteTextures(1, &texture); }
+}
+
+void Framebuffer::assign_texture(unsigned int tex_handle) {
+    texture = tex_handle;
+    bind(*this);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                           texture, 0);
+}
+
 void Framebuffer::create_fbo() { glGenFramebuffers(1, &fbo); }
 
 void Framebuffer::create_rbo() {

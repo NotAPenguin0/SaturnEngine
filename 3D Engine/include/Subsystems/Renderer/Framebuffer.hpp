@@ -31,6 +31,10 @@ public:
 
     unsigned int get_texture() { return texture; }
 
+	void delete_texture();
+
+	void assign_texture(unsigned int tex_handle);
+
 private:
     friend class Renderer;
 

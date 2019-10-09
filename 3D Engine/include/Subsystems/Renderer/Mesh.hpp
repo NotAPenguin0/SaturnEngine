@@ -19,11 +19,10 @@ public:
     Mesh& operator=(Mesh const&) = delete;
     Mesh& operator=(Mesh&&) = delete;
 
-	void assign(CreateInfo const& create_info);
+    void assign(CreateInfo const& create_info);
 
-    // Only allow const access since we don't want the user to be able to
-    // call .assign()
     VertexArray& get_vertices();
+    VertexArray const& get_vertices() const { return vertices; }
 
 private:
     VertexArray vertices;

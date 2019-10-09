@@ -8,8 +8,8 @@ RenderModule ParticleModule
 RenderModule TransferModule
 PostRenderStage BlitPass
 RenderModule EditorModule
-asset shader C:/Users/michi_000/Desktop/C++/SaturnEngine/Saturn Projects/ProjectFileDev/assets/shaders/normal_mapping.sh
-asset texture C:/Users/michi_000/Desktop/C++/SaturnEngine/Saturn Projects/ProjectFileDev/assets/textures/brickwall.tex
-asset texture C:/Users/michi_000/Desktop/C++/SaturnEngine/Saturn Projects/ProjectFileDev/assets/textures/brickwall_normal.tex
-asset texture C:/Users/michi_000/Desktop/C++/SaturnEngine/Saturn Projects/ProjectFileDev/assets/textures/brickwall_specular.tex
-asset mesh C:/Users/michi_000/Desktop/C++/SaturnEngine/Saturn Projects/ProjectFileDev/assets/meshes/my_cube.mesh
+asset shader assets/shaders/normal_mapping.sh
+asset texture assets/textures/brickwall.tex
+asset texture assets/textures/brickwall_normal.tex
+asset texture assets/textures/brickwall_specular.tex
+asset mesh assets/meshes/my_cube.mesh

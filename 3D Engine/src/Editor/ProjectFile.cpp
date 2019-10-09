@@ -84,7 +84,9 @@ void export_assets(std::vector<ExportedAsset>& assets, std::string_view type) {
 
     for (auto const& [id, asset] : AssetManager<T>::resource_list()) {
         if (asset.imported) {
-            assets.push_back(ExportedAsset{asset.path, std::string(type)});
+            assets.push_back(ExportedAsset{
+                fs::relative(asset.path, ProjectFile::root_path()),
+                std::string(type)});
         }
     }
 }

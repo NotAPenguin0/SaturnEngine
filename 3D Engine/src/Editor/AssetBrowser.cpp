@@ -4,6 +4,7 @@
 #include <imgui/imgui.h>
 
 #include "Editor/EditorLog.hpp"
+#include "Editor/PreviewRendering.hpp"
 #include "Subsystems/AssetManager/AssetManager.hpp"
 #include "Subsystems/Renderer/Mesh.hpp"
 #include "Subsystems/Renderer/Shader.hpp"
@@ -91,7 +92,7 @@ AssetBrowser::AssetBrowser() {
 }
 
 template<typename AssetT>
-void display_preview(AssetT const& asset, ImVec2 size) {
+void display_preview(AssetT& asset, ImVec2 size) {
     // Default preview: an image saying no preview is available
     Resource<Texture> no_preview_tex = AssetManager<Texture>::get_resource(
         "config/resources/textures/no_preview.tex", true);
@@ -99,12 +100,18 @@ void display_preview(AssetT const& asset, ImVec2 size) {
 }
 
 template<>
-void display_preview(AssetManager<Texture>::Asset const& asset, ImVec2 size) {
+void display_preview(AssetManager<Texture>::Asset& asset, ImVec2 size) {
     ImGui::Image(reinterpret_cast<ImTextureID>(asset.ptr->handle()), size);
 }
 
 template<>
-void display_preview(AssetManager<Shader>::Asset const& asset, ImVec2 size) {
+void display_preview(AssetManager<Mesh>::Asset& asset, ImVec2 size) {
+    auto texture_id = render_mesh_preview(asset);
+    ImGui::Image(reinterpret_cast<ImTextureID>(texture_id), size);
+}
+
+template<>
+void display_preview(AssetManager<Shader>::Asset& asset, ImVec2 size) {
     ImGui::TextWrapped("Shader preview");
 }
 
@@ -117,8 +124,8 @@ struct show_asset_tab {
     }
 
     ImVec2 get_grid_size() {
-        const float pad_x = ImGui::GetStyle().FramePadding.x;
-        const float pad_y = ImGui::GetStyle().FramePadding.y;
+        const float pad_x = ImGui::GetStyle().WindowPadding.x;
+        const float pad_y = ImGui::GetStyle().WindowPadding.y;
         const ImVec2 full_window_size = ImGui::GetWindowSize();
         return ImVec2(full_window_size.x - 2 * pad_x,
                       full_window_size.y - 2 * pad_y);
@@ -139,9 +146,9 @@ struct show_asset_tab {
         ImVec2 grid_size = get_grid_size();
         // #TODO: Add slider to adjust this setting
 
-        const ImVec2 pad = ImGui::GetStyle().FramePadding;
+        const ImVec2 pad = ImGui::GetStyle().WindowPadding;
         const float text_h = ImGui::GetFrameHeightWithSpacing();
-        const ImVec2 preview_size = ImVec2(100, 100 + text_h + 2 * pad.y);
+        const ImVec2 preview_size = ImVec2(100, 100 + text_h + pad.y);
 
         const int max_cols = get_column_count(grid_size, preview_size, pad);
 
@@ -150,10 +157,11 @@ struct show_asset_tab {
             return;
         }
 
-        auto const& assets = AssetManager<A>::resource_list();
+        auto& assets = AssetManager<A>::resource_list();
         size_t idx = 0;
-        for (auto const& [id, asset] : assets) {
-            //            if (!asset.imported) { continue; }
+        for (auto& [id, asset] : assets) {
+            // Only display imported assets
+            if (!asset.imported) { continue; }
             auto asset_name = get_asset_name(asset.path);
             if (ImGui::BeginChild(
                     fmt::format("AssetPreviewFrame##{}", asset_name).c_str(),
@@ -161,7 +169,8 @@ struct show_asset_tab {
                     ImGuiWindowFlags_NoScrollbar |
                         ImGuiWindowFlags_NoScrollWithMouse)) {
 
-                display_preview(asset, ImVec2(80, 80));
+                float edge_sz = preview_size.x - 2 * pad.x;
+                display_preview(asset, ImVec2(edge_sz, edge_sz));
 
                 ImGui::TextWrapped("%s", asset_name.c_str());
             }
