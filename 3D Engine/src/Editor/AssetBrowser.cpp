@@ -106,7 +106,7 @@ void display_preview(AssetManager<Texture>::Asset& asset, ImVec2 size) {
 
 template<>
 void display_preview(AssetManager<Mesh>::Asset& asset, ImVec2 size) {
-    auto texture_id = render_mesh_preview(asset);
+    auto texture_id = previews::render_mesh_preview(asset);
     ImGui::Image(reinterpret_cast<ImTextureID>(texture_id), size);
 }
 
@@ -138,17 +138,17 @@ struct show_asset_tab {
         //		width = cols * (pad_x + frame_w) + pad_x
         // <=>	cols = (width - pad_x) / (pad_x + frame_w)
 
-        return static_cast<int>(
-            (grid_size.x - pad.x) / (pad.x + preview_size.x) - 1);
+        return static_cast<int>((grid_size.x - pad.x) /
+                                (pad.x + preview_size.x));
     }
 
-    void show_asset_grid() {
+    void show_asset_grid(int sz, bool show_editor_assets) {
         ImVec2 grid_size = get_grid_size();
         // #TODO: Add slider to adjust this setting
 
         const ImVec2 pad = ImGui::GetStyle().WindowPadding;
         const float text_h = ImGui::GetFrameHeightWithSpacing();
-        const ImVec2 preview_size = ImVec2(100, 100 + text_h + pad.y);
+        const ImVec2 preview_size = ImVec2(sz, sz + text_h + pad.y);
 
         const int max_cols = get_column_count(grid_size, preview_size, pad);
 
@@ -161,7 +161,7 @@ struct show_asset_tab {
         size_t idx = 0;
         for (auto& [id, asset] : assets) {
             // Only display imported assets
-            if (!asset.imported) { continue; }
+            if (!show_editor_assets && !asset.imported) { continue; }
             auto asset_name = get_asset_name(asset.path);
             if (ImGui::BeginChild(
                     fmt::format("AssetPreviewFrame##{}", asset_name).c_str(),
@@ -183,24 +183,14 @@ struct show_asset_tab {
         }
     }
 
-    void operator()(std::vector<std::string_view> const& asset_types) {
+    void operator()(std::vector<std::string_view> const& asset_types,
+                    int preview_size,
+                    bool show_editor_assets) {
         std::string_view type_name = asset_types[index];
         if (ImGui::BeginTabItem(
                 fmt::format("{}##BrowserTabBar", type_name).c_str())) {
 
-            /*if (ImGui::BeginChild("##AssetListFrame", ImVec2(0, 0), true)) {
-
-                auto const& assets = AssetManager<A>::resource_list();
-                for (auto const& [id, asset] : assets) {
-                    if (asset.imported) {
-                        auto asset_name = get_asset_name(asset.path);
-                        ImGui::Text("%s", asset_name.c_str());
-                    }
-                }
-                ImGui::EndChild();
-            }*/
-
-            show_asset_grid();
+            show_asset_grid(preview_size, show_editor_assets);
 
             ImGui::EndTabItem();
         }
@@ -210,11 +200,22 @@ struct show_asset_tab {
 void AssetBrowser::show() {
 
     if (ImGui::Begin("Asset browser", get_shown_pointer())) {
+
+        // Menu buttons
+        if (ImGui::Button("Clear cache")) { previews::clear_cache(); }
+        ImGui::SameLine();
+        ImGui::Checkbox("Show editor assets", &show_editor_assets);
+        ImGui::SameLine();
+        ImGui::SliderInt("Preview size", &preview_size, 1,
+                         previews::max_preview_size, "%d px");
+        ImGui::Separator();
+
         if (ImGui::BeginTabBar("Asset types##AssetBrowserTabBar",
                                ImGuiTabBarFlags_NoCloseWithMiddleMouseButton |
                                    ImGuiTabBarFlags_Reorderable)) {
 
-            impl::for_each_asset<show_asset_tab>(asset_types);
+            impl::for_each_asset<show_asset_tab>(asset_types, preview_size,
+                                                 show_editor_assets);
 
             ImGui::EndTabBar();
         }

@@ -15,6 +15,8 @@ public:
 
 private:
     std::vector<std::string_view> asset_types;
+    int preview_size = 128;
+	bool show_editor_assets = false;
 };
 
 } // namespace Saturn::Editor
