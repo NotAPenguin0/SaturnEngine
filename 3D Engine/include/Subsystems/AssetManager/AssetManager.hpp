@@ -26,6 +26,7 @@ public:
         std::unique_ptr<R> ptr;
         fs::path path;
         bool imported;
+        size_t id;
     };
 
     // If the resource is not loaded yet, this function will load it.
@@ -58,6 +59,7 @@ public:
             resources[id].ptr = std::move(res);
             resources[id].path = fs::absolute(fs::path(new_p));
             resources[id].imported = imported;
+            resources[id].id = id;
             return Resource<R>(raw, id, true,
                                fs::absolute(fs::path(new_p)).generic_string());
         }
@@ -78,6 +80,7 @@ public:
             resources[id].ptr = std::move(res);
             resources[id].path = fs::absolute(fs::path(name));
             resources[id].imported = false;
+            resources[id].id = id;
             return Resource<R>(raw, id, true,
                                fs::absolute(fs::path(name)).generic_string());
         }
@@ -93,6 +96,11 @@ public:
 
     static std::unordered_map<size_t, Asset>& resource_list() {
         return resources;
+    }
+
+    static void remove_asset(Asset& asset) {
+        id_map.erase(asset.path.generic_string());
+        resources.erase(asset.id);
     }
 
     static void queue_import(fs::path path) { import_list.push(path); }

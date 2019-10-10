@@ -81,7 +81,6 @@ texture_t create_texture() {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, max_preview_size, max_preview_size,
                  0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 
-
     return handle;
 }
 
@@ -112,8 +111,8 @@ void render_mesh(render_info& info, AssetManager<Mesh>::Asset& asset) {
     glDrawElements(GL_TRIANGLES, vertices.index_size(), GL_UNSIGNED_INT,
                    nullptr);
     glBindTexture(GL_TEXTURE_2D, info.framebuf.get_texture());
-	glGenerateMipmap(GL_TEXTURE_2D);
-	
+    // Don't forget to generate mipmap to allow resizing
+    glGenerateMipmap(GL_TEXTURE_2D);
 }
 
 } // namespace impl
@@ -147,9 +146,6 @@ impl::texture_t render_mesh_preview(AssetManager<Mesh>::Asset& asset) {
     return texture;
 }
 
-void clear_cache() {
-	impl::cache.clear();
-}
-
+void clear_cache() { impl::cache.clear(); }
 
 } // namespace Saturn::Editor::previews

@@ -5,6 +5,7 @@
 
 #include "Editor/EditorLog.hpp"
 #include "Editor/PreviewRendering.hpp"
+#include "Editor/SelectFileDialog.hpp"
 #include "Subsystems/AssetManager/AssetManager.hpp"
 #include "Subsystems/Renderer/Mesh.hpp"
 #include "Subsystems/Renderer/Shader.hpp"
@@ -94,9 +95,19 @@ AssetBrowser::AssetBrowser() {
 template<typename AssetT>
 void display_preview(AssetT& asset, ImVec2 size) {
     // Default preview: an image saying no preview is available
-    Resource<Texture> no_preview_tex = AssetManager<Texture>::get_resource(
-        "config/resources/textures/no_preview.tex", true);
+    static Resource<Texture> no_preview_tex =
+        AssetManager<Texture>::get_resource(
+            "config/resources/textures/no_preview.tex", true);
     ImGui::Image(reinterpret_cast<ImTextureID>(no_preview_tex->handle()), size);
+}
+
+template<>
+void display_preview(AssetManager<audeo::SoundSource>::Asset& asset,
+                     ImVec2 size) {
+
+    static Resource<Texture> speaker_tex = AssetManager<Texture>::get_resource(
+        "config/resources/textures/speaker.tex", true);
+    ImGui::Image(reinterpret_cast<ImTextureID>(speaker_tex->handle()), size);
 }
 
 template<>
@@ -112,7 +123,9 @@ void display_preview(AssetManager<Mesh>::Asset& asset, ImVec2 size) {
 
 template<>
 void display_preview(AssetManager<Shader>::Asset& asset, ImVec2 size) {
-    ImGui::TextWrapped("Shader preview");
+    static Resource<Texture> shader_icon = AssetManager<Texture>::get_resource(
+        "config/resources/textures/shader_icon.tex", true);
+    ImGui::Image(reinterpret_cast<ImTextureID>(shader_icon->handle()), size);
 }
 
 template<typename A>
@@ -159,6 +172,7 @@ struct show_asset_tab {
 
         auto& assets = AssetManager<A>::resource_list();
         size_t idx = 0;
+        typename AssetManager<A>::Asset* asset_to_erase = nullptr;
         for (auto& [id, asset] : assets) {
             // Only display imported assets
             if (!show_editor_assets && !asset.imported) { continue; }
@@ -169,10 +183,28 @@ struct show_asset_tab {
                     ImGuiWindowFlags_NoScrollbar |
                         ImGuiWindowFlags_NoScrollWithMouse)) {
 
+                bool open_details_dialog = false;
+
+                if (ImGui::IsWindowHovered()) {
+                    if (ImGui::IsMouseClicked(1)) {
+                        open_details_dialog = true;
+                    }
+                }
+
                 float edge_sz = preview_size.x - 2 * pad.x;
                 display_preview(asset, ImVec2(edge_sz, edge_sz));
 
                 ImGui::TextWrapped("%s", asset_name.c_str());
+
+                if (open_details_dialog) {
+                    ImGui::OpenPopup("##AssetContextMenu");
+                }
+                if (ImGui::BeginPopup("##AssetContextMenu")) {
+                    if (ImGui::MenuItem("Remove asset")) {
+                        asset_to_erase = &asset;
+                    }
+                    ImGui::EndPopup();
+                }
             }
             ImGui::EndChild();
 
@@ -181,6 +213,8 @@ struct show_asset_tab {
             if ((idx + 1) % max_cols != 0) { ImGui::SameLine(); }
             ++idx;
         }
+        // do erasing of id's that have to BEGONE
+        if (asset_to_erase) { AssetManager<A>::remove_asset(*asset_to_erase); }
     }
 
     void operator()(std::vector<std::string_view> const& asset_types,
@@ -191,6 +225,21 @@ struct show_asset_tab {
                 fmt::format("{}##BrowserTabBar", type_name).c_str())) {
 
             show_asset_grid(preview_size, show_editor_assets);
+            ImGui::Separator();
+            if (ImGui::Button("Import##ImportAssetBtn")) {
+                SelectFileDialog dialog;
+                dialog.show(SelectFileDialog::PickFiles,
+                            fs::absolute(fs::path(last_open_path<A>())),
+                            FileTypes<A>::types);
+                fs::path result = dialog.get_result();
+                if (result != "") {
+                    auto discarded = AssetManager<A>::get_resource(
+                        fs::relative(result, ProjectFile::root_path())
+                            .generic_string(),
+                        false, true);
+                    last_open_path<A>() = result.remove_filename().string();
+                }
+            }
 
             ImGui::EndTabItem();
         }
@@ -208,6 +257,7 @@ void AssetBrowser::show() {
         ImGui::SameLine();
         ImGui::SliderInt("Preview size", &preview_size, 1,
                          previews::max_preview_size, "%d px");
+
         ImGui::Separator();
 
         if (ImGui::BeginTabBar("Asset types##AssetBrowserTabBar",
