@@ -129,7 +129,30 @@ struct ComponentFieldVisitor {
     void operator()(Resource<R>* field) {
         ImGui::Text("%s:", field_name.data());
         ImGui::SameLine();
-        ImGui::Text("%s", fs::path(field->get_path()).stem().string().c_str());
+
+        auto icon = AssetManager<Texture>::get_resource(
+            "config/resources/textures/circle_icon.tex", true);
+        // dummy image to make drag drop work?
+        ImGui::Image(reinterpret_cast<ImTextureID>(icon->handle()),
+                     ImVec2(0, 0));
+        ImGui::SameLine();
+        if (field->is_loaded()) {
+            ImGui::Text("%s",
+                        fs::path(field->get_path()).stem().string().c_str());
+        } else {
+            ImGui::Text("(none)");
+		}
+        const std::string drag_drop_type =
+            "p_" + std::string(asset_type_string<R>());
+        if (ImGui::BeginDragDropTarget()) {
+            if (const ImGuiPayload* payload =
+                    ImGui::AcceptDragDropPayload(drag_drop_type.c_str())) {
+                auto& asset = *(typename AssetManager<R>::Asset*)payload->Data;
+                *field =
+                    AssetManager<R>::get_resource(asset.path.generic_string());
+            }
+            ImGui::EndDragDropTarget();
+        }
         if (ImGui::IsItemHovered()) {
             ImGui::BeginTooltip();
             ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);

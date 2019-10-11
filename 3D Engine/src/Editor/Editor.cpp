@@ -70,6 +70,7 @@ Editor::Editor(Application& app) : app(&app) {
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigDockingWithShift = false;
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+    io.ConfigWindowsMoveFromTitleBarOnly = true;
     ImGui_ImplGlfw_InitForOpenGL(this->app->window_handle, true);
     ImGui_ImplOpenGL3_Init("#version 430");
     // Initialize components metadata

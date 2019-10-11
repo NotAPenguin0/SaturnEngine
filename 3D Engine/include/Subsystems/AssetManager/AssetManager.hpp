@@ -8,6 +8,7 @@
 #include <string>
 #include <type_traits>
 #include <unordered_map>
+#include <string_view>
 
 namespace fs = std::filesystem;
 
@@ -135,6 +136,14 @@ template<typename R>
 void to_json(nlohmann::json& j, Resource<R> const& res) {
     j["Resource"] =
         fs::relative(res.get_path(), Editor::ProjectFile::root_path()).string();
+}
+
+template<typename A>
+std::string_view asset_type_string() {
+    if constexpr (std::is_same_v<A, Shader>) { return "shader"; }
+    if constexpr (std::is_same_v<A, Texture>) { return "texture"; }
+    if constexpr (std::is_same_v<A, Mesh>) { return "mesh"; }
+    if constexpr (std::is_same_v<A, audeo::SoundSource>) { return "sound"; }
 }
 
 } // namespace Saturn

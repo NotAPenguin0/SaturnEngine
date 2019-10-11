@@ -59,14 +59,6 @@ void for_each_asset(Args&&... args) {
 }
 
 template<typename A>
-std::string_view asset_type_string() {
-    if constexpr (std::is_same_v<A, Shader>) { return "shader"; }
-    if constexpr (std::is_same_v<A, Texture>) { return "texture"; }
-    if constexpr (std::is_same_v<A, Mesh>) { return "mesh"; }
-    if constexpr (std::is_same_v<A, audeo::SoundSource>) { return "sound"; }
-}
-
-template<typename A>
 constexpr size_t asset_index() {
     return index_of<A, ASSET_LIST>::value;
 }
@@ -79,7 +71,7 @@ constexpr size_t asset_index() {
 template<typename A>
 struct fill_asset_types {
     void operator()(std::vector<std::string_view>& types) {
-        types.push_back(impl::asset_type_string<A>());
+        types.push_back(asset_type_string<A>());
     }
 };
 
@@ -155,7 +147,9 @@ struct show_asset_tab {
                                 (pad.x + preview_size.x));
     }
 
-    void show_asset_grid(int sz, bool show_editor_assets) {
+    void show_asset_grid(int sz,
+                         bool show_editor_assets,
+                         std::vector<std::string_view> const& asset_types) {
         ImVec2 grid_size = get_grid_size();
         // #TODO: Add slider to adjust this setting
 
@@ -183,6 +177,16 @@ struct show_asset_tab {
                     ImGuiWindowFlags_NoScrollbar |
                         ImGuiWindowFlags_NoScrollWithMouse)) {
 
+				if (ImGui::BeginDragDropSource()) {
+                    std::string const type =
+                        "p_" + std::string(asset_types[index]);
+                    ImGui::SetDragDropPayload(
+                        type.c_str(), &asset,
+                        sizeof(typename AssetManager<A>::Asset));
+
+                    ImGui::EndDragDropSource();
+                }
+
                 bool open_details_dialog = false;
 
                 if (ImGui::IsWindowHovered()) {
@@ -193,6 +197,7 @@ struct show_asset_tab {
 
                 float edge_sz = preview_size.x - 2 * pad.x;
                 display_preview(asset, ImVec2(edge_sz, edge_sz));
+
 
                 ImGui::TextWrapped("%s", asset_name.c_str());
 
@@ -224,7 +229,7 @@ struct show_asset_tab {
         if (ImGui::BeginTabItem(
                 fmt::format("{}##BrowserTabBar", type_name).c_str())) {
 
-            show_asset_grid(preview_size, show_editor_assets);
+            show_asset_grid(preview_size, show_editor_assets, asset_types);
             ImGui::Separator();
             if (ImGui::Button("Import##ImportAssetBtn")) {
                 SelectFileDialog dialog;
