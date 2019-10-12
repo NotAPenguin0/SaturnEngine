@@ -184,7 +184,7 @@ struct show_asset_tab {
                     ImGui::SetDragDropPayload(
                         type.c_str(), &asset,
                         sizeof(typename AssetManager<A>::Asset));
-
+					display_preview(asset, ImVec2(32, 32));
                     ImGui::EndDragDropSource();
                 }
 
