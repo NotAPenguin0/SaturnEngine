@@ -5,6 +5,7 @@
 
 #    include "DebugConsole.hpp"
 #    include <fmt/format.h>
+#    include <fmt/ostream.h>
 #    include <functional>
 
 namespace Saturn {

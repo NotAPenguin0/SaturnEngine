@@ -18,6 +18,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Editor/PreviewRendering.hpp"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/AssetManager/AssetManager.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/AssetManager/AssetTracker.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/AssetManager/Resource.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/AssetManager/ResourceLoaders.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Subsystems/ECS/ComponentList.hpp"

@@ -8,13 +8,12 @@
 
 namespace Saturn {
 
-std::unique_ptr<Shader>
-ResourceLoader<Shader>::load(std::string const& path,
-                             std::string const& root_dir) {
+LoadResult<Shader> ResourceLoader<Shader>::load(std::string const& path,
+                                                std::string const& root_dir) {
     std::ifstream file(path);
     if (!file.good()) {
         log::error("Failed to open shader file at path: {}/{}", root_dir, path);
-        return nullptr;
+        return {nullptr, {}};
     }
     Shader::CreateInfo info;
 
@@ -32,15 +31,25 @@ ResourceLoader<Shader>::load(std::string const& path,
     info.vtx_path = vtx;
     info.frag_path = frag;
 
-    return std::make_unique<Shader>(info);
+    return {std::make_unique<Shader>(info),
+            {fs::absolute(vtx), fs::absolute(frag)}};
 }
 
-std::unique_ptr<Mesh> ResourceLoader<Mesh>::load(std::string const& path,
-                                                 std::string const& root_dir) {
+void ResourceLoader<Shader>::reload(std::unique_ptr<Shader>& res,
+                                    std::vector<fs::path>& dependent_paths,
+                                    std::string const& path,
+                                    std::string const& root_dir) {
+    auto new_res = load(path, root_dir);
+    res->swap(*new_res.ptr);
+    dependent_paths = std::move(new_res.dependent_paths);
+}
+
+LoadResult<Mesh> ResourceLoader<Mesh>::load(std::string const& path,
+                                            std::string const& root_dir) {
     std::ifstream file(path);
     if (!file.good()) {
         log::error("Failed to open mesh file at path: {}/{}", root_dir, path);
-        return nullptr;
+        return {nullptr, {}};
     }
 
     // A Mesh file looks like this:
@@ -109,7 +118,16 @@ std::unique_ptr<Mesh> ResourceLoader<Mesh>::load(std::string const& path,
 
     info.vertices.dynamic = false;
 
-    return std::make_unique<Mesh>(info);
+    return {std::make_unique<Mesh>(info), {}};
+}
+
+void ResourceLoader<Mesh>::reload(std::unique_ptr<Mesh>& res,
+                                  std::vector<fs::path>& dependent_paths,
+                                  std::string const& path,
+                                  std::string const& root_dir) {
+    auto new_res = load(path, root_dir);
+    res->swap(*new_res.ptr);
+    dependent_paths = std::move(new_res.dependent_paths);
 }
 
 static TextureFormat format_from_string(std::string const& str) {
@@ -180,14 +198,13 @@ static TextureParameterValue value_from_string(std::string const& str) {
     throw std::runtime_error("Invalid texture parameter value!");
 }
 
-std::unique_ptr<Texture>
-ResourceLoader<Texture>::load(std::string const& path,
-                              std::string const& root_dir) {
+LoadResult<Texture> ResourceLoader<Texture>::load(std::string const& path,
+                                                  std::string const& root_dir) {
     std::ifstream file(path);
     if (!file.good()) {
         log::error("Failed to open texture file at path: {}/{}", root_dir,
                    path);
-        return nullptr;
+        return {nullptr, {}};
     }
 
     /*
@@ -238,7 +255,7 @@ ResourceLoader<Texture>::load(std::string const& path,
         param.value = value_from_string(str);
     }
 
-	path_to_file = root_dir + path_to_file;
+    path_to_file = root_dir + path_to_file;
 
     Texture::CreateInfo info;
     info.flip_y = flip_y;
@@ -249,17 +266,26 @@ ResourceLoader<Texture>::load(std::string const& path,
     info.texture_unit = unit;
     info.target = target;
 
-    return std::make_unique<Texture>(info);
+    return {std::make_unique<Texture>(info), {fs::absolute(path_to_file)}};
 }
 
-std::unique_ptr<audeo::SoundSource>
+void ResourceLoader<Texture>::reload(std::unique_ptr<Texture>& res,
+                                     std::vector<fs::path>& dependent_paths,
+                                     std::string const& path,
+                                     std::string const& root_dir) {
+    auto new_res = load(path, root_dir);
+    res->swap(*new_res.ptr);
+    dependent_paths = std::move(new_res.dependent_paths);
+}
+
+LoadResult<audeo::SoundSource>
 ResourceLoader<audeo::SoundSource>::load(std::string const& path,
                                          std::string const& root_dir) {
     std::ifstream file(path);
     if (!file.good()) {
         log::error("Failed to open sound source file at path: {}/{}", root_dir,
                    path);
-        return nullptr;
+        return {nullptr, {}};
     }
 
     // First line contains the path to the sound source
@@ -273,13 +299,23 @@ ResourceLoader<audeo::SoundSource>::load(std::string const& path,
     audeo::AudioType type = audeo::AudioType::Effect;
     if (type_s == "Music") { type = audeo::AudioType::Music; }
 
-    audeo::SoundSource source =
-        audeo::load_source(root_dir +  src_path, type);
+    audeo::SoundSource source = audeo::load_source(root_dir + src_path, type);
     if (audeo::is_valid(source)) {
-        return std::make_unique<audeo::SoundSource>(source);
+        return {std::make_unique<audeo::SoundSource>(source),
+                {fs::absolute(root_dir + src_path)}};
     } else {
-        return nullptr;
+        return {nullptr, {}};
     }
+}
+
+void ResourceLoader<audeo::SoundSource>::reload(
+    std::unique_ptr<audeo::SoundSource>& res,
+    std::vector<fs::path>& dependent_paths,
+    std::string const& path,
+    std::string const& root_dir) {
+    auto new_res = load(path, root_dir);
+    *res = *new_res.ptr;
+    dependent_paths = std::move(new_res.dependent_paths);
 }
 
 // File types definitions

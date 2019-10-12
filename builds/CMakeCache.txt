@@ -26,6 +26,9 @@ BUILD_STATIC_LIBS:BOOL=ON
 //Build the testing tree.
 BUILD_TESTING:BOOL=OFF
 
+//Build the test app
+BUILD_TEST_APP:BOOL=OFF
+
 //Path to a program.
 BZRCOMMAND:FILEPATH=BZRCOMMAND-NOTFOUND
 
@@ -483,6 +486,9 @@ SLURM_SBATCH_COMMAND:FILEPATH=SLURM_SBATCH_COMMAND-NOTFOUND
 //Path to the SLURM srun executable
 SLURM_SRUN_COMMAND:FILEPATH=SLURM_SRUN_COMMAND-NOTFOUND
 
+//Build efsw as a static library
+STATIC_LIB:BOOL=ON
+
 //Path to a program.
 SVNCOMMAND:FILEPATH=SVNCOMMAND-NOTFOUND
 
@@ -501,6 +507,9 @@ Serialization_SOURCE_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/Code
 //Use MSVC runtime library DLL
 USE_MSVC_RUNTIME_LIBRARY_DLL:BOOL=ON
 
+//Build efsw with verbose mode.
+VERBOSE:BOOL=OFF
+
 VS_DEBUGGER_WORKING_DIRECTORY:PATH=C:/Users/michi_000/Desktop/C++/SaturnEngine
 
 //Value Computed by CMake
@@ -508,6 +517,12 @@ audeo_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D En
 
 //Value Computed by CMake
 audeo_SOURCE_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/audeo
+
+//Value Computed by CMake
+efsw_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/efsw
+
+//Value Computed by CMake
+efsw_SOURCE_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/efsw
 
 //Value Computed by CMake
 glad_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/glad
@@ -660,7 +675,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO
 CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=17
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=18
 //Platform information initialized
 CMAKE_PLATFORM_INFO_INITIALIZED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_RC_COMPILER

@@ -12,6 +12,7 @@
 #include "Subsystems/Renderer/Texture.hpp"
 #include "Utility/Utility.hpp"
 
+
 #include <tuple>
 
 namespace Saturn::Editor {
@@ -177,7 +178,7 @@ struct show_asset_tab {
                     ImGuiWindowFlags_NoScrollbar |
                         ImGuiWindowFlags_NoScrollWithMouse)) {
 
-				if (ImGui::BeginDragDropSource()) {
+                if (ImGui::BeginDragDropSource()) {
                     std::string const type =
                         "p_" + std::string(asset_types[index]);
                     ImGui::SetDragDropPayload(
@@ -197,7 +198,6 @@ struct show_asset_tab {
 
                 float edge_sz = preview_size.x - 2 * pad.x;
                 display_preview(asset, ImVec2(edge_sz, edge_sz));
-
 
                 ImGui::TextWrapped("%s", asset_name.c_str());
 

@@ -27,6 +27,9 @@ C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/audeo/
 C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/audeo/dependencies/CMakeFiles/INSTALL.dir
 C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/audeo/include/CMakeFiles/INSTALL.dir
 C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/audeo/src/CMakeFiles/INSTALL.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/efsw/CMakeFiles/efsw.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/efsw/CMakeFiles/INSTALL.dir
+C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/efsw/CMakeFiles/ALL_BUILD.dir
 C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/include/CMakeFiles/INSTALL.dir
 C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/src/CMakeFiles/INSTALL.dir
 C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/CodeGen/Serialization/CMakeFiles/SerializationCodeGen.dir

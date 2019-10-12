@@ -104,6 +104,14 @@ public:
 
     GLuint handle();
 
+    void swap(Texture& other) {
+        std::swap(texture_handle, other.texture_handle);
+        std::swap(texture_unit, other.texture_unit);
+        std::swap(w, other.w);
+        std::swap(h, other.h);
+        std::swap(target, other.target);
+    }
+
 private:
     GLuint texture_handle;
     GLenum texture_unit;

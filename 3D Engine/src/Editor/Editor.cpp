@@ -159,7 +159,14 @@ Editor::Editor(Application& app) : app(&app) {
             app, stage_data.type, stage_data.stage);
     }
 
+	
+    AssetManager<Texture>::init();
+    AssetManager<Shader>::init();
+    AssetManager<Mesh>::init();
+    AssetManager<audeo::SoundSource>::init();
+
     do_imports();
+
 
     set_window_title();
 } // namespace Saturn::Editor
@@ -233,6 +240,13 @@ void Editor::render(Scene& scene) {
     glViewport(0, 0, app->window_dimensions.x, app->window_dimensions.y);
     glClear(GL_COLOR_BUFFER_BIT);
     if (!playmode_active) {
+
+        // Do asset reloads if queued
+        AssetManager<Shader>::do_reloads();
+        AssetManager<Texture>::do_reloads();
+        AssetManager<Mesh>::do_reloads();
+        AssetManager<audeo::SoundSource>::do_reloads();
+
         if (show_demo) { ImGui::ShowDemoWindow(&show_demo); }
 
         show_menu_bar(scene);

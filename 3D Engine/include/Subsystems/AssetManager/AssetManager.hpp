@@ -6,12 +6,13 @@
 #include <nlohmann/json.hpp>
 #include <queue>
 #include <string>
+#include <string_view>
 #include <type_traits>
 #include <unordered_map>
-#include <string_view>
 
 namespace fs = std::filesystem;
 
+#include "AssetTracker.hpp"
 #include "Resource.hpp"
 #include "ResourceLoaders.hpp"
 #include "Utility/IDGenerator.hpp"
@@ -23,11 +24,14 @@ namespace Saturn {
 template<typename R>
 class AssetManager {
 public:
+    static void init() { asset_tracker = std::make_unique<AssetTracker<R>>(); }
+
     struct Asset {
         std::unique_ptr<R> ptr;
         fs::path path;
         bool imported;
         size_t id;
+        std::vector<fs::path> dependent_paths;
     };
 
     // If the resource is not loaded yet, this function will load it.
@@ -49,18 +53,26 @@ public:
         }
 
         auto id = IDGenerator<R>::next();
-        std::unique_ptr<R> res = ResourceLoader<R>::load(
+        auto res = ResourceLoader<R>::load(
             new_p,
             use_engine_path ? "" : Editor::ProjectFile::root_path().string());
-        if (res == nullptr) {
+        if (res.ptr == nullptr) {
             return Resource<R>(nullptr, -1, false, new_p);
         } else {
             id_map[fs::absolute(fs::path(new_p)).generic_string()] = id;
-            R* raw = res.get();
-            resources[id].ptr = std::move(res);
+            R* raw = res.ptr.get();
+            resources[id].ptr = std::move(res.ptr);
             resources[id].path = fs::absolute(fs::path(new_p));
             resources[id].imported = imported;
             resources[id].id = id;
+            resources[id].dependent_paths = std::move(res.dependent_paths);
+            if (imported) {
+                std::vector<fs::path> associated_paths =
+                    resources[id].dependent_paths;
+                associated_paths.push_back(resources[id].path);
+                asset_tracker->start_tracking(resources[id],
+                                              std::move(associated_paths));
+            }
             return Resource<R>(raw, id, true,
                                fs::absolute(fs::path(new_p)).generic_string());
         }
@@ -100,6 +112,7 @@ public:
     }
 
     static void remove_asset(Asset& asset) {
+        asset_tracker->stop_tracking(asset);
         id_map.erase(asset.path.generic_string());
         resources.erase(asset.id);
     }
@@ -111,9 +124,22 @@ public:
             auto const& path = import_list.front();
             // load the resource, but discard the handle. This should never use
             // the engine path since engine assets will not be imported this way
-            [[maybe_unused]] auto unused =
+            auto imported =
                 AssetManager<R>::get_resource(path.string(), false, true);
             import_list.pop();
+        }
+    }
+
+    static void queue_reload(Asset* asset) { reload_queue.push(asset); }
+
+    static void do_reloads() {
+        while (!reload_queue.empty()) {
+            Asset* asset = reload_queue.front();
+            ResourceLoader<R>::reload(
+                asset->ptr, asset->dependent_paths,
+                asset->path.generic_string(),
+                Editor::ProjectFile::root_path().generic_string());
+            reload_queue.pop();
         }
     }
 
@@ -122,6 +148,9 @@ private:
     static inline std::unordered_map<std::string, std::size_t> id_map;
 
     static inline std::queue<fs::path> import_list;
+    static inline std::queue<Asset*> reload_queue;
+
+    static inline std::unique_ptr<AssetTracker<R>> asset_tracker = nullptr;
 };
 
 template<typename R>

@@ -24,6 +24,8 @@ public:
     VertexArray& get_vertices();
     VertexArray const& get_vertices() const { return vertices; }
 
+    void swap(Mesh& other) { vertices.swap(other.vertices); }
+
 private:
     VertexArray vertices;
 };

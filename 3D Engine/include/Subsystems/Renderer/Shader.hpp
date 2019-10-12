@@ -44,6 +44,11 @@ public:
 
     int location(std::string_view name);
 
+	void swap(Shader& other) {
+		std::swap(other.program, program);
+		std::swap(other.uniform_cache, uniform_cache);
+	}
+
     struct Uniforms {
         static constexpr int Model = 2;
         static constexpr int Color = 4;
