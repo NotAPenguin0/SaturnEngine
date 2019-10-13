@@ -159,14 +159,12 @@ Editor::Editor(Application& app) : app(&app) {
             app, stage_data.type, stage_data.stage);
     }
 
-	
     AssetManager<Texture>::init();
     AssetManager<Shader>::init();
     AssetManager<Mesh>::init();
     AssetManager<audeo::SoundSource>::init();
 
     do_imports();
-
 
     set_window_title();
 } // namespace Saturn::Editor
