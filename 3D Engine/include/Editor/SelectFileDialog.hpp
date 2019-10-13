@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 
-#include "Subsystems/AssetManager/ResourceLoaders.hpp"
+#include "AssetManager/ResourceLoaders.hpp"
 
 namespace fs = std::filesystem;
 

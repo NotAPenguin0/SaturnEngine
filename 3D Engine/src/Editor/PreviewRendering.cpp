@@ -1,9 +1,9 @@
 #include "Editor/PreviewRendering.hpp"
 
-#include "Subsystems/Renderer/Framebuffer.hpp"
-#include "Subsystems/Renderer/OpenGL.hpp"
-#include "Subsystems/Renderer/Shader.hpp"
-#include "Subsystems/Renderer/VertexArray.hpp"
+#include "Renderer/Framebuffer.hpp"
+#include "Renderer/OpenGL.hpp"
+#include "Renderer/Shader.hpp"
+#include "Renderer/VertexArray.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 

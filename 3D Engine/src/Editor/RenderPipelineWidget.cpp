@@ -6,13 +6,13 @@
 #    include "Editor/EditorLog.hpp"
 #    include "imgui/imgui.h"
 
-#    include "Subsystems/Renderer/Modules/BlitPass.hpp"
-#    include "Subsystems/Renderer/Modules/DebugModule.hpp"
-#    include "Subsystems/Renderer/Modules/DepthMapPass.hpp"
-#    include "Subsystems/Renderer/Modules/EditorModule.hpp"
-#    include "Subsystems/Renderer/Modules/MeshRenderModule.hpp"
-#    include "Subsystems/Renderer/Modules/ParticleModule.hpp"
-#    include "Subsystems/Renderer/Modules/TransferModule.hpp"
+#    include "Renderer/Modules/BlitPass.hpp"
+#    include "Renderer/Modules/DebugModule.hpp"
+#    include "Renderer/Modules/DepthMapPass.hpp"
+#    include "Renderer/Modules/EditorModule.hpp"
+#    include "Renderer/Modules/MeshRenderModule.hpp"
+#    include "Renderer/Modules/ParticleModule.hpp"
+#    include "Renderer/Modules/TransferModule.hpp"
 
 namespace Saturn::Editor {
 

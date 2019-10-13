@@ -2,9 +2,9 @@
 #define SATURN_APPLICATION_HPP_
 
 
-#include "Subsystems/Physics/Physics.hpp"
-#include "Subsystems/Physics/PhysicsTickScheduler.hpp"
-#include "Subsystems/Renderer/Renderer.hpp"
+#include "Physics/Physics.hpp"
+#include "Physics/PhysicsTickScheduler.hpp"
+#include "Renderer/Renderer.hpp"
 #include "Utility/Utility.hpp"
 
 #include "glad/glad.h"

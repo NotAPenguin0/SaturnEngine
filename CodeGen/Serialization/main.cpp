@@ -156,7 +156,7 @@ std::ostream& operator<<(std::ostream& out, CXString const& str) {
 Directories get_directories(fs::path const& main) {
     fs::path include_directory = main / "include";
     fs::path source_directory = main / "src";
-    fs::path components = include_directory / "Subsystems/ECS/Components";
+    fs::path components = include_directory / "ECS/Components";
     fs::path dependencies = main / "dependencies";
     fs::path glm = dependencies / "glm";
     fs::path nlohmann = dependencies / "nlohmann_json/single_include";
@@ -176,20 +176,20 @@ Directories get_directories(fs::path const& main) {
 }
 
 OutputFiles get_output_files(Directories const& dirs) {
-    const fs::path output_header = dirs.include / "Subsystems" /
+    const fs::path output_header = dirs.include / 
                                    "Serialization" / "ComponentSerializers.hpp";
-    const fs::path output_source = dirs.source / "Subsystems" /
+    const fs::path output_source = dirs.source / 
                                    "Serialization" / "ComponentSerializers.cpp";
     const fs::path output_scene_obj =
-        dirs.source / "Subsystems" / "Scene" / "SceneObject.cpp";
+        dirs.source  / "Scene" / "SceneObject.cpp";
     const fs::path components =
-        dirs.include / "Subsystems" / "ECS" / "Components.hpp";
+        dirs.include  / "ECS" / "Components.hpp";
     const fs::path component_list =
-        dirs.include / "Subsystems" / "ECS" / "ComponentList.hpp";
+        dirs.include / "ECS" / "ComponentList.hpp";
     const fs::path component_meta_src =
-        dirs.source / "Subsystems" / "Serialization" / "ComponentMetaInfo.cpp";
+        dirs.source  / "Serialization" / "ComponentMetaInfo.cpp";
     const fs::path component_meta_header =
-        dirs.include / "Subsystems" / "Serialization" / "ComponentMetaInfo.hpp";
+        dirs.include  / "Serialization" / "ComponentMetaInfo.hpp";
     return {output_header,        output_source,  output_scene_obj,
             components,           component_list, component_meta_src,
             component_meta_header};

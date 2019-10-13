@@ -6,12 +6,12 @@
 
 #include "Core/Application.hpp"
 #include "Core/ErrorHandler.hpp"
-#include "Subsystems/Input/Input.hpp"
-#include "Subsystems/Logging/LogSystem.hpp"
+#include "Input/Input.hpp"
+#include "Logging/LogSystem.hpp"
 #include "Utility/Utility.hpp"
-#include "Subsystems/Math/Math.hpp"
+#include "Math/Math.hpp"
 
-#include "Subsystems/Renderer/Renderer.hpp"
+#include "Renderer/Renderer.hpp"
 
 namespace Saturn {
 

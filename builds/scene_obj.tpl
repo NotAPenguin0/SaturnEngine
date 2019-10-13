@@ -3,18 +3,18 @@
 // At some point, I will move this generated function out of this file
 // to avoid this problem. #TODO
 
-#include "Subsystems/Scene/SceneObject.hpp"
-#include "Subsystems/Scene/Scene.hpp"
+#include "Scene/SceneObject.hpp"
+#include "Scene/Scene.hpp"
 
 #include "Core/Application.hpp"
-#include "Subsystems/AssetManager/AssetManager.hpp"
-#include "Subsystems/ECS/ComponentList.hpp"
-#include "Subsystems/ECS/Components.hpp"
-#include "Subsystems/Math/Math.hpp"
-#include "Subsystems/Renderer/Renderer.hpp"
-#include "Subsystems/Renderer/Viewport.hpp"
-#include "Subsystems/Serialization/ComponentSerializers.hpp"
-#include "Subsystems/Serialization/CustomSerializers.hpp"
+#include "AssetManager/AssetManager.hpp"
+#include "ECS/ComponentList.hpp"
+#include "ECS/Components.hpp"
+#include "Math/Math.hpp"
+#include "Renderer/Renderer.hpp"
+#include "Renderer/Viewport.hpp"
+#include "Serialization/ComponentSerializers.hpp"
+#include "Serialization/CustomSerializers.hpp"
 
 #include <fstream>
 #include <nlohmann/json.hpp>

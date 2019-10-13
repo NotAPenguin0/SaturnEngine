@@ -1,6 +1,6 @@
 #include "Utility/Utility.hpp"
 
-#include "Subsystems/Scene/Scene.hpp"
+#include "Scene/Scene.hpp"
 
 namespace Saturn {
 

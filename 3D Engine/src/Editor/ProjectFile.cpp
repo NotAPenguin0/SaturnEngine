@@ -6,12 +6,12 @@
 
 #    include "Editor/EditorLog.hpp"
 
-#    include "Subsystems/Renderer/Mesh.hpp"
-#    include "Subsystems/Renderer/Shader.hpp"
-#    include "Subsystems/Renderer/Texture.hpp"
+#    include "Renderer/Mesh.hpp"
+#    include "Renderer/Shader.hpp"
+#    include "Renderer/Texture.hpp"
 #    include <audeo/SoundSource.hpp>
 
-#    include "Subsystems/AssetManager/AssetManager.hpp"
+#    include "AssetManager/AssetManager.hpp"
 
 namespace Saturn::Editor {
 

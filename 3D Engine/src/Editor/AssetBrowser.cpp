@@ -6,10 +6,10 @@
 #include "Editor/EditorLog.hpp"
 #include "Editor/PreviewRendering.hpp"
 #include "Editor/SelectFileDialog.hpp"
-#include "Subsystems/AssetManager/AssetManager.hpp"
-#include "Subsystems/Renderer/Mesh.hpp"
-#include "Subsystems/Renderer/Shader.hpp"
-#include "Subsystems/Renderer/Texture.hpp"
+#include "AssetManager/AssetManager.hpp"
+#include "Renderer/Mesh.hpp"
+#include "Renderer/Shader.hpp"
+#include "Renderer/Texture.hpp"
 #include "Utility/Utility.hpp"
 
 

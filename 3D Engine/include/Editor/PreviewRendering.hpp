@@ -1,8 +1,8 @@
 #ifndef SATURN_PREVIEW_RENDERING_HPP_
 #define SATURN_PREVIEW_RENDERING_HPP_
 
-#include "Subsystems/AssetManager/AssetManager.hpp"
-#include "Subsystems/Renderer/Mesh.hpp"
+#include "AssetManager/AssetManager.hpp"
+#include "Renderer/Mesh.hpp"
 
 namespace Saturn::Editor {
 

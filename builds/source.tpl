@@ -2,9 +2,9 @@
  *	for SaturnEngine. Do NOT modify this file manually.
  */
  
-#include "Subsystems/Serialization/ComponentSerializers.hpp"
-#include "Subsystems/AssetManager/AssetManager.hpp"
-#include "Subsystems/ECS/Components.hpp"
+#include "Serialization/ComponentSerializers.hpp"
+#include "AssetManager/AssetManager.hpp"
+#include "ECS/Components.hpp"
 
 #include <glm/glm.hpp>
 #include <stdexcept>

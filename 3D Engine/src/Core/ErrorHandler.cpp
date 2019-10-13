@@ -1,7 +1,7 @@
 #include "Core/ErrorHandler.hpp"
 
 #include "Editor/EditorLog.hpp"
-#include "Subsystems/Logging/LogSystem.hpp"
+#include "Logging/LogSystem.hpp"
 
 #include <string>
 

@@ -4,7 +4,7 @@
 #include "Editor/Editor.hpp"
 #include "Editor/ProjectFile.hpp"
 #include "Editor/SelectFileDialog.hpp"
-#include "Subsystems/Scene/Scene.hpp"
+#include "Scene/Scene.hpp"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
