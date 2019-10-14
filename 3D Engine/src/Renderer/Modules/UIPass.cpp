@@ -52,6 +52,7 @@ static void blit_framebuffer(Framebuffer& source,
 
     shader.set_int(Shader::Uniforms::Texture, 0);
     shader.set_vec2(0, glm::vec2(1, 1));
+	shader.set_vec2(1, glm::vec2(0, 0));
     glDrawElements(GL_TRIANGLES, quad.index_size(), GL_UNSIGNED_INT, nullptr);
 }
 
