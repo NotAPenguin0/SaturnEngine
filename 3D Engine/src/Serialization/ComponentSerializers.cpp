@@ -64,6 +64,20 @@ void from_json(nlohmann::json const& json, CameraZoomController& component) {
 	}
 }
 
+void from_json(nlohmann::json const& json, Canvas& component) {
+	auto c = json.find("CanvasComponent");
+	if (c == json.end()) {
+		throw std::runtime_error("No Canvas component stored even though it was requested");
+	} else {
+		if (auto x = (*c).find("Position"); x != (*c).end()) {
+			component.position = (*x).get<glm::vec2>();
+		}
+		if (auto x = (*c).find("Size"); x != (*c).end()) {
+			component.size = (*x).get<glm::vec2>();
+		}
+	}
+}
+
 void from_json(nlohmann::json const& json, ClickEffect& component) {
 	auto c = json.find("ClickEffectComponent");
 	if (c == json.end()) {
@@ -364,6 +378,14 @@ void to_json(nlohmann::json& json, CameraZoomController const& component) {
 	json["CameraZoomControllerComponent"]["ZoomSpeed"] = component.zoom_speed;
 	json["CameraZoomControllerComponent"]["MinZoom"] = component.min_zoom;
 	json["CameraZoomControllerComponent"]["MaxZoom"] = component.max_zoom;
+	// clang-format on
+}
+
+void to_json(nlohmann::json& json, Canvas const& component) {
+	json["CanvasComponent"] = nlohmann::json::object();
+	// clang-format off
+	json["CanvasComponent"]["Position"] = component.position;
+	json["CanvasComponent"]["Size"] = component.size;
 	// clang-format on
 }
 

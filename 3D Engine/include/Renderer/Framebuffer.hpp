@@ -30,10 +30,11 @@ public:
     void check_complete();
 
     unsigned int get_texture() { return texture; }
+    void delete_texture();
+    void assign_texture(unsigned int tex_handle);
 
-	void delete_texture();
-
-	void assign_texture(unsigned int tex_handle);
+    ImgDim get_size() const { return size; }
+    void set_size(ImgDim sz) { size = sz; }
 
 private:
     friend class Renderer;

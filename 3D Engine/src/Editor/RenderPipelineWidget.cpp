@@ -13,6 +13,7 @@
 #    include "Renderer/Modules/MeshRenderModule.hpp"
 #    include "Renderer/Modules/ParticleModule.hpp"
 #    include "Renderer/Modules/TransferModule.hpp"
+#    include "Renderer/Modules/UIPass.hpp"
 
 namespace Saturn::Editor {
 
@@ -47,11 +48,13 @@ add_render_stage(V const& v, Application* app, std::string_view stage) {
     } else if (stage == "BlitPass") {
         app->get_renderer()->add_post_render_stage(
             std::make_unique<BlitPass>());
+    } else if (stage == "UIPass") {
+        app->get_renderer()->add_post_render_stage(std::make_unique<UIPass>());
     }
 }
 
 void RenderPipelineWidget::show(Application& app) {
-//    ImGui::Begin("Render pipeline", &shown);
+    //    ImGui::Begin("Render pipeline", &shown);
 
     ImGui::Columns(2);
 
@@ -73,7 +76,7 @@ void RenderPipelineWidget::show(Application& app) {
     display_stage_info(app);
     ImGui::Columns();
 
-//    ImGui::End();
+    //    ImGui::End();
 }
 
 void RenderPipelineWidget::add_stage(Application& app,
@@ -129,7 +132,7 @@ void RenderPipelineWidget::show_add_stage_popup(Application& app) {
         static const char* modules[] = {"DebugModule", "EditorModule",
                                         "MeshRenderModule", "ParticleModule",
                                         "TransferModule"};
-        static const char* post_stages[] = {"BlitPass"};
+        static const char* post_stages[] = {"BlitPass", "UIPass"};
 
         static int stage_index = -1;
         switch (stage_type) {

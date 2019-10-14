@@ -55,6 +55,7 @@ std::string_view get_component_category() {
     CAT(SpotLight, "Light")
     CAT(StaticMesh, "Rendering")
     CAT(Transform, "Rendering")
+	CAT(Canvas, "UI")
 
 #    undef CAT
 
@@ -63,7 +64,7 @@ std::string_view get_component_category() {
 
 std::vector<std::string_view> get_component_categories() {
     return {"Camera",  "Editor-only", "Light", "Particle System",
-            "Physics", "Rendering",   "Sound", "User-defined"};
+            "Physics", "Rendering",   "Sound", "UI", "User-defined"};
 }
 
 struct ComponentFieldVisitor {
@@ -94,6 +95,10 @@ struct ComponentFieldVisitor {
         field->resize(buf_size);
         ImGui::InputText(field_name.data(), field->data(), buf_size);
     }
+
+	void operator()(glm::vec2* field) {
+		ImGui::InputFloat2(field_name.data(), &field->x);
+	}
 
     void operator()(glm::vec3* field) {
         ImGui::InputFloat3(field_name.data(), &field->x);

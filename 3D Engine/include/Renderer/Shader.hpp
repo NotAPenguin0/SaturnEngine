@@ -38,6 +38,7 @@ public:
     void set_int(int loc, int value);
     void set_float(int loc, float value);
 
+	void set_vec2(int loc, glm::vec2 const& value);
     void set_vec3(int loc, glm::vec3 const& value);
     void set_vec4(int loc, glm::vec4 const& value);
     void set_mat4(int loc, glm::mat4 const& value);

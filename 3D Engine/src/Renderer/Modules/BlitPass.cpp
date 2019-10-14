@@ -1,7 +1,7 @@
 #include "Renderer/Modules/BlitPass.hpp"
 
-#include "Core/Application.hpp"
 #include "AssetManager/AssetManager.hpp"
+#include "Core/Application.hpp"
 #include "Renderer/Viewport.hpp"
 
 #include <vector>
@@ -26,8 +26,8 @@ void BlitPass::init() {
 
     screen_vao.assign({screen_attributes, screen_vertices, {0, 1, 2, 0, 3, 2}});
 
-    blit_shader =
-        AssetManager<Shader>::get_resource("config/resources/shaders/blit.sh", true);
+    blit_shader = AssetManager<Shader>::get_resource(
+        "config/resources/shaders/blit.sh", true);
 }
 
 void BlitPass::process(Scene& scene, Framebuffer& source) {

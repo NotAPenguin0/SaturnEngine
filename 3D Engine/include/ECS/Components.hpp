@@ -8,6 +8,7 @@
 #include "Components/BoxCollider.hpp"
 #include "Components/Camera.hpp"
 #include "Components/CameraZoomController.hpp"
+#include "Components/Canvas.hpp"
 #include "Components/ClickEffect.hpp"
 #include "Components/ColliderRenderer.hpp"
 #include "Components/DirectionalLight.hpp"

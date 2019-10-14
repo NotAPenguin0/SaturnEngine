@@ -72,6 +72,13 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
 		j.get_to(c);
 		
 	}
+	// Deserialization for Canvas component
+	if (auto const& component = j.find("CanvasComponent"); component != j.end()) {
+		auto& c = obj.get_scene()->get_ecs().get_with_id<Canvas>(
+			obj.add_component<Canvas>());
+		j.get_to(c);
+		
+	}
 	// Deserialization for ClickEffect component
 	if (auto const& component = j.find("ClickEffectComponent"); component != j.end()) {
 		auto& c = obj.get_scene()->get_ecs().get_with_id<ClickEffect>(

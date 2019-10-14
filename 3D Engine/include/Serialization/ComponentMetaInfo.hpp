@@ -37,10 +37,10 @@ struct ComponentInfo {
 class ComponentFieldPtr {
 public:
 #define SUPPORTED_COMPONENT_FIELD_TYPES                                        \
-    std::size_t, float, int, std::string, glm::vec3, glm::vec4, bool, glm::bvec3, color3, color4, unsigned int, \
+    std::size_t, float, int, std::string, glm::vec2, glm::vec3, glm::vec4, bool, glm::bvec3, color3, color4, unsigned int, \
 	Resource<Shader>, Resource<Texture>, Resource<Mesh>, Resource<audeo::SoundSource>
 #define SUPPORTED_COMPONENT_FIELD_POINTER_TYPES                                \
-    std::size_t*, float*, int*, std::string*, glm::vec3*, glm::vec4*, bool*, glm::bvec3*, color3*, color4*, unsigned int*, \
+    std::size_t*, float*, int*, std::string*, glm::vec2*, glm::vec3*, glm::vec4*, bool*, glm::bvec3*, color3*, color4*, unsigned int*, \
 	Resource<Shader>*, Resource<Texture>*, Resource<Mesh>*, Resource<audeo::SoundSource>*
     using field_variant_t =
         std::variant<SUPPORTED_COMPONENT_FIELD_POINTER_TYPES>;
@@ -127,6 +127,18 @@ public:
 		}
 		if (field_name == "max_zoom") {
 			return ComponentFieldPtr(&comp.max_zoom);
+		}
+		
+		// return nullptr if the field was not found
+		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
+	}
+    static ComponentFieldPtr get_component_field(Components::Canvas& comp,
+                                                 std::string_view field_name) {
+		if (field_name == "position") {
+			return ComponentFieldPtr(&comp.position);
+		}
+		if (field_name == "size") {
+			return ComponentFieldPtr(&comp.size);
 		}
 		
 		// return nullptr if the field was not found

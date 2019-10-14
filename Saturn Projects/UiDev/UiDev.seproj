@@ -1,6 +1,6 @@
 1
 scenes\main_scene
-7
+8
 PreRenderStage DepthMapPass
 RenderModule DebugModule
 RenderModule MeshRenderModule
@@ -8,3 +8,4 @@ RenderModule ParticleModule
 RenderModule TransferModule
 PostRenderStage BlitPass
 RenderModule EditorModule
+PostRenderStage UIPass

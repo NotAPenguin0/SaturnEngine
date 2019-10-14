@@ -64,6 +64,9 @@ void Framebuffer::assign_texture(unsigned int tex_handle) {
     bind(*this);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
                            texture, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, size.x, size.y);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
 void Framebuffer::create_fbo() { glGenFramebuffers(1, &fbo); }

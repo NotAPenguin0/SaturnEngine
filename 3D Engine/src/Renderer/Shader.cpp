@@ -172,6 +172,8 @@ void Shader::set_float(std::string_view name, float value) {
     glUniform1f(location(name), value);
 }
 
+
+
 void Shader::set_vec3(std::string_view name, glm::vec3 const& value) {
     glUniform3fv(location(name), 1, glm::value_ptr(value));
 }
@@ -192,6 +194,11 @@ void Shader::set_int(int loc, int value) {
 void Shader::set_float(int loc, float value) {
     assert(loc != -1);
     glUniform1f(loc, value);
+}
+
+void Shader::set_vec2(int loc, glm::vec2 const& value) {
+    assert(loc != -1);
+    glUniform2fv(loc, 1, glm::value_ptr(value));
 }
 
 void Shader::set_vec3(int loc, glm::vec3 const& value) {

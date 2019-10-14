@@ -30,6 +30,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/ECS.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Systems.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/BoxCollider.hpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/Canvas.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/Camera.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/CameraZoomController.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/ColliderRenderer.hpp"

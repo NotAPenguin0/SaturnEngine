@@ -7,6 +7,7 @@
 ::Saturn::Components::BoxCollider, \
 ::Saturn::Components::Camera, \
 ::Saturn::Components::CameraZoomController, \
+::Saturn::Components::Canvas, \
 ::Saturn::Components::ClickEffect, \
 ::Saturn::Components::ColliderRenderer, \
 ::Saturn::Components::DirectionalLight, \
