@@ -75,6 +75,9 @@ void from_json(nlohmann::json const& json, Canvas& component) {
 		if (auto x = (*c).find("Size"); x != (*c).end()) {
 			component.size = (*x).get<glm::vec2>();
 		}
+		if (auto x = (*c).find("Opacity"); x != (*c).end()) {
+			component.opacity = (*x).get<float>();
+		}
 	}
 }
 
@@ -162,6 +165,23 @@ void from_json(nlohmann::json const& json, FreeLookController& component) {
 	} else {
 		if (auto x = (*c).find("MouseSensitivity"); x != (*c).end()) {
 			component.mouse_sensitivity = (*x).get<float>();
+		}
+	}
+}
+
+void from_json(nlohmann::json const& json, Image& component) {
+	auto c = json.find("ImageComponent");
+	if (c == json.end()) {
+		throw std::runtime_error("No Image component stored even though it was requested");
+	} else {
+		if (auto x = (*c).find("Image"); x != (*c).end()) {
+			component.image = (*x).get<Resource<Saturn::Texture>>();
+		}
+		if (auto x = (*c).find("Position"); x != (*c).end()) {
+			component.position = (*x).get<glm::vec2>();
+		}
+		if (auto x = (*c).find("Size"); x != (*c).end()) {
+			component.size = (*x).get<glm::vec2>();
 		}
 	}
 }
@@ -386,6 +406,7 @@ void to_json(nlohmann::json& json, Canvas const& component) {
 	// clang-format off
 	json["CanvasComponent"]["Position"] = component.position;
 	json["CanvasComponent"]["Size"] = component.size;
+	json["CanvasComponent"]["Opacity"] = component.opacity;
 	// clang-format on
 }
 
@@ -436,6 +457,15 @@ void to_json(nlohmann::json& json, FreeLookController const& component) {
 	json["FreeLookControllerComponent"] = nlohmann::json::object();
 	// clang-format off
 	json["FreeLookControllerComponent"]["MouseSensitivity"] = component.mouse_sensitivity;
+	// clang-format on
+}
+
+void to_json(nlohmann::json& json, Image const& component) {
+	json["ImageComponent"] = nlohmann::json::object();
+	// clang-format off
+	json["ImageComponent"]["Image"] = component.image;
+	json["ImageComponent"]["Position"] = component.position;
+	json["ImageComponent"]["Size"] = component.size;
 	// clang-format on
 }
 

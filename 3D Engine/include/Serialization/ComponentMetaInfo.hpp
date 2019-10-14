@@ -140,6 +140,9 @@ public:
 		if (field_name == "size") {
 			return ComponentFieldPtr(&comp.size);
 		}
+		if (field_name == "opacity") {
+			return ComponentFieldPtr(&comp.opacity);
+		}
 		
 		// return nullptr if the field was not found
 		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
@@ -222,6 +225,21 @@ public:
                                                  std::string_view field_name) {
 		if (field_name == "mouse_sensitivity") {
 			return ComponentFieldPtr(&comp.mouse_sensitivity);
+		}
+		
+		// return nullptr if the field was not found
+		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
+	}
+    static ComponentFieldPtr get_component_field(Components::Image& comp,
+                                                 std::string_view field_name) {
+		if (field_name == "image") {
+			return ComponentFieldPtr(&comp.image);
+		}
+		if (field_name == "position") {
+			return ComponentFieldPtr(&comp.position);
+		}
+		if (field_name == "size") {
+			return ComponentFieldPtr(&comp.size);
 		}
 		
 		// return nullptr if the field was not found

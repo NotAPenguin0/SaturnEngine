@@ -29,6 +29,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/component_view.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/ECS.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Systems.hpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/BoxCollider.hpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/Canvas.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/Camera.hpp"
@@ -39,6 +40,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/EditorCameraController.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/FPSCameraController.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/FreeLookController.hpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/Image.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/Material.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/Name.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/OutlineRenderer.hpp"
@@ -51,6 +53,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/SoundListener.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/StaticMesh.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/Transform.hpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Systems/CameraZoomControllerSystem.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Systems/EditorCameraSystem.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Systems/FPSCameraControllerSystem.hpp"
@@ -61,9 +64,12 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Systems/SystemBase.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Systems/SoundSystem.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Systems/FPSSoundListenerSystem.hpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/Input/Input.hpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/Logging/LogSystem.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Logging/rang.hpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/Math/ConstexprMath.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Math/CoordConversions.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Math/Curve.hpp"
@@ -75,11 +81,13 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Math/PositionGenerators.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Math/RandomEngine.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Math/Transform.hpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/Physics/CollisionDetectors.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Physics/Gravity.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Physics/Physics.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Physics/PhysicsTickScheduler.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Physics/AABBCollisionHandler.hpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/DepthMap.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Framebuffer.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Mesh.hpp"
@@ -105,14 +113,18 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/DebugModule.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/EditorModule.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/MeshRenderModule.hpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/UIPass.hpp"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/Scene/Scene.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Scene/SceneObject.hpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/Serialization/CodeGenDefinitions.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Serialization/ComponentSerializers.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Serialization/ComponentMetaInfo.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Serialization/CustomSerializers.hpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/Time/Time.hpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/Color.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/ColorGradient.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/Exceptions.hpp"
@@ -120,6 +132,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/type_erased.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/Utility.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/in_range.hpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_impl_opengl3.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_impl_glfw.h"

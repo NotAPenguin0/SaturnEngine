@@ -9,3 +9,4 @@ RenderModule TransferModule
 PostRenderStage BlitPass
 RenderModule EditorModule
 PostRenderStage UIPass
+asset texture assets/textures/brickwall.tex

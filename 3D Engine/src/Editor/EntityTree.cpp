@@ -56,6 +56,7 @@ std::string_view get_component_category() {
     CAT(StaticMesh, "Rendering")
     CAT(Transform, "Rendering")
 	CAT(Canvas, "UI")
+	CAT(Image, "UI")
 
 #    undef CAT
 

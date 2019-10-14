@@ -16,7 +16,9 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Core/Application.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Core/Engine.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Core/ErrorHandler.cpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/AssetManager/ResourceLoaders.cpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/component_container.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Systems/SystemBase.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Systems/CameraZoomControllerSystem.cpp"
@@ -28,8 +30,11 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Systems/ParticleSystem.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Systems/SoundSystem.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Systems/FPSSoundListenerSystem.cpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/Logging/LogSystem.cpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/Input/Input.cpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/Math/CoordConversions.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Math/Curve.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Math/DirectionGenerators.cpp"
@@ -37,11 +42,13 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Math/PositionGenerators.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Math/RandomEngine.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Math/Transform.cpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/Physics/AABBCollisionHandler.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Physics/CollisionDetectors.cpp" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Physics/Gravity.cpp" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Physics/Physics.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Physics/PhysicsTickScheduler.cpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/DepthMap.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Framebuffer.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Mesh.cpp"
@@ -64,16 +71,22 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/DebugModule.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/EditorModule.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/MeshRenderModule.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/UIPass.cpp"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/Scene/Scene.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Scene/SceneObject.cpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/Serialization/ComponentMetaInfo.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Serialization/ComponentSerializers.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Serialization/CustomSerializers.cpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/Time/Time.cpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/ColorGradient.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/Utility.cpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
+	
     "${CMAKE_CURRENT_SOURCE_DIR}/../include/imgui/imgui.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/../include/imgui/imgui_demo.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/../include/imgui/imgui_widgets.cpp"

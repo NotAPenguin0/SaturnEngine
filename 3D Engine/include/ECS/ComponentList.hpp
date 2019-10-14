@@ -15,6 +15,7 @@
 ::Saturn::Components::EditorCameraController, \
 ::Saturn::Components::FPSCameraController, \
 ::Saturn::Components::FreeLookController, \
+::Saturn::Components::Image, \
 ::Saturn::Components::Material, \
 ::Saturn::Components::MusicController, \
 ::Saturn::Components::Name, \

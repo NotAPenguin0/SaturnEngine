@@ -81,7 +81,7 @@ static unsigned int create_shader(const char* vtx_path,
                 "Failed to compile geometry shader at path: {}", vtx_path));
             log::error(fmt::format("[SHADER::GEOMETRY::COMPILATION_FAILED]: {}",
                                    infolog));
-            throw "";
+            throw infolog;
             return 0;
         }
     }
@@ -107,7 +107,7 @@ static unsigned int create_shader(const char* vtx_path,
                                vtx_path));
         log::error(
             fmt::format("[SHADER::VERTEX::COMPILATION_FAILED]: {}", infolog));
-        throw "";
+        throw infolog;
         return 0;
     }
 
@@ -119,7 +119,7 @@ static unsigned int create_shader(const char* vtx_path,
                                vtx_path));
         log::error(
             fmt::format("[SHADER::FRAGMENT::COMPILATION_FAILED]: {}", infolog));
-        throw ""; //#UGLYANDMUSTREMOVELATER
+        throw infolog; //#UGLYANDMUSTREMOVELATER
         return 0;
     }
 
@@ -138,7 +138,7 @@ static unsigned int create_shader(const char* vtx_path,
             fmt::format("Failed to link shader. Vertex\n: {}\nFragment: {}",
                         vtx_path, frag_path));
         log::error(fmt::format("[SHADER::LINK_FAILED]: ", infolog));
-        throw "";
+        throw infolog;
         return 0;
     }
 

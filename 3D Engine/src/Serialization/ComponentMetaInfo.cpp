@@ -45,6 +45,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.editor_only = false;
 		info.fields["position"] = "glm::vec2";
 		info.fields["size"] = "glm::vec2";
+		info.fields["opacity"] = "float";
 		data.push_back(info);
 	}
 	{
@@ -116,6 +117,17 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.hide_in_editor = false;
 		info.editor_only = false;
 		info.fields["mouse_sensitivity"] = "float";
+		data.push_back(info);
+	}
+	{
+		ComponentInfo info;
+		info.name = "Image ";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
+		info.fields["image"] = "Resource<Saturn::Texture>";
+		info.fields["position"] = "glm::vec2";
+		info.fields["size"] = "glm::vec2";
 		data.push_back(info);
 	}
 	{

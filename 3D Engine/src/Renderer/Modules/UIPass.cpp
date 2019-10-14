@@ -2,6 +2,7 @@
 
 #include "AssetManager/AssetManager.hpp"
 #include "ECS/Components/Canvas.hpp"
+#include "ECS/Components/Image.hpp"
 
 using namespace Saturn::Components;
 
@@ -52,7 +53,8 @@ static void blit_framebuffer(Framebuffer& source,
 
     shader.set_int(Shader::Uniforms::Texture, 0);
     shader.set_vec2(0, glm::vec2(1, 1));
-	shader.set_vec2(1, glm::vec2(0, 0));
+    shader.set_vec2(1, glm::vec2(0, 0));
+    shader.set_float(2, 1.0f);
     glDrawElements(GL_TRIANGLES, quad.index_size(), GL_UNSIGNED_INT, nullptr);
 }
 
@@ -60,7 +62,7 @@ static void blit_ui(Framebuffer& source,
                     Framebuffer& target,
                     Shader& shader,
                     VertexArray& quad,
-                    glm::vec2 ui_rel_size, glm::vec2 ui_pos) {
+                    Canvas& canv) {
     Framebuffer::bind(target);
     glViewport(0, 0, target.get_size().x, target.get_size().y);
 
@@ -72,8 +74,31 @@ static void blit_ui(Framebuffer& source,
     glBindTexture(GL_TEXTURE_2D, source.get_texture());
 
     shader.set_int(Shader::Uniforms::Texture, 0);
-    shader.set_vec2(0, ui_rel_size);
-	shader.set_vec2(1, ui_pos);
+    shader.set_vec2(0, canv.size);
+    shader.set_vec2(1, canv.position);
+    shader.set_float(2, canv.opacity);
+    glDrawElements(GL_TRIANGLES, quad.index_size(), GL_UNSIGNED_INT, nullptr);
+}
+
+static void render_image_widget(Framebuffer& target,
+                                Image& img,
+                                VertexArray& quad,
+                                Shader& shader) {
+    Framebuffer::bind(target);
+    glViewport(0, 0, target.get_size().x, target.get_size().y);
+    VertexArray::bind(quad);
+    Shader::bind(shader);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, img.image->handle());
+    shader.set_int(Shader::Uniforms::Texture, 0);
+    glm::vec2 img_dim =
+        glm::vec2(img.image->dimensions().x, img.image->dimensions().y);
+    glm::vec2 target_dim = glm::vec2(target.get_size().x, target.get_size().y);
+    shader.set_vec2(0, glm::vec2(img_dim.x / target_dim.x * img.size.x,
+                                 img_dim.y / target_dim.y * img.size.y));
+    shader.set_vec2(1, img.position);
+
     glDrawElements(GL_TRIANGLES, quad.index_size(), GL_UNSIGNED_INT, nullptr);
 }
 
@@ -107,6 +132,8 @@ void UIPass::init() {
         "config/resources/shaders/ui/ui_main.sh", true);
     blit_shader = AssetManager<Shader>::get_resource(
         "config/resources/shaders/ui/blit.sh", true);
+    img_shader = AssetManager<Shader>::get_resource(
+        "config/resources/shaders/ui/image.sh", true);
 }
 
 void UIPass::process(Scene& scene, Framebuffer& source) {
@@ -124,7 +151,6 @@ void UIPass::process(Scene& scene, Framebuffer& source) {
 
         glDisable(GL_CULL_FACE);
         glDisable(GL_DEPTH_TEST);
-        glDisable(GL_BLEND);
 
         // First, blit the scene view to our target buffer, then render the UI
         // to the UI buffer and blit both on the target buffer
@@ -133,6 +159,8 @@ void UIPass::process(Scene& scene, Framebuffer& source) {
         impl::blit_framebuffer(source, target, *blit_shader, quad);
 
         // Render UI
+
+        // Temporary background to show where the canvas is
 
         Framebuffer::bind(ui_buffer);
         glViewport(0, 0, ui_buffer.get_size().x, ui_buffer.get_size().y);
@@ -144,10 +172,14 @@ void UIPass::process(Scene& scene, Framebuffer& source) {
         glDrawElements(GL_TRIANGLES, quad.index_size(), GL_UNSIGNED_INT,
                        nullptr);
 
-        // Blit UI to target buffer
-        impl::blit_ui(ui_buffer, target, *blit_shader, quad, canvas.size, canvas.position);
+        // Render Image widgets
+        for (auto [img] : scene.get_ecs().select<Image>()) {
+            impl::render_image_widget(ui_buffer, img, quad, *img_shader);
+        }
 
-        glEnable(GL_BLEND);
+        // Blit UI to target buffer
+        impl::blit_ui(ui_buffer, target, *blit_shader, quad, canvas);
+
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
 

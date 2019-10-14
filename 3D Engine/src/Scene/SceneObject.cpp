@@ -128,6 +128,13 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
 		j.get_to(c);
 		
 	}
+	// Deserialization for Image component
+	if (auto const& component = j.find("ImageComponent"); component != j.end()) {
+		auto& c = obj.get_scene()->get_ecs().get_with_id<Image>(
+			obj.add_component<Image>());
+		j.get_to(c);
+		
+	}
 	// Deserialization for Material component
 	if (auto const& component = j.find("MaterialComponent"); component != j.end()) {
 		auto& c = obj.get_scene()->get_ecs().get_with_id<Material>(
