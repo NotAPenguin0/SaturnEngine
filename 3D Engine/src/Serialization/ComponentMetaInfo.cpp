@@ -270,6 +270,18 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	}
 	{
 		ComponentInfo info;
+		info.name = "Text ";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
+		info.fields["text"] = "std::string";
+		info.fields["position"] = "glm::vec2";
+		info.fields["size"] = "glm::vec2";
+		info.fields["color"] = "Saturn::color3";
+		data.push_back(info);
+	}
+	{
+		ComponentInfo info;
 		info.name = "Transform ";
 		info.default_serialize = true;
 		info.hide_in_editor = false;

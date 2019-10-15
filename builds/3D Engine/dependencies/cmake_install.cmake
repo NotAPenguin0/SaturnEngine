@@ -41,6 +41,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/libfmt/cmake_install.cmake")
   include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/audeo/cmake_install.cmake")
   include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/efsw/cmake_install.cmake")
+  include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/FreeType/cmake_install.cmake")
 
 endif()
 

@@ -52,6 +52,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/Sound.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/SoundListener.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/StaticMesh.hpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/Text.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/Transform.hpp"
 	
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Systems/CameraZoomControllerSystem.hpp"

@@ -66,6 +66,7 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC ${ENGINE_PUBLIC_INCLUDE_DIRECTORIES} 
     "${CMAKE_CURRENT_SOURCE_DIR}/3D Engine/dependencies/libfmt/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/3D Engine/dependencies/efsw/include"
+	"${CMAKE_CURRENT_SOURCE_DIR}/3D Engine/dependencies/FreeType/include"
 )
 
 get_filename_component(ABSOLUTE_PROJECT_DIR "3D Engine" ABSOLUTE)
@@ -78,7 +79,7 @@ add_custom_command(TARGET ${PROJECT_NAME}
 )
 
 set(SATURN_LINK_LIBRARIES
-	${OPENGL_LIBRARIES} glad glfw nlohmann_json glm fmt audeo efsw	
+	${OPENGL_LIBRARIES} glad glfw nlohmann_json glm fmt audeo efsw freetype
 )
 
 if (WIN32) 

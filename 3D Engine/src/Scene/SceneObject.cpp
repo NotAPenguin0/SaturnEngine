@@ -219,6 +219,13 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
 		j.get_to(c);
 		
 	}
+	// Deserialization for Text component
+	if (auto const& component = j.find("TextComponent"); component != j.end()) {
+		auto& c = obj.get_scene()->get_ecs().get_with_id<Text>(
+			obj.add_component<Text>());
+		j.get_to(c);
+		
+	}
 	// Deserialization for Transform component
 	if (auto const& component = j.find("TransformComponent"); component != j.end()) {
 		auto& c = obj.get_scene()->get_ecs().get_with_id<Transform>(

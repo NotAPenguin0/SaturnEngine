@@ -356,6 +356,26 @@ void from_json(nlohmann::json const& json, StaticMesh& component) {
 	}
 }
 
+void from_json(nlohmann::json const& json, Text& component) {
+	auto c = json.find("TextComponent");
+	if (c == json.end()) {
+		throw std::runtime_error("No Text component stored even though it was requested");
+	} else {
+		if (auto x = (*c).find("Text"); x != (*c).end()) {
+			component.text = (*x).get<std::string>();
+		}
+		if (auto x = (*c).find("Position"); x != (*c).end()) {
+			component.position = (*x).get<glm::vec2>();
+		}
+		if (auto x = (*c).find("Size"); x != (*c).end()) {
+			component.size = (*x).get<glm::vec2>();
+		}
+		if (auto x = (*c).find("Color"); x != (*c).end()) {
+			component.color = (*x).get<Saturn::color3>();
+		}
+	}
+}
+
 void from_json(nlohmann::json const& json, Transform& component) {
 	auto c = json.find("TransformComponent");
 	if (c == json.end()) {
@@ -556,6 +576,16 @@ void to_json(nlohmann::json& json, StaticMesh const& component) {
 	// clang-format off
 	json["StaticMeshComponent"]["Mesh"] = component.mesh;
 	json["StaticMeshComponent"]["FaceCull"] = component.face_cull;
+	// clang-format on
+}
+
+void to_json(nlohmann::json& json, Text const& component) {
+	json["TextComponent"] = nlohmann::json::object();
+	// clang-format off
+	json["TextComponent"]["Text"] = component.text;
+	json["TextComponent"]["Position"] = component.position;
+	json["TextComponent"]["Size"] = component.size;
+	json["TextComponent"]["Color"] = component.color;
 	// clang-format on
 }
 

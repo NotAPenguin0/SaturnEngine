@@ -2,12 +2,12 @@
 
 #ifdef WITH_EDITOR
 
-#    include "Editor/EditorLog.hpp"
-#    include "Editor/SelectFileDialog.hpp"
 #    include "AssetManager/AssetManager.hpp"
 #    include "AssetManager/Resource.hpp"
 #    include "ECS/ComponentList.hpp"
 #    include "ECS/Components.hpp"
+#    include "Editor/EditorLog.hpp"
+#    include "Editor/SelectFileDialog.hpp"
 #    include "Scene/Scene.hpp"
 #    include "Scene/SceneObject.hpp"
 #    include "Serialization/ComponentMetaInfo.hpp"
@@ -55,17 +55,18 @@ std::string_view get_component_category() {
     CAT(SpotLight, "Light")
     CAT(StaticMesh, "Rendering")
     CAT(Transform, "Rendering")
-	CAT(Canvas, "UI")
-	CAT(Image, "UI")
+    CAT(Canvas, "UI")
+    CAT(Image, "UI")
+    CAT(Text, "UI")
 
 #    undef CAT
 
-    return "Category-Unknown";
+    return "User-defined";
 }
 
 std::vector<std::string_view> get_component_categories() {
-    return {"Camera",  "Editor-only", "Light", "Particle System",
-            "Physics", "Rendering",   "Sound", "UI", "User-defined"};
+    return {"Camera",    "Editor-only", "Light", "Particle System", "Physics",
+            "Rendering", "Sound",       "UI",    "User-defined"};
 }
 
 struct ComponentFieldVisitor {
@@ -97,9 +98,9 @@ struct ComponentFieldVisitor {
         ImGui::InputText(field_name.data(), field->data(), buf_size);
     }
 
-	void operator()(glm::vec2* field) {
-		ImGui::InputFloat2(field_name.data(), &field->x);
-	}
+    void operator()(glm::vec2* field) {
+        ImGui::InputFloat2(field_name.data(), &field->x);
+    }
 
     void operator()(glm::vec3* field) {
         ImGui::InputFloat3(field_name.data(), &field->x);
@@ -122,12 +123,12 @@ struct ComponentFieldVisitor {
     void operator()(bool* field) { ImGui::Checkbox(field_name.data(), field); }
 
     void operator()(color3* field) {
-        ImGui::ColorEdit3((std::string(field_name) + " color").c_str(),
+        ImGui::ColorEdit3(std::string(field_name).c_str(),
                           &field->x);
     }
 
     void operator()(color4* field) {
-        ImGui::ColorEdit4((std::string(field_name) + " color").c_str(),
+        ImGui::ColorEdit4(std::string(field_name).c_str(),
                           &field->x);
     }
 
@@ -147,7 +148,7 @@ struct ComponentFieldVisitor {
                         fs::path(field->get_path()).stem().string().c_str());
         } else {
             ImGui::Text("(none)");
-		}
+        }
         const std::string drag_drop_type =
             "p_" + std::string(asset_type_string<R>());
         if (ImGui::BeginDragDropTarget()) {

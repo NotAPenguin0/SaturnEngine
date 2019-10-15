@@ -402,6 +402,24 @@ public:
 		// return nullptr if the field was not found
 		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
 	}
+    static ComponentFieldPtr get_component_field(Components::Text& comp,
+                                                 std::string_view field_name) {
+		if (field_name == "text") {
+			return ComponentFieldPtr(&comp.text);
+		}
+		if (field_name == "position") {
+			return ComponentFieldPtr(&comp.position);
+		}
+		if (field_name == "size") {
+			return ComponentFieldPtr(&comp.size);
+		}
+		if (field_name == "color") {
+			return ComponentFieldPtr(&comp.color);
+		}
+		
+		// return nullptr if the field was not found
+		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
+	}
     static ComponentFieldPtr get_component_field(Components::Transform& comp,
                                                  std::string_view field_name) {
 		if (field_name == "position") {

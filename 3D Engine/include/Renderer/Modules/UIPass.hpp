@@ -27,6 +27,7 @@ private:
     Resource<Shader> ui_shader;
     Resource<Shader> blit_shader;
 	Resource<Shader> img_shader;
+	Resource<Shader> text_shader;
     Framebuffer ui_buffer;
 };
 

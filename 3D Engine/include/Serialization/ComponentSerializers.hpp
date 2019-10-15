@@ -30,6 +30,7 @@ struct Rotator;
 struct SoundListener;
 struct SpotLight;
 struct StaticMesh;
+struct Text;
 struct Transform;
 
 void from_json(nlohmann::json const& json, BoxCollider& component);
@@ -53,6 +54,7 @@ void from_json(nlohmann::json const& json, Rotator& component);
 void from_json(nlohmann::json const& json, SoundListener& component);
 void from_json(nlohmann::json const& json, SpotLight& component);
 void from_json(nlohmann::json const& json, StaticMesh& component);
+void from_json(nlohmann::json const& json, Text& component);
 void from_json(nlohmann::json const& json, Transform& component);
 
 void to_json(nlohmann::json& json, BoxCollider const& component);
@@ -76,6 +78,7 @@ void to_json(nlohmann::json& json, Rotator const& component);
 void to_json(nlohmann::json& json, SoundListener const& component);
 void to_json(nlohmann::json& json, SpotLight const& component);
 void to_json(nlohmann::json& json, StaticMesh const& component);
+void to_json(nlohmann::json& json, Text const& component);
 void to_json(nlohmann::json& json, Transform const& component);
 
 } // namespace Saturn::Components

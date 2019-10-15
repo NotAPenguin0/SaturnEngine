@@ -7,6 +7,7 @@ out vec2 TexCoords;
 
 layout(location = 0) uniform vec2 Scale;
 layout(location = 1) uniform vec2 Position;
+layout(location = 2) uniform vec2 Offset;
 
 float map_range(float val, float input_start, float input_end, float output_start, float output_end) {
     const float slope = (output_end - output_start) / (input_end - input_start);
@@ -28,8 +29,9 @@ void main()
 	// Make sure the UI canvas is relative to the top left corner
 	pos_remap.y += (1 - Scale.y);
 	pos_remap += vec2(Position.x, -Position.y);
+    pos_remap += vec2(Offset.x, -Offset.y);
 	// map back to NDC
 	vec2 pos_scaled = map_range(pos_remap, 0, 1, -1, 1);
 	gl_Position = vec4(pos_scaled.x, pos_scaled.y, 0.0, 1.0);
-	TexCoords = iTexCoords;
+	TexCoords = vec2(iTexCoords.x, 1 - iTexCoords.y);
 }

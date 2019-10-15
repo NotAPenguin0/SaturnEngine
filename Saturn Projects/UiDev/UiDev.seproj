@@ -10,3 +10,6 @@ PostRenderStage BlitPass
 RenderModule EditorModule
 PostRenderStage UIPass
 asset texture assets/textures/brickwall.tex
+asset texture assets/textures/brickwall_normal.tex
+asset texture assets/textures/brickwall_specular.tex
+asset texture assets/textures/reload_test.tex
