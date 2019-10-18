@@ -19,6 +19,12 @@ public:
     // itself.
     virtual void process(Scene& scene, Framebuffer& source) = 0;
 
+	virtual void clear(glm::vec4 color, GLenum flags) {
+		Framebuffer::bind(target);
+		glClearColor(color.r, color.g, color.b, color.a);
+		glClear(flags);
+	}
+
     Framebuffer& get_framebuffer() { return target; }
 
     virtual ~PostRenderStage() = default;

@@ -158,6 +158,7 @@ void Application::run() {
             glfwSwapBuffers(window_handle);
         } catch (std::exception const& e) {
             log::warn(e.what());
+			std::cout << e.what();
             editor->frame_end();
         }
     }

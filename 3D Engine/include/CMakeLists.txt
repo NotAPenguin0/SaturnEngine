@@ -90,6 +90,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Physics/AABBCollisionHandler.hpp"
 	
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/DepthMap.hpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Font.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Framebuffer.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Mesh.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/OpenGL.hpp"
@@ -126,6 +127,7 @@ set(ENGINE_HEADER_FILES
 	
     "${CMAKE_CURRENT_SOURCE_DIR}/Time/Time.hpp"
 	
+	"${CMAKE_CURRENT_SOURCE_DIR}/Utility/UIAnchor.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/Color.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/ColorGradient.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Utility/Exceptions.hpp"

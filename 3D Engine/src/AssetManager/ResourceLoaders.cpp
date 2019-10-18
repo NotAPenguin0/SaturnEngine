@@ -318,6 +318,22 @@ void ResourceLoader<audeo::SoundSource>::reload(
     dependent_paths = std::move(new_res.dependent_paths);
 }
 
+LoadResult<Font> ResourceLoader<Font>::load(std::string const& path,
+                                            std::string const& root_dir) {
+    Font::CreateInfo info;
+    info.font_path = path;
+    return {std::make_unique<Font>(info), {}};
+}
+
+void ResourceLoader<Font>::reload(std::unique_ptr<Font>& res,
+                                  std::vector<fs::path>& dependent_paths,
+                                  std::string const& path,
+                                  std::string const& root_dir) {
+    auto new_res = load(path, root_dir);
+    res->swap(*new_res.ptr);
+    dependent_paths = std::move(new_res.dependent_paths);
+}
+
 // File types definitions
 
 std::vector<FileType> FileTypes<Shader>::types = {
@@ -328,5 +344,8 @@ std::vector<FileType> FileTypes<Texture>::types = {
     {L"Texture file (*.tex)", L"*tex"}};
 std::vector<FileType> FileTypes<audeo::SoundSource>::types = {
     {L"SoundSource file (*.sfx)", L"*.sfx"}};
+
+std::vector<FileType> FileTypes<Font>::types = {
+    {L"TrueType font file (*.ttf)", L"*.ttf"}};
 
 } // namespace Saturn

@@ -6,7 +6,7 @@
 
 namespace Saturn::Math {
 
-enum class CurveShape { Constant, LinearUp, LinearDown };
+enum class CurveShape { Constant = 0, LinearUp = 1, LinearDown = 2};
 
 struct Curve {
     CurveShape shape = CurveShape::Constant;

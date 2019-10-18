@@ -127,6 +127,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.editor_only = false;
 		info.fields["image"] = "Resource<Saturn::Texture>";
 		info.fields["position"] = "glm::vec2";
+		info.fields["anchor"] = "ui_anchors::anchor_t";
 		info.fields["size"] = "glm::vec2";
 		data.push_back(info);
 	}
@@ -177,7 +178,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		ComponentInfo info;
 		info.name = "ParticleEmitter ";
 		info.default_serialize = false;
-		info.hide_in_editor = true;
+		info.hide_in_editor = false;
 		info.editor_only = false;
 		info.fields["velocity_over_lifetime"] = "Saturn::Components::ParticleEmitter::VelocityOverTimeModule";
 		info.fields["additive"] = "bool";
@@ -186,7 +187,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.fields["emission"] = "Saturn::Components::ParticleEmitter::EmissionModule";
 		info.fields["size_over_lifetime"] = "Saturn::Components::ParticleEmitter::SizeOverTimeModule";
 		info.fields["color_over_lifetime"] = "Saturn::Components::ParticleEmitter::ColorOverTimeModule";
-		info.fields["particles"] = "std::vector<Particle>";
+		info.fields["particles"] = "int";
 		info.fields["particle_vao"] = "Resource<Saturn::VertexArray>";
 		info.fields["texture"] = "Resource<Saturn::Texture>";
 		info.fields["particle_data"] = "Saturn::Components::ParticleEmitter::ParticleData";
@@ -276,7 +277,9 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.editor_only = false;
 		info.fields["text"] = "std::string";
 		info.fields["position"] = "glm::vec2";
+		info.fields["anchor"] = "ui_anchors::anchor_t";
 		info.fields["size"] = "glm::vec2";
+		info.fields["font"] = "Resource<Saturn::Font>";
 		info.fields["color"] = "Saturn::color3";
 		data.push_back(info);
 	}

@@ -1,15 +1,20 @@
-1
+2
 scenes\main_scene
-8
+scenes\Particles
+7
 PreRenderStage DepthMapPass
 RenderModule DebugModule
 RenderModule MeshRenderModule
 RenderModule ParticleModule
 RenderModule TransferModule
 PostRenderStage BlitPass
-RenderModule EditorModule
 PostRenderStage UIPass
 asset texture assets/textures/brickwall.tex
 asset texture assets/textures/brickwall_normal.tex
 asset texture assets/textures/brickwall_specular.tex
 asset texture assets/textures/reload_test.tex
+asset texture assets/textures/smoke.tex
+asset font assets/fonts/ARIAL.TTF
+asset font assets/fonts/BBRICK.TTF
+asset font assets/fonts/ARIALI.TTF
+asset font assets/fonts/ARIALBI.TTF

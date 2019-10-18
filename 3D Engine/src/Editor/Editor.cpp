@@ -2,11 +2,11 @@
 #    include "Editor/Editor.hpp"
 
 #    include "Core/Application.hpp"
-#    include "Editor/ProjectFile.hpp"
-#    include "Editor/SelectFileDialog.hpp"
 #    include "ECS/ComponentList.hpp"
 #    include "ECS/Components.hpp"
 #    include "ECS/ECS.hpp"
+#    include "Editor/ProjectFile.hpp"
+#    include "Editor/SelectFileDialog.hpp"
 #    include "Input/Input.hpp"
 #    include "Renderer/Viewport.hpp"
 #    include "Scene/Scene.hpp"
@@ -59,6 +59,7 @@ static void do_imports() {
     AssetManager<Texture>::do_imports();
     AssetManager<Mesh>::do_imports();
     AssetManager<audeo::SoundSource>::do_imports();
+    AssetManager<Font>::do_imports();
 }
 
 Editor::Editor(Application& app) : app(&app) {
@@ -131,6 +132,10 @@ Editor::Editor(Application& app) : app(&app) {
             log_resources<audeo::SoundSource>(show_non_imported);
             return;
         }
+        if (type == "font") {
+            log_resources<Font>(show_non_imported);
+            return;
+        }
     });
 
     // Load preferences
@@ -163,6 +168,7 @@ Editor::Editor(Application& app) : app(&app) {
     AssetManager<Shader>::init();
     AssetManager<Mesh>::init();
     AssetManager<audeo::SoundSource>::init();
+    AssetManager<Font>::init();
 
     do_imports();
 

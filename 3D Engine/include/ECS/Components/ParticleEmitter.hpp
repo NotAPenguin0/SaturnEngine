@@ -1,8 +1,9 @@
 #ifndef SATURN_PARTICLE_EMITTER_HPP_
 #define SATURN_PARTICLE_EMITTER_HPP_
 
-#include "ComponentBase.hpp"
+#include "AssetManager/AssetManager.hpp"
 #include "AssetManager/Resource.hpp"
+#include "ComponentBase.hpp"
 #include "Math/Curve.hpp"
 #include "Math/math_traits.hpp"
 #include "Renderer/Texture.hpp"
@@ -23,7 +24,53 @@ class ParticleSystem;
 
 namespace Saturn::Components {
 
-struct COMPONENT HIDE_IN_EDITOR ParticleEmitter : ComponentBase {
+struct COMPONENT ParticleEmitter : ComponentBase {
+    ParticleEmitter() {
+        static const std::vector<float> particle_quad_vertices = {
+            -1.0f, 1.0f,  0.0f, 0.0f, 1.0f, // TL
+            1.0f,  1.0f,  0.0f, 1.0f, 1.0f, // TR
+            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, // BL
+            1.0f,  -1.0f, 0.0f, 1.0f, 0.0f  // BR
+        };
+
+        static const std::vector<GLuint> particle_quad_indices = {
+            0, 1, 2, // First triangle
+            1, 2, 3  // Second triangle
+        };
+
+        // Add additional rendering info
+        VertexArray::CreateInfo vao_info;
+        vao_info.attributes.push_back({0, 3}); // position
+        vao_info.attributes.push_back({1, 2}); // texture coordinates
+        vao_info.vertices = particle_quad_vertices;
+        vao_info.indices = particle_quad_indices;
+        particle_vao =
+            AssetManager<VertexArray>::get_resource(vao_info, "particle_vao");
+        VertexArray::BufferInfo pos_buffer_info;
+        pos_buffer_info.attributes.push_back({2, 3, 1}); // position
+        pos_buffer_info.mode = BufferMode::DataStream;
+
+        pos_buffer_info.data = make_float_vec(particle_data.positions);
+        VertexArray::BufferInfo scale_buffer_info;
+        scale_buffer_info.attributes.push_back({3, 3, 1}); // scale
+        scale_buffer_info.mode = BufferMode::DataStream;
+        scale_buffer_info.data = make_float_vec(particle_data.sizes);
+        VertexArray::BufferInfo color_buffer_info;
+        color_buffer_info.attributes.push_back({4, 4, 1}); // color
+        color_buffer_info.mode = BufferMode::DataStream;
+        color_buffer_info.data = make_float_vec(particle_data.colors);
+
+        particle_vao->add_buffer(pos_buffer_info);
+        particle_vao->add_buffer(scale_buffer_info);
+        particle_vao->add_buffer(color_buffer_info);
+    }
+
+    ParticleEmitter(ParticleEmitter const&) = default;
+    ParticleEmitter(ParticleEmitter&&) = default;
+
+    ParticleEmitter& operator=(ParticleEmitter const&) = default;
+    ParticleEmitter& operator=(ParticleEmitter&&) = default;
+
     struct Particle {
         float life_left;
         float velocity;
@@ -34,11 +81,11 @@ struct COMPONENT HIDE_IN_EDITOR ParticleEmitter : ComponentBase {
         // If disabled, no particles will spawn
         bool enabled = true;
 
-        float start_lifetime;
+        float start_lifetime = 1.0f;
 
-        float start_velocity;
-        glm::vec4 start_color;
-        glm::vec2 start_size;
+        float start_velocity = 1.0f;
+        glm::vec4 start_color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+        glm::vec2 start_size = glm::vec2(1.0f, 1.0f);
 
         // Total duration for which particles should spawn. In seconds
         float duration = 5.0f;
@@ -68,21 +115,21 @@ struct COMPONENT HIDE_IN_EDITOR ParticleEmitter : ComponentBase {
         ColorGradient gradient;
     };
 
-    enum class SpawnShape { Sphere, Hemisphere, Cone, Box };
+    enum class SpawnShape { Sphere = 0, Hemisphere, Cone, Box };
     enum class SpawnMode { Random };
 
     struct ShapeModule {
         bool enabled = true;
 
-        SpawnShape shape;
+        SpawnShape shape = SpawnShape::Sphere;
 
         // Only present if shape is a Sphere, Hemisphere or a Cone
         std::optional<float> radius = 1.0f;
         // Only present if shape is a Cone. Represents the angle of the Cone, in
         // degrees
-        std::optional<float> angle;
-        // Only present if shape is a Cone. Represents the area of the circle to
-        // use (in degrees)
+        std::optional<float> angle = 60.0f;
+        // Only present if shape is a Cone, Sphere or Hemisphere. Represents the
+        // area of the circle to use (in degrees)
         std::optional<float> arc = 360.0f;
         // Only present if shape is a Cone
         std::optional<SpawnMode> mode = SpawnMode::Random;

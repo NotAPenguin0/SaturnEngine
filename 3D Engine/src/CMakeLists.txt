@@ -50,6 +50,7 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Physics/PhysicsTickScheduler.cpp"
 	
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/DepthMap.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Font.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Framebuffer.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Mesh.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/OpenGL.cpp"

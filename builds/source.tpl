@@ -3,6 +3,7 @@
  */
  
 #include "Serialization/ComponentSerializers.hpp"
+#include "Serialization/CustomSerializers.hpp"
 #include "AssetManager/AssetManager.hpp"
 #include "ECS/Components.hpp"
 

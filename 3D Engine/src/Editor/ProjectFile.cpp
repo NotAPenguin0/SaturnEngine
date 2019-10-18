@@ -6,6 +6,7 @@
 
 #    include "Editor/EditorLog.hpp"
 
+#    include "Renderer/Font.hpp"
 #    include "Renderer/Mesh.hpp"
 #    include "Renderer/Shader.hpp"
 #    include "Renderer/Texture.hpp"
@@ -69,6 +70,9 @@ void ProjectFile::load(fs::path path) {
         if (asset_type == "sound") {
             AssetManager<audeo::SoundSource>::queue_import(asset_path);
         }
+        if (asset_type == "font") {
+            AssetManager<Font>::queue_import(asset_path);
+        }
     }
 }
 
@@ -110,6 +114,7 @@ void ProjectFile::save() {
     export_assets<Texture>(assets, "texture");
     export_assets<Mesh>(assets, "mesh");
     export_assets<audeo::SoundSource>(assets, "sound");
+    export_assets<Font>(assets, "font");
 
     // Write exported assets to file
     for (auto& exported_asset : assets) {
@@ -130,7 +135,8 @@ void ProjectFile::create_and_load(fs::path folder) {
     file << "7\n"
             "PreRenderStage DepthMapPass\nRenderModule DebugModule\n"
             "RenderModule MeshRenderModule\nRenderModule ParticleModule\n"
-            "RenderModule TransferModule\nPostRenderStage BlitPass\n"
+            "RenderModule TransferModule\nPostRenderStage "
+            "BlitPass\nPostRenderStage UIPass\n"
             "RenderModule EditorModule\n";
     file.close();
     load(folder / project_name);

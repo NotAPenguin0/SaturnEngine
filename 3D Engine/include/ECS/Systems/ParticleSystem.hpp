@@ -11,6 +11,8 @@ class SYSTEM ParticleSystem : public SystemBase {
 public:
     void on_update(Scene& scene) override;
 
+	SYSTEM_RUN_IN_EDITOR
+
 private:
     std::size_t particles_to_spawn(float& time_since_last_spawn,
                                    float spawn_rate,

@@ -32,8 +32,10 @@ void BlitPass::init() {
 
 void BlitPass::process(Scene& scene, Framebuffer& source) {
     Framebuffer::bind(target);
+    glClearColor(0, 0, 0, 1);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-    Viewport::set_active(scene.get_app()->get_renderer()->get_viewport(0));
+	Viewport::set_active(scene.get_app()->get_renderer()->get_viewport(0));
 
     VertexArray::bind(screen_vao);
 

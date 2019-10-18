@@ -1,5 +1,6 @@
 #include "Editor/PreviewRendering.hpp"
 
+#include "Renderer/Font.hpp"
 #include "Renderer/Framebuffer.hpp"
 #include "Renderer/OpenGL.hpp"
 #include "Renderer/Shader.hpp"
@@ -92,7 +93,7 @@ void send_light_data(render_info& info) {
     info.shader->set_vec3(6, info.light_data.specular);
 }
 
-void render_mesh(render_info& info, AssetManager<Mesh>::Asset& asset) {
+static void render_mesh(render_info& info, AssetManager<Mesh>::Asset& asset) {
     if (!info.shader.is_loaded()) { return; }
 
     // TODO: Make sure this only has to happen once for a performance boost
@@ -113,6 +114,56 @@ void render_mesh(render_info& info, AssetManager<Mesh>::Asset& asset) {
     glBindTexture(GL_TEXTURE_2D, info.framebuf.get_texture());
     // Don't forget to generate mipmap to allow resizing
     glGenerateMipmap(GL_TEXTURE_2D);
+}
+
+static void render_char(Font::glyph_data const& data,
+                        Framebuffer& target,
+                        VertexArray& quad,
+                        Shader& shader,
+                        glm::vec2 position,
+                        glm::vec2 size,
+                        glm::vec2 offset) {
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, data.texture);
+    shader.set_int(Shader::Uniforms::Texture, 0);
+    glm::vec2 img_dim = glm::vec2(data.size.x, data.size.y);
+    glm::vec2 target_dim = glm::vec2(target.get_size().x, target.get_size().y);
+    shader.set_vec2(0, glm::vec2(img_dim.x / target_dim.x * size.x,
+                                 img_dim.y / target_dim.y * size.y));
+    shader.set_vec2(1, position);
+    shader.set_vec2(2, offset);
+
+    glDrawElements(GL_TRIANGLES, quad.index_size(), GL_UNSIGNED_INT, nullptr);
+}
+
+static void render_font(Framebuffer& target,
+                        Font& font,
+                        VertexArray& quad,
+                        Shader& shader) {
+    Framebuffer::bind(target);
+    glViewport(0, 0, target.get_size().x, target.get_size().y);
+    Shader::bind(shader);
+    VertexArray::bind(quad);
+
+    shader.set_vec3(3, {1, 1, 1});
+
+    glm::vec2 offset = glm::vec2(0, 0);
+    static const std::string text = "Example";
+    for (auto const& c : text) {
+        if (c == 0) { break; };
+        Font::glyph_data const& data = font.glyphs[c];
+        glm::vec2 offset_pos =
+            offset +
+            glm::vec2(data.bearing.x, data.pixel_size - data.bearing.y);
+        glm::vec2 relative_offset =
+            glm::vec2(offset_pos.x / target.get_size().x,
+                      offset_pos.y / target.get_size().y);
+        render_char(data, target, quad, shader, {glm::vec2(0.4, 0.4)},
+                    glm::vec2(0.1, 0.1), relative_offset);
+        // shift by 6 to get the offset in pixels
+        offset.x += (data.advance >> 6);
+    }
 }
 
 } // namespace impl

@@ -27,6 +27,9 @@ void from_json(nlohmann::json const& json, ParticleEmitter& emitter) {
         emitter.main.loop = main["Loop"].get<bool>();
         emitter.main.duration = main["Duration"].get<float>();
 
+        if (auto tex = (*emit).find("Texture"); tex != (*emit).end()) {
+            emitter.texture = (*tex).get<Resource<Texture>>();
+        }
         // Emission module
         auto& emission = (*emit)["Emission"];
         emitter.emission.enabled = emission["Enabled"].get<bool>();
@@ -64,63 +67,19 @@ void from_json(nlohmann::json const& json, ParticleEmitter& emitter) {
         if (emitter.shape.enabled) {
             emitter.shape.shape =
                 shape["Type"].get<ParticleEmitter::SpawnShape>();
-            switch (emitter.shape.shape) {
-                case ParticleEmitter::SpawnShape::Sphere:
-                    emitter.shape.radius = shape["Radius"].get<float>();
-                    emitter.shape.arc = shape["Arc"].get<float>();
-                    emitter.shape.angle = shape["Angle"].get<float>();
-                    emitter.shape.randomize_direction =
-                        shape["RandomizeDirection"].get<float>();
-                    emitter.shape.random_position_offset =
-                        shape["RandomPositionOffset"].get<float>();
-                    emitter.shape.mode =
-                        shape["SpawnMode"].get<ParticleEmitter::SpawnMode>();
-                    emitter.shape.scale = shape["Scale"].get<glm::vec3>();
-                    break;
-                case ParticleEmitter::SpawnShape::Hemisphere: break;
-                case ParticleEmitter::SpawnShape::Cone: break;
-                case ParticleEmitter::SpawnShape::Box: break;
-            }
+
+            emitter.shape.radius = shape["Radius"].get<float>();
+            emitter.shape.arc = shape["Arc"].get<float>();
+            emitter.shape.angle = shape["Angle"].get<float>();
+            emitter.shape.randomize_direction =
+                shape["RandomizeDirection"].get<float>();
+            emitter.shape.random_position_offset =
+                shape["RandomPositionOffset"].get<float>();
+            emitter.shape.mode =
+                shape["SpawnMode"].get<ParticleEmitter::SpawnMode>();
+            emitter.shape.scale = shape["Scale"].get<glm::vec3>();
         }
-
-        static const std::vector<float> particle_quad_vertices = {
-            -1.0f, 1.0f,  0.0f, 0.0f, 1.0f, // TL
-            1.0f,  1.0f,  0.0f, 1.0f, 1.0f, // TR
-            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, // BL
-            1.0f,  -1.0f, 0.0f, 1.0f, 0.0f  // BR
-        };
-
-        static const std::vector<GLuint> particle_quad_indices = {
-            0, 1, 2, // First triangle
-            1, 2, 3  // Second triangle
-        };
-
         emitter.additive = (*emit)["Additive"].get<bool>();
-        // Add additional rendering info
-        VertexArray::CreateInfo vao_info;
-        vao_info.attributes.push_back({0, 3}); // position
-        vao_info.attributes.push_back({1, 2}); // texture coordinates
-        vao_info.vertices = particle_quad_vertices;
-        vao_info.indices = particle_quad_indices;
-        emitter.particle_vao =
-            AssetManager<VertexArray>::get_resource(vao_info, "particle_vao");
-        VertexArray::BufferInfo pos_buffer_info;
-        pos_buffer_info.attributes.push_back({2, 3, 1}); // position
-        pos_buffer_info.mode = BufferMode::DataStream;
-        
-        pos_buffer_info.data = make_float_vec(emitter.particle_data.positions);
-        VertexArray::BufferInfo scale_buffer_info;
-        scale_buffer_info.attributes.push_back({3, 3, 1}); // scale
-        scale_buffer_info.mode = BufferMode::DataStream;
-        scale_buffer_info.data = make_float_vec(emitter.particle_data.sizes);
-        VertexArray::BufferInfo color_buffer_info;
-        color_buffer_info.attributes.push_back({4, 4, 1}); // color
-        color_buffer_info.mode = BufferMode::DataStream;
-        color_buffer_info.data = make_float_vec(emitter.particle_data.colors);
-
-        emitter.particle_vao->add_buffer(pos_buffer_info);
-        emitter.particle_vao->add_buffer(scale_buffer_info);
-        emitter.particle_vao->add_buffer(color_buffer_info);
     }
 }
 
@@ -134,6 +93,7 @@ void to_json(nlohmann::json& json, ParticleEmitter const& emitter) {
     comp["VelocityOverLifetime"] = nlohmann::json::object();
     comp["Shape"] = nlohmann::json::object();
     comp["Additive"] = emitter.additive;
+    comp["Texture"] = emitter.texture;
 
     auto& main = comp["Main"];
     auto& emission = comp["Emission"];
@@ -166,7 +126,7 @@ void to_json(nlohmann::json& json, ParticleEmitter const& emitter) {
 
     shape["Enabled"] = emitter.shape.enabled;
     shape["Type"] = emitter.shape.shape;
-    
+
     shape["Radius"] = *emitter.shape.radius;
     shape["Arc"] = *emitter.shape.arc;
     shape["Angle"] = *emitter.shape.angle;

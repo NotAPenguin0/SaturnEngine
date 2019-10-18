@@ -50,7 +50,9 @@ void ParticleSystem::on_update(Scene& scene) {
         }
 
         if (emitter.particles.size() + new_particles >
-            emitter.main.max_particles) {
+                emitter.main.max_particles &&
+            emitter.main.max_particles >=
+                emitter.particles.size() + new_particles) {
             new_particles =
                 emitter.main.max_particles - emitter.particles.size();
         }

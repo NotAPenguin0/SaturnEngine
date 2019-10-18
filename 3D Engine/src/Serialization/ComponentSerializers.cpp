@@ -3,6 +3,7 @@
  */
  
 #include "Serialization/ComponentSerializers.hpp"
+#include "Serialization/CustomSerializers.hpp"
 #include "AssetManager/AssetManager.hpp"
 #include "ECS/Components.hpp"
 
@@ -179,6 +180,9 @@ void from_json(nlohmann::json const& json, Image& component) {
 		}
 		if (auto x = (*c).find("Position"); x != (*c).end()) {
 			component.position = (*x).get<glm::vec2>();
+		}
+		if (auto x = (*c).find("Anchor"); x != (*c).end()) {
+			component.anchor = (*x).get<ui_anchors::anchor_t>();
 		}
 		if (auto x = (*c).find("Size"); x != (*c).end()) {
 			component.size = (*x).get<glm::vec2>();
@@ -367,8 +371,14 @@ void from_json(nlohmann::json const& json, Text& component) {
 		if (auto x = (*c).find("Position"); x != (*c).end()) {
 			component.position = (*x).get<glm::vec2>();
 		}
+		if (auto x = (*c).find("Anchor"); x != (*c).end()) {
+			component.anchor = (*x).get<ui_anchors::anchor_t>();
+		}
 		if (auto x = (*c).find("Size"); x != (*c).end()) {
 			component.size = (*x).get<glm::vec2>();
+		}
+		if (auto x = (*c).find("Font"); x != (*c).end()) {
+			component.font = (*x).get<Resource<Saturn::Font>>();
 		}
 		if (auto x = (*c).find("Color"); x != (*c).end()) {
 			component.color = (*x).get<Saturn::color3>();
@@ -485,6 +495,7 @@ void to_json(nlohmann::json& json, Image const& component) {
 	// clang-format off
 	json["ImageComponent"]["Image"] = component.image;
 	json["ImageComponent"]["Position"] = component.position;
+	json["ImageComponent"]["Anchor"] = component.anchor;
 	json["ImageComponent"]["Size"] = component.size;
 	// clang-format on
 }
@@ -584,7 +595,9 @@ void to_json(nlohmann::json& json, Text const& component) {
 	// clang-format off
 	json["TextComponent"]["Text"] = component.text;
 	json["TextComponent"]["Position"] = component.position;
+	json["TextComponent"]["Anchor"] = component.anchor;
 	json["TextComponent"]["Size"] = component.size;
+	json["TextComponent"]["Font"] = component.font;
 	json["TextComponent"]["Color"] = component.color;
 	// clang-format on
 }

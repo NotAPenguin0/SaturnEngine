@@ -3,6 +3,7 @@
 #include "AssetManager/AssetManager.hpp"
 #include "ECS/Components/Canvas.hpp"
 #include "ECS/Components/Image.hpp"
+#include "Renderer/Font.hpp"
 
 #include "Editor/EditorLog.hpp"
 
@@ -106,7 +107,7 @@ static void render_image_widget(Framebuffer& target,
     glm::vec2 target_dim = glm::vec2(target.get_size().x, target.get_size().y);
     shader.set_vec2(0, glm::vec2(img_dim.x / target_dim.x * img.size.x,
                                  img_dim.y / target_dim.y * img.size.y));
-    shader.set_vec2(1, img.position);
+    shader.set_vec2(1, img.position + ui_anchors::anchor_positions[img.anchor]);
 
     glDrawElements(GL_TRIANGLES, quad.index_size(), GL_UNSIGNED_INT, nullptr);
 }
@@ -119,74 +120,13 @@ static std::vector<float> quad_vertices = {
     1.0f,  1.0f,  1.0f, 1.0f, // TR
 };
 
-struct glyph_data {
-    unsigned int texture;
-    // size of the glyph
-    glm::vec2 size;
-    // offset from baseline to left/top of the glyph
-    glm::vec2 bearing;
-    // offset to advance to next glyph
-    unsigned int advance;
-    // the pixel size this character was rendered with in the font texture
-    size_t pixel_size;
-};
-
-std::unordered_map<char, glyph_data> glyphs;
-
-unsigned int create_glyph_texture(FT_Face& face) {
-    unsigned int texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, face->glyph->bitmap.width,
-                 face->glyph->bitmap.rows, 0, GL_RED, GL_UNSIGNED_BYTE,
-                 face->glyph->bitmap.buffer);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-    return texture;
-}
-
-void load_glyphs(FT_Library& ft, const char* font_file) {
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    FT_Face face;
-    if (FT_New_Face(ft, font_file, 0, &face)) {
-        log::error("Failed to load font {}", font_file);
-    }
-    // Set font size
-    constexpr size_t pixel_size = 48;
-    FT_Set_Pixel_Sizes(face, 0, pixel_size);
-    for (unsigned char c = 0; c < 128; ++c) {
-        if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
-            log::error("Failed to extract character '{}' from font file '{}'",
-                       c, font_file);
-            continue;
-        }
-        unsigned int texture = create_glyph_texture(face);
-        glyph_data data;
-        data.texture = texture;
-        data.size =
-            glm::vec2(face->glyph->bitmap.width, face->glyph->bitmap.rows);
-        data.bearing =
-            glm::vec2(face->glyph->bitmap_left, face->glyph->bitmap_top);
-        data.advance = face->glyph->advance.x;
-        glyphs.insert({c, std::move(data)});
-        data.pixel_size = pixel_size;
-    }
-    // reset texture alignment to default value
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-
-    FT_Done_Face(face);
-}
-
-void render_char(glyph_data const& data,
-                 Framebuffer& target,
-                 VertexArray& quad,
-                 Shader& shader,
-                 glm::vec2 position,
-                 glm::vec2 size,
-                 glm::vec2 offset) {
+static void render_char(Font::glyph_data const& data,
+                        Framebuffer& target,
+                        VertexArray& quad,
+                        Shader& shader,
+                        glm::vec2 position,
+                        glm::vec2 size,
+                        glm::vec2 offset) {
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, data.texture);
@@ -201,10 +141,8 @@ void render_char(glyph_data const& data,
     glDrawElements(GL_TRIANGLES, quad.index_size(), GL_UNSIGNED_INT, nullptr);
 }
 
-void render_text(Framebuffer& target,
-                 Text& txt,
-                 VertexArray& quad,
-                 Shader& shader) {
+static void
+render_text(Framebuffer& target, Text& txt, VertexArray& quad, Shader& shader) {
     Framebuffer::bind(target);
     glViewport(0, 0, target.get_size().x, target.get_size().y);
     Shader::bind(shader);
@@ -213,9 +151,10 @@ void render_text(Framebuffer& target,
     shader.set_vec3(3, txt.color);
 
     glm::vec2 offset = glm::vec2(0, 0);
+    glm::vec2 const& anchor_pos = ui_anchors::anchor_positions[txt.anchor];
     for (auto const& c : txt.text) {
         if (c == 0) { break; };
-        glyph_data const& data = glyphs[c];
+        Font::glyph_data const& data = txt.font->glyphs[c];
         glm::vec2 offset_pos =
             offset +
             glm::vec2(data.bearing.x, data.pixel_size - data.bearing.y) *
@@ -223,8 +162,8 @@ void render_text(Framebuffer& target,
         glm::vec2 relative_offset =
             glm::vec2(offset_pos.x / target.get_size().x,
                       offset_pos.y / target.get_size().y);
-        render_char(data, target, quad, shader, txt.position, txt.size,
-                    relative_offset);
+        render_char(data, target, quad, shader, txt.position + anchor_pos,
+                    txt.size, relative_offset);
         // shift by 6 to get the offset in pixels
         offset.x += (data.advance >> 6) * txt.size.x;
     }
@@ -232,14 +171,7 @@ void render_text(Framebuffer& target,
 
 } // namespace impl
 
-UIPass::UIPass() : PostRenderStage(10) {
-    FT_Library ft;
-    if (FT_Init_FreeType(&ft)) {
-        log::error("Failed to initialize freetype library");
-    }
-    impl::load_glyphs(ft, "config/resources/fonts/arial.ttf");
-    FT_Done_FreeType(ft);
-}
+UIPass::UIPass() : PostRenderStage(10) {}
 
 void UIPass::init() {
     Framebuffer::CreateInfo info;
@@ -268,11 +200,18 @@ void UIPass::init() {
 void UIPass::process(Scene& scene, Framebuffer& source) {
     auto canvas_list = scene.get_ecs().select<Canvas>();
 
-    for (auto [canvas] : canvas_list) {
+    // Resize framebuffer if needed
+    impl::resize_if_needed(target,
+                           glm::vec2(source.get_size().x, source.get_size().y));
 
-        // Resize framebuffers if needed
-        impl::resize_if_needed(
-            target, glm::vec2(source.get_size().x, source.get_size().y));
+    // First, blit the scene view to our target buffer, then render the UI
+    // to the UI buffer and blit both on the target buffer
+
+    // Blit source buffer to target buffer
+    impl::blit_framebuffer(source, target, *blit_shader, quad);
+
+    for (auto [canvas] : canvas_list) {
+        // Resize canvas if needed
         glm::vec2 ui_size_pixels =
             glm::vec2(canvas.size.x * source.get_size().x,
                       canvas.size.y * source.get_size().y);
@@ -280,12 +219,6 @@ void UIPass::process(Scene& scene, Framebuffer& source) {
 
         glDisable(GL_CULL_FACE);
         glDisable(GL_DEPTH_TEST);
-
-        // First, blit the scene view to our target buffer, then render the UI
-        // to the UI buffer and blit both on the target buffer
-
-        // Blit source buffer to target buffer
-        impl::blit_framebuffer(source, target, *blit_shader, quad);
 
         // Render UI
 
@@ -312,7 +245,9 @@ void UIPass::process(Scene& scene, Framebuffer& source) {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         for (auto [txt] : scene.get_ecs().select<Text>()) {
-            impl::render_text(ui_buffer, txt, quad, *text_shader);
+            if (txt.font.is_loaded()) {
+                impl::render_text(ui_buffer, txt, quad, *text_shader);
+            }
         }
         // Blit UI to target buffer
         impl::blit_ui(ui_buffer, target, *blit_shader, quad, canvas);

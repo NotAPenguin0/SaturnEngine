@@ -12,10 +12,12 @@
 #include "ECS/Components.hpp"
 #include "ECS/component_index.hpp"
 #include "Utility/Utility.hpp"
+#include "Utility/UIAnchor.hpp"
 #include "Utility/Color.hpp"
 #include "Renderer/Shader.hpp"
 #include "Renderer/Texture.hpp"
 #include "Renderer/Mesh.hpp"
+#include "Renderer/Font.hpp"
 
 #include <audeo/SoundSource.hpp>
 
@@ -38,10 +40,12 @@ class ComponentFieldPtr {
 public:
 #define SUPPORTED_COMPONENT_FIELD_TYPES                                        \
     std::size_t, float, int, std::string, glm::vec2, glm::vec3, glm::vec4, bool, glm::bvec3, color3, color4, unsigned int, \
-	Resource<Shader>, Resource<Texture>, Resource<Mesh>, Resource<audeo::SoundSource>
+	Resource<Shader>, Resource<Texture>, Resource<Mesh>, Resource<audeo::SoundSource>, \
+	Resource<Font>, ui_anchors::anchor_t
 #define SUPPORTED_COMPONENT_FIELD_POINTER_TYPES                                \
     std::size_t*, float*, int*, std::string*, glm::vec2*, glm::vec3*, glm::vec4*, bool*, glm::bvec3*, color3*, color4*, unsigned int*, \
-	Resource<Shader>*, Resource<Texture>*, Resource<Mesh>*, Resource<audeo::SoundSource>*
+	Resource<Shader>*, Resource<Texture>*, Resource<Mesh>*, Resource<audeo::SoundSource>*, \
+	Resource<Font>*, ui_anchors::anchor_t*
     using field_variant_t =
         std::variant<SUPPORTED_COMPONENT_FIELD_POINTER_TYPES>;
 
@@ -238,6 +242,9 @@ public:
 		if (field_name == "position") {
 			return ComponentFieldPtr(&comp.position);
 		}
+		if (field_name == "anchor") {
+			return ComponentFieldPtr(&comp.anchor);
+		}
 		if (field_name == "size") {
 			return ComponentFieldPtr(&comp.size);
 		}
@@ -410,8 +417,14 @@ public:
 		if (field_name == "position") {
 			return ComponentFieldPtr(&comp.position);
 		}
+		if (field_name == "anchor") {
+			return ComponentFieldPtr(&comp.anchor);
+		}
 		if (field_name == "size") {
 			return ComponentFieldPtr(&comp.size);
+		}
+		if (field_name == "font") {
+			return ComponentFieldPtr(&comp.font);
 		}
 		if (field_name == "color") {
 			return ComponentFieldPtr(&comp.color);

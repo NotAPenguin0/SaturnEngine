@@ -12,6 +12,7 @@
 #    include "Scene/SceneObject.hpp"
 #    include "Serialization/ComponentMetaInfo.hpp"
 #    include "Utility/Color.hpp"
+#    include "Utility/UIAnchor.hpp"
 
 #    include "imgui/imgui.h"
 
@@ -76,20 +77,26 @@ struct ComponentFieldVisitor {
 
     std::string_view field_name;
 
+    static constexpr float sensitivity = 0.005f;
+
     void operator()(std::size_t* field) {
-        ImGui::DragScalar(field_name.data(), ImGuiDataType_U64, field, 0.2f);
+        ImGui::DragScalar(field_name.data(), ImGuiDataType_U64, field,
+                          sensitivity);
     }
 
     void operator()(unsigned int* field) {
-        ImGui::DragScalar(field_name.data(), ImGuiDataType_U64, field, 0.2f);
+        ImGui::DragScalar(field_name.data(), ImGuiDataType_U64, field,
+                          sensitivity);
     }
 
     void operator()(float* field) {
-        ImGui::DragScalar(field_name.data(), ImGuiDataType_Float, field, 0.2f);
+        ImGui::DragScalar(field_name.data(), ImGuiDataType_Float, field,
+                          sensitivity);
     }
 
     void operator()(int* field) {
-        ImGui::DragScalar(field_name.data(), ImGuiDataType_S32, field, 0.2f);
+        ImGui::DragScalar(field_name.data(), ImGuiDataType_S32, field,
+                          sensitivity);
     }
 
     void operator()(std::string* field) {
@@ -99,15 +106,15 @@ struct ComponentFieldVisitor {
     }
 
     void operator()(glm::vec2* field) {
-        ImGui::InputFloat2(field_name.data(), &field->x);
+        ImGui::DragFloat2(field_name.data(), &field->x, sensitivity);
     }
 
     void operator()(glm::vec3* field) {
-        ImGui::InputFloat3(field_name.data(), &field->x);
+        ImGui::DragFloat3(field_name.data(), &field->x, sensitivity);
     }
 
     void operator()(glm::vec4* field) {
-        ImGui::InputFloat4(field_name.data(), &field->x);
+        ImGui::DragFloat4(field_name.data(), &field->x, sensitivity);
     }
 
     void operator()(glm::bvec3* field) {
@@ -123,13 +130,21 @@ struct ComponentFieldVisitor {
     void operator()(bool* field) { ImGui::Checkbox(field_name.data(), field); }
 
     void operator()(color3* field) {
-        ImGui::ColorEdit3(std::string(field_name).c_str(),
-                          &field->x);
+        ImGui::ColorEdit3(std::string(field_name).c_str(), &field->x);
     }
 
     void operator()(color4* field) {
-        ImGui::ColorEdit4(std::string(field_name).c_str(),
-                          &field->x);
+        ImGui::ColorEdit4(std::string(field_name).c_str(), &field->x);
+    }
+
+    void operator()(ui_anchors::anchor_t* field) {
+        if (ImGui::BeginCombo(field_name.data(),
+                              ui_anchors::anchor_names[*field])) {
+            for (auto const& [anchor, name] : ui_anchors::anchor_names) {
+                if (ImGui::Selectable(name)) { field->id = anchor.id; }
+            }
+            ImGui::EndCombo();
+        }
     }
 
     template<typename R>
@@ -223,6 +238,144 @@ void display_component(SceneObject* entity) {
     }
 }
 
+template<>
+void display_component<::Saturn::Components::ParticleEmitter>(
+    SceneObject* entity) {
+    using namespace ::Saturn::Meta;
+    using namespace ::Saturn::Components;
+    using ComponentMeta = ComponentsMeta<COMPONENT_LIST>;
+    auto& comp = entity->get_component<ParticleEmitter>();
+    ComponentInfo const& component_meta =
+        ComponentMeta::get_component_meta_info<ParticleEmitter>();
+    static constexpr int imgui_mouse_right_button = 1;
+
+    std::string popup_name = "Component Actions##" + component_meta.name;
+
+    if (ImGui::CollapsingHeader(component_meta.name.c_str())) {
+        if (ImGui::IsItemClicked(imgui_mouse_right_button)) {
+            // Show popup menu containing actions to delete this component
+            ImGui::OpenPopup(popup_name.c_str());
+        }
+
+        if (ImGui::BeginPopup(popup_name.c_str())) {
+            if (ImGui::Selectable("Delete component")) {
+                log::log("Deleting component: {0}from entity: {1}",
+                         component_meta.name,
+                         entity->get_component<Name>().name);
+                entity->remove_component<ParticleEmitter>();
+                ImGui::CloseCurrentPopup();
+                ImGui::EndPopup();
+                return;
+            }
+            ImGui::EndPopup();
+        }
+
+        auto display_curve = [](Math::Curve& curve, const char* label,
+                                const char* suffix) {
+            static const char* curves[] = {"Constant", "Linear Up",
+                                           "Linear Down"};
+            if (ImGui::BeginCombo(label, curves[static_cast<int>(curve.shape)])) {
+                for (size_t i = 0; i < sizeof(curves) / sizeof(const char*);
+                     ++i) {
+                    if (ImGui::Selectable(curves[i])) {
+                        curve.shape = static_cast<Math::CurveShape>(i);
+                    }
+                }
+                ImGui::EndCombo();
+            }
+            ImGui::DragFloat((std::string("min") + suffix).c_str(), &curve.min,
+                             0.05);
+            ImGui::DragFloat((std::string("max") + suffix).c_str(), &curve.max,
+                             0.05);
+        };
+
+        // Display ParticleEmitter fields
+        if (ImGui::TreeNode("Main")) {
+            ImGui::Checkbox("enabled##main", &comp.main.enabled);
+            ImGui::DragFloat("start_lifetime", &comp.main.start_lifetime);
+            ImGui::DragFloat("start_velocity", &comp.main.start_velocity);
+            ImGui::ColorEdit4("start_color", &comp.main.start_color.x);
+            ImGui::DragFloat2("start_size", &comp.main.start_size.x);
+            ImGui::DragFloat("duration", &comp.main.duration);
+            ImGui::Checkbox("loop", &comp.main.loop);
+            ImGui::DragInt("max_particles", (int*)&comp.main.max_particles, 50);
+            ImGui::TreePop();
+        }
+        if (ImGui::TreeNode("Emission")) {
+            ImGui::Checkbox("enabled##emission", &comp.emission.enabled);
+            ImGui::DragFloat("spawn_rate", &comp.emission.spawn_rate, 2);
+            ImGui::TreePop();
+        }
+        if (ImGui::TreeNode("Velocity over lifetime")) {
+            auto& vot = comp.velocity_over_lifetime;
+            ImGui::Checkbox("enabled##vel_over_time", &vot.enabled);
+            display_curve(vot.modifier, "modifier##vel_over_lifetime",
+                          "##vel_over_lifetime");
+            ImGui::TreePop();
+        }
+        if (ImGui::TreeNode("Size over lifetime")) {
+            auto& sot = comp.size_over_lifetime;
+            ImGui::Checkbox("enabled##size_over_time", &sot.enabled);
+            display_curve(sot.modifier, "modifier##size_over_time",
+                          "##size_over_time");
+            ImGui::TreePop();
+        }
+        if (ImGui::TreeNode("Color over lifetime")) {
+            auto& cot = comp.color_over_lifetime;
+            ImGui::Checkbox("enabled##size_over_time", &cot.enabled);
+            ImGui::ColorEdit4("start_color##col_over_time",
+                              &cot.gradient.start.x);
+            ImGui::ColorEdit4("end_color##col_over_time", &cot.gradient.end.x);
+            ImGui::TreePop();
+        }
+        if (ImGui::TreeNode("Shape")) {
+            static const char* shapes[] = {"Sphere", "Hemisphere", "Cone",
+                                           "Box"};
+            ImGui::Checkbox("enabled##shape", &comp.shape.enabled);
+
+            if (ImGui::BeginCombo("spawn_shape", shapes[static_cast<int>(comp.shape.shape)])) {
+                for (size_t i = 0; i < sizeof(shapes) / sizeof(const char*);
+                     ++i) {
+                    if (ImGui::Selectable(shapes[i])) {
+                        comp.shape.shape =
+                            static_cast<ParticleEmitter::SpawnShape>(i);
+                    }
+                }
+				ImGui::EndCombo();
+            }
+
+            if (comp.shape.shape == ParticleEmitter::SpawnShape::Sphere ||
+                comp.shape.shape == ParticleEmitter::SpawnShape::Hemisphere ||
+                comp.shape.shape == ParticleEmitter::SpawnShape::Cone) {
+
+                ImGui::DragFloat("radius##shape", &(*comp.shape.radius), 0.1f);
+            }
+
+            if (comp.shape.shape == ParticleEmitter::SpawnShape::Cone) {
+                ImGui::DragFloat("angle##shape", &(*comp.shape.angle));
+                ImGui::DragFloat("arc##shape", &(*comp.shape.arc));
+                //#TODO: SpawnMode
+            }
+
+            ImGui::DragFloat("randomize_direction",
+                             &comp.shape.randomize_direction, 0.05f);
+            ImGui::DragFloat("random_position_offset",
+                             &comp.shape.random_position_offset, 0.5f);
+
+			if (comp.shape.shape == ParticleEmitter::SpawnShape::Box) {
+				ImGui::DragFloat3("scale##shape", &comp.shape.scale.x, 0.1f);
+			}
+
+            ImGui::TreePop();
+        }
+
+		ImGui::Checkbox("additive##particle_emitter", &comp.additive);
+		// Display texture field
+        ComponentFieldVisitor vst { "texture" };
+		vst(&comp.texture);
+    }
+}
+
 template<typename C, typename... Cs>
 void display_components(SceneObject* entity) {
     using namespace Components;
@@ -231,11 +384,9 @@ void display_components(SceneObject* entity) {
     ComponentInfo const& meta_info =
         ComponentMeta::get_component_meta_info<C>();
     if (!meta_info.hide_in_editor && entity->has_component<C>()) {
-        // Temporary
-        if constexpr (!std::is_same_v<C, ParticleEmitter>) {
-            display_component<C>(entity);
-        }
-    };
+
+        display_component<C>(entity);
+    }
     if constexpr (sizeof...(Cs) != 0) { display_components<Cs...>(entity); }
 }
 
@@ -254,8 +405,7 @@ void show_add_component_entry(SceneObject* entity) {
 template<typename C, typename... Cs>
 void show_add_component_list(SceneObject* entity, std::string_view cat) {
     using namespace ::Saturn::Components;
-    if (!std::is_same_v<C, Name> && !std::is_same_v<C, ParticleEmitter> &&
-        cat == get_component_category<C>()) {
+    if (!std::is_same_v<C, Name> && cat == get_component_category<C>()) {
         show_add_component_entry<C>(entity);
     }
 

@@ -8,6 +8,7 @@
 #include "Renderer/Mesh.hpp"
 #include "Renderer/Shader.hpp"
 #include "Renderer/Texture.hpp"
+#include "Renderer/Font.hpp"
 
 #include <audeo/audeo.hpp>
 
@@ -79,6 +80,16 @@ public:
                        std::string const& root_dir);
 };
 
+template<>
+class ResourceLoader<Font> {
+	public:
+		static LoadResult<Font> load(std::string const& path, std::string const& root_dir);
+		 static void reload(std::unique_ptr<Font>& res,
+                       std::vector<fs::path>& dep_paths,
+                       std::string const& path,
+                       std::string const& root_dir);
+};
+
 // File types
 
 template<typename R>
@@ -107,6 +118,11 @@ struct FileTypes<Texture> {
 template<>
 struct FileTypes<audeo::SoundSource> {
     static std::vector<FileType> types;
+};
+
+template<>
+struct FileTypes<Font> {
+	static std::vector<FileType> types;
 };
 
 } // namespace Saturn

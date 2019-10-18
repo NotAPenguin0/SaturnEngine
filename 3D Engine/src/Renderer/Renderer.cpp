@@ -10,7 +10,6 @@
 #include "Utility/Exceptions.hpp"
 #include "Utility/Utility.hpp"
 
-
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Saturn {
@@ -40,7 +39,6 @@ Renderer::Renderer(CreateInfo create_info) :
     setup_framebuffer(create_info);
     create_default_viewport(create_info);
     initialize_postprocessing();
-
 }
 
 Renderer::~Renderer() {}
@@ -49,10 +47,14 @@ void Renderer::clear(
     Color clear_color,
     GLenum flags /*= GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT*/) {
 
-    Framebuffer::bind(framebuf);
-
+	Framebuffer::bind(framebuf);
     glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
     glClear(flags);
+
+	for (auto& stage : post_render_stages) {
+		stage->clear({clear_color.r, clear_color.g, clear_color.b, clear_color.a}, flags);
+	}
+    Framebuffer::bind(framebuf);
 }
 
 void Renderer::render_scene(Scene& scene) {

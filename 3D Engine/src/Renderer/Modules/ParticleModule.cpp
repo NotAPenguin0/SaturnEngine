@@ -10,10 +10,10 @@ namespace Saturn::RenderModules {
 ParticleModule::ParticleModule() : RenderModule(1) {}
 
 void ParticleModule::init() {
-    particle_shader =
-        AssetManager<Shader>::get_resource("config/resources/shaders/particle.sh", true);
-    default_texture =
-        AssetManager<Texture>::get_resource("config/resources/textures/white.tex", true);
+    particle_shader = AssetManager<Shader>::get_resource(
+        "config/resources/shaders/particle.sh", true);
+    default_texture = AssetManager<Texture>::get_resource(
+        "config/resources/textures/white.tex", true);
 }
 
 void ParticleModule::process(Scene& scene,
@@ -23,8 +23,12 @@ void ParticleModule::process(Scene& scene,
     Shader::bind(particle_shader.get());
 
     glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
     for (auto [emitter] : scene.get_ecs().select<ParticleEmitter>()) {
-        if (emitter.additive) { glBlendFunc(GL_SRC_ALPHA, GL_ONE); }
+		glEnable(GL_BLEND);
+        if (emitter.additive) {
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        }
         // Bind VAO
         VertexArray::bind(emitter.particle_vao.get());
 
@@ -35,9 +39,9 @@ void ParticleModule::process(Scene& scene,
         particle_shader->set_int(Shader::Uniforms::Texture,
                                  texture.unit() - GL_TEXTURE0);
 
-        glDrawElementsInstanced(
-            GL_TRIANGLES, emitter.particle_vao->index_size(), GL_UNSIGNED_INT,
-            nullptr, emitter.particles.size());
+        glDrawElementsInstanced(GL_TRIANGLES, emitter.particle_vao->index_size(),
+                                GL_UNSIGNED_INT, nullptr,
+                                emitter.particles.size());
 
         Texture::unbind(texture);
 
@@ -46,6 +50,7 @@ void ParticleModule::process(Scene& scene,
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         }
     }
+	glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 }
 
