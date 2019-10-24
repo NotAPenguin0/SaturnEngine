@@ -5,9 +5,13 @@
 
 namespace Saturn::Components {
 
-struct COMPONENT DEFAULT_SERIALIZE FreeLookController : public ComponentBase {
+// clang-format off
+struct [[saturn::component, saturn::default_serialize]] FreeLookController
+    : public ComponentBase {
+	[[saturn::tooltip("The sensitivity of the mouse controller")]]
     float mouse_sensitivity;
 };
+// clang-format on
 
 } // namespace Saturn::Components
 

@@ -207,6 +207,9 @@ void UIPass::process(Scene& scene, Framebuffer& source) {
     // First, blit the scene view to our target buffer, then render the UI
     // to the UI buffer and blit both on the target buffer
 
+	glDisable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
+
     // Blit source buffer to target buffer
     impl::blit_framebuffer(source, target, *blit_shader, quad);
 
@@ -216,9 +219,6 @@ void UIPass::process(Scene& scene, Framebuffer& source) {
             glm::vec2(canvas.size.x * source.get_size().x,
                       canvas.size.y * source.get_size().y);
         impl::resize_if_needed(ui_buffer, ui_size_pixels);
-
-        glDisable(GL_CULL_FACE);
-        glDisable(GL_DEPTH_TEST);
 
         // Render UI
 

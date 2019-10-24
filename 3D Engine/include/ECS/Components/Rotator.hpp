@@ -7,10 +7,17 @@
 
 namespace Saturn::Components {
 
-struct COMPONENT DEFAULT_SERIALIZE Rotator : public ComponentBase {
+// clang-format off
+struct [[saturn::component, saturn::default_serialize]] Rotator
+    : public ComponentBase {
+
+	[[saturn::tooltip("Speed at which to rotate")]]
     float speed;
-    glm::vec3 euler_angles;
+    
+	[[saturn::tooltip("The angles around which to rotate (in degrees).")]]
+	glm::vec3 euler_angles;
 };
+// clang-format on
 
 } // namespace Saturn::Components
 

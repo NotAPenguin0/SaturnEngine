@@ -5,8 +5,10 @@
 #include <string>
 
 namespace Saturn::Components {
-
-struct COMPONENT DEFAULT_SERIALIZE HIDE_IN_EDITOR Name : ComponentBase {
+// clang-format off
+struct [[saturn::component, saturn::default_serialize, saturn::hide_in_editor]] Name
+    : ComponentBase {
+    // clang-format on
     std::string name;
 };
 

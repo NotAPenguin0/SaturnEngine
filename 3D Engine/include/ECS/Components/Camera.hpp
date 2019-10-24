@@ -8,14 +8,20 @@
 namespace Saturn {
 
 namespace Components {
+// clang-format off
+struct [[saturn::component, saturn::default_serialize]] Camera
+    : public ComponentBase {
+    [[saturn::tooltip("Front vector of the camera.")]] 
+	glm::vec3 front;
+    [[saturn::tooltip("Up vector of the camera.")]] 
+	glm::vec3 up;
 
-struct COMPONENT DEFAULT_SERIALIZE Camera : public ComponentBase {
-    glm::vec3 front;
-    glm::vec3 up;
-
+    [[saturn::tooltip("Camera field of view (in degrees).")]] 
 	float fov;
+    [[saturn::tooltip("Id of the viewport that this camera is assigned to.")]] 
 	unsigned int viewport_id = 0;
 };
+// clang-format on
 
 } // namespace Components
 

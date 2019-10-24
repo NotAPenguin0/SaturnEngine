@@ -9,11 +9,17 @@ namespace Saturn::Components {
 
 // There is only one canvas in each scene. If there are more, only the first
 // will be used
-struct COMPONENT DEFAULT_SERIALIZE Canvas : ComponentBase {
-    glm::vec2 position;
+// clang-format off
+struct [[saturn::component, saturn::default_serialize]] Canvas
+    : ComponentBase {
+    [[saturn::tooltip("The position of the canvas in 2D screen coordinates ranging from 0 to 1. Left top is (0, 0).")]] 
+	glm::vec2 position;
+	[[saturn::tooltip("Size of the canvas relative to the screen size.")]]
     glm::vec2 size;
-	float opacity;
+	[[saturn::tooltip("Opacity of the UI overlay drawn on this canvas.")]]
+    float opacity;
 };
+// clang-format on
 
 } // namespace Saturn::Components
 

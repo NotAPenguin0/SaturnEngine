@@ -7,12 +7,17 @@
 namespace Saturn::Components {
 
 // Every scene must have exactly one SoundListener component
-struct COMPONENT DEFAULT_SERIALIZE SoundListener : ComponentBase {
+// clang-format off
+struct [[saturn::component, saturn::default_serialize]] SoundListener
+    : ComponentBase {
     // position (relative to the entity's position)
+	[[saturn::tooltip("Position of the sound listener, relatieve to the entity position")]]
     glm::vec3 position;
-	// forward vector
-	glm::vec3 forward;
+    // forward vector
+	[[saturn::tooltip("The forward vector of the listener")]]
+    glm::vec3 forward;
 };
+// clang-format n
 
 } // namespace Saturn::Components
 

@@ -1,25 +1,38 @@
 #ifndef SATURN_MATERIAL_HPP_
 #define SATURN_MATERIAL_HPP_
 
-#include "ComponentBase.hpp"
 #include "AssetManager/Resource.hpp"
+#include "ComponentBase.hpp"
 #include "Renderer/Shader.hpp"
 #include "Renderer/Texture.hpp"
 
 namespace Saturn::Components {
 
-struct COMPONENT DEFAULT_SERIALIZE Material : public ComponentBase {
+// clang-format off
+struct [[saturn::component, saturn::default_serialize]] Material
+    : public ComponentBase {
+
+	[[saturn::tooltip("The shader this material will use.")]]
     Resource<Shader> shader;
-    // Optional
-    /*Resource<Texture> texture;*/
+
+	[[saturn::tooltip("Whether this material is affected by lighting.")]]
     bool lit = true;
 
     // Lighting data
+
+	[[saturn::tooltip("Diffuse texture map.")]]
     Resource<Texture> diffuse_map;
+
+	[[saturn::tooltip("Specular texture map.")]]
     Resource<Texture> specular_map;
-	Resource<Texture> normal_map;
-	float shininess;
+
+	[[saturn::tooltip("Normal map texture.")]]
+    Resource<Texture> normal_map;
+
+	[[saturn::tooltip("Shininess value of the material")]]
+    float shininess;
 };
+// clang-format on
 
 } // namespace Saturn::Components
 

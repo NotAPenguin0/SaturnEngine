@@ -13,11 +13,15 @@ set(MUSTACHE_INCLUDE_DIR
 set(SERIALIZATION_SOURCE_FILES
 	${SERIALIZATION_SOURCE_FILES}
 	"${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/Parser.cpp"
 )
 
-include_directories(${LIBCLANG_INCLUDE_DIR})
-include_directories(${MUSTACHE_INCLUDE_DIR})
+set(SERIALIZATION_HEADER_FILES
+	${SERIALIZATION_HEADER_FILES}
+	${CMAKE_CURRENT_SOURCE_DIR}/Parser.hpp
+)
 
+add_subdirectory(cppast)
 
 # Add targets
 add_executable(SerializationCodeGen
@@ -26,10 +30,8 @@ add_executable(SerializationCodeGen
 )
 
 target_include_directories(SerializationCodeGen PRIVATE
-	${LIBCLANG_INCLUDE_DIR}
 	${MUSTACHE_INCLUDE_DIR}
 )
 
-
-target_link_libraries(SerializationCodeGen 
-	${CMAKE_CURRENT_SOURCE_DIR}/libclang/lib/libclang.lib)
+# ${CMAKE_CURRENT_SOURCE_DIR}/libclang/lib/libclang.lib 
+target_link_libraries(SerializationCodeGen cppast)

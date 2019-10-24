@@ -3,27 +3,34 @@
 
 // This component is part of a user script. It is not part of the main engine.
 
-#include "ComponentBase.hpp"
 #include "AssetManager/Resource.hpp"
+#include "ComponentBase.hpp"
 
 #include <audeo/audeo.hpp>
 
 namespace Saturn::Systems {
-	class MusicSystem;
+class MusicSystem;
 }
 
 namespace Saturn::Components {
-
-struct COMPONENT DEFAULT_SERIALIZE MusicController : ComponentBase {
+// clang-format off
+struct [[saturn::component, saturn::default_serialize]] MusicController
+    : ComponentBase {
     friend class Systems::MusicSystem;
 
+	[[saturn::tooltip("The music source to play.")]]
     Resource<audeo::SoundSource> music;
+
+	[[saturn::tooltip("Whether to loop the music when it has finished playing.")]]
     bool loop;
+
+	[[saturn::tooltip("The amount of ms to fade in the music when starting playback.")]]
     float fade_in_ms;
 
 private:
     bool is_playing = false;
 };
+// clang-format on
 
 } // namespace Saturn::Components
 

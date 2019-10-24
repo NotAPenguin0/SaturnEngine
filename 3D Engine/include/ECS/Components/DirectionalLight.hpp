@@ -6,12 +6,22 @@
 
 namespace Saturn::Components {
 
-struct COMPONENT DEFAULT_SERIALIZE DirectionalLight : public ComponentBase {
-    color3 ambient;
+// clang-format off
+struct [[saturn::component, saturn::default_serialize]] DirectionalLight
+    : public ComponentBase {
+    [[saturn::tooltip("Ambient light color.")]]
+	color3 ambient;
+
+	[[saturn::tooltip("Diffuse light color.")]]
     color3 diffuse;
+
+	[[saturn::tooltip("Specular light color.")]]
     color3 specular;
+
+	[[saturn::tooltip("Light direction vector.")]]
     glm::vec3 direction;
 };
+// clang-format on
 
 } // namespace Saturn::Components
 

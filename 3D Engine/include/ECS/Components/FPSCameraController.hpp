@@ -4,11 +4,14 @@
 #include "ComponentBase.hpp"
 
 namespace Saturn::Components {
-
-struct COMPONENT DEFAULT_SERIALIZE FPSCameraController : public ComponentBase {
-	// Movement speed
+// clang-format off
+struct [[saturn::component, saturn::default_serialize]] FPSCameraController
+    : public ComponentBase {
+    // Movement speed
+	[[saturn::tooltip("The movement speed")]]
     float speed;
 };
+// clang-format on
 
 } // namespace Saturn::Components
 

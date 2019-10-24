@@ -71,50 +71,80 @@ std::vector<std::string_view> get_component_categories() {
 }
 
 struct ComponentFieldVisitor {
-
+    using ComponentMeta = Saturn::Meta::ComponentsMeta<COMPONENT_LIST>;
+    using FieldMeta = Saturn::Meta::ComponentInfo::FieldMeta;
     // Define overloaded visitor for all types supported in
     // ComponentMetaInfo.hpp
 
     std::string_view field_name;
+    const FieldMeta* field_meta;
 
     static constexpr float sensitivity = 0.005f;
+
+    void display_tooltip() {
+        if (!field_meta) return;
+        ImGui::TextDisabled("(?)");
+        if (ImGui::IsItemHovered()) {
+            ImGui::BeginTooltip();
+            ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+            ImGui::TextUnformatted(field_meta->tooltip.c_str());
+            ImGui::PopTextWrapPos();
+            ImGui::EndTooltip();
+        }
+    }
 
     void operator()(std::size_t* field) {
         ImGui::DragScalar(field_name.data(), ImGuiDataType_U64, field,
                           sensitivity);
+		ImGui::SameLine();
+		display_tooltip();
     }
 
     void operator()(unsigned int* field) {
         ImGui::DragScalar(field_name.data(), ImGuiDataType_U64, field,
                           sensitivity);
+        ImGui::SameLine();
+        display_tooltip();
     }
 
     void operator()(float* field) {
         ImGui::DragScalar(field_name.data(), ImGuiDataType_Float, field,
                           sensitivity);
+        ImGui::SameLine();
+        display_tooltip();
     }
 
     void operator()(int* field) {
         ImGui::DragScalar(field_name.data(), ImGuiDataType_S32, field,
                           sensitivity);
+        ImGui::SameLine();
+        display_tooltip();
     }
 
     void operator()(std::string* field) {
         static constexpr std::size_t buf_size = 128;
         field->resize(buf_size);
         ImGui::InputText(field_name.data(), field->data(), buf_size);
+        ImGui::SameLine();
+        display_tooltip();
     }
 
     void operator()(glm::vec2* field) {
         ImGui::DragFloat2(field_name.data(), &field->x, sensitivity);
+        ImGui::SameLine();
+        display_tooltip();
     }
 
     void operator()(glm::vec3* field) {
         ImGui::DragFloat3(field_name.data(), &field->x, sensitivity);
+        ImGui::SameLine();
+        display_tooltip();
     }
 
     void operator()(glm::vec4* field) {
         ImGui::DragFloat4(field_name.data(), &field->x, sensitivity);
+        ImGui::SameLine();
+        display_tooltip();
     }
 
     void operator()(glm::bvec3* field) {
@@ -125,16 +155,26 @@ struct ComponentFieldVisitor {
         ImGui::Checkbox("y", &field->y);
         ImGui::SameLine();
         ImGui::Checkbox("z", &field->z);
+        ImGui::SameLine();
+        display_tooltip();
     }
 
-    void operator()(bool* field) { ImGui::Checkbox(field_name.data(), field); }
+    void operator()(bool* field) {
+        ImGui::Checkbox(field_name.data(), field);
+        ImGui::SameLine();
+        display_tooltip();
+    }
 
     void operator()(color3* field) {
         ImGui::ColorEdit3(std::string(field_name).c_str(), &field->x);
+        ImGui::SameLine();
+        display_tooltip();
     }
 
     void operator()(color4* field) {
         ImGui::ColorEdit4(std::string(field_name).c_str(), &field->x);
+        ImGui::SameLine();
+        display_tooltip();
     }
 
     void operator()(ui_anchors::anchor_t* field) {
@@ -145,11 +185,15 @@ struct ComponentFieldVisitor {
             }
             ImGui::EndCombo();
         }
+        ImGui::SameLine();
+        display_tooltip();
     }
 
     template<typename R>
     void operator()(Resource<R>* field) {
         ImGui::Text("%s:", field_name.data());
+        ImGui::SameLine();
+        display_tooltip();
         ImGui::SameLine();
 
         auto icon = AssetManager<Texture>::get_resource(
@@ -228,12 +272,13 @@ void display_component(SceneObject* entity) {
             ImGui::EndPopup();
         }
 
-        for (auto const& [field_name, field_type] : component_meta.fields) {
+        for (auto const& [field_name, field_meta] : component_meta.fields) {
             ComponentFieldPtr field_info =
                 ComponentMeta::get_component_field(comp, field_name);
             // Check if pointer isn't null
             if (!field_info) { continue; }
-            std::visit(ComponentFieldVisitor{field_name}, field_info.get());
+            std::visit(ComponentFieldVisitor{field_name, &field_meta},
+                       field_info.get());
         }
     }
 }
@@ -273,8 +318,9 @@ void display_component<::Saturn::Components::ParticleEmitter>(
         auto display_curve = [](Math::Curve& curve, const char* label,
                                 const char* suffix) {
             static const char* curves[] = {"Constant", "Linear Up",
-                                           "Linear Down"};
-            if (ImGui::BeginCombo(label, curves[static_cast<int>(curve.shape)])) {
+                                           "Linear Down", "Sin"};
+            if (ImGui::BeginCombo(label,
+                                  curves[static_cast<int>(curve.shape)])) {
                 for (size_t i = 0; i < sizeof(curves) / sizeof(const char*);
                      ++i) {
                     if (ImGui::Selectable(curves[i])) {
@@ -333,7 +379,8 @@ void display_component<::Saturn::Components::ParticleEmitter>(
                                            "Box"};
             ImGui::Checkbox("enabled##shape", &comp.shape.enabled);
 
-            if (ImGui::BeginCombo("spawn_shape", shapes[static_cast<int>(comp.shape.shape)])) {
+            if (ImGui::BeginCombo("spawn_shape",
+                                  shapes[static_cast<int>(comp.shape.shape)])) {
                 for (size_t i = 0; i < sizeof(shapes) / sizeof(const char*);
                      ++i) {
                     if (ImGui::Selectable(shapes[i])) {
@@ -341,7 +388,7 @@ void display_component<::Saturn::Components::ParticleEmitter>(
                             static_cast<ParticleEmitter::SpawnShape>(i);
                     }
                 }
-				ImGui::EndCombo();
+                ImGui::EndCombo();
             }
 
             if (comp.shape.shape == ParticleEmitter::SpawnShape::Sphere ||
@@ -362,17 +409,17 @@ void display_component<::Saturn::Components::ParticleEmitter>(
             ImGui::DragFloat("random_position_offset",
                              &comp.shape.random_position_offset, 0.5f);
 
-			if (comp.shape.shape == ParticleEmitter::SpawnShape::Box) {
-				ImGui::DragFloat3("scale##shape", &comp.shape.scale.x, 0.1f);
-			}
+            if (comp.shape.shape == ParticleEmitter::SpawnShape::Box) {
+                ImGui::DragFloat3("scale##shape", &comp.shape.scale.x, 0.1f);
+            }
 
             ImGui::TreePop();
         }
 
-		ImGui::Checkbox("additive##particle_emitter", &comp.additive);
-		// Display texture field
-        ComponentFieldVisitor vst { "texture" };
-		vst(&comp.texture);
+        ImGui::Checkbox("additive##particle_emitter", &comp.additive);
+        // Display texture field
+        ComponentFieldVisitor vst{"texture", nullptr};
+        vst(&comp.texture);
     }
 }
 

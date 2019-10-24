@@ -11,7 +11,7 @@ enable_language(CXX)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 17)
 
-set(ENGINE_COMPILE_FLAGS "-Wno-unused-variable -Wno-unused-function -Wno-unused-parameter")
+set(ENGINE_COMPILE_FLAGS "-Wno-unused-variable -Wno-unused-function -Wno-unused-parameter -Wno-unknown-attributes")
 
 # Define Release by default.
 if(NOT CMAKE_BUILD_TYPE)

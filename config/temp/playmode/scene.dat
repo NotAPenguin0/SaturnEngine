@@ -1,3 +1,6 @@
 config/temp/playmode/entities/Main Camera.json
 config/temp/playmode/entities/Directional Light.json
 config/temp/playmode/entities/Fire.json
+config/temp/playmode/entities/Portal Particles.json
+config/temp/playmode/entities/SinCurve.json
+config/temp/playmode/entities/Blob.json

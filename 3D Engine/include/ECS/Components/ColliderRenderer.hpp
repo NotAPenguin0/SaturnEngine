@@ -5,8 +5,9 @@
 
 namespace Saturn::Components {
 
-struct COMPONENT DEFAULT_SERIALIZE HIDE_IN_EDITOR ColliderRenderer
-    : ComponentBase {};
+struct [[saturn::component,
+         saturn::default_serialize,
+         saturn::hide_in_editor]] ColliderRenderer : ComponentBase{};
 
 } // namespace Saturn::Components
 

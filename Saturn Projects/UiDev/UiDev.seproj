@@ -1,7 +1,7 @@
 2
 scenes\main_scene
 scenes\Particles
-7
+8
 PreRenderStage DepthMapPass
 RenderModule DebugModule
 RenderModule MeshRenderModule
@@ -9,6 +9,7 @@ RenderModule ParticleModule
 RenderModule TransferModule
 PostRenderStage BlitPass
 PostRenderStage UIPass
+RenderModule EditorModule
 asset texture assets/textures/brickwall.tex
 asset texture assets/textures/brickwall_normal.tex
 asset texture assets/textures/brickwall_specular.tex

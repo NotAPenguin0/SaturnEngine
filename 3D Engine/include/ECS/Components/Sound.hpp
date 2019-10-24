@@ -7,9 +7,12 @@
 
 namespace Saturn::Components {
 
-struct COMPONENT HIDE_IN_EDITOR Sound : ComponentBase {
+// clang-format off
+struct [[saturn::component]] Sound : ComponentBase {
+	[[saturn::tooltip("The sound handle this sound component refers to.")]]
     audeo::Sound sound;
 };
+// clang-format on
 
 } // namespace Saturn::Components
 

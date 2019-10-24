@@ -33,7 +33,12 @@ struct ComponentInfo {
 	bool editor_only;
 	bool default_serialize;
     using type_name_t = std::string;
-    std::unordered_map<std::string, type_name_t> fields;
+	struct FieldMeta {
+		type_name_t type;
+		std::string tooltip;
+	};
+	
+    std::unordered_map<std::string, FieldMeta> fields;
 };
 
 class ComponentFieldPtr {

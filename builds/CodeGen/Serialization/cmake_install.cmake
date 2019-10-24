@@ -32,3 +32,9 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "FALSE")
 endif()
 
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for each subdirectory.
+  include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/CodeGen/Serialization/cppast/cmake_install.cmake")
+
+endif()
+

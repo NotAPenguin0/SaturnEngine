@@ -41,6 +41,8 @@ BZIP2_LIBRARY_RELEASE:FILEPATH=BZIP2_LIBRARY_RELEASE-NOTFOUND
 //Path to a program.
 BZRCOMMAND:FILEPATH=BZRCOMMAND-NOTFOUND
 
+CLANG_BINARY:FILEPATH=C:/Program Files/LLVM/bin/clang++.exe
+
 CMAKE_BUILD_TYPE:STRING=Editor
 
 //Semicolon separated list of supported configuration types, only
@@ -323,6 +325,15 @@ CPACK_SOURCE_7Z:BOOL=ON
 //Enable to build ZIP source packages
 CPACK_SOURCE_ZIP:BOOL=ON
 
+//whether or not to build the examples
+CPPAST_BUILD_EXAMPLE:BOOL=OFF
+
+//whether or not to build the tests
+CPPAST_BUILD_TEST:BOOL=OFF
+
+//whether or not to build the tool
+CPPAST_BUILD_TOOL:BOOL=OFF
+
 //How many times to retry timed-out CTest submissions.
 CTEST_SUBMIT_RETRY_COUNT:STRING=3
 
@@ -337,6 +348,28 @@ CVS_UPDATE_OPTIONS:STRING=-d -A -P
 
 //Maximum time allowed before CTest will kill the test.
 DART_TESTING_TIMEOUT:STRING=1500
+
+//override of DEBUG_ASSERT_ASSUME macro
+DEBUG_ASSERT_ASSUME:STRING=
+
+//Value Computed by CMake
+DEBUG_ASSERT_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/CodeGen/Serialization/cppast/external/type_safe/external/debug_assert
+
+//completely disable assertion macro
+DEBUG_ASSERT_DISABLE:BOOL=OFF
+
+//override of DEBUG_ASSERT_FORCE_INLINE macro
+DEBUG_ASSERT_FORCE_INLINE:STRING=
+
+//override of DEBUG_ASSERT_MARK_UNREACHABLE
+DEBUG_ASSERT_MARK_UNREACHABLE:STRING=
+
+//whether or not the default_handler uses fprintf() to print an
+// error message
+DEBUG_ASSERT_NO_STDIO:BOOL=OFF
+
+//Value Computed by CMake
+DEBUG_ASSERT_SOURCE_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/CodeGen/Serialization/cppast/external/type_safe/external/debug_assert
 
 //Doxygen documentation generation tool (http://www.doxygen.org)
 DOXYGEN_EXECUTABLE:FILEPATH=C:/Program Files/doxygen/bin/doxygen.exe
@@ -488,6 +521,15 @@ JSON_Sanitizer:BOOL=OFF
 //Execute test suite with Valgrind
 JSON_Valgrind:BOOL=OFF
 
+LIBCLANG_INCLUDE_DIR:PATH=C:/Users/michi_000/Desktop/C++/SaturnEngine/CodeGen/Serialization/libclang/include
+
+LIBCLANG_LIBRARY:PATH=C:/Users/michi_000/Desktop/C++/SaturnEngine/CodeGen/Serialization/libclang/lib/libclang.lib
+
+//the preferred LLVM version
+LLVM_PREFERRED_VERSION:STRING=9.0.0
+
+LLVM_VERSION_EXPLICIT:STRING=9.0.0
+
 //Command to build the project
 MAKECOMMAND:STRING=C:\Users\michi_000\Downloads\cmake-3.13.2-win64-x64\cmake-3.13.2-win64-x64\bin\cmake.exe --build . --config "${CTEST_CONFIGURATION_TYPE}"
 
@@ -540,6 +582,31 @@ Serialization_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/buil
 //Value Computed by CMake
 Serialization_SOURCE_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/CodeGen/Serialization
 
+//whether or not the undefined_behavior_arithmetic policy is used
+TYPE_SAFE_ARITHMETIC_UB:BOOL=ON
+
+//Value Computed by CMake
+TYPE_SAFE_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/CodeGen/Serialization/cppast/external/type_safe
+
+//generate documentation
+TYPE_SAFE_BUILD_DOC:BOOL=OFF
+
+//build test and example
+TYPE_SAFE_BUILD_TEST_EXAMPLE:BOOL=OFF
+
+//whether or not to enable internal assertions for the type_safe
+// library
+TYPE_SAFE_ENABLE_ASSERTIONS:BOOL=OFF
+
+//whether or not to enable precondition checks
+TYPE_SAFE_ENABLE_PRECONDITION_CHECKS:BOOL=ON
+
+//whether or not the wrappers in types.hpp are used
+TYPE_SAFE_ENABLE_WRAPPER:BOOL=ON
+
+//Value Computed by CMake
+TYPE_SAFE_SOURCE_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/CodeGen/Serialization/cppast/external/type_safe
+
 //Use MSVC runtime library DLL
 USE_MSVC_RUNTIME_LIBRARY_DLL:BOOL=ON
 
@@ -562,6 +629,18 @@ audeo_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D En
 
 //Value Computed by CMake
 audeo_SOURCE_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/audeo
+
+//Value Computed by CMake
+cppast_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/CodeGen/Serialization/cppast
+
+//Dependencies for the target
+cppast_LIB_DEPENDS:STATIC=general;_cppast_tiny_process;
+
+//Value Computed by CMake
+cppast_SOURCE_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/CodeGen/Serialization/cppast
+
+//The directory containing a CMake configuration file for debug_assert.
+debug_assert_DIR:PATH=debug_assert_DIR-NOTFOUND
 
 //Value Computed by CMake
 efsw_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/efsw
@@ -587,11 +666,20 @@ glm_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engi
 //Value Computed by CMake
 glm_SOURCE_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/glm
 
+//Path to a program.
+llvm_config_binary_no_suffix:FILEPATH=llvm_config_binary_no_suffix-NOTFOUND
+
+//Path to a program.
+llvm_config_binary_suffix:FILEPATH=llvm_config_binary_suffix-NOTFOUND
+
 //Value Computed by CMake
 nlohmann_json_BINARY_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/nlohmann_json
 
 //Value Computed by CMake
 nlohmann_json_SOURCE_DIR:STATIC=C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/nlohmann_json
+
+//The directory containing a CMake configuration file for type_safe.
+type_safe_DIR:PATH=type_safe_DIR-NOTFOUND
 
 
 ########################
@@ -732,7 +820,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO
 CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=19
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=23
 //Platform information initialized
 CMAKE_PLATFORM_INFO_INITIALIZED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_RC_COMPILER
@@ -824,6 +912,8 @@ HAVE_OPEN:INTERNAL=1
 HAVE_STRTOD_L:INTERNAL=1
 //ADVANCED property for variable: HGCOMMAND
 HGCOMMAND-ADVANCED:INTERNAL=1
+LLVM_CONFIG_BINARY:INTERNAL=llvm_config_binary_suffix-NOTFOUND
+LLVM_VERSION:INTERNAL=9.0.0
 //ADVANCED property for variable: MAKECOMMAND
 MAKECOMMAND-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: MEMORYCHECK_COMMAND
