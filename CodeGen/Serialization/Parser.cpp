@@ -26,16 +26,14 @@ struct ast_visitor {
     }
 
     bool has_attribute(cppast::cpp_entity const& e,
-                       std::string_view scope,
+
                        std::string_view attr) {
 
         auto const& attributes = e.attributes();
         return std::find_if(
                    attributes.begin(), attributes.end(),
-                   [scope,
-                    attr](cppast::cpp_attribute const& attribute) -> bool {
-                       return attribute.scope() == scope &&
-                              attribute.name() == attr;
+                   [attr](cppast::cpp_attribute const& attribute) -> bool {
+                       return attribute.name() == attr;
                    }) != attributes.end();
     }
 
@@ -49,19 +47,19 @@ struct ast_visitor {
             if (entity.kind() == cppast::cpp_entity_kind::class_t) {
                 // If this entity is a component
                 if (auto const& attributes = entity.attributes();
-                    has_attribute(entity, "saturn", "component")) {
+                    has_attribute(entity, "component")) {
                     in_component = true;
                     in_component_child = false;
                     component_depth = cur_depth;
                     // Grab attributes and name
                     data.name = entity.name();
-                    if (has_attribute(entity, "saturn", "default_serialize")) {
+                    if (has_attribute(entity, "default_serialize")) {
                         data.flags |= ComponentData::Flags::DefaultSerialize;
                     }
-                    if (has_attribute(entity, "saturn", "hide_in_editor")) {
+                    if (has_attribute(entity, "hide_in_editor")) {
                         data.flags |= ComponentData::Flags::HideInEditor;
                     }
-                    if (has_attribute(entity, "saturn", "editor_only")) {
+                    if (has_attribute(entity, "editor_only")) {
                         data.flags |= ComponentData::Flags::EditorOnly;
                     }
                 }
@@ -73,7 +71,7 @@ struct ast_visitor {
         if (info.event == cppast::visitor_info::container_entity_exit) {
             --cur_depth;
             in_component_child =
-                (in_component_child ? (cur_depth == component_depth) : false);
+                (in_component_child ? (cur_depth != component_depth) : false);
             if (cur_depth < component_depth) { in_component = false; }
         }
     }
@@ -83,13 +81,13 @@ struct ast_visitor {
         auto const& attributes = field.attributes();
         for (auto const& attribute : attributes) {
 
-            if (attribute.scope() != "saturn") continue;
             if (attribute.name() == "tooltip") {
                 auto const& args = attribute.arguments();
                 if (!args) { continue; }
                 for (auto const& arg : args.value()) {
-                    /*if (arg.kind == cppast::cpp_token_kind::string_literal) {*/
-                        meta.tooltip = remove_quotes(arg.spelling);
+                    /*if (arg.kind == cppast::cpp_token_kind::string_literal)
+                     * {*/
+                    meta.tooltip = remove_quotes(arg.spelling);
                     /*} else {
                         std::cerr << "Invalid argument for attribute "
                                      "[[saturn::tooltip]]. Expected a string, "
@@ -97,6 +95,12 @@ struct ast_visitor {
                                   << arg.spelling << "\n";
                     }*/
                 }
+            }
+            if (attribute.name() == "do_not_serialize") {
+                meta.do_not_serialize = true;
+            }
+            if (attribute.name() == "hide_in_editor") {
+                meta.hide_in_editor = true;
             }
         }
     }

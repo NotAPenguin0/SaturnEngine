@@ -96,8 +96,8 @@ struct ComponentFieldVisitor {
     void operator()(std::size_t* field) {
         ImGui::DragScalar(field_name.data(), ImGuiDataType_U64, field,
                           sensitivity);
-		ImGui::SameLine();
-		display_tooltip();
+        ImGui::SameLine();
+        display_tooltip();
     }
 
     void operator()(unsigned int* field) {
@@ -273,6 +273,7 @@ void display_component(SceneObject* entity) {
         }
 
         for (auto const& [field_name, field_meta] : component_meta.fields) {
+            if (field_meta.hide_in_editor) { continue; }
             ComponentFieldPtr field_info =
                 ComponentMeta::get_component_field(comp, field_name);
             // Check if pointer isn't null

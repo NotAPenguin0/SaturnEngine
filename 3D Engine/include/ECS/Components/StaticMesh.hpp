@@ -8,13 +8,13 @@
 namespace Saturn::Components {
 
 // clang-format off
-struct [[saturn::component, saturn::default_serialize]] StaticMesh
+struct [[component, default_serialize]] StaticMesh
     : public ComponentBase {
 
-	[[saturn::tooltip("The mesh resource that will be rendered")]]
+	[[tooltip("The mesh resource that will be rendered")]]
     Resource<Mesh> mesh;
 
-	[[saturn::tooltip("Whether to do face culling on the mesh. Usually you want this, except for planes.")]]
+	[[tooltip("Whether to do face culling on the mesh. Usually you want this, except for planes.")]]
     bool face_cull = true;
 };
 // clang-format on

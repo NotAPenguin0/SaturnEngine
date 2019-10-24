@@ -13,23 +13,23 @@
 
 namespace Saturn::Components {
 // clang-format off
-struct [[saturn::component, saturn::default_serialize]] Text : ComponentBase {
-	[[saturn::tooltip("The text string to display.")]]
+struct [[component, default_serialize]] Text : ComponentBase {
+	[[tooltip("The text string to display.")]]
     std::string text;
 
-	[[saturn::tooltip("Position on the UI canvas, relative to it's size.")]]
+	[[tooltip("Position on the UI canvas, relative to it's size.")]]
     glm::vec2 position;
 
-	[[saturn::tooltip("Size of the text.")]]
+	[[tooltip("Size of the text.")]]
     glm::vec2 size;
 
-	[[saturn::tooltip("Text color.")]]
+	[[tooltip("Text color.")]]
     color3 color;
 
-	[[saturn::tooltip("Font resource to render the text with.")]]
+	[[tooltip("Font resource to render the text with.")]]
     Resource<Font> font;
 
-	[[saturn::tooltip("UI anchor to align the text with.")]]
+	[[tooltip("UI anchor to align the text with.")]]
     ui_anchors::anchor_t anchor;
 };
 // clang-format on

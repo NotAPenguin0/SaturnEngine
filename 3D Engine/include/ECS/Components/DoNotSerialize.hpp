@@ -5,7 +5,7 @@
 
 namespace Saturn::Components {
 
-struct [[saturn::component, saturn::hide_in_editor]] DoNotSerialize : public ComponentBase {};
+struct [[component, hide_in_editor]] DoNotSerialize : public ComponentBase {};
 
 } // namespace Saturn::Components
 

@@ -6,6 +6,7 @@
 #define MVG_COMPONENTS_HPP_
 
 #include "Components/BoxCollider.hpp"
+#include "Components/Button.hpp"
 #include "Components/Camera.hpp"
 #include "Components/CameraZoomController.hpp"
 #include "Components/Canvas.hpp"

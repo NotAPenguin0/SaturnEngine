@@ -8,8 +8,8 @@
 namespace Saturn::Components {
 
 // clang-format off
-struct [[saturn::component]] Sound : ComponentBase {
-	[[saturn::tooltip("The sound handle this sound component refers to.")]]
+struct [[component]] Sound : ComponentBase {
+	[[tooltip("The sound handle this sound component refers to.")]]
     audeo::Sound sound;
 };
 // clang-format on

@@ -37,6 +37,8 @@ struct ComponentData {
     struct FieldMeta {
         std::string type;
         std::string tooltip;
+        bool hide_in_editor = false;
+        bool do_not_serialize = false;
 	};
 
     std::string name;

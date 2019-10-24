@@ -9,27 +9,27 @@
 namespace Saturn::Components {
 
 // clang-format off
-struct [[saturn::component, saturn::default_serialize]] Material
+struct [[component, default_serialize]] Material
     : public ComponentBase {
 
-	[[saturn::tooltip("The shader this material will use.")]]
+	[[tooltip("The shader this material will use.")]]
     Resource<Shader> shader;
 
-	[[saturn::tooltip("Whether this material is affected by lighting.")]]
+	[[tooltip("Whether this material is affected by lighting.")]]
     bool lit = true;
 
     // Lighting data
 
-	[[saturn::tooltip("Diffuse texture map.")]]
+	[[tooltip("Diffuse texture map.")]]
     Resource<Texture> diffuse_map;
 
-	[[saturn::tooltip("Specular texture map.")]]
+	[[tooltip("Specular texture map.")]]
     Resource<Texture> specular_map;
 
-	[[saturn::tooltip("Normal map texture.")]]
+	[[tooltip("Normal map texture.")]]
     Resource<Texture> normal_map;
 
-	[[saturn::tooltip("Shininess value of the material")]]
+	[[tooltip("Shininess value of the material")]]
     float shininess;
 };
 // clang-format on

@@ -10,18 +10,18 @@
 
 namespace Saturn::Components {
 // clang-format off
-struct [[saturn::component, saturn::default_serialize]] Image : ComponentBase {
+struct [[component, default_serialize]] Image : ComponentBase {
 
-	[[saturn::tooltip("Position on the UI canvas, relative to it's size.")]]
+	[[tooltip("Position on the UI canvas, relative to it's size.")]]
     glm::vec2 position;
 
-	[[saturn::tooltip("Size of the image.")]]
+	[[tooltip("Size of the image.")]]
     glm::vec2 size;
 
-	[[saturn::tooltip("The image to display.")]]
+	[[tooltip("The image to display.")]]
     Resource<Texture> image;
 
-	[[saturn::tooltip("UI anchor to align the image with.")]]
+	[[tooltip("UI anchor to align the image with.")]]
     ui_anchors::anchor_t anchor;
 };
 // clang-format on

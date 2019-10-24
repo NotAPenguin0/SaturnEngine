@@ -7,9 +7,9 @@
 namespace Saturn::Components {
 
 // Controls and Editor Camera
-struct [[saturn::component,
-         saturn::default_serialize,
-         saturn::hide_in_editor]] EditorCameraController
+struct [[component,
+         default_serialize,
+         hide_in_editor]] EditorCameraController
     : public ComponentBase {
     float speed;
     float sensitivity;

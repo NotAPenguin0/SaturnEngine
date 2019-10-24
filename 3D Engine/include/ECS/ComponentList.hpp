@@ -5,6 +5,7 @@
 
 #define COMPONENT_LIST \
 ::Saturn::Components::BoxCollider, \
+::Saturn::Components::Button, \
 ::Saturn::Components::Camera, \
 ::Saturn::Components::CameraZoomController, \
 ::Saturn::Components::Canvas, \

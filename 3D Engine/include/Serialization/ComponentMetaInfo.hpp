@@ -36,6 +36,8 @@ struct ComponentInfo {
 	struct FieldMeta {
 		type_name_t type;
 		std::string tooltip;
+		bool do_not_serialize;
+		bool hide_in_editor;
 	};
 	
     std::unordered_map<std::string, FieldMeta> fields;
@@ -108,13 +110,34 @@ public:
 		// return nullptr if the field was not found
 		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
 	}
+    static ComponentFieldPtr get_component_field(Components::Button& comp,
+                                                 std::string_view field_name) {
+		if (field_name == "position") {
+			return ComponentFieldPtr(&comp.position);
+		}
+		if (field_name == "image") {
+			return ComponentFieldPtr(&comp.image);
+		}
+		if (field_name == "size") {
+			return ComponentFieldPtr(&comp.size);
+		}
+		if (field_name == "anchor") {
+			return ComponentFieldPtr(&comp.anchor);
+		}
+		if (field_name == "color") {
+			return ComponentFieldPtr(&comp.color);
+		}
+		
+		// return nullptr if the field was not found
+		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
+	}
     static ComponentFieldPtr get_component_field(Components::Camera& comp,
                                                  std::string_view field_name) {
-		if (field_name == "front") {
-			return ComponentFieldPtr(&comp.front);
-		}
 		if (field_name == "up") {
 			return ComponentFieldPtr(&comp.up);
+		}
+		if (field_name == "front") {
+			return ComponentFieldPtr(&comp.front);
 		}
 		if (field_name == "fov") {
 			return ComponentFieldPtr(&comp.fov);
@@ -259,11 +282,11 @@ public:
 	}
     static ComponentFieldPtr get_component_field(Components::Material& comp,
                                                  std::string_view field_name) {
-		if (field_name == "diffuse_map") {
-			return ComponentFieldPtr(&comp.diffuse_map);
-		}
 		if (field_name == "shader") {
 			return ComponentFieldPtr(&comp.shader);
+		}
+		if (field_name == "diffuse_map") {
+			return ComponentFieldPtr(&comp.diffuse_map);
 		}
 		if (field_name == "lit") {
 			return ComponentFieldPtr(&comp.lit);
@@ -334,11 +357,11 @@ public:
 	}
     static ComponentFieldPtr get_component_field(Components::Rigidbody& comp,
                                                  std::string_view field_name) {
-		if (field_name == "mass") {
-			return ComponentFieldPtr(&comp.mass);
-		}
 		if (field_name == "locked_axes") {
 			return ComponentFieldPtr(&comp.locked_axes);
+		}
+		if (field_name == "mass") {
+			return ComponentFieldPtr(&comp.mass);
 		}
 		
 		// return nullptr if the field was not found

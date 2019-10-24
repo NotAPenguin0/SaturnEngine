@@ -10,6 +10,7 @@
 namespace Saturn::Components {
         
 struct BoxCollider;
+struct Button;
 struct Camera;
 struct CameraZoomController;
 struct Canvas;
@@ -34,6 +35,7 @@ struct Text;
 struct Transform;
 
 void from_json(nlohmann::json const& json, BoxCollider& component);
+void from_json(nlohmann::json const& json, Button& component);
 void from_json(nlohmann::json const& json, Camera& component);
 void from_json(nlohmann::json const& json, CameraZoomController& component);
 void from_json(nlohmann::json const& json, Canvas& component);
@@ -58,6 +60,7 @@ void from_json(nlohmann::json const& json, Text& component);
 void from_json(nlohmann::json const& json, Transform& component);
 
 void to_json(nlohmann::json& json, BoxCollider const& component);
+void to_json(nlohmann::json& json, Button const& component);
 void to_json(nlohmann::json& json, Camera const& component);
 void to_json(nlohmann::json& json, CameraZoomController const& component);
 void to_json(nlohmann::json& json, Canvas const& component);

@@ -58,6 +58,13 @@ void from_json(nlohmann::json const& j, SceneObject& obj) {
 		j.get_to(c);
 		
 	}
+	// Deserialization for Button component
+	if (auto const& component = j.find("ButtonComponent"); component != j.end()) {
+		auto& c = obj.get_scene()->get_ecs().get_with_id<Button>(
+			obj.add_component<Button>());
+		j.get_to(c);
+		
+	}
 	// Deserialization for Camera component
 	if (auto const& component = j.find("CameraComponent"); component != j.end()) {
 		auto& c = obj.get_scene()->get_ecs().get_with_id<Camera>(

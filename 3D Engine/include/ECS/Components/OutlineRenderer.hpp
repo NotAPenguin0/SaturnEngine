@@ -6,9 +6,9 @@
 
 namespace Saturn::Components {
 
-struct [[saturn::component,
-         saturn::default_serialize,
-         saturn::hide_in_editor]] OutlineRenderer : public ComponentBase {
+struct [[component,
+         default_serialize,
+         hide_in_editor]] OutlineRenderer : public ComponentBase {
     color3 color;
 };
 

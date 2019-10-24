@@ -14,17 +14,17 @@ class MusicSystem;
 
 namespace Saturn::Components {
 // clang-format off
-struct [[saturn::component, saturn::default_serialize]] MusicController
+struct [[component, default_serialize]] MusicController
     : ComponentBase {
     friend class Systems::MusicSystem;
 
-	[[saturn::tooltip("The music source to play.")]]
+	[[tooltip("The music source to play.")]]
     Resource<audeo::SoundSource> music;
 
-	[[saturn::tooltip("Whether to loop the music when it has finished playing.")]]
+	[[tooltip("Whether to loop the music when it has finished playing.")]]
     bool loop;
 
-	[[saturn::tooltip("The amount of ms to fade in the music when starting playback.")]]
+	[[tooltip("The amount of ms to fade in the music when starting playback.")]]
     float fade_in_ms;
 
 private:

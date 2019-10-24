@@ -7,16 +7,16 @@
 namespace Saturn::Components {
 
 // clang-format off
-struct [[saturn::component, saturn::default_serialize]] CameraZoomController
+struct [[component, default_serialize]] CameraZoomController
     : public ComponentBase {
-    [[saturn::tooltip("The speed of the zoom. Note that zoom corresponds to FOV.")]] 
+    [[tooltip("The speed of the zoom. Note that zoom corresponds to FOV.")]] 
 	float zoom_speed;
 
     // minimum zoom. Has to be > 0
-	[[saturn::tooltip("Minimum zoom in degrees. Always greater than zero.")]]
+	[[tooltip("Minimum zoom in degrees. Always greater than zero.")]]
     float min_zoom = 1.0f;
     // maximum zoom. Has to be < 180.0f
-	[[saturn::tooltip("Maximum zoom in degrees. Has to be smaller than 180")]]
+	[[tooltip("Maximum zoom in degrees. Has to be smaller than 180")]]
     float max_zoom = 45.0f;
 };
 // clang-format on

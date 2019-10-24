@@ -57,7 +57,6 @@ struct OutputFiles {
     fs::path component_meta_header;
 };
 
-
 Directories get_directories(fs::path const& main) {
     fs::path include_directory = main / "include";
     fs::path source_directory = main / "src";
@@ -208,6 +207,7 @@ void add_from_json_impl_data(mustache::data& data,
 
         // Add fields
         for (auto const& [field, meta] : component.fields) {
+            if (meta.do_not_serialize) { continue; }
             mustache::data field_data = mustache::data::type::object;
             if (meta.type == "audeo::Sound") continue;
             field_data["FieldName"] = field;
@@ -348,6 +348,7 @@ generate_components_meta_info(std::vector<ComponentData> const& components) {
             field_data["FieldName"] = field_name;
             field_data["FieldType"] = field_meta.type;
             field_data["FieldTooltip"] = field_meta.tooltip;
+            field_data["FieldHideInEditor"] = bool_str(field_meta.hide_in_editor);
             fields_data_list.push_back(field_data);
         }
 
@@ -374,6 +375,7 @@ generate_meta_info_header(std::vector<ComponentData> const& components) {
         c_data["Field"] = mustache::data::type::list;
         auto& field_list = c_data["Field"];
         for (auto const& [field_name, field_meta] : component.fields) {
+            if (field_meta.hide_in_editor) { continue; }
             if (field_meta.type == "audeo::Sound") continue;
             mustache::data f_data = mustache::data::type::object;
             f_data["FieldName"] = field_name;

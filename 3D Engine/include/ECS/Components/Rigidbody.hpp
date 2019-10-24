@@ -12,13 +12,13 @@ class Physics;
 // clang-format off
 namespace Saturn::Components {
 
-struct [[saturn::component, saturn::default_serialize]] Rigidbody
+struct [[component, default_serialize]] Rigidbody
     : public ComponentBase {
 
-	[[saturn::tooltip("The mass of the rigid body.")]]
+	[[tooltip("The mass of the rigid body.")]]
     float mass;
 
-	[[saturn::tooltip("The axes that should not be affected by the physics system")]]
+	[[tooltip("The axes that should not be affected by the physics system")]]
 	glm::bvec3 locked_axes = {false, false, false};
 private:
     friend class ::Saturn::Physics;

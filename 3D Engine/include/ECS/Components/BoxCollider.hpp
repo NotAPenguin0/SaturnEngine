@@ -7,13 +7,13 @@
 
 namespace Saturn::Components {
 // clang-format off
-struct [[saturn::component, saturn::default_serialize]] BoxCollider
+struct [[component, default_serialize]] BoxCollider
     : ComponentBase {
     // The center of the collider. In object space
-    [[saturn::tooltip("The center of the collider.")]] 
+    [[tooltip("The center of the collider.")]] 
 	glm::vec3 center;
 
-    [[saturn::tooltip("Half the width of the box for each axis.")]] 
+    [[tooltip("Half the width of the box for each axis.")]] 
 	glm::vec3 half_widths;
 };
 // clang-format on
