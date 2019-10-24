@@ -25,9 +25,7 @@ struct ast_visitor {
                !cppast::is_templated(entity) && !cppast::is_friended(entity);
     }
 
-    bool has_attribute(cppast::cpp_entity const& e,
-
-                       std::string_view attr) {
+    bool has_attribute(cppast::cpp_entity const& e, std::string_view attr) {
 
         auto const& attributes = e.attributes();
         return std::find_if(
@@ -35,6 +33,16 @@ struct ast_visitor {
                    [attr](cppast::cpp_attribute const& attribute) -> bool {
                        return attribute.name() == attr;
                    }) != attributes.end();
+    }
+
+    cppast::cpp_attribute const& get_attribute(cppast::cpp_entity const& entity,
+                                               std::string_view attr) {
+        auto const& attributes = entity.attributes();
+        return *std::find_if(
+            attributes.begin(), attributes.end(),
+            [attr](cppast::cpp_attribute const& attribute) -> bool {
+                return attribute.name() == attr;
+            });
     }
 
     void check_in_component(cppast::cpp_entity const& entity,
@@ -61,6 +69,14 @@ struct ast_visitor {
                     }
                     if (has_attribute(entity, "editor_only")) {
                         data.flags |= ComponentData::Flags::EditorOnly;
+                    }
+                    if (has_attribute(entity, "category")) {
+                        auto const& cat_attribute =
+                            get_attribute(entity, "category");
+						for (auto const& token : cat_attribute.arguments().value()) {
+							data.category = remove_quotes(token.spelling);
+							break;
+						}
                     }
                 }
             } else {

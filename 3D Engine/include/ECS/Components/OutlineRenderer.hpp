@@ -8,7 +8,8 @@ namespace Saturn::Components {
 
 struct [[component,
          default_serialize,
-         hide_in_editor]] OutlineRenderer : public ComponentBase {
+         hide_in_editor,
+         category("Editor-only")]] OutlineRenderer : public ComponentBase {
     color3 color;
 };
 

@@ -7,7 +7,7 @@
 namespace Saturn::Components {
 
 // clang-format off
-struct [[component, default_serialize]] PointLight : public ComponentBase {
+struct [[component, default_serialize, category("Light")]] PointLight : public ComponentBase {
    
     [[tooltip("Ambient light color.")]]
 	color3 ambient;

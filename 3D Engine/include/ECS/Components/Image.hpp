@@ -10,7 +10,7 @@
 
 namespace Saturn::Components {
 // clang-format off
-struct [[component, default_serialize]] Image : ComponentBase {
+struct [[component, default_serialize, category("UI")]] Image : ComponentBase {
 
 	[[tooltip("Position on the UI canvas, relative to it's size.")]]
     glm::vec2 position;

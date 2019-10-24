@@ -8,7 +8,7 @@
 namespace Saturn::Components {
 
 // clang-format off
-struct [[component, default_serialize]] Rotator
+struct [[component, default_serialize, category("User-defined")]] Rotator
     : public ComponentBase {
 
 	[[tooltip("Speed at which to rotate")]]

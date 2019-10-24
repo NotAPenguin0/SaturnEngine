@@ -14,7 +14,7 @@ class MusicSystem;
 
 namespace Saturn::Components {
 // clang-format off
-struct [[component, default_serialize]] MusicController
+struct [[component, default_serialize, category("Sound")]] MusicController
     : ComponentBase {
     friend class Systems::MusicSystem;
 

@@ -9,7 +9,7 @@ namespace Saturn {
 
 namespace Components {
 // clang-format off
-struct [[component, default_serialize]] Camera
+struct [[component, default_serialize, category("Camera")]] Camera
     : public ComponentBase {
     [[tooltip("Front vector of the camera.")]] 
 	glm::vec3 front;

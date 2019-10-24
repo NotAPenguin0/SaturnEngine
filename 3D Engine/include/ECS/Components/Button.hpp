@@ -12,7 +12,7 @@
 namespace Saturn::Components {
 
 // clang-format off
-struct [[component, default_serialize]] Button
+struct [[component, default_serialize, category("UI")]] Button
     : ComponentBase {
 
 	enum class Event {
@@ -34,8 +34,8 @@ struct [[component, default_serialize]] Button
 	[[tooltip("Background image to display.")]]
     Resource<Texture> image;
 
-	[[tooltip("Color to multiply with the image")]]
-	color3 color;
+	[[tooltip("The text color.")]]
+	color3 text_color;
 
 	[[tooltip("UI anchor to align the button with.")]]
     ui_anchors::anchor_t anchor;

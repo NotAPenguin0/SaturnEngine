@@ -7,6 +7,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "BoxCollider ";
+		info.category = "Physics";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -21,10 +22,11 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "Button ";
+		info.category = "UI";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
-		info.fields["last_event"].type = "Saturn::Components::Button::LastEvent";
+		info.fields["last_event"].type = "Saturn::Components::Button::Event";
 		info.fields["last_event"].tooltip = "";
 		info.fields["last_event"].hide_in_editor = true;
 		info.fields["position"].type = "glm::vec2";
@@ -33,20 +35,21 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.fields["image"].type = "Resource<Saturn::Texture>";
 		info.fields["image"].tooltip = "Background image to display.";
 		info.fields["image"].hide_in_editor = false;
+		info.fields["text_color"].type = "Saturn::color3";
+		info.fields["text_color"].tooltip = "The text color.";
+		info.fields["text_color"].hide_in_editor = false;
 		info.fields["size"].type = "glm::vec2";
 		info.fields["size"].tooltip = "Size of the button";
 		info.fields["size"].hide_in_editor = false;
 		info.fields["anchor"].type = "ui_anchors::anchor_t";
 		info.fields["anchor"].tooltip = "UI anchor to align the button with.";
 		info.fields["anchor"].hide_in_editor = false;
-		info.fields["color"].type = "Saturn::color3";
-		info.fields["color"].tooltip = "Color to multiply with the image";
-		info.fields["color"].hide_in_editor = false;
 		data.push_back(info);
 	}
 	{
 		ComponentInfo info;
 		info.name = "Camera ";
+		info.category = "Camera";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -67,6 +70,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "CameraZoomController ";
+		info.category = "Camera";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -84,6 +88,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "Canvas ";
+		info.category = "UI";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -101,6 +106,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "ClickEffect ";
+		info.category = "User-defined";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -115,6 +121,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "ColliderRenderer ";
+		info.category = "Editor-only";
 		info.default_serialize = true;
 		info.hide_in_editor = true;
 		info.editor_only = false;
@@ -124,6 +131,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "DirectionalLight ";
+		info.category = "Light";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -144,6 +152,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "DoNotSerialize ";
+		info.category = "";
 		info.default_serialize = false;
 		info.hide_in_editor = true;
 		info.editor_only = false;
@@ -153,6 +162,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "EditorCameraController ";
+		info.category = "Editor-only";
 		info.default_serialize = true;
 		info.hide_in_editor = true;
 		info.editor_only = false;
@@ -176,6 +186,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "FPSCameraController ";
+		info.category = "Camera";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -187,6 +198,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "FreeLookController ";
+		info.category = "Camera";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -198,6 +210,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "Image ";
+		info.category = "UI";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -218,6 +231,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "Material ";
+		info.category = "Rendering";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -244,6 +258,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "MusicController ";
+		info.category = "Sound";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -261,6 +276,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "Name ";
+		info.category = "Editor-only";
 		info.default_serialize = true;
 		info.hide_in_editor = true;
 		info.editor_only = false;
@@ -272,6 +288,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "OutlineRenderer ";
+		info.category = "Editor-only";
 		info.default_serialize = true;
 		info.hide_in_editor = true;
 		info.editor_only = false;
@@ -283,6 +300,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "ParticleEmitter ";
+		info.category = "Particle System";
 		info.default_serialize = false;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -396,6 +414,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "PointLight ";
+		info.category = "Light";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -416,6 +435,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "Rigidbody ";
+		info.category = "Physics";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -430,6 +450,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "Rotator ";
+		info.category = "User-defined";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -444,6 +465,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "Sound ";
+		info.category = "Sound";
 		info.default_serialize = false;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -453,6 +475,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "SoundListener ";
+		info.category = "Sound";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -467,6 +490,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "SpotLight ";
+		info.category = "Light";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -496,6 +520,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "StaticMesh ";
+		info.category = "Rendering";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -510,6 +535,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "Text ";
+		info.category = "UI";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
@@ -536,6 +562,7 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	{
 		ComponentInfo info;
 		info.name = "Transform ";
+		info.category = "Rendering";
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;

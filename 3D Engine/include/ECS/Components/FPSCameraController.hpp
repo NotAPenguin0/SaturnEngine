@@ -5,7 +5,7 @@
 
 namespace Saturn::Components {
 // clang-format off
-struct [[component, default_serialize]] FPSCameraController
+struct [[component, default_serialize, category("Camera")]] FPSCameraController
     : public ComponentBase {
     // Movement speed
 	[[tooltip("The movement speed")]]

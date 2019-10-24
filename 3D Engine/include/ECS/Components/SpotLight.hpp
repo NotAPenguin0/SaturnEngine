@@ -7,7 +7,7 @@
 namespace Saturn::Components {
 
 // clang-format off
-struct [[component, default_serialize]] SpotLight
+struct [[component, default_serialize, category("Light")]] SpotLight
     : ComponentBase {
 
     [[tooltip("Ambient light color.")]]

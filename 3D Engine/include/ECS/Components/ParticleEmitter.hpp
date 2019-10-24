@@ -24,7 +24,7 @@ class ParticleSystem;
 
 namespace Saturn::Components {
 
-struct [[component]] ParticleEmitter : ComponentBase {
+struct [[component, category("Particle System")]] ParticleEmitter : ComponentBase {
     ParticleEmitter() {
         static const std::vector<float> particle_quad_vertices = {
             -1.0f, 1.0f,  0.0f, 0.0f, 1.0f, // TL

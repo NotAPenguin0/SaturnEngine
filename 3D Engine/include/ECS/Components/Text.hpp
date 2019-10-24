@@ -13,7 +13,7 @@
 
 namespace Saturn::Components {
 // clang-format off
-struct [[component, default_serialize]] Text : ComponentBase {
+struct [[component, default_serialize, category("UI")]] Text : ComponentBase {
 	[[tooltip("The text string to display.")]]
     std::string text;
 

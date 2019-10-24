@@ -6,7 +6,7 @@
 
 namespace Saturn::Components {
 // clang-format off
-struct [[component, default_serialize, hide_in_editor]] Name
+struct [[component, default_serialize, hide_in_editor, category("Editor-only")]] Name
     : ComponentBase {
     // clang-format on
     std::string name;

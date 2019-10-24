@@ -12,7 +12,7 @@ class Physics;
 // clang-format off
 namespace Saturn::Components {
 
-struct [[component, default_serialize]] Rigidbody
+struct [[component, default_serialize, category("Physics")]] Rigidbody
     : public ComponentBase {
 
 	[[tooltip("The mass of the rigid body.")]]

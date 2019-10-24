@@ -340,6 +340,7 @@ generate_components_meta_info(std::vector<ComponentData> const& components) {
         comp_data["DefaultSerialize"] = bool_str(default_serialize);
         comp_data["HideInEditor"] = bool_str(hide_in_editor);
         comp_data["EditorOnly"] = bool_str(editor_only);
+		comp_data["ComponentCat"] = component.category;
         comp_data["ComponentFieldMeta"] = mustache::data::type::list;
         auto& fields_data_list = comp_data["ComponentFieldMeta"];
         for (auto const& [field_name, field_meta] : component.fields) {

@@ -24,47 +24,6 @@ namespace impl {
 
 const char* entity_payload_id = "p_entity";
 
-// #TODO: extract this into meta info using a CATEGORY("some_category")
-// macro
-template<typename C>
-std::string_view get_component_category() {
-    using namespace ::Saturn::Components;
-#    define CAT(comp, str_id)                                                  \
-        if constexpr (std::is_same_v<C, ::Saturn::Components::comp>) {         \
-            return str_id;                                                     \
-        }
-
-    CAT(BoxCollider, "Physics")
-    CAT(Camera, "Camera")
-    CAT(CameraZoomController, "Camera")
-    CAT(ClickEffect, "User-defined")
-    CAT(ColliderRenderer, "Editor-only")
-    CAT(DirectionalLight, "Light")
-    CAT(EditorCameraController, "Editor-only")
-    CAT(FPSCameraController, "Camera")
-    CAT(FreeLookController, "Camera")
-    CAT(Material, "Rendering")
-    CAT(MusicController, "Sound")
-    CAT(Name, "Editor-only")
-    CAT(OutlineRenderer, "Editor-only")
-    CAT(ParticleEmitter, "Particle System")
-    CAT(PointLight, "Light")
-    CAT(Rigidbody, "Physics")
-    CAT(Rotator, "User-defined")
-    CAT(Sound, "Sound")
-    CAT(SoundListener, "Sound")
-    CAT(SpotLight, "Light")
-    CAT(StaticMesh, "Rendering")
-    CAT(Transform, "Rendering")
-    CAT(Canvas, "UI")
-    CAT(Image, "UI")
-    CAT(Text, "UI")
-
-#    undef CAT
-
-    return "User-defined";
-}
-
 std::vector<std::string_view> get_component_categories() {
     return {"Camera",    "Editor-only", "Light", "Particle System", "Physics",
             "Rendering", "Sound",       "UI",    "User-defined"};
@@ -453,7 +412,10 @@ void show_add_component_entry(SceneObject* entity) {
 template<typename C, typename... Cs>
 void show_add_component_list(SceneObject* entity, std::string_view cat) {
     using namespace ::Saturn::Components;
-    if (!std::is_same_v<C, Name> && cat == get_component_category<C>()) {
+    using namespace ::Saturn::Meta;
+    using ComponentMeta = ComponentsMeta<COMPONENT_LIST>;
+	ComponentInfo const& meta_info = ComponentMeta::get_component_meta_info<C>();
+    if (!std::is_same_v<C, Name> && cat == meta_info.category) {
         show_add_component_entry<C>(entity);
     }
 
@@ -474,7 +436,13 @@ void do_component_copy(Scene& scene, SceneObject* src, SceneObject* dest) {
 template<typename C, typename... Cs>
 void copy_components(Scene& scene, SceneObject* src, SceneObject* dest) {
 
-    if (get_component_category<C>() != "Editor-only" &&
+	using namespace ::Saturn::Components;
+    using namespace ::Saturn::Meta;
+    using ComponentMeta = ComponentsMeta<COMPONENT_LIST>;
+    ComponentInfo const& meta_info =
+        ComponentMeta::get_component_meta_info<C>();
+
+    if (meta_info.category != "Editor-only" &&
         src->has_component<C>()) {
         do_component_copy<C>(scene, src, dest);
     }

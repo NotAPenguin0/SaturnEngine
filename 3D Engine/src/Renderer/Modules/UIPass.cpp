@@ -1,6 +1,7 @@
 #include "Renderer/Modules/UIPass.hpp"
 
 #include "AssetManager/AssetManager.hpp"
+#include "ECS/Components/Button.hpp"
 #include "ECS/Components/Canvas.hpp"
 #include "ECS/Components/Image.hpp"
 #include "Renderer/Font.hpp"
@@ -169,6 +170,34 @@ render_text(Framebuffer& target, Text& txt, VertexArray& quad, Shader& shader) {
     }
 }
 
+static void render_button(Framebuffer& target,
+	Button& btn,
+	VertexArray& quad,
+	Shader& img_shader,
+	Shader& text_shader) {
+
+	// Render button image
+
+	Framebuffer::bind(target);
+    glViewport(0, 0, target.get_size().x, target.get_size().y);
+    VertexArray::bind(quad);
+    Shader::bind(img_shader);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, btn.image->handle());
+    img_shader.set_int(Shader::Uniforms::Texture, 0);
+    glm::vec2 img_dim =
+        glm::vec2(btn.image->dimensions().x, btn.image->dimensions().y);
+    glm::vec2 target_dim = glm::vec2(target.get_size().x, target.get_size().y);
+    img_shader.set_vec2(0, glm::vec2(img_dim.x / target_dim.x * btn.size.x,
+                                 img_dim.y / target_dim.y * btn.size.y));
+    img_shader.set_vec2(1, btn.position + ui_anchors::anchor_positions[btn.anchor]);
+
+    glDrawElements(GL_TRIANGLES, quad.index_size(), GL_UNSIGNED_INT, nullptr);
+
+	// Render button text
+}
+
 } // namespace impl
 
 UIPass::UIPass() : PostRenderStage(10) {}
@@ -207,7 +236,7 @@ void UIPass::process(Scene& scene, Framebuffer& source) {
     // First, blit the scene view to our target buffer, then render the UI
     // to the UI buffer and blit both on the target buffer
 
-	glDisable(GL_CULL_FACE);
+    glDisable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
 
     // Blit source buffer to target buffer
@@ -249,6 +278,15 @@ void UIPass::process(Scene& scene, Framebuffer& source) {
                 impl::render_text(ui_buffer, txt, quad, *text_shader);
             }
         }
+
+        // Render buttons
+        for (auto [btn] : scene.get_ecs().select<Button>()) {
+            if (btn.image.is_loaded()) {
+                impl::render_button(ui_buffer, btn, quad, *img_shader,
+                                    *text_shader);
+            }
+        }
+
         // Blit UI to target buffer
         impl::blit_ui(ui_buffer, target, *blit_shader, quad, canvas);
 

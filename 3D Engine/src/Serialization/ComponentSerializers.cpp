@@ -39,14 +39,14 @@ void from_json(nlohmann::json const& json, Button& component) {
 		if (auto x = (*c).find("Image"); x != (*c).end()) {
 			component.image = (*x).get<Resource<Saturn::Texture>>();
 		}
+		if (auto x = (*c).find("TextColor"); x != (*c).end()) {
+			component.text_color = (*x).get<Saturn::color3>();
+		}
 		if (auto x = (*c).find("Size"); x != (*c).end()) {
 			component.size = (*x).get<glm::vec2>();
 		}
 		if (auto x = (*c).find("Anchor"); x != (*c).end()) {
 			component.anchor = (*x).get<ui_anchors::anchor_t>();
-		}
-		if (auto x = (*c).find("Color"); x != (*c).end()) {
-			component.color = (*x).get<Saturn::color3>();
 		}
 	}
 }
@@ -441,9 +441,9 @@ void to_json(nlohmann::json& json, Button const& component) {
 	json["ButtonComponent"]["LastEvent"] = component.last_event;
 	json["ButtonComponent"]["Position"] = component.position;
 	json["ButtonComponent"]["Image"] = component.image;
+	json["ButtonComponent"]["TextColor"] = component.text_color;
 	json["ButtonComponent"]["Size"] = component.size;
 	json["ButtonComponent"]["Anchor"] = component.anchor;
-	json["ButtonComponent"]["Color"] = component.color;
 	// clang-format on
 }
 

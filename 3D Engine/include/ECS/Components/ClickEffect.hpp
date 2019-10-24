@@ -11,7 +11,7 @@
 namespace Saturn::Components {
 
 // clang-format off
-struct [[component, default_serialize]] ClickEffect
+struct [[component, default_serialize, category("User-defined")]] ClickEffect
     : ComponentBase {
     [[tooltip("Sound effect to play on mouse click.")]] 
 	Resource<audeo::SoundSource> sound_effect;

@@ -9,7 +9,7 @@
 namespace Saturn::Components {
 
 // clang-format off
-struct [[component, default_serialize]] Material
+struct [[component, default_serialize, category("Rendering")]] Material
     : public ComponentBase {
 
 	[[tooltip("The shader this material will use.")]]

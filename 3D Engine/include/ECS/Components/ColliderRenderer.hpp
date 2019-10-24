@@ -7,7 +7,8 @@ namespace Saturn::Components {
 
 struct [[component,
          default_serialize,
-         hide_in_editor]] ColliderRenderer : ComponentBase{};
+         hide_in_editor,
+		 category("Editor-only")]] ColliderRenderer : ComponentBase{};
 
 } // namespace Saturn::Components
 

@@ -7,7 +7,7 @@
 namespace Saturn::Components {
 
 // clang-format off
-struct [[component, default_serialize]] CameraZoomController
+struct [[component, default_serialize, category("Camera")]] CameraZoomController
     : public ComponentBase {
     [[tooltip("The speed of the zoom. Note that zoom corresponds to FOV.")]] 
 	float zoom_speed;

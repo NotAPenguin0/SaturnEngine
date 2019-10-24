@@ -8,7 +8,7 @@
 namespace Saturn::Components {
 
 // clang-format off
-struct [[component, default_serialize]] StaticMesh
+struct [[component, default_serialize, category("Rendering")]] StaticMesh
     : public ComponentBase {
 
 	[[tooltip("The mesh resource that will be rendered")]]

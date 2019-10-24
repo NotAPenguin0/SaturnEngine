@@ -8,7 +8,7 @@ namespace Saturn::Components {
 
 // Every scene must have exactly one SoundListener component
 // clang-format off
-struct [[component, default_serialize]] SoundListener
+struct [[component, default_serialize, category("Sound")]] SoundListener
     : ComponentBase {
     // position (relative to the entity's position)
 	[[tooltip("Position of the sound listener, relatieve to the entity position")]]

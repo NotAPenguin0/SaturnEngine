@@ -29,6 +29,7 @@ struct ComponentInfo {
     // This has a space behind it to avoid problems with UI.
     // #DirtyFixPleaseFixBetter
     std::string name;
+	std::string category;
 	bool hide_in_editor;
 	bool editor_only;
 	bool default_serialize;
@@ -118,14 +119,14 @@ public:
 		if (field_name == "image") {
 			return ComponentFieldPtr(&comp.image);
 		}
+		if (field_name == "text_color") {
+			return ComponentFieldPtr(&comp.text_color);
+		}
 		if (field_name == "size") {
 			return ComponentFieldPtr(&comp.size);
 		}
 		if (field_name == "anchor") {
 			return ComponentFieldPtr(&comp.anchor);
-		}
-		if (field_name == "color") {
-			return ComponentFieldPtr(&comp.color);
 		}
 		
 		// return nullptr if the field was not found

@@ -7,7 +7,7 @@
 
 namespace Saturn::Components {
 // clang-format off
-struct [[component, default_serialize]] BoxCollider
+struct [[component, default_serialize, category("Physics")]] BoxCollider
     : ComponentBase {
     // The center of the collider. In object space
     [[tooltip("The center of the collider.")]] 

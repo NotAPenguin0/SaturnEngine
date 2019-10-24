@@ -10,7 +10,7 @@ namespace Saturn::Components {
 // There is only one canvas in each scene. If there are more, only the first
 // will be used
 // clang-format off
-struct [[component, default_serialize]] Canvas
+struct [[component, default_serialize, category("UI")]] Canvas
     : ComponentBase {
     [[tooltip("The position of the canvas in 2D screen coordinates ranging from 0 to 1. Left top is (0, 0).")]] 
 	glm::vec2 position;

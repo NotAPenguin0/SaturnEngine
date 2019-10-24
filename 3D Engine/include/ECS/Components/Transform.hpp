@@ -9,7 +9,7 @@ namespace Saturn {
 
 namespace Components {
 // clang-format off
-struct [[component, default_serialize]] Transform
+struct [[component, default_serialize, category("Rendering")]] Transform
     : public ComponentBase {
 
 	[[tooltip("Position of the entity in world space, or relative to its parent.")]]

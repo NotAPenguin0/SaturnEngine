@@ -42,6 +42,7 @@ struct ComponentData {
 	};
 
     std::string name;
+	std::string category;
     uint32_t flags;
     // Maps a member name to its type
     std::unordered_map<std::string, FieldMeta> fields;
