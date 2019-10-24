@@ -25,3 +25,6 @@
 [submodule "3D Engine/dependencies/FreeType"]
 	path = 3D Engine/dependencies/FreeType
 	url = https://github.com/aseprite/freetype2
+[submodule "CodeGen/dependencies/cppast"]
+	path = CodeGen/Serialization/cppast
+	url = https://github.com/foonathan/cppast
