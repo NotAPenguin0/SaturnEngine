@@ -244,6 +244,9 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.fields["diffuse_map"].type = "Resource<Saturn::Texture>";
 		info.fields["diffuse_map"].tooltip = "Diffuse texture map.";
 		info.fields["diffuse_map"].hide_in_editor = false;
+		info.fields["reflective"].type = "bool";
+		info.fields["reflective"].tooltip = "Whether the material is reflective. Needs a reflection shader to actually work.";
+		info.fields["reflective"].hide_in_editor = false;
 		info.fields["lit"].type = "bool";
 		info.fields["lit"].tooltip = "Whether this material is affected by lighting.";
 		info.fields["lit"].hide_in_editor = false;

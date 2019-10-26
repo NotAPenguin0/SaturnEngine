@@ -111,6 +111,10 @@ public:
         return resources;
     }
 
+	static std::unordered_map<std::string, size_t>& get_id_map() {
+		return id_map;
+	}
+
     static void remove_asset(Asset& asset) {
         asset_tracker->stop_tracking(asset);
         id_map.erase(asset.path.generic_string());

@@ -227,6 +227,9 @@ void from_json(nlohmann::json const& json, Material& component) {
 		if (auto x = (*c).find("DiffuseMap"); x != (*c).end()) {
 			component.diffuse_map = (*x).get<Resource<Saturn::Texture>>();
 		}
+		if (auto x = (*c).find("Reflective"); x != (*c).end()) {
+			component.reflective = (*x).get<bool>();
+		}
 		if (auto x = (*c).find("Lit"); x != (*c).end()) {
 			component.lit = (*x).get<bool>();
 		}
@@ -544,6 +547,7 @@ void to_json(nlohmann::json& json, Material const& component) {
 	// clang-format off
 	json["MaterialComponent"]["Shader"] = component.shader;
 	json["MaterialComponent"]["DiffuseMap"] = component.diffuse_map;
+	json["MaterialComponent"]["Reflective"] = component.reflective;
 	json["MaterialComponent"]["Lit"] = component.lit;
 	json["MaterialComponent"]["SpecularMap"] = component.specular_map;
 	json["MaterialComponent"]["NormalMap"] = component.normal_map;

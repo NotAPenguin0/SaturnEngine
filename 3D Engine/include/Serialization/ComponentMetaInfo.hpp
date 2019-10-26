@@ -290,6 +290,9 @@ public:
 		if (field_name == "diffuse_map") {
 			return ComponentFieldPtr(&comp.diffuse_map);
 		}
+		if (field_name == "reflective") {
+			return ComponentFieldPtr(&comp.reflective);
+		}
 		if (field_name == "lit") {
 			return ComponentFieldPtr(&comp.lit);
 		}

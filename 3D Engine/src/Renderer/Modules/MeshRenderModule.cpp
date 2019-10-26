@@ -15,8 +15,8 @@ MeshRenderModule::MeshRenderModule() : RenderModule(10) {}
 
 void MeshRenderModule::init() {
 
-    no_shader_error =
-        AssetManager<Shader>::get_resource("config/resources/shaders/default.sh", true);
+    no_shader_error = AssetManager<Shader>::get_resource(
+        "config/resources/shaders/default.sh", true);
 }
 
 void MeshRenderModule::process(Scene& scene,
@@ -33,7 +33,7 @@ void MeshRenderModule::process(Scene& scene,
 
         // Send data to shader
         send_model_matrix(shader, relative_transform);
-        send_material_data(shader, material);
+        send_material_data(scene, shader, material);
 
         // Set lightspace matrix in shader
         Shader::bind(shader);
@@ -73,13 +73,15 @@ void MeshRenderModule::unbind_textures(Material& material) {
         if (material.specular_map.is_loaded()) {
             Texture::unbind(*material.specular_map);
         }
-		if (material.normal_map.is_loaded()) {
+        if (material.normal_map.is_loaded()) {
             Texture::unbind(*material.normal_map);
-		}
+        }
     }
 }
 
-void MeshRenderModule::send_material_data(Shader& shader, Material& material) {
+void MeshRenderModule::send_material_data(Scene& scene,
+                                          Shader& shader,
+                                          Material& material) {
     Shader::bind(shader);
     if (material.lit) {
         if (material.diffuse_map.is_loaded()) {
@@ -100,6 +102,25 @@ void MeshRenderModule::send_material_data(Shader& shader, Material& material) {
         shader.set_float(Shader::Uniforms::Material::Shininess,
                          material.shininess);
     }
+
+    if (material.reflective) {
+        // Get the skybox texture
+        CubeMap* skybox = nullptr;
+        for (auto [cam] : scene.get_ecs().select<Camera>()) {
+			// Grab the first skybox we can get and exit
+            if (cam.skybox.is_loaded()) {
+                skybox = &cam.skybox.get();
+                break;
+            }
+        }
+        // Skybox has texture unit 4
+        if (skybox) { 
+			glActiveTexture(GL_TEXTURE4);
+            glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->handle);
+			shader.set_int(Shader::Uniforms::Material::Skybox, 4); 
+		}
+    }
+
     Shader::unbind();
 }
 

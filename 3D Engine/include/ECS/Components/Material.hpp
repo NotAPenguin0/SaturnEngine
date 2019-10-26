@@ -31,6 +31,9 @@ struct [[component, default_serialize, category("Rendering")]] Material
 
 	[[tooltip("Shininess value of the material")]]
     float shininess;
+
+	[[tooltip("Whether the material is reflective. Needs a reflection shader to actually work.")]]
+	bool reflective;
 };
 // clang-format on
 

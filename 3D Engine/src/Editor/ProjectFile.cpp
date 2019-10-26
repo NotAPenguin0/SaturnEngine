@@ -42,6 +42,13 @@ void ProjectFile::load(fs::path path) {
     AssetManager<Font>::resource_list().clear();
     AssetManager<CubeMap>::resource_list().clear();
 
+	AssetManager<Shader>::get_id_map().clear();
+    AssetManager<Texture>::get_id_map().clear();
+    AssetManager<Mesh>::get_id_map().clear();
+    AssetManager<audeo::SoundSource>::get_id_map().clear();
+    AssetManager<Font>::get_id_map().clear();
+    AssetManager<CubeMap>::get_id_map().clear();
+
     self_name = path.stem().string();
     self_dir = fs::absolute(path.remove_filename());
 

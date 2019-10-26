@@ -369,7 +369,7 @@ void load_face(CubeMapFace face_id, std::string const& path) {
         stbi_load(path.c_str(), &width, &height, &channels, 0);
     glTexImage2D(static_cast<GLenum>(face_id), 0, GL_RGB, width, height, 0,
                  GL_RGB, GL_UNSIGNED_BYTE, data);
-	stbi_image_free(data);
+    stbi_image_free(data);
 }
 
 LoadResult<CubeMap> ResourceLoader<CubeMap>::load(std::string const& path,
@@ -377,6 +377,12 @@ LoadResult<CubeMap> ResourceLoader<CubeMap>::load(std::string const& path,
     std::ifstream base_file(path);
     // This file contains all the faces of the cube map, and other data like
     // format
+
+    bool flip = false;
+    std::string s;
+    base_file >> s;
+	flip = (s == "true");
+	stbi_set_flip_vertically_on_load(flip);
 
     std::vector<fs::path> face_paths;
     constexpr size_t face_count = 6;
@@ -398,7 +404,7 @@ LoadResult<CubeMap> ResourceLoader<CubeMap>::load(std::string const& path,
         face_paths.emplace_back(face_path);
     }
 
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);

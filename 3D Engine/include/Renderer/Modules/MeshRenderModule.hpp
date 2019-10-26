@@ -26,7 +26,7 @@ public:
 
 private:
     void unbind_textures(Components::Material& material);
-    void send_material_data(Shader& shader, Components::Material& material);
+    void send_material_data(Scene& scene, Shader& shader, Components::Material& material);
 
     Resource<Shader> no_shader_error;
 };

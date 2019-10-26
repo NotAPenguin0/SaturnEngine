@@ -62,6 +62,7 @@ public:
             static constexpr int SpecularMap = 7;
             static constexpr int Shininess = 8;
             static constexpr int NormalMap = 11;
+            static constexpr int Skybox = 12;
         };
 		
 		static constexpr int LightSpaceMatrix = 9;

@@ -209,6 +209,8 @@ SystemUpdateMode Editor::get_update_mode() {
 }
 
 void Editor::render(Scene& scene) {
+    using namespace Saturn::Components;
+
     static bool once = true;
     if (once) {
         // Load startup scene
@@ -242,6 +244,15 @@ void Editor::render(Scene& scene) {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+
+    if (!playmode_active) {
+        auto old_cam_id = app->get_renderer()
+                              ->get_viewport(scene_view_viewport_id)
+                              .get_camera();
+        auto& old_cam = scene.get_ecs().get_with_id<Camera>(old_cam_id);
+        editor_camera->get_component<Camera>().skybox = old_cam.skybox;
+    }
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClearColor(0, 0, 0, 0);
     glViewport(0, 0, app->window_dimensions.x, app->window_dimensions.y);
@@ -506,8 +517,8 @@ void Editor::create_editor_camera(Scene& scene) {
 
     auto old_cam_id =
         app->get_renderer()->get_viewport(scene_view_viewport_id).get_camera();
-	auto& old_cam = scene.get_ecs().get_with_id<Camera>(old_cam_id);
-	cam_c.skybox = old_cam.skybox;
+    auto& old_cam = scene.get_ecs().get_with_id<Camera>(old_cam_id);
+    cam_c.skybox = old_cam.skybox;
 
     app->get_renderer()
         ->get_viewport(scene_view_viewport_id)
