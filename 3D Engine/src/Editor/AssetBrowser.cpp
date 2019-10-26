@@ -23,7 +23,7 @@ namespace impl {
 
 namespace {
 
-#define ASSET_LIST Shader, Texture, Mesh, audeo::SoundSource, Font
+#define ASSET_LIST Shader, Texture, Mesh, audeo::SoundSource, Font, CubeMap
 template<size_t I, typename F, typename... Args>
 void do_for_each_asset(F&& f, Args&&... args) {
     using assets = std::tuple<ASSET_LIST>;
@@ -153,7 +153,6 @@ struct show_asset_tab {
                          bool show_editor_assets,
                          std::vector<std::string_view> const& asset_types) {
         ImVec2 grid_size = get_grid_size();
-        // #TODO: Add slider to adjust this setting
 
         const ImVec2 pad = ImGui::GetStyle().WindowPadding;
         const float text_h = ImGui::GetFrameHeightWithSpacing();
@@ -179,7 +178,8 @@ struct show_asset_tab {
                     ImGuiWindowFlags_NoScrollbar |
                         ImGuiWindowFlags_NoScrollWithMouse)) {
 
-                if (ImGui::BeginDragDropSource()) {
+                if (ImGui::BeginDragDropSource(
+                        ImGuiDragDropFlags_SourceAllowNullID)) {
                     std::string const type =
                         "p_" + std::string(asset_types[index]);
                     ImGui::SetDragDropPayload(

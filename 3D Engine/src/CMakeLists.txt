@@ -49,6 +49,7 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Physics/Physics.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Physics/PhysicsTickScheduler.cpp"
 	
+    "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/CubeMap.cpp"	
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/DepthMap.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Font.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Framebuffer.cpp"
@@ -72,6 +73,7 @@ set(ENGINE_SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/DebugModule.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/EditorModule.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/MeshRenderModule.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/SkyboxPass.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/UIPass.cpp"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/Scene/Scene.cpp"

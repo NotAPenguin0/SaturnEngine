@@ -129,39 +129,47 @@ void ParticleSystem::spawn_particle(
 
     ParticleEmitter::Particle particle;
     particle.life_left = emitter.main.start_lifetime;
-    emitter.particle_data.colors.push_back(emitter.main.start_color);
-    emitter.particle_data.positions.push_back(transform.position);
+    /*
+        emitter.particle_data.colors.push_back(emitter.main.start_color);
+        emitter.particle_data.positions.push_back(transform.position);*/
 
-    auto& color = emitter.particle_data.colors.back();
-    auto& position = emitter.particle_data.positions.back();
-	
+    glm::vec4 color;
+    glm::vec3 position;
+
+    /*
+            auto& color = emitter.particle_data.colors.back();
+        auto& position = emitter.particle_data.positions.back();*/
+
     // Direction and Position
     // Switch on shape and call the appropriate function
     switch (emitter.shape.shape) {
         case Components::ParticleEmitter::SpawnShape::Sphere:
-            particle.direction = Math::direction_in_sphere(
-                emitter.shape.randomize_direction, glm::radians(abs_transform.rotation));
+            particle.direction =
+                Math::direction_in_sphere(emitter.shape.randomize_direction,
+                                          glm::radians(abs_transform.rotation));
             position += Math::position_on_sphere(*emitter.shape.radius);
             break;
         case ParticleEmitter::SpawnShape::Hemisphere:
             particle.direction = Math::direction_in_hemisphere(
-                emitter.shape.randomize_direction, glm::radians(abs_transform.rotation));
-            position = Math::position_on_hemisphere(*emitter.shape.radius,
-                                                    glm::radians(abs_transform.rotation));
+                emitter.shape.randomize_direction,
+                glm::radians(abs_transform.rotation));
+            position = Math::position_on_hemisphere(
+                *emitter.shape.radius, glm::radians(abs_transform.rotation));
             break;
         case Components::ParticleEmitter::SpawnShape::Cone:
-            position = Math::position_on_circle(*emitter.shape.radius,
-                                                *emitter.shape.arc,
-                                                glm::radians(abs_transform.rotation));
+            position = Math::position_on_circle(
+                *emitter.shape.radius, *emitter.shape.arc,
+                glm::radians(abs_transform.rotation));
             particle.direction = Math::direction_in_cone(
                 *emitter.shape.arc, *emitter.shape.angle,
                 glm::radians(abs_transform.rotation));
             break;
         case Components::ParticleEmitter::SpawnShape::Box:
-            position = Math::position_in_box(emitter.shape.scale,
-                                             glm::radians(abs_transform.rotation));
-            particle.direction = Math::direction_in_sphere(
-                emitter.shape.randomize_direction, glm::radians(abs_transform.rotation));
+            position = Math::position_in_box(
+                emitter.shape.scale, glm::radians(abs_transform.rotation));
+            particle.direction =
+                Math::direction_in_sphere(emitter.shape.randomize_direction,
+                                          glm::radians(abs_transform.rotation));
             break;
     }
 
@@ -169,10 +177,26 @@ void ParticleSystem::spawn_particle(
     position += abs_transform.position;
 
     particle.velocity = emitter.main.start_velocity;
-    emitter.particle_data.sizes.emplace_back(emitter.main.start_size, 1.0f);
+
+    auto pos = std::upper_bound(
+        emitter.particle_data.positions.begin(),
+        emitter.particle_data.positions.end(), position,
+        [](glm::vec3 const& a, glm::vec3 const& b) { return a.z < b.z; });
+
+    auto idx = std::distance(emitter.particle_data.positions.begin(), pos);
+
+    emitter.particle_data.sizes.insert(emitter.particle_data.sizes.begin() +
+                                           idx,
+                                       {emitter.main.start_size, 1.0f});
+    emitter.particle_data.positions.insert(
+        emitter.particle_data.positions.begin() + idx, position);
+    emitter.particle_data.colors.insert(
+        emitter.particle_data.colors.begin() + idx, color);
 
     // Put the particle in the emitter
-    emitter.particles.push_back(std::move(particle));
+    emitter.particles.insert(emitter.particles.begin() + idx,
+                             std::move(particle));
+//    emitter.particles.push_back(std::move(particle));
 }
 
 void ParticleSystem::update_particle(std::size_t index,

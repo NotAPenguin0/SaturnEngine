@@ -18,6 +18,7 @@
 #include "Renderer/Texture.hpp"
 #include "Renderer/Mesh.hpp"
 #include "Renderer/Font.hpp"
+#include "Renderer/CubeMap.hpp"
 
 #include <audeo/SoundSource.hpp>
 
@@ -49,11 +50,11 @@ public:
 #define SUPPORTED_COMPONENT_FIELD_TYPES                                        \
     std::size_t, float, int, std::string, glm::vec2, glm::vec3, glm::vec4, bool, glm::bvec3, color3, color4, unsigned int, \
 	Resource<Shader>, Resource<Texture>, Resource<Mesh>, Resource<audeo::SoundSource>, \
-	Resource<Font>, ui_anchors::anchor_t
+	Resource<Font>, ui_anchors::anchor_t, Resource<CubeMap>
 #define SUPPORTED_COMPONENT_FIELD_POINTER_TYPES                                \
     std::size_t*, float*, int*, std::string*, glm::vec2*, glm::vec3*, glm::vec4*, bool*, glm::bvec3*, color3*, color4*, unsigned int*, \
 	Resource<Shader>*, Resource<Texture>*, Resource<Mesh>*, Resource<audeo::SoundSource>*, \
-	Resource<Font>*, ui_anchors::anchor_t*
+	Resource<Font>*, ui_anchors::anchor_t*, Resource<CubeMap>*
     using field_variant_t =
         std::variant<SUPPORTED_COMPONENT_FIELD_POINTER_TYPES>;
 
@@ -143,8 +144,8 @@ public:
 		if (field_name == "fov") {
 			return ComponentFieldPtr(&comp.fov);
 		}
-		if (field_name == "viewport_id") {
-			return ComponentFieldPtr(&comp.viewport_id);
+		if (field_name == "skybox") {
+			return ComponentFieldPtr(&comp.skybox);
 		}
 		
 		// return nullptr if the field was not found

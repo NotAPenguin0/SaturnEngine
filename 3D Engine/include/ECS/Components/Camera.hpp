@@ -5,6 +5,9 @@
 
 #include <glm/glm.hpp>
 
+#include "AssetManager/Resource.hpp"
+#include "Renderer/CubeMap.hpp"
+
 namespace Saturn {
 
 namespace Components {
@@ -18,7 +21,11 @@ struct [[component, default_serialize, category("Camera")]] Camera
 
     [[tooltip("Camera field of view (in degrees).")]] 
 	float fov;
-    [[tooltip("Id of the viewport that this camera is assigned to.")]] 
+    
+	[[tooltip("The skybox to render with this camera")]]
+	Resource<CubeMap> skybox;
+
+	[[hide_in_editor]] 
 	unsigned int viewport_id = 0;
 };
 // clang-format on

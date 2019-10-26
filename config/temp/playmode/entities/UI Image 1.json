@@ -3,7 +3,7 @@
     "ImageComponent": {
         "Anchor": 0,
         "Image": {
-            "Resource": "assets\\textures\\smoke.tex"
+            "Resource": "assets\\textures\\brickwall.tex"
         },
         "Position": [
             0.0,

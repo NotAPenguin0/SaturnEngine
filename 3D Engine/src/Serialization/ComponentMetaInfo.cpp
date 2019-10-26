@@ -62,9 +62,12 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.fields["fov"].type = "float";
 		info.fields["fov"].tooltip = "Camera field of view (in degrees).";
 		info.fields["fov"].hide_in_editor = false;
+		info.fields["skybox"].type = "Resource<Saturn::CubeMap>";
+		info.fields["skybox"].tooltip = "The skybox to render with this camera";
+		info.fields["skybox"].hide_in_editor = false;
 		info.fields["viewport_id"].type = "unsigned int";
-		info.fields["viewport_id"].tooltip = "Id of the viewport that this camera is assigned to.";
-		info.fields["viewport_id"].hide_in_editor = false;
+		info.fields["viewport_id"].tooltip = "";
+		info.fields["viewport_id"].hide_in_editor = true;
 		data.push_back(info);
 	}
 	{

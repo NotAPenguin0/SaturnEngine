@@ -157,7 +157,7 @@ struct ComponentFieldVisitor {
 
         auto icon = AssetManager<Texture>::get_resource(
             "config/resources/textures/circle_icon.tex", true);
-        // dummy image to make drag drop work?
+        // dummy image to make drag drop work somehow?
         ImGui::Image(reinterpret_cast<ImTextureID>(icon->handle()),
                      ImVec2(0, 0));
         ImGui::SameLine();

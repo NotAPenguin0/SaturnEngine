@@ -5,9 +5,8 @@
 
 namespace Saturn::RenderModules {
 
-// After the transfer module has been processed, we can process the particle
-// module
-ParticleModule::ParticleModule() : RenderModule(1) {}
+// Particles should be rendered after the skybox to get correct blending
+ParticleModule::ParticleModule() : RenderModule(200) {}
 
 void ParticleModule::init() {
     particle_shader = AssetManager<Shader>::get_resource(
@@ -23,7 +22,6 @@ void ParticleModule::process(Scene& scene,
     Shader::bind(particle_shader.get());
 
     glDisable(GL_CULL_FACE);
-	glDisable(GL_DEPTH_TEST);
     for (auto [emitter] : scene.get_ecs().select<ParticleEmitter>()) {
 		glEnable(GL_BLEND);
         if (emitter.additive) {
@@ -50,7 +48,6 @@ void ParticleModule::process(Scene& scene,
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         }
     }
-	glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 }
 

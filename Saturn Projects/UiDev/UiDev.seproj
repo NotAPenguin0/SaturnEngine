@@ -1,7 +1,7 @@
 2
 scenes\main_scene
 scenes\Particles
-8
+9
 PreRenderStage DepthMapPass
 RenderModule DebugModule
 RenderModule MeshRenderModule
@@ -10,6 +10,7 @@ RenderModule TransferModule
 PostRenderStage BlitPass
 PostRenderStage UIPass
 RenderModule EditorModule
+RenderModule SkyboxPass
 asset texture assets/textures/brickwall.tex
 asset texture assets/textures/brickwall_normal.tex
 asset texture assets/textures/brickwall_specular.tex
@@ -19,3 +20,4 @@ asset font assets/fonts/ARIAL.TTF
 asset font assets/fonts/BBRICK.TTF
 asset font assets/fonts/ARIALI.TTF
 asset font assets/fonts/ARIALBI.TTF
+asset cubemap assets/skyboxes/ice_sea.cm

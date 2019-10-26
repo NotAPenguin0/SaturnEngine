@@ -91,6 +91,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Physics/PhysicsTickScheduler.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Physics/AABBCollisionHandler.hpp"
 	
+	"${CMAKE_CURRENT_SOURCE_DIR}/Renderer/CubeMap.hpp"	
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/DepthMap.hpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Font.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Framebuffer.hpp"
@@ -115,6 +116,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/TransferModule.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/ParticleModule.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/DebugModule.hpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/SkyboxPass.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/EditorModule.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/MeshRenderModule.hpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Modules/UIPass.hpp"

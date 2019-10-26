@@ -12,6 +12,7 @@
 #    include "Renderer/Modules/EditorModule.hpp"
 #    include "Renderer/Modules/MeshRenderModule.hpp"
 #    include "Renderer/Modules/ParticleModule.hpp"
+#    include "Renderer/Modules/SkyboxPass.hpp"
 #    include "Renderer/Modules/TransferModule.hpp"
 #    include "Renderer/Modules/UIPass.hpp"
 
@@ -45,6 +46,8 @@ add_render_stage(V const& v, Application* app, std::string_view stage) {
     } else if (stage == "TransferModule") {
         app->get_renderer()->add_render_module(
             std::make_unique<TransferModule>());
+    } else if (stage == "SkyboxPass") {
+        app->get_renderer()->add_render_module(std::make_unique<SkyboxPass>());
     } else if (stage == "BlitPass") {
         app->get_renderer()->add_post_render_stage(
             std::make_unique<BlitPass>());
@@ -131,7 +134,7 @@ void RenderPipelineWidget::show_add_stage_popup(Application& app) {
         static const char* pre_stages[] = {"DepthMapPass"};
         static const char* modules[] = {"DebugModule", "EditorModule",
                                         "MeshRenderModule", "ParticleModule",
-                                        "TransferModule"};
+                                        "TransferModule", "SkyboxPass"};
         static const char* post_stages[] = {"BlitPass", "UIPass"};
 
         static int stage_index = -1;

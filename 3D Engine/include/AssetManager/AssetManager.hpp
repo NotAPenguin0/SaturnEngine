@@ -174,6 +174,7 @@ std::string_view asset_type_string() {
     if constexpr (std::is_same_v<A, Mesh>) { return "mesh"; }
     if constexpr (std::is_same_v<A, audeo::SoundSource>) { return "sound"; }
     if constexpr (std::is_same_v<A, Font>) { return "font"; }
+    if constexpr (std::is_same_v<A, CubeMap>) { return "cubemap"; }
 }
 
 } // namespace Saturn

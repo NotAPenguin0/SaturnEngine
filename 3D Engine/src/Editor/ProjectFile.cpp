@@ -6,6 +6,7 @@
 
 #    include "Editor/EditorLog.hpp"
 
+#    include "Renderer/CubeMap.hpp"
 #    include "Renderer/Font.hpp"
 #    include "Renderer/Mesh.hpp"
 #    include "Renderer/Shader.hpp"
@@ -33,6 +34,13 @@ void ProjectFile::load(fs::path path) {
         log::error("Failed to open project file at path {}", path.string());
         return;
     }
+
+    AssetManager<Shader>::resource_list().clear();
+    AssetManager<Texture>::resource_list().clear();
+    AssetManager<Mesh>::resource_list().clear();
+    AssetManager<audeo::SoundSource>::resource_list().clear();
+    AssetManager<Font>::resource_list().clear();
+    AssetManager<CubeMap>::resource_list().clear();
 
     self_name = path.stem().string();
     self_dir = fs::absolute(path.remove_filename());
@@ -72,6 +80,9 @@ void ProjectFile::load(fs::path path) {
         }
         if (asset_type == "font") {
             AssetManager<Font>::queue_import(asset_path);
+        }
+        if (asset_type == "cubemap") {
+            AssetManager<CubeMap>::queue_import(asset_path);
         }
     }
 }
@@ -115,6 +126,7 @@ void ProjectFile::save() {
     export_assets<Mesh>(assets, "mesh");
     export_assets<audeo::SoundSource>(assets, "sound");
     export_assets<Font>(assets, "font");
+    export_assets<CubeMap>(assets, "cubemap");
 
     // Write exported assets to file
     for (auto& exported_asset : assets) {
@@ -134,7 +146,8 @@ void ProjectFile::create_and_load(fs::path folder) {
     file << 1 << "\nscenes/main_scene\n";
     file << "7\n"
             "PreRenderStage DepthMapPass\nRenderModule DebugModule\n"
-            "RenderModule MeshRenderModule\nRenderModule ParticleModule\n"
+            "RenderModule MeshRenderModule\nRenderModule "
+            "ParticleModule\nRenderModule SkyboxPass\n"
             "RenderModule TransferModule\nPostRenderStage "
             "BlitPass\nPostRenderStage UIPass\n"
             "RenderModule EditorModule\n";

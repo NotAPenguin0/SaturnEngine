@@ -65,6 +65,9 @@ void from_json(nlohmann::json const& json, Camera& component) {
 		if (auto x = (*c).find("Fov"); x != (*c).end()) {
 			component.fov = (*x).get<float>();
 		}
+		if (auto x = (*c).find("Skybox"); x != (*c).end()) {
+			component.skybox = (*x).get<Resource<Saturn::CubeMap>>();
+		}
 		if (auto x = (*c).find("ViewportId"); x != (*c).end()) {
 			component.viewport_id = (*x).get<unsigned int>();
 		}
@@ -453,6 +456,7 @@ void to_json(nlohmann::json& json, Camera const& component) {
 	json["CameraComponent"]["Up"] = component.up;
 	json["CameraComponent"]["Front"] = component.front;
 	json["CameraComponent"]["Fov"] = component.fov;
+	json["CameraComponent"]["Skybox"] = component.skybox;
 	json["CameraComponent"]["ViewportId"] = component.viewport_id;
 	// clang-format on
 }

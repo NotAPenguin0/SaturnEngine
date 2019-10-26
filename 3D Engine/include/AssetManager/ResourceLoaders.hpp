@@ -9,6 +9,7 @@
 #include "Renderer/Shader.hpp"
 #include "Renderer/Texture.hpp"
 #include "Renderer/Font.hpp"
+#include "Renderer/CubeMap.hpp"
 
 #include <audeo/audeo.hpp>
 
@@ -90,6 +91,17 @@ class ResourceLoader<Font> {
                        std::string const& root_dir);
 };
 
+template<>
+class ResourceLoader<CubeMap> {
+public:
+    static LoadResult<CubeMap> load(std::string const& path,
+                                 std::string const& root_dir);
+    static void reload(std::unique_ptr<CubeMap>& res,
+                       std::vector<fs::path>& dep_paths,
+                       std::string const& path,
+                       std::string const& root_dir);
+};
+
 // File types
 
 template<typename R>
@@ -123,6 +135,11 @@ struct FileTypes<audeo::SoundSource> {
 template<>
 struct FileTypes<Font> {
 	static std::vector<FileType> types;
+};
+
+template<>
+struct FileTypes<CubeMap> {
+	static std::vector<FileType> types; 
 };
 
 } // namespace Saturn

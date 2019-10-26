@@ -1,9 +1,9 @@
 #include "AssetManager/ResourceLoaders.hpp"
 
+#include "Editor/EditorLog.hpp"
 #include "Logging/LogSystem.hpp"
 
-#include "Editor/EditorLog.hpp"
-
+#include <Renderer/stb_image.h>
 #include <fstream>
 
 namespace Saturn {
@@ -334,6 +334,88 @@ void ResourceLoader<Font>::reload(std::unique_ptr<Font>& res,
     dependent_paths = std::move(new_res.dependent_paths);
 }
 
+enum class CubeMapFace {
+    Right = GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+    Left = GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+    Top = GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+    Bottom = GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+    Back = GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
+    Front = GL_TEXTURE_CUBE_MAP_POSITIVE_Z
+};
+
+std::ifstream& operator>>(std::ifstream& in, CubeMapFace& fc) {
+    std::string s;
+    in >> s;
+    if (s == "Right") {
+        fc = CubeMapFace::Right;
+    } else if (s == "Left") {
+        fc = CubeMapFace::Left;
+    } else if (s == "Top") {
+        fc = CubeMapFace::Top;
+    } else if (s == "Bottom") {
+        fc = CubeMapFace::Bottom;
+    } else if (s == "Back") {
+        fc = CubeMapFace::Back;
+    } else if (s == "Front") {
+        fc = CubeMapFace::Front;
+    }
+
+    return in;
+}
+
+void load_face(CubeMapFace face_id, std::string const& path) {
+    int width, height, channels;
+    unsigned char* data =
+        stbi_load(path.c_str(), &width, &height, &channels, 0);
+    glTexImage2D(static_cast<GLenum>(face_id), 0, GL_RGB, width, height, 0,
+                 GL_RGB, GL_UNSIGNED_BYTE, data);
+	stbi_image_free(data);
+}
+
+LoadResult<CubeMap> ResourceLoader<CubeMap>::load(std::string const& path,
+                                                  std::string const& root_dir) {
+    std::ifstream base_file(path);
+    // This file contains all the faces of the cube map, and other data like
+    // format
+
+    std::vector<fs::path> face_paths;
+    constexpr size_t face_count = 6;
+
+    // Create the cubemap texture
+    unsigned int handle;
+    glGenTextures(1, &handle);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, handle);
+
+    for (size_t i = 0; i < face_count; ++i) {
+        CubeMapFace face_id;
+        std::string face_path;
+
+        base_file >> face_id >> face_path;
+        face_path = root_dir + face_path;
+
+        load_face(face_id, face_path);
+
+        face_paths.emplace_back(face_path);
+    }
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    return {std::make_unique<CubeMap>(handle), std::move(face_paths)};
+}
+
+void ResourceLoader<CubeMap>::reload(std::unique_ptr<CubeMap>& res,
+                                     std::vector<fs::path>& dependent_paths,
+                                     std::string const& path,
+                                     std::string const& root_dir) {
+    auto new_res = load(path, root_dir);
+    res->swap(*new_res.ptr);
+    dependent_paths = std::move(new_res.dependent_paths);
+}
+
 // File types definitions
 
 std::vector<FileType> FileTypes<Shader>::types = {
@@ -347,5 +429,8 @@ std::vector<FileType> FileTypes<audeo::SoundSource>::types = {
 
 std::vector<FileType> FileTypes<Font>::types = {
     {L"TrueType font file (*.ttf)", L"*.ttf"}};
+
+std::vector<FileType> FileTypes<CubeMap>::types = {
+    {L"CubeMap file (*.cm)", L"*.cm"}};
 
 } // namespace Saturn

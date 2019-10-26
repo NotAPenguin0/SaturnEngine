@@ -60,6 +60,7 @@ static void do_imports() {
     AssetManager<Mesh>::do_imports();
     AssetManager<audeo::SoundSource>::do_imports();
     AssetManager<Font>::do_imports();
+    AssetManager<CubeMap>::do_imports();
 }
 
 Editor::Editor(Application& app) : app(&app) {
@@ -136,6 +137,7 @@ Editor::Editor(Application& app) : app(&app) {
             log_resources<Font>(show_non_imported);
             return;
         }
+        if (type == "cubemap") { log_resources<CubeMap>(show_non_imported); }
     });
 
     // Load preferences
@@ -169,6 +171,7 @@ Editor::Editor(Application& app) : app(&app) {
     AssetManager<Mesh>::init();
     AssetManager<audeo::SoundSource>::init();
     AssetManager<Font>::init();
+    AssetManager<CubeMap>::init();
 
     do_imports();
 
@@ -250,6 +253,8 @@ void Editor::render(Scene& scene) {
         AssetManager<Texture>::do_reloads();
         AssetManager<Mesh>::do_reloads();
         AssetManager<audeo::SoundSource>::do_reloads();
+        AssetManager<Font>::do_reloads();
+        AssetManager<CubeMap>::do_reloads();
 
         if (show_demo) { ImGui::ShowDemoWindow(&show_demo); }
 
@@ -498,6 +503,12 @@ void Editor::create_editor_camera(Scene& scene) {
     trans_c.position = glm::vec3(-10, 13, -11);
     trans_c.rotation = glm::vec3(-30, 52, 0);
     trans_c.scale = glm::vec3(1, 1, 1);
+
+    auto old_cam_id =
+        app->get_renderer()->get_viewport(scene_view_viewport_id).get_camera();
+	auto& old_cam = scene.get_ecs().get_with_id<Camera>(old_cam_id);
+	cam_c.skybox = old_cam.skybox;
+
     app->get_renderer()
         ->get_viewport(scene_view_viewport_id)
         .set_camera(cam_c.id);

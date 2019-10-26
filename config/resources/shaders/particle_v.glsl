@@ -14,8 +14,6 @@ layout(std140, binding = 0) uniform Matrices {
 out vec2 TexCoords;
 out vec4 color;
 
-// layout(location = 2) uniform vec3 position;
-// layout(location = 3) uniform vec3 scale;
 
 void main() {
     color = iColor;

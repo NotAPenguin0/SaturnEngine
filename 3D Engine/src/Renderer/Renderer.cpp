@@ -39,6 +39,8 @@ Renderer::Renderer(CreateInfo create_info) :
     setup_framebuffer(create_info);
     create_default_viewport(create_info);
     initialize_postprocessing();
+
+	glDepthFunc(GL_LEQUAL);
 }
 
 Renderer::~Renderer() {}
