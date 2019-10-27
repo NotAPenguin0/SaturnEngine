@@ -8,9 +8,9 @@
         "NormalMap": {
             "Resource": "assets\\textures\\brickwall_normal.tex"
         },
-        "Reflective": true,
+        "Reflective": false,
         "Shader": {
-            "Resource": "assets\\shaders\\basic_reflect.sh"
+            "Resource": "assets\\shaders\\normal_mapping.sh"
         },
         "Shininess": 1000.0,
         "SpecularMap": {

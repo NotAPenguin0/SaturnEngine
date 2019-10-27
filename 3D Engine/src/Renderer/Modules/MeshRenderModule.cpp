@@ -99,6 +99,7 @@ void MeshRenderModule::send_material_data(Scene& scene,
             shader.set_int(Shader::Uniforms::Material::NormalMap,
                            material.normal_map->unit() - GL_TEXTURE0);
         }
+
         shader.set_float(Shader::Uniforms::Material::Shininess,
                          material.shininess);
     }
@@ -107,18 +108,18 @@ void MeshRenderModule::send_material_data(Scene& scene,
         // Get the skybox texture
         CubeMap* skybox = nullptr;
         for (auto [cam] : scene.get_ecs().select<Camera>()) {
-			// Grab the first skybox we can get and exit
+            // Grab the first skybox we can get and exit
             if (cam.skybox.is_loaded()) {
                 skybox = &cam.skybox.get();
                 break;
             }
         }
         // Skybox has texture unit 4
-        if (skybox) { 
-			glActiveTexture(GL_TEXTURE4);
+        if (skybox) {
+            glActiveTexture(GL_TEXTURE4);
             glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->handle);
-			shader.set_int(Shader::Uniforms::Material::Skybox, 4); 
-		}
+            shader.set_int(Shader::Uniforms::Material::Skybox, 4);
+        }
     }
 
     Shader::unbind();

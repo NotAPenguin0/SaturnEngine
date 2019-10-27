@@ -34,6 +34,10 @@ struct [[component, default_serialize, category("Rendering")]] Material
 
 	[[tooltip("Whether the material is reflective. Needs a reflection shader to actually work.")]]
 	bool reflective;
+
+/*
+	[[tooltip("Reflection map of the material. Only used when reflective is enabled.")]]
+	Resource<Texture> reflection_map;*/
 };
 // clang-format on
 

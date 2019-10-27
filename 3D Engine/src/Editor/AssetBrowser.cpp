@@ -99,7 +99,7 @@ template<>
 void display_preview(AssetManager<audeo::SoundSource>::Asset& asset,
                      ImVec2 size) {
 
-    static Resource<Texture> speaker_tex = AssetManager<Texture>::get_resource(
+    Resource<Texture> speaker_tex = AssetManager<Texture>::get_resource(
         "config/resources/textures/speaker.tex", true);
     ImGui::Image(reinterpret_cast<ImTextureID>(speaker_tex->handle()), size);
 }
@@ -117,7 +117,7 @@ void display_preview(AssetManager<Mesh>::Asset& asset, ImVec2 size) {
 
 template<>
 void display_preview(AssetManager<Shader>::Asset& asset, ImVec2 size) {
-    static Resource<Texture> shader_icon = AssetManager<Texture>::get_resource(
+    Resource<Texture> shader_icon = AssetManager<Texture>::get_resource(
         "config/resources/textures/shader_icon.tex", true);
     ImGui::Image(reinterpret_cast<ImTextureID>(shader_icon->handle()), size);
 }

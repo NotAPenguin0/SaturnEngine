@@ -14,7 +14,7 @@
         },
         "Shininess": 1000.0,
         "SpecularMap": {
-            "Resource": "assets\\textures\\brickwall_specular.tex"
+            "Resource": "assets\\textures\\container2_specular.tex"
         }
     },
     "NameComponent": {

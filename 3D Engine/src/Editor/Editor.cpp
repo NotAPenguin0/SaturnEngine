@@ -356,6 +356,15 @@ void Editor::show_menu_bar(Scene& scene) {
                 fs::path result = dialog.get_result();
                 if (result != "") {
                     ProjectFile::load(result);
+                    app->get_renderer()->get_pre_render_stages().clear();
+                    app->get_renderer()->get_post_render_stages().clear();
+                    app->get_renderer()->get_render_modules().clear();
+                    for (auto const& stage_data :
+                         ProjectFile::get_render_stages()) {
+                        editor_widgets.project_menu.pipeline_settings.add_stage(
+                            *app, stage_data.type, stage_data.stage);
+                    }
+
                     load_scene(scene, ProjectFile::main_scene());
                 }
             }
