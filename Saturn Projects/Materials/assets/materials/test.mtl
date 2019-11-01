@@ -1,0 +1,9 @@
+{
+	"shader": "assets/shaders/normal_mapping.sh",
+	"lit": true,
+	"diffuse": "assets/textures/brickwall.tex",
+	"specular": "assets/textures/brickwall_specular.tex",
+	"normal": "assets/textures/brickwall_normal.tex",
+	"shininess": 800,
+	"reflective": false
+}

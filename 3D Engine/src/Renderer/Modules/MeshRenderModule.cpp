@@ -23,10 +23,14 @@ void MeshRenderModule::process(Scene& scene,
                                Viewport& viewport,
                                Framebuffer& target) {
 
-    for (auto [relative_transform, mesh, material] :
-         scene.get_ecs().select<Transform, StaticMesh, Material>()) {
+    for (auto [relative_transform, mesh] :
+         scene.get_ecs().select<Transform, StaticMesh>()) {
+
+		if (!mesh.material.is_loaded()) { continue; }
 
         if (!mesh.mesh.is_loaded()) { continue; }
+
+		auto& material = *mesh.material;
 
         auto& shader = material.shader.is_loaded() ? material.shader.get()
                                                    : no_shader_error.get();

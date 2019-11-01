@@ -1,15 +1,16 @@
 #ifndef SATURN_RESOURCE_LOADERS_HPP_
 #define SATURN_RESOURCE_LOADERS_HPP_
 
+#include <filesystem>
 #include <memory>
 #include <string>
-#include <filesystem>
 
+#include "Renderer/CubeMap.hpp"
+#include "Renderer/Font.hpp"
+#include "Renderer/Material.hpp"
 #include "Renderer/Mesh.hpp"
 #include "Renderer/Shader.hpp"
 #include "Renderer/Texture.hpp"
-#include "Renderer/Font.hpp"
-#include "Renderer/CubeMap.hpp"
 
 #include <audeo/audeo.hpp>
 
@@ -26,11 +27,12 @@ template<typename R>
 class ResourceLoader {
 public:
     static LoadResult<R> load(std::string const& path,
-                                   std::string const& root_dir) {
+                              std::string const& root_dir) {
         static_assert("No resource loader found for specified type.");
     }
 
-    static void reload(std::unique_ptr<R>& res, std::vector<fs::path>& dep_paths,
+    static void reload(std::unique_ptr<R>& res,
+                       std::vector<fs::path>& dep_paths,
                        std::string const& path,
                        std::string const& root_dir) {
         static_assert("No resource loader found for specified type.");
@@ -41,7 +43,7 @@ template<>
 class ResourceLoader<Shader> {
 public:
     static LoadResult<Shader> load(std::string const& path,
-                                        std::string const& root_dir);
+                                   std::string const& root_dir);
     static void reload(std::unique_ptr<Shader>& res,
                        std::vector<fs::path>& dep_paths,
                        std::string const& path,
@@ -52,7 +54,7 @@ template<>
 class ResourceLoader<Mesh> {
 public:
     static LoadResult<Mesh> load(std::string const& path,
-                                      std::string const& root_dir);
+                                 std::string const& root_dir);
     static void reload(std::unique_ptr<Mesh>& res,
                        std::vector<fs::path>& dep_paths,
                        std::string const& path,
@@ -63,7 +65,7 @@ template<>
 class ResourceLoader<Texture> {
 public:
     static LoadResult<Texture> load(std::string const& path,
-                                         std::string const& root_dir);
+                                    std::string const& root_dir);
     static void reload(std::unique_ptr<Texture>& res,
                        std::vector<fs::path>& dep_paths,
                        std::string const& path,
@@ -73,8 +75,8 @@ public:
 template<>
 class ResourceLoader<audeo::SoundSource> {
 public:
-    static LoadResult<audeo::SoundSource>
-    load(std::string const& path, std::string const& root_dir);
+    static LoadResult<audeo::SoundSource> load(std::string const& path,
+                                               std::string const& root_dir);
     static void reload(std::unique_ptr<audeo::SoundSource>& res,
                        std::vector<fs::path>& dep_paths,
                        std::string const& path,
@@ -83,9 +85,10 @@ public:
 
 template<>
 class ResourceLoader<Font> {
-	public:
-		static LoadResult<Font> load(std::string const& path, std::string const& root_dir);
-		 static void reload(std::unique_ptr<Font>& res,
+public:
+    static LoadResult<Font> load(std::string const& path,
+                                 std::string const& root_dir);
+    static void reload(std::unique_ptr<Font>& res,
                        std::vector<fs::path>& dep_paths,
                        std::string const& path,
                        std::string const& root_dir);
@@ -95,8 +98,19 @@ template<>
 class ResourceLoader<CubeMap> {
 public:
     static LoadResult<CubeMap> load(std::string const& path,
-                                 std::string const& root_dir);
+                                    std::string const& root_dir);
     static void reload(std::unique_ptr<CubeMap>& res,
+                       std::vector<fs::path>& dep_paths,
+                       std::string const& path,
+                       std::string const& root_dir);
+};
+
+template<>
+class ResourceLoader<Material> {
+public:
+    static LoadResult<Material> load(std::string const& path,
+                                    std::string const& root_dir);
+    static void reload(std::unique_ptr<Material>& res,
                        std::vector<fs::path>& dep_paths,
                        std::string const& path,
                        std::string const& root_dir);
@@ -134,12 +148,17 @@ struct FileTypes<audeo::SoundSource> {
 
 template<>
 struct FileTypes<Font> {
-	static std::vector<FileType> types;
+    static std::vector<FileType> types;
 };
 
 template<>
 struct FileTypes<CubeMap> {
-	static std::vector<FileType> types; 
+    static std::vector<FileType> types;
+};
+
+template<>
+struct FileTypes<Material> {
+    static std::vector<FileType> types;
 };
 
 } // namespace Saturn

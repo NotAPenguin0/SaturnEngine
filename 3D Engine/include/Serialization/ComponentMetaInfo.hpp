@@ -17,6 +17,7 @@
 #include "Renderer/Shader.hpp"
 #include "Renderer/Texture.hpp"
 #include "Renderer/Mesh.hpp"
+#include "Renderer/Material.hpp"
 #include "Renderer/Font.hpp"
 #include "Renderer/CubeMap.hpp"
 
@@ -50,11 +51,11 @@ public:
 #define SUPPORTED_COMPONENT_FIELD_TYPES                                        \
     std::size_t, float, int, std::string, glm::vec2, glm::vec3, glm::vec4, bool, glm::bvec3, color3, color4, unsigned int, \
 	Resource<Shader>, Resource<Texture>, Resource<Mesh>, Resource<audeo::SoundSource>, \
-	Resource<Font>, ui_anchors::anchor_t, Resource<CubeMap>
+	Resource<Font>, ui_anchors::anchor_t, Resource<CubeMap>, Resource<Material>
 #define SUPPORTED_COMPONENT_FIELD_POINTER_TYPES                                \
     std::size_t*, float*, int*, std::string*, glm::vec2*, glm::vec3*, glm::vec4*, bool*, glm::bvec3*, color3*, color4*, unsigned int*, \
 	Resource<Shader>*, Resource<Texture>*, Resource<Mesh>*, Resource<audeo::SoundSource>*, \
-	Resource<Font>*, ui_anchors::anchor_t*, Resource<CubeMap>*
+	Resource<Font>*, ui_anchors::anchor_t*, Resource<CubeMap>*, Resource<Material>*
     using field_variant_t =
         std::variant<SUPPORTED_COMPONENT_FIELD_POINTER_TYPES>;
 
@@ -282,33 +283,6 @@ public:
 		// return nullptr if the field was not found
 		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
 	}
-    static ComponentFieldPtr get_component_field(Components::Material& comp,
-                                                 std::string_view field_name) {
-		if (field_name == "shader") {
-			return ComponentFieldPtr(&comp.shader);
-		}
-		if (field_name == "diffuse_map") {
-			return ComponentFieldPtr(&comp.diffuse_map);
-		}
-		if (field_name == "reflective") {
-			return ComponentFieldPtr(&comp.reflective);
-		}
-		if (field_name == "lit") {
-			return ComponentFieldPtr(&comp.lit);
-		}
-		if (field_name == "specular_map") {
-			return ComponentFieldPtr(&comp.specular_map);
-		}
-		if (field_name == "normal_map") {
-			return ComponentFieldPtr(&comp.normal_map);
-		}
-		if (field_name == "shininess") {
-			return ComponentFieldPtr(&comp.shininess);
-		}
-		
-		// return nullptr if the field was not found
-		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
-	}
     static ComponentFieldPtr get_component_field(Components::MusicController& comp,
                                                  std::string_view field_name) {
 		if (field_name == "music") {
@@ -362,11 +336,11 @@ public:
 	}
     static ComponentFieldPtr get_component_field(Components::Rigidbody& comp,
                                                  std::string_view field_name) {
-		if (field_name == "locked_axes") {
-			return ComponentFieldPtr(&comp.locked_axes);
-		}
 		if (field_name == "mass") {
 			return ComponentFieldPtr(&comp.mass);
+		}
+		if (field_name == "locked_axes") {
+			return ComponentFieldPtr(&comp.locked_axes);
 		}
 		
 		// return nullptr if the field was not found
@@ -434,6 +408,9 @@ public:
                                                  std::string_view field_name) {
 		if (field_name == "mesh") {
 			return ComponentFieldPtr(&comp.mesh);
+		}
+		if (field_name == "material") {
+			return ComponentFieldPtr(&comp.material);
 		}
 		if (field_name == "face_cull") {
 			return ComponentFieldPtr(&comp.face_cull);

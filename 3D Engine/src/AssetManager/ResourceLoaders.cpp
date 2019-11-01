@@ -6,6 +6,10 @@
 #include <Renderer/stb_image.h>
 #include <fstream>
 
+#include "AssetManager/AssetManager.hpp"
+
+#include <nlohmann/json.hpp>
+
 namespace Saturn {
 
 LoadResult<Shader> ResourceLoader<Shader>::load(std::string const& path,
@@ -381,8 +385,8 @@ LoadResult<CubeMap> ResourceLoader<CubeMap>::load(std::string const& path,
     bool flip = false;
     std::string s;
     base_file >> s;
-	flip = (s == "true");
-	stbi_set_flip_vertically_on_load(flip);
+    flip = (s == "true");
+    stbi_set_flip_vertically_on_load(flip);
 
     std::vector<fs::path> face_paths;
     constexpr size_t face_count = 6;
@@ -422,6 +426,69 @@ void ResourceLoader<CubeMap>::reload(std::unique_ptr<CubeMap>& res,
     dependent_paths = std::move(new_res.dependent_paths);
 }
 
+template<typename T>
+void json_get_or(nlohmann::json const& j,
+                 std::string_view key,
+                 T& dest,
+                 T const& def = T{}) {
+    if (auto json_it = j.find(key); json_it != j.end()) {
+        dest = (*json_it).get<T>();
+    } else {
+        dest = def;
+    }
+}
+
+template<typename R>
+void load_res_if_present(Resource<R>& res,
+                         std::string const& path,
+                         std::string const& root,
+                         std::vector<fs::path>& dependent_paths) {
+
+    if (path != "") {
+        res = AssetManager<R>::get_resource(root + path, false, true);
+		dependent_paths.emplace_back(root + path);
+    }
+}
+
+LoadResult<Material>
+ResourceLoader<Material>::load(std::string const& path,
+                               std::string const& root_dir) {
+    Material mat;
+    std::vector<fs::path> paths;
+
+    nlohmann::json j;
+    std::ifstream file(path);
+    file >> j;
+
+    std::string diffuse, specular, normal, shader;
+    // get paths to different resources used in this material
+    json_get_or(j, "diffuse", diffuse);
+    json_get_or(j, "specular", specular);
+    json_get_or(j, "normal", normal);
+    json_get_or(j, "shader", shader);
+    // fix their paths
+    load_res_if_present(mat.diffuse_map, diffuse, root_dir, paths);
+    load_res_if_present(mat.specular_map, specular, root_dir, paths);
+    load_res_if_present(mat.normal_map, normal, root_dir, paths);
+    load_res_if_present(mat.shader, shader, root_dir, paths);
+
+    json_get_or(j, "shininess", mat.shininess, 100.0f);
+    json_get_or(j, "lit", mat.lit, true);
+    json_get_or(j, "reflective", mat.reflective, false);
+
+    return {std::make_unique<Material>(std::move(mat)), paths};
+}
+
+void ResourceLoader<Material>::reload(std::unique_ptr<Material>& res,
+                                      std::vector<fs::path>& dependent_paths,
+                                      std::string const& path,
+                                      std::string const& root_dir) {
+
+    auto new_res = load(path, root_dir);
+    res->swap(*new_res.ptr);
+    dependent_paths = std::move(new_res.dependent_paths);
+}
+
 // File types definitions
 
 std::vector<FileType> FileTypes<Shader>::types = {
@@ -432,11 +499,11 @@ std::vector<FileType> FileTypes<Texture>::types = {
     {L"Texture file (*.tex)", L"*tex"}};
 std::vector<FileType> FileTypes<audeo::SoundSource>::types = {
     {L"SoundSource file (*.sfx)", L"*.sfx"}};
-
 std::vector<FileType> FileTypes<Font>::types = {
     {L"TrueType font file (*.ttf)", L"*.ttf"}};
-
 std::vector<FileType> FileTypes<CubeMap>::types = {
     {L"CubeMap file (*.cm)", L"*.cm"}};
+std::vector<FileType> FileTypes<Material>::types = {
+    {L"Material file (*.mtl)", L"*.mtl"}};
 
 } // namespace Saturn

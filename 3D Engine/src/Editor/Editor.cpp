@@ -61,6 +61,7 @@ static void do_imports() {
     AssetManager<audeo::SoundSource>::do_imports();
     AssetManager<Font>::do_imports();
     AssetManager<CubeMap>::do_imports();
+    AssetManager<Material>::do_imports();
 }
 
 Editor::Editor(Application& app) : app(&app) {
@@ -137,7 +138,14 @@ Editor::Editor(Application& app) : app(&app) {
             log_resources<Font>(show_non_imported);
             return;
         }
-        if (type == "cubemap") { log_resources<CubeMap>(show_non_imported); }
+        if (type == "cubemap") {
+            log_resources<CubeMap>(show_non_imported);
+            return;
+        }
+        if (type == "material") {
+            log_resources<Material>(show_non_imported);
+            return;
+        }
     });
 
     // Load preferences
@@ -172,6 +180,7 @@ Editor::Editor(Application& app) : app(&app) {
     AssetManager<audeo::SoundSource>::init();
     AssetManager<Font>::init();
     AssetManager<CubeMap>::init();
+	AssetManager<Material>::init();
 
     do_imports();
 
@@ -266,6 +275,7 @@ void Editor::render(Scene& scene) {
         AssetManager<audeo::SoundSource>::do_reloads();
         AssetManager<Font>::do_reloads();
         AssetManager<CubeMap>::do_reloads();
+		AssetManager<Material>::do_reloads();
 
         if (show_demo) { ImGui::ShowDemoWindow(&show_demo); }
 

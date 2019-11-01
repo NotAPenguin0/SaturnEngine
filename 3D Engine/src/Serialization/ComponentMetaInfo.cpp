@@ -233,36 +233,6 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	}
 	{
 		ComponentInfo info;
-		info.name = "Material ";
-		info.category = "Rendering";
-		info.default_serialize = true;
-		info.hide_in_editor = false;
-		info.editor_only = false;
-		info.fields["shader"].type = "Resource<Saturn::Shader>";
-		info.fields["shader"].tooltip = "The shader this material will use.";
-		info.fields["shader"].hide_in_editor = false;
-		info.fields["diffuse_map"].type = "Resource<Saturn::Texture>";
-		info.fields["diffuse_map"].tooltip = "Diffuse texture map.";
-		info.fields["diffuse_map"].hide_in_editor = false;
-		info.fields["reflective"].type = "bool";
-		info.fields["reflective"].tooltip = "Whether the material is reflective. Needs a reflection shader to actually work.";
-		info.fields["reflective"].hide_in_editor = false;
-		info.fields["lit"].type = "bool";
-		info.fields["lit"].tooltip = "Whether this material is affected by lighting.";
-		info.fields["lit"].hide_in_editor = false;
-		info.fields["specular_map"].type = "Resource<Saturn::Texture>";
-		info.fields["specular_map"].tooltip = "Specular texture map.";
-		info.fields["specular_map"].hide_in_editor = false;
-		info.fields["normal_map"].type = "Resource<Saturn::Texture>";
-		info.fields["normal_map"].tooltip = "Normal map texture.";
-		info.fields["normal_map"].hide_in_editor = false;
-		info.fields["shininess"].type = "float";
-		info.fields["shininess"].tooltip = "Shininess value of the material";
-		info.fields["shininess"].hide_in_editor = false;
-		data.push_back(info);
-	}
-	{
-		ComponentInfo info;
 		info.name = "MusicController ";
 		info.category = "Sound";
 		info.default_serialize = true;
@@ -445,12 +415,12 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.default_serialize = true;
 		info.hide_in_editor = false;
 		info.editor_only = false;
-		info.fields["locked_axes"].type = "glm::bvec3";
-		info.fields["locked_axes"].tooltip = "The axes that should not be affected by the physics system";
-		info.fields["locked_axes"].hide_in_editor = false;
 		info.fields["mass"].type = "float";
 		info.fields["mass"].tooltip = "The mass of the rigid body.";
 		info.fields["mass"].hide_in_editor = false;
+		info.fields["locked_axes"].type = "glm::bvec3";
+		info.fields["locked_axes"].tooltip = "The axes that should not be affected by the physics system";
+		info.fields["locked_axes"].hide_in_editor = false;
 		data.push_back(info);
 	}
 	{
@@ -533,6 +503,9 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.fields["mesh"].type = "Resource<Saturn::Mesh>";
 		info.fields["mesh"].tooltip = "The mesh resource that will be rendered";
 		info.fields["mesh"].hide_in_editor = false;
+		info.fields["material"].type = "Resource<Saturn::Material>";
+		info.fields["material"].tooltip = "The material to use when rendering the mesh";
+		info.fields["material"].hide_in_editor = false;
 		info.fields["face_cull"].type = "bool";
 		info.fields["face_cull"].tooltip = "Whether to do face culling on the mesh. Usually you want this, except for planes.";
 		info.fields["face_cull"].hide_in_editor = false;

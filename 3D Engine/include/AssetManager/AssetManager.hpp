@@ -111,9 +111,9 @@ public:
         return resources;
     }
 
-	static std::unordered_map<std::string, size_t>& get_id_map() {
-		return id_map;
-	}
+    static std::unordered_map<std::string, size_t>& get_id_map() {
+        return id_map;
+    }
 
     static void remove_asset(Asset& asset) {
         asset_tracker->stop_tracking(asset);
@@ -179,6 +179,7 @@ std::string_view asset_type_string() {
     if constexpr (std::is_same_v<A, audeo::SoundSource>) { return "sound"; }
     if constexpr (std::is_same_v<A, Font>) { return "font"; }
     if constexpr (std::is_same_v<A, CubeMap>) { return "cubemap"; }
+    if constexpr (std::is_same_v<A, Material>) { return "material"; }
 }
 
 } // namespace Saturn

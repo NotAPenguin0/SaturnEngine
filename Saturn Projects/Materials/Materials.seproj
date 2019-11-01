@@ -1,0 +1,16 @@
+1
+scenes\main_scene
+7
+PreRenderStage DepthMapPass
+RenderModule DebugModule
+RenderModule MeshRenderModule
+RenderModule ParticleModule
+RenderModule SkyboxPass
+RenderModule TransferModule
+PostRenderStage BlitPass
+asset shader assets/shaders/normal_mapping.sh
+asset texture assets/textures/brickwall.tex
+asset texture assets/textures/brickwall_specular.tex
+asset texture assets/textures/brickwall_normal.tex
+asset mesh assets/meshes/my_cube.mesh
+asset material assets/materials/test.mtl

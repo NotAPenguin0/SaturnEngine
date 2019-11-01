@@ -216,35 +216,6 @@ void from_json(nlohmann::json const& json, Image& component) {
 	}
 }
 
-void from_json(nlohmann::json const& json, Material& component) {
-	auto c = json.find("MaterialComponent");
-	if (c == json.end()) {
-		throw std::runtime_error("No Material component stored even though it was requested");
-	} else {
-		if (auto x = (*c).find("Shader"); x != (*c).end()) {
-			component.shader = (*x).get<Resource<Saturn::Shader>>();
-		}
-		if (auto x = (*c).find("DiffuseMap"); x != (*c).end()) {
-			component.diffuse_map = (*x).get<Resource<Saturn::Texture>>();
-		}
-		if (auto x = (*c).find("Reflective"); x != (*c).end()) {
-			component.reflective = (*x).get<bool>();
-		}
-		if (auto x = (*c).find("Lit"); x != (*c).end()) {
-			component.lit = (*x).get<bool>();
-		}
-		if (auto x = (*c).find("SpecularMap"); x != (*c).end()) {
-			component.specular_map = (*x).get<Resource<Saturn::Texture>>();
-		}
-		if (auto x = (*c).find("NormalMap"); x != (*c).end()) {
-			component.normal_map = (*x).get<Resource<Saturn::Texture>>();
-		}
-		if (auto x = (*c).find("Shininess"); x != (*c).end()) {
-			component.shininess = (*x).get<float>();
-		}
-	}
-}
-
 void from_json(nlohmann::json const& json, MusicController& component) {
 	auto c = json.find("MusicControllerComponent");
 	if (c == json.end()) {
@@ -309,11 +280,11 @@ void from_json(nlohmann::json const& json, Rigidbody& component) {
 	if (c == json.end()) {
 		throw std::runtime_error("No Rigidbody component stored even though it was requested");
 	} else {
-		if (auto x = (*c).find("LockedAxes"); x != (*c).end()) {
-			component.locked_axes = (*x).get<glm::bvec3>();
-		}
 		if (auto x = (*c).find("Mass"); x != (*c).end()) {
 			component.mass = (*x).get<float>();
+		}
+		if (auto x = (*c).find("LockedAxes"); x != (*c).end()) {
+			component.locked_axes = (*x).get<glm::bvec3>();
 		}
 	}
 }
@@ -382,6 +353,9 @@ void from_json(nlohmann::json const& json, StaticMesh& component) {
 	} else {
 		if (auto x = (*c).find("Mesh"); x != (*c).end()) {
 			component.mesh = (*x).get<Resource<Saturn::Mesh>>();
+		}
+		if (auto x = (*c).find("Material"); x != (*c).end()) {
+			component.material = (*x).get<Resource<Saturn::Material>>();
 		}
 		if (auto x = (*c).find("FaceCull"); x != (*c).end()) {
 			component.face_cull = (*x).get<bool>();
@@ -542,19 +516,6 @@ void to_json(nlohmann::json& json, Image const& component) {
 	// clang-format on
 }
 
-void to_json(nlohmann::json& json, Material const& component) {
-	json["MaterialComponent"] = nlohmann::json::object();
-	// clang-format off
-	json["MaterialComponent"]["Shader"] = component.shader;
-	json["MaterialComponent"]["DiffuseMap"] = component.diffuse_map;
-	json["MaterialComponent"]["Reflective"] = component.reflective;
-	json["MaterialComponent"]["Lit"] = component.lit;
-	json["MaterialComponent"]["SpecularMap"] = component.specular_map;
-	json["MaterialComponent"]["NormalMap"] = component.normal_map;
-	json["MaterialComponent"]["Shininess"] = component.shininess;
-	// clang-format on
-}
-
 void to_json(nlohmann::json& json, MusicController const& component) {
 	json["MusicControllerComponent"] = nlohmann::json::object();
 	// clang-format off
@@ -591,8 +552,8 @@ void to_json(nlohmann::json& json, PointLight const& component) {
 void to_json(nlohmann::json& json, Rigidbody const& component) {
 	json["RigidbodyComponent"] = nlohmann::json::object();
 	// clang-format off
-	json["RigidbodyComponent"]["LockedAxes"] = component.locked_axes;
 	json["RigidbodyComponent"]["Mass"] = component.mass;
+	json["RigidbodyComponent"]["LockedAxes"] = component.locked_axes;
 	// clang-format on
 }
 
@@ -629,6 +590,7 @@ void to_json(nlohmann::json& json, StaticMesh const& component) {
 	json["StaticMeshComponent"] = nlohmann::json::object();
 	// clang-format off
 	json["StaticMeshComponent"]["Mesh"] = component.mesh;
+	json["StaticMeshComponent"]["Material"] = component.material;
 	json["StaticMeshComponent"]["FaceCull"] = component.face_cull;
 	// clang-format on
 }

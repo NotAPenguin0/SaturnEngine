@@ -11,6 +11,7 @@
 #include "Renderer/Shader.hpp"
 #include "Renderer/Texture.hpp"
 #include "Renderer/Font.hpp"
+#include "Renderer/Material.hpp"
 #include "Utility/Utility.hpp"
 
 
@@ -23,7 +24,7 @@ namespace impl {
 
 namespace {
 
-#define ASSET_LIST Shader, Texture, Mesh, audeo::SoundSource, Font, CubeMap
+#define ASSET_LIST Shader, Texture, Mesh, audeo::SoundSource, Font, CubeMap, Material
 template<size_t I, typename F, typename... Args>
 void do_for_each_asset(F&& f, Args&&... args) {
     using assets = std::tuple<ASSET_LIST>;

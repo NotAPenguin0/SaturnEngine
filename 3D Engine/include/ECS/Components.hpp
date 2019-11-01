@@ -18,7 +18,6 @@
 #include "Components/FPSCameraController.hpp"
 #include "Components/FreeLookController.hpp"
 #include "Components/Image.hpp"
-#include "Components/Material.hpp"
 #include "Components/MusicController.hpp"
 #include "Components/Name.hpp"
 #include "Components/OutlineRenderer.hpp"

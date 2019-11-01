@@ -25,8 +25,8 @@ public:
     process(Scene& scene, Viewport& viewport, Framebuffer& target) override;
 
 private:
-    void unbind_textures(Components::Material& material);
-    void send_material_data(Scene& scene, Shader& shader, Components::Material& material);
+    void unbind_textures(Material& material);
+    void send_material_data(Scene& scene, Shader& shader, Material& material);
 
     Resource<Shader> no_shader_error;
 };
