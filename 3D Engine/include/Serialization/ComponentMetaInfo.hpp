@@ -19,6 +19,7 @@
 #include "Renderer/Mesh.hpp"
 #include "Renderer/Material.hpp"
 #include "Renderer/Font.hpp"
+#include "Renderer/Model.hpp"
 #include "Renderer/CubeMap.hpp"
 
 #include <audeo/SoundSource.hpp>
@@ -51,11 +52,11 @@ public:
 #define SUPPORTED_COMPONENT_FIELD_TYPES                                        \
     std::size_t, float, int, std::string, glm::vec2, glm::vec3, glm::vec4, bool, glm::bvec3, color3, color4, unsigned int, \
 	Resource<Shader>, Resource<Texture>, Resource<Mesh>, Resource<audeo::SoundSource>, \
-	Resource<Font>, ui_anchors::anchor_t, Resource<CubeMap>, Resource<Material>
+	Resource<Font>, ui_anchors::anchor_t, Resource<CubeMap>, Resource<Material>, Resource<Model>
 #define SUPPORTED_COMPONENT_FIELD_POINTER_TYPES                                \
     std::size_t*, float*, int*, std::string*, glm::vec2*, glm::vec3*, glm::vec4*, bool*, glm::bvec3*, color3*, color4*, unsigned int*, \
 	Resource<Shader>*, Resource<Texture>*, Resource<Mesh>*, Resource<audeo::SoundSource>*, \
-	Resource<Font>*, ui_anchors::anchor_t*, Resource<CubeMap>*, Resource<Material>*
+	Resource<Font>*, ui_anchors::anchor_t*, Resource<CubeMap>*, Resource<Material>*, Resource<Model>*
     using field_variant_t =
         std::variant<SUPPORTED_COMPONENT_FIELD_POINTER_TYPES>;
 
@@ -411,6 +412,18 @@ public:
 		}
 		if (field_name == "material") {
 			return ComponentFieldPtr(&comp.material);
+		}
+		if (field_name == "face_cull") {
+			return ComponentFieldPtr(&comp.face_cull);
+		}
+		
+		// return nullptr if the field was not found
+		return ComponentFieldPtr(ComponentFieldPtr::null_ptr);
+	}
+    static ComponentFieldPtr get_component_field(Components::StaticModel& comp,
+                                                 std::string_view field_name) {
+		if (field_name == "model") {
+			return ComponentFieldPtr(&comp.model);
 		}
 		if (field_name == "face_cull") {
 			return ComponentFieldPtr(&comp.face_cull);

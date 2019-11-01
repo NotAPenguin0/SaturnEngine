@@ -28,6 +28,7 @@
 ::Saturn::Components::SoundListener, \
 ::Saturn::Components::SpotLight, \
 ::Saturn::Components::StaticMesh, \
+::Saturn::Components::StaticModel, \
 ::Saturn::Components::Text, \
 ::Saturn::Components::Transform
 #endif

@@ -161,7 +161,7 @@ template<typename R>
 void from_json(nlohmann::json const& j, Resource<R>& res) {
     if (auto r = j.find("Resource"); r != j.end()) {
         auto path = j["Resource"];
-        res = AssetManager<R>::get_resource(path);
+        if (path != "") { res = AssetManager<R>::get_resource(path); }
     }
 }
 
@@ -180,6 +180,7 @@ std::string_view asset_type_string() {
     if constexpr (std::is_same_v<A, Font>) { return "font"; }
     if constexpr (std::is_same_v<A, CubeMap>) { return "cubemap"; }
     if constexpr (std::is_same_v<A, Material>) { return "material"; }
+    if constexpr (std::is_same_v<A, Model>) { return "model"; }
 }
 
 } // namespace Saturn

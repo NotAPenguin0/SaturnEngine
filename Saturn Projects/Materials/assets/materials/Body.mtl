@@ -1,0 +1,6 @@
+{"diffuse":"assets/textures/body_dif.tex",
+"shader":"assets/shaders/normal_mapping.sh",
+"specular":"assets/textures/body_showroom_spec.tex",
+"shininess": 800,
+"reflective": false
+}

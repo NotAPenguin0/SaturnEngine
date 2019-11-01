@@ -1,3 +1,5 @@
 config/temp/playmode/entities/Main Camera.json
 config/temp/playmode/entities/Directional Light.json
 config/temp/playmode/entities/Cube.json
+config/temp/playmode/entities/Nanosuit_Obj.json
+config/temp/playmode/entities/PtLight.json

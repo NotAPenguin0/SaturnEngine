@@ -7,6 +7,11 @@
 #include <fstream>
 
 #include "AssetManager/AssetManager.hpp"
+#include "Editor/ProjectFile.hpp"
+
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
 
 #include <nlohmann/json.hpp>
 
@@ -446,7 +451,7 @@ void load_res_if_present(Resource<R>& res,
 
     if (path != "") {
         res = AssetManager<R>::get_resource(root + path, false, true);
-		dependent_paths.emplace_back(root + path);
+        dependent_paths.emplace_back(root + path);
     }
 }
 
@@ -489,6 +494,195 @@ void ResourceLoader<Material>::reload(std::unique_ptr<Material>& res,
     dependent_paths = std::move(new_res.dependent_paths);
 }
 
+void add_mesh(Model& model,
+              const aiMesh* mesh,
+              const aiScene* scene,
+              std::vector<Resource<Material>> const& materials) {
+    std::vector<float> data;
+    std::vector<unsigned int> indices;
+
+    const size_t vertex_size = 11;
+    const size_t buf_elems = mesh->mNumVertices * vertex_size;
+    data.reserve(buf_elems);
+
+    indices.reserve(mesh->mNumFaces * 3);
+
+    // vertices
+    for (size_t i = 0; i < mesh->mNumVertices; ++i) {
+        data.push_back(mesh->mVertices[i].x);
+        data.push_back(mesh->mVertices[i].y);
+        data.push_back(mesh->mVertices[i].z);
+        data.push_back(mesh->mTextureCoords[0][i].x);
+        data.push_back(mesh->mTextureCoords[0][i].y);
+        data.push_back(mesh->mNormals[i].x);
+        data.push_back(mesh->mNormals[i].y);
+        data.push_back(mesh->mNormals[i].z);
+        data.push_back(mesh->mTangents[i].x);
+        data.push_back(mesh->mTangents[i].y);
+        data.push_back(mesh->mTangents[i].z);
+    }
+
+    // indices
+    for (size_t i = 0; i < mesh->mNumFaces; i++) {
+        aiFace face = mesh->mFaces[i];
+        for (unsigned int j = 0; j < face.mNumIndices; j++)
+            indices.push_back(face.mIndices[j]);
+    }
+
+    Mesh::CreateInfo info;
+    info.vertices.vertices = std::move(data);
+    info.vertices.indices = std::move(indices);
+    info.vertices.attributes.push_back({0, 3}); // pos
+    info.vertices.attributes.push_back({1, 2}); // tx
+    info.vertices.attributes.push_back({2, 3}); // norm
+    info.vertices.attributes.push_back({3, 3}); // tan
+
+    model.meshes.emplace_back();
+    model.meshes.back().assign(info);
+
+    if (mesh->mMaterialIndex >= 0) {
+        model.meshes.back().material = materials[mesh->mMaterialIndex];
+    }
+}
+
+void process_node(const aiNode* node,
+                  const aiScene* scene,
+                  Model& model,
+                  std::vector<Resource<Material>> const& materials) {
+    for (size_t i = 0; i < node->mNumMeshes; ++i) {
+        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+        add_mesh(model, mesh, scene, materials);
+    }
+
+    for (size_t i = 0; i < node->mNumChildren; ++i) {
+        process_node(node->mChildren[i], scene, model, materials);
+    }
+}
+
+void create_tex_file(fs::path const& path,
+                     fs::path const& img_path,
+                     aiTextureType tex_type) {
+
+    size_t unit = 0;
+    std::string format = "SRGB";
+
+    if (tex_type == aiTextureType_DIFFUSE) {
+        unit = 1;
+    } else if (tex_type == aiTextureType_SPECULAR) {
+        unit = 0;
+        format = "RGBA";
+    } else if (tex_type == aiTextureType_NORMALS) {
+        unit = 3;
+        format = "RGBA";
+    }
+
+    std::ofstream file(path);
+    file << "Texture2D\n";
+    file << img_path.generic_string() << "\n";
+    file << unit << "\n";
+    file << "RGBA\n";
+    file << format << "\n";
+    file << "false\n";
+    file << 4 << "\n";
+    file << "WrapS = Repeat\n"
+            "WrapT = Repeat\nMinFilter = LinearMipmapLinear\nMagFilter = "
+            "Linear\n";
+}
+
+void create_material_texture(aiMaterial* material,
+                             fs::path const& path,
+                             std::string const& root_dir,
+                             aiTextureType type,
+                             std::string_view key,
+                             nlohmann::json& j) {
+    // Diffuse texture. We only support one of each texture for now
+    if (material->GetTextureCount(type) > 0) {
+        aiString t_path;
+
+        material->GetTexture(type, 0, &t_path);
+        fs::path img_path = fs::relative(root_dir + t_path.C_Str(),
+                                         Editor::ProjectFile::root_path());
+        fs::path tex_path = Editor::ProjectFile::root_path() /
+                            "assets/textures/" /
+                            (img_path.stem().string() + ".tex");
+        create_tex_file(tex_path, img_path, type);
+        j[std::string(key)] =
+            fs::relative(tex_path.string(), Editor::ProjectFile::root_path())
+                .generic_string();
+    }
+}
+void create_material_file(aiMaterial* material,
+                          fs::path const& path,
+                          std::string const& root_dir) {
+    nlohmann::json j;
+
+    create_material_texture(material, path, root_dir, aiTextureType_DIFFUSE,
+                            "diffuse", j);
+    create_material_texture(material, path, root_dir, aiTextureType_SPECULAR,
+                            "specular", j);
+    create_material_texture(material, path, root_dir, aiTextureType_NORMALS,
+                            "normal", j);
+    j["shader"] = "assets/shaders/normal_mapping.sh";
+
+    std::ofstream file(path);
+    file << j;
+}
+
+std::vector<Resource<Material>> load_materials(const aiScene* scene,
+                                               std::string const& root_dir) {
+    using namespace std::literals::string_literals;
+    std::vector<Resource<Material>> materials;
+
+    for (size_t i = 0; i < scene->mNumMaterials; ++i) {
+        aiMaterial* material = scene->mMaterials[i];
+        // Convert to our own format and load from asset manager
+        aiString name = material->GetName();
+        std::string material_rel =
+            "assets/materials/" + (name.C_Str() + ".mtl"s);
+        fs::path material_path =
+            Editor::ProjectFile::root_path() / material_rel;
+        create_material_file(material, material_path, root_dir);
+        materials.push_back(
+            AssetManager<Material>::get_resource(material_rel, false, true));
+    }
+
+    return materials;
+}
+
+LoadResult<Model> ResourceLoader<Model>::load(std::string const& path,
+                                              std::string const& root_dir) {
+
+    Model model;
+
+    const int ai_load_flags = aiProcess_Triangulate |
+                              aiProcess_CalcTangentSpace | aiProcess_FlipUVs |
+                              aiProcess_GenNormals;
+
+    Assimp::Importer importer;
+    const aiScene* scene = importer.ReadFile(path, ai_load_flags);
+
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ||
+        !scene->mRootNode) {
+        return {nullptr, {}};
+    }
+
+    std::vector<Resource<Material>> materials =
+        load_materials(scene, root_dir + "/assets/models/");
+
+    process_node(scene->mRootNode, scene, model, materials);
+
+    return {std::make_unique<Model>(std::move(model)), {}};
+}
+
+void ResourceLoader<Model>::reload(std::unique_ptr<Model>& res,
+                                   std::vector<fs::path>& dependent_paths,
+                                   std::string const& path,
+                                   std::string const& root_dir) {
+    auto new_res = load(path, root_dir);
+    res->swap(*new_res.ptr);
+    dependent_paths = std::move(new_res.dependent_paths);
+}
+
 // File types definitions
 
 std::vector<FileType> FileTypes<Shader>::types = {
@@ -505,5 +699,8 @@ std::vector<FileType> FileTypes<CubeMap>::types = {
     {L"CubeMap file (*.cm)", L"*.cm"}};
 std::vector<FileType> FileTypes<Material>::types = {
     {L"Material file (*.mtl)", L"*.mtl"}};
+// #TODO add more model file types here
+std::vector<FileType> FileTypes<Model>::types = {
+    {L"Obj file (*.obj)", L"*.obj"}};
 
 } // namespace Saturn

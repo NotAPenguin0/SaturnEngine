@@ -513,6 +513,21 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 	}
 	{
 		ComponentInfo info;
+		info.name = "StaticModel ";
+		info.category = "Rendering";
+		info.default_serialize = true;
+		info.hide_in_editor = false;
+		info.editor_only = false;
+		info.fields["model"].type = "Resource<Saturn::Model>";
+		info.fields["model"].tooltip = "The model resource that will be rendered";
+		info.fields["model"].hide_in_editor = false;
+		info.fields["face_cull"].type = "bool";
+		info.fields["face_cull"].tooltip = "Whether to do face culling on the model. Usually you want this, except for planes.";
+		info.fields["face_cull"].hide_in_editor = false;
+		data.push_back(info);
+	}
+	{
+		ComponentInfo info;
 		info.name = "Text ";
 		info.category = "UI";
 		info.default_serialize = true;

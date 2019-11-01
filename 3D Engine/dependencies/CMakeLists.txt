@@ -6,19 +6,20 @@ add_subdirectory(libfmt)
 add_subdirectory(audeo)
 add_subdirectory(efsw)
 add_subdirectory(FreeType)
+add_subdirectory(assimp)
 
-set_target_properties(glad glfw audeo freetype # nlohmann_json glm
+set_target_properties(glad glfw audeo freetype assimp efsw
     PROPERTIES
     FOLDER "${ENGINE_DEPENDENCIES_FOLDER_NAME}"
 )
 
 if(MSVC)
-    set_target_properties(glfw glad efsw freetype
+    set_target_properties(glfw glad efsw freetype assimp
         PROPERTIES
         COMPILE_OPTIONS "/W0"
     )
 elseif("${CMAKE_CXX_COMPILER_ID}" matches "GCC" or "${CMAKE_CXX_COMPILER_ID}" matches "Clang")
-    set_target_properties(glfw glad efsw freetyp
+    set_target_properties(glfw glad efsw freetyp assimp
         PROPERTIES
         COMPILE_OPTIONS "-Wno-everything"
     )

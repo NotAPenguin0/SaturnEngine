@@ -9,8 +9,29 @@ RenderModule SkyboxPass
 RenderModule TransferModule
 PostRenderStage BlitPass
 asset shader assets/shaders/normal_mapping.sh
+asset shader assets/shaders/basic_reflect.sh
+asset texture assets/textures/hand_dif.tex
+asset texture assets/textures/helmet_diff.tex
 asset texture assets/textures/brickwall.tex
 asset texture assets/textures/brickwall_specular.tex
 asset texture assets/textures/brickwall_normal.tex
+asset texture assets/textures/arm_dif.tex
+asset texture assets/textures/body_dif.tex
+asset texture assets/textures/glass_dif.tex
+asset texture assets/textures/leg_dif.tex
+asset texture assets/textures/arm_showroom_spec.tex
+asset texture assets/textures/body_showroom_spec.tex
+asset texture assets/textures/hand_showroom_spec.tex
+asset texture assets/textures/helmet_showroom_spec.tex
+asset texture assets/textures/leg_showroom_spec.tex
 asset mesh assets/meshes/my_cube.mesh
+asset cubemap assets/skyboxes/graycloud.cm
 asset material assets/materials/test.mtl
+asset material assets/materials/DefaultMaterial.mtl
+asset material assets/materials/Arm.mtl
+asset material assets/materials/Body.mtl
+asset material assets/materials/Glass.mtl
+asset material assets/materials/Hand.mtl
+asset material assets/materials/Helmet.mtl
+asset material assets/materials/Leg.mtl
+asset model assets/models/nanosuit.obj

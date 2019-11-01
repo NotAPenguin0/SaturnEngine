@@ -10,6 +10,7 @@
 #    include "Renderer/Font.hpp"
 #    include "Renderer/Material.hpp"
 #    include "Renderer/Mesh.hpp"
+#    include "Renderer/Model.hpp"
 #    include "Renderer/Shader.hpp"
 #    include "Renderer/Texture.hpp"
 #    include <audeo/SoundSource.hpp>
@@ -43,6 +44,7 @@ void ProjectFile::load(fs::path path) {
     AssetManager<Font>::resource_list().clear();
     AssetManager<CubeMap>::resource_list().clear();
     AssetManager<Material>::resource_list().clear();
+    AssetManager<Model>::resource_list().clear();
 
     AssetManager<Shader>::get_id_map().clear();
     AssetManager<Texture>::get_id_map().clear();
@@ -51,6 +53,7 @@ void ProjectFile::load(fs::path path) {
     AssetManager<Font>::get_id_map().clear();
     AssetManager<CubeMap>::get_id_map().clear();
     AssetManager<Material>::get_id_map().clear();
+    AssetManager<Model>::get_id_map().clear();
 
     self_name = path.stem().string();
     self_dir = fs::absolute(path.remove_filename());
@@ -94,9 +97,12 @@ void ProjectFile::load(fs::path path) {
         if (asset_type == "cubemap") {
             AssetManager<CubeMap>::queue_import(asset_path);
         }
-		if (asset_type == "material") {
-			AssetManager<Material>::queue_import(asset_path);
-		}
+        if (asset_type == "material") {
+            AssetManager<Material>::queue_import(asset_path);
+        }
+        if (asset_type == "model") {
+            AssetManager<Model>::queue_import(asset_path);
+        }
     }
 }
 
@@ -140,7 +146,8 @@ void ProjectFile::save() {
     export_assets<audeo::SoundSource>(assets, "sound");
     export_assets<Font>(assets, "font");
     export_assets<CubeMap>(assets, "cubemap");
-	export_assets<Material>(assets, "material");
+    export_assets<Material>(assets, "material");
+    export_assets<Model>(assets, "model");
 
     // Write exported assets to file
     for (auto& exported_asset : assets) {

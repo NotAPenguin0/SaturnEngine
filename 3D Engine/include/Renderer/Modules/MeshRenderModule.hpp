@@ -25,6 +25,12 @@ public:
     process(Scene& scene, Viewport& viewport, Framebuffer& target) override;
 
 private:
+    void render_mesh(Scene& scene,
+                     Components::Transform& relative_transform,
+                     Mesh& mesh,
+                     Material& material,
+                     bool face_cull);
+
     void unbind_textures(Material& material);
     void send_material_data(Scene& scene, Shader& shader, Material& material);
 

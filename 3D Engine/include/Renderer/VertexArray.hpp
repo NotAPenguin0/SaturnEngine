@@ -38,10 +38,33 @@ public:
     VertexArray(CreateInfo const& create_info);
 
     VertexArray(VertexArray const&) = delete;
-    VertexArray(VertexArray&& rhs) = delete;
+    VertexArray(VertexArray&& rhs) {
+        vao.id = rhs.vao.id;
+        rhs.vao.id = 0;
+        std::swap(buffers, rhs.buffers);
+        ebo.id = rhs.ebo.id;
+        rhs.ebo.id = 0;
+        vertex_count = rhs.vertex_count;
+        rhs.vertex_count = 0;
+        indices_size = rhs.indices_size;
+        rhs.indices_size = 0;
+		std::swap(indices, rhs.indices);
+    }
 
     VertexArray& operator=(VertexArray const&) = delete;
-    VertexArray& operator=(VertexArray&& rhs) = delete;
+	VertexArray& operator=(VertexArray&& rhs) {
+        vao.id = rhs.vao.id;
+        rhs.vao.id = 0;
+        std::swap(buffers, rhs.buffers);
+        ebo.id = rhs.ebo.id;
+        rhs.ebo.id = 0;
+        vertex_count = rhs.vertex_count;
+        rhs.vertex_count = 0;
+        indices_size = rhs.indices_size;
+        rhs.indices_size = 0;
+        std::swap(indices, rhs.indices);
+        return *this;
+	}
 
     void assign(CreateInfo const& create_info);
 
@@ -69,8 +92,8 @@ public:
         std::swap(ebo.id, other.ebo.id);
         std::swap(vertex_count, other.vertex_count);
         std::swap(indices_size, other.indices_size);
-		std::swap(indices, other.indices);
-	}
+        std::swap(indices, other.indices);
+    }
 
 private:
     friend class Renderer;

@@ -19,6 +19,46 @@ void MeshRenderModule::init() {
         "config/resources/shaders/default.sh", true);
 }
 
+void MeshRenderModule::render_mesh(Scene& scene,
+                                   Transform& relative_transform,
+                                   Mesh& mesh,
+                                   Material& material,
+                                   bool face_cull) {
+    auto& shader = material.shader.is_loaded() ? material.shader.get()
+                                               : no_shader_error.get();
+
+    // Send data to shader
+    send_model_matrix(shader, relative_transform);
+    send_material_data(scene, shader, material);
+
+    // Set lightspace matrix in shader
+    Shader::bind(shader);
+    if (material.lit) {
+        auto lightspace = get_lightspace_matrix(scene);
+        shader.set_mat4(Shader::Uniforms::LightSpaceMatrix, lightspace);
+        if (RenderModules::DepthMapPass::last_depthmap) {
+            // Set shadow map in shader
+            glActiveTexture(GL_TEXTURE2);
+            DepthMap::bind_texture(*RenderModules::DepthMapPass::last_depthmap);
+            shader.set_int(Shader::Uniforms::DepthMap, 2);
+        }
+    }
+
+    // Do the actual rendering (maybe put this in another function
+    // render_mesh() or something)
+    auto& vtx_array = mesh.get_vertices();
+
+    VertexArray::bind(vtx_array);
+    if (!face_cull) { glDisable(GL_CULL_FACE); }
+    glDrawElements(GL_TRIANGLES, vtx_array.index_size(), GL_UNSIGNED_INT,
+                   nullptr);
+    if (!face_cull) { glEnable(GL_CULL_FACE); }
+    // Cleanup
+    unbind_textures(material);
+    glActiveTexture(GL_TEXTURE2);
+    DepthMap::unbind_texture();
+}
+
 void MeshRenderModule::process(Scene& scene,
                                Viewport& viewport,
                                Framebuffer& target) {
@@ -26,46 +66,26 @@ void MeshRenderModule::process(Scene& scene,
     for (auto [relative_transform, mesh] :
          scene.get_ecs().select<Transform, StaticMesh>()) {
 
-		if (!mesh.material.is_loaded()) { continue; }
+        if (!mesh.material.is_loaded()) { continue; }
 
         if (!mesh.mesh.is_loaded()) { continue; }
 
-		auto& material = *mesh.material;
+        auto& material = *mesh.material;
+        render_mesh(scene, relative_transform, mesh.mesh.get(), material,
+                    mesh.face_cull);
+    }
 
-        auto& shader = material.shader.is_loaded() ? material.shader.get()
-                                                   : no_shader_error.get();
+    for (auto [relative_transform, model] :
+         scene.get_ecs().select<Transform, StaticModel>()) {
 
-        // Send data to shader
-        send_model_matrix(shader, relative_transform);
-        send_material_data(scene, shader, material);
+        if (!model.model.is_loaded()) continue;
 
-        // Set lightspace matrix in shader
-        Shader::bind(shader);
-        if (material.lit) {
-            auto lightspace = get_lightspace_matrix(scene);
-            shader.set_mat4(Shader::Uniforms::LightSpaceMatrix, lightspace);
-            if (RenderModules::DepthMapPass::last_depthmap) {
-                // Set shadow map in shader
-                glActiveTexture(GL_TEXTURE2);
-                DepthMap::bind_texture(
-                    *RenderModules::DepthMapPass::last_depthmap);
-                shader.set_int(Shader::Uniforms::DepthMap, 2);
-            }
+        for (auto& mesh : model.model->meshes) {
+
+            auto& material = *mesh.material;
+            render_mesh(scene, relative_transform, mesh, material,
+                        model.face_cull);
         }
-
-        // Do the actual rendering (maybe put this in another function
-        // render_mesh() or something)
-        auto& vtx_array = mesh.mesh->get_vertices();
-
-        VertexArray::bind(vtx_array);
-        if (!mesh.face_cull) { glDisable(GL_CULL_FACE); }
-        glDrawElements(GL_TRIANGLES, vtx_array.index_size(), GL_UNSIGNED_INT,
-                       nullptr);
-        if (!mesh.face_cull) { glEnable(GL_CULL_FACE); }
-        // Cleanup
-        unbind_textures(material);
-        glActiveTexture(GL_TEXTURE2);
-        DepthMap::unbind_texture();
     }
 }
 

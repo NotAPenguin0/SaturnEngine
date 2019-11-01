@@ -29,6 +29,7 @@
 #include "Components/SoundListener.hpp"
 #include "Components/SpotLight.hpp"
 #include "Components/StaticMesh.hpp"
+#include "Components/StaticModel.hpp"
 #include "Components/Text.hpp"
 #include "Components/Transform.hpp"
 

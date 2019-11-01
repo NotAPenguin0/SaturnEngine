@@ -53,6 +53,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/Sound.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/SoundListener.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/StaticMesh.hpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/StaticModel.hpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/Text.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Components/Transform.hpp"
 	
@@ -96,6 +97,7 @@ set(ENGINE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Framebuffer.hpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Material.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Mesh.hpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Model.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/OpenGL.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/PostProcessing.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Renderer/Renderer.hpp"

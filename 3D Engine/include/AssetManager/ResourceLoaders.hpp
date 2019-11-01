@@ -11,6 +11,7 @@
 #include "Renderer/Mesh.hpp"
 #include "Renderer/Shader.hpp"
 #include "Renderer/Texture.hpp"
+#include "Renderer/Model.hpp"
 
 #include <audeo/audeo.hpp>
 
@@ -116,6 +117,17 @@ public:
                        std::string const& root_dir);
 };
 
+template<>
+class ResourceLoader<Model> {
+public:
+    static LoadResult<Model> load(std::string const& path,
+                                     std::string const& root_dir);
+    static void reload(std::unique_ptr<Model>& res,
+                       std::vector<fs::path>& dep_paths,
+                       std::string const& path,
+                       std::string const& root_dir);
+};
+
 // File types
 
 template<typename R>
@@ -158,6 +170,11 @@ struct FileTypes<CubeMap> {
 
 template<>
 struct FileTypes<Material> {
+    static std::vector<FileType> types;
+};
+
+template<>
+struct FileTypes<Model> {
     static std::vector<FileType> types;
 };
 

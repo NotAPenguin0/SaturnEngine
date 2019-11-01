@@ -363,6 +363,20 @@ void from_json(nlohmann::json const& json, StaticMesh& component) {
 	}
 }
 
+void from_json(nlohmann::json const& json, StaticModel& component) {
+	auto c = json.find("StaticModelComponent");
+	if (c == json.end()) {
+		throw std::runtime_error("No StaticModel component stored even though it was requested");
+	} else {
+		if (auto x = (*c).find("Model"); x != (*c).end()) {
+			component.model = (*x).get<Resource<Saturn::Model>>();
+		}
+		if (auto x = (*c).find("FaceCull"); x != (*c).end()) {
+			component.face_cull = (*x).get<bool>();
+		}
+	}
+}
+
 void from_json(nlohmann::json const& json, Text& component) {
 	auto c = json.find("TextComponent");
 	if (c == json.end()) {
@@ -592,6 +606,14 @@ void to_json(nlohmann::json& json, StaticMesh const& component) {
 	json["StaticMeshComponent"]["Mesh"] = component.mesh;
 	json["StaticMeshComponent"]["Material"] = component.material;
 	json["StaticMeshComponent"]["FaceCull"] = component.face_cull;
+	// clang-format on
+}
+
+void to_json(nlohmann::json& json, StaticModel const& component) {
+	json["StaticModelComponent"] = nlohmann::json::object();
+	// clang-format off
+	json["StaticModelComponent"]["Model"] = component.model;
+	json["StaticModelComponent"]["FaceCull"] = component.face_cull;
 	// clang-format on
 }
 
