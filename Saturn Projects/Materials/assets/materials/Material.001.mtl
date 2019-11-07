@@ -1,0 +1,4 @@
+{
+	"shader":"assets/shaders/normal_mapping.sh",
+	"diffuse": "assets/textures/glass_dif.tex"
+}

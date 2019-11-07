@@ -1,2 +1,1 @@
-{"diffuse":"assets/textures/glass_dif.tex","shader":"assets/shaders/basic_reflect.sh",
-reflective = true}
+{"diffuse":"assets/textures/glass_dif.tex","shader":"assets/shaders/normal_mapping.sh"}
