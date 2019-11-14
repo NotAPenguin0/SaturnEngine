@@ -191,6 +191,8 @@ Editor::Editor(Application& app) : app(&app) {
     do_imports();
 
     set_window_title();
+    init_font();
+
 } // namespace Saturn::Editor
 
 Editor::~Editor() {
@@ -259,6 +261,39 @@ void Editor::render(Scene& scene) {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+    static bool init_style = true;
+    if (init_style) {
+        set_editor_style(Style::Grey);
+
+		init_style = false;
+    }
+
+			push_font();
+
+    // initialize editor dockspace
+    ImGuiWindowFlags flags =
+        ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+    ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(viewport->Pos);
+    ImGui::SetNextWindowSize(viewport->Size);
+    ImGui::SetNextWindowViewport(viewport->ID);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+    flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
+             ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+    flags |=
+        ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+    ImGui::Begin("MainEditorSpace", nullptr, flags);
+    ImGui::PopStyleVar(3);
+
+    // DockSpace
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
+        ImGuiID dockspace_id = ImGui::GetID("MainDockSpace");
+        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f),
+                         ImGuiDockNodeFlags_None);
+    }
 
     if (!playmode_active) {
         auto old_cam_id = app->get_renderer()
@@ -305,11 +340,6 @@ void Editor::render(Scene& scene) {
             editor_widgets.asset_browser.show();
         }
     }
-
-    ImGui::Render();
-    Viewport::set_active(
-        app->get_renderer()->get_viewport(scene_view_viewport_id));
-    glViewport(0, 0, 800, 600);
 }
 
 void Editor::show_menu_bar(Scene& scene) {
@@ -567,7 +597,27 @@ void Editor::on_playmode_enter(Scene& scene) {
     scene.on_start();
 }
 
+void Editor::render_scene_view(Framebuffer& buf) {
+    static bool shown = true;
+    ImVec2 size = ImVec2(buf.get_size().x, buf.get_size().y);
+    if (ImGui::Begin("Scene view", &shown)) {
+        auto texture = buf.get_texture();
+        // flip image for some reason
+        ImGui::Image(reinterpret_cast<ImTextureID>(texture), size, ImVec2(0, 1),
+                     ImVec2(1, 0));
+        ImVec2 win_size = ImGui::GetWindowSize();
+        app->get_renderer()->resize(win_size.x, win_size.y);
+    }
+
+    ImGui::End();
+}
+
 void Editor::frame_end() {
+    ImGui::End();
+	clear_font();
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, app->window_dimensions.x, app->window_dimensions.y);
+    ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     auto& io = ImGui::GetIO();
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {

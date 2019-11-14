@@ -16,13 +16,14 @@ namespace Saturn {
 
 void Renderer::setup_framebuffer(CreateInfo const& create_info) {
     Framebuffer::CreateInfo framebuf_info;
-    framebuf_info.size = screen_size;
+    framebuf_info.size = {800, 600};
     framebuf.assign(framebuf_info);
+
+    screen_tex = nullptr;
 }
 
 void Renderer::create_default_viewport(CreateInfo const& create_info) {
-    add_viewport(
-        Viewport(0, 0, create_info.screen_size.x, create_info.screen_size.y));
+    add_viewport(Viewport(0, 0, 600, 800));
     // Set it as the active viewport
     Viewport::set_active(get_viewport(0));
 }
@@ -40,7 +41,7 @@ Renderer::Renderer(CreateInfo create_info) :
     create_default_viewport(create_info);
     initialize_postprocessing();
 
-	glDepthFunc(GL_LEQUAL);
+    glDepthFunc(GL_LEQUAL);
 }
 
 Renderer::~Renderer() {}
@@ -49,13 +50,18 @@ void Renderer::clear(
     Color clear_color,
     GLenum flags /*= GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT*/) {
 
-	Framebuffer::bind(framebuf);
+    Framebuffer::bind(framebuf);
     glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
     glClear(flags);
 
-	for (auto& stage : post_render_stages) {
-		stage->clear({clear_color.r, clear_color.g, clear_color.b, clear_color.a}, flags);
-	}
+    for (auto& stage : post_render_stages) {
+        stage->clear(
+            {clear_color.r, clear_color.g, clear_color.b, clear_color.a},
+            flags);
+    }
+    blit_pass.clear(
+        {clear_color.r, clear_color.g, clear_color.b, clear_color.a}, flags);
+
     Framebuffer::bind(framebuf);
 }
 
@@ -81,7 +87,12 @@ void Renderer::render_scene(Scene& scene) {
             // on the result of the previous one
             next_source = &stage->get_framebuffer();
         }
+        screen_tex = next_source;
     }
+}
+
+void Renderer::blit_to_screen(Scene& scene) {
+    blit_pass.process(scene, *screen_tex);
 }
 
 void Renderer::render_viewport(Scene& scene, Viewport& vp) {
@@ -89,6 +100,41 @@ void Renderer::render_viewport(Scene& scene, Viewport& vp) {
 
     // Process render modules
     for (auto& mod : render_modules) { mod->process(scene, vp, framebuf); }
+}
+
+static unsigned int create_texture(glm::vec2 size) {
+    unsigned int handle;
+    glGenTextures(1, &handle);
+    glBindTexture(GL_TEXTURE_2D, handle);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // Fill with empty data
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, nullptr);
+
+    return handle;
+}
+
+static void resize_if_needed(Framebuffer& target, glm::vec2 size) {
+    if (auto const& framebuf_size = target.get_size();
+        framebuf_size.x != (size_t)size.x ||
+        framebuf_size.y != (size_t)size.y) {
+
+        unsigned int new_texture = create_texture(size);
+        target.delete_texture();
+        target.set_size({(size_t)size.x, (size_t)size.y});
+        target.assign_texture(new_texture);
+    }
+}
+
+void Renderer::resize(unsigned int x, unsigned int y) {
+    resize_if_needed(framebuf, {x, y});
+    viewports[0] = Viewport(viewports[0].get_camera(), 0, 0, x, y);
+	for (auto& post_pass : post_render_stages) {
+        resize_if_needed(post_pass->get_framebuffer(), {x, y});
+	}
 }
 
 Viewport& Renderer::get_viewport(std::size_t index) {

@@ -144,7 +144,6 @@ void Application::run() {
             glViewport(0, 0, window_dimensions.x, window_dimensions.y);
 #endif
             renderer->clear(Color{0.003f, 0.003f, 0.003f, 1.0f});
-            glViewport(0, 0, 800, 600);
 
             scene.update_systems(system_update_mode);
             // This updates the timer in the physics scheduler, and runs a
@@ -153,6 +152,7 @@ void Application::run() {
             renderer->render_scene(scene);
 
 #ifdef WITH_EDITOR
+            editor->render_scene_view(*renderer->get_screen_framebuf());
             editor->frame_end();
 #endif
             glfwSwapBuffers(window_handle);

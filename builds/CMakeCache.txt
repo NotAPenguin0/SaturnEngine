@@ -494,10 +494,10 @@ DirectX_DXGI_LIBRARY:FILEPATH=C:/Program Files (x86)/Windows Kits/10/Lib/10.0.17
 DirectX_DXGUID_LIBRARY:FILEPATH=C:/Program Files (x86)/Windows Kits/10/Lib/10.0.17763.0/um/x64/dxguid.lib
 
 //x
-DirectX_INCLUDE_DIR:PATH=C:/Program Files (x86)/Windows Kits/10/Include/10.0.17763.0/shared
+DirectX_INCLUDE_DIR:PATH=DirectX_INCLUDE_DIR-NOTFOUND
 
 //x
-DirectX_LIBRARY:FILEPATH=C:/Program Files (x86)/Windows Kits/10/Lib/10.0.17763.0/um/x64/d3d9.lib
+DirectX_LIBRARY:FILEPATH=DirectX_LIBRARY-NOTFOUND
 
 //Single output directory for building all executables.
 EXECUTABLE_OUTPUT_PATH:PATH=

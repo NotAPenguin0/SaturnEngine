@@ -8,6 +8,8 @@
 #include <fstream>
 #include <string>
 
+#include "Editor/EditorStyle.hpp"
+
 #ifdef WITH_EDITOR
 
 namespace Saturn::Editor {
@@ -66,13 +68,11 @@ void EditorPreferencesWidget::show() {
         }
         if (ImGui::CollapsingHeader("Style##Prefs")) {
             static int style_index = -1;
-            if (ImGui::Combo("Colors: ##Prefs", &style_index,
-                             "Classic\0Dark\0Light\0")) {
-                switch (style_index) {
-                    case 0: ImGui::StyleColorsClassic(); break;
-                    case 1: ImGui::StyleColorsDark(); break;
-                    case 2: ImGui::StyleColorsLight(); break;
-                    default: ImGui::StyleColorsDark();
+            static const char* styles[] = {"ImGuiDark", "Grey"};
+            if (ImGui::Combo("Colors: ##Prefs", &style_index, styles,
+                             sizeof(styles) / sizeof(const char*))) {
+                if (style_index != -1) {
+                    set_editor_style(static_cast<Style>(style_index));
                 }
             }
         }

@@ -15,6 +15,7 @@
 #include "Modules/PostRenderStage.hpp"
 #include "Modules/PreRenderStage.hpp"
 #include "Modules/RenderModule.hpp"
+#include "Modules/BlitPass.hpp"
 
 #include "glad/glad.h"
 
@@ -67,6 +68,12 @@ public:
     auto& get_render_modules() { return render_modules; }
     auto& get_post_render_stages() { return post_render_stages; }
 
+    Framebuffer* get_screen_framebuf() { return screen_tex; }
+
+	void resize(unsigned int x, unsigned int y);
+
+	void blit_to_screen(Scene& scene);
+
 private:
     // Initialization
     void setup_framebuffer(CreateInfo const& create_info);
@@ -87,6 +94,9 @@ private:
     std::vector<std::unique_ptr<RenderModules::RenderModule>> render_modules;
     std::vector<std::unique_ptr<RenderModules::PostRenderStage>>
         post_render_stages;
+
+    Framebuffer* screen_tex = nullptr;
+	RenderModules::BlitPass blit_pass;
 };
 
 } // namespace Saturn

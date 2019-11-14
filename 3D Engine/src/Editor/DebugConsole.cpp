@@ -29,7 +29,7 @@ void DebugConsole::show() {
     ImGui::SetNextWindowSize(ImVec2(520, 600), ImGuiCond_FirstUseEver);
     if (ImGui::Begin("Debug Console", &shown)) {
         show_log_section();
-        show_command_line_section();
+//        show_command_line_section();
     }
 
     ImGui::End();
@@ -69,8 +69,8 @@ void DebugConsole::show_log_section() {
     ImGui::Separator();
 
     // 1 reserve space for a separator and an InputText
-    const float footer_height =
-        ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
+    const float footer_height = 0;
+//        ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
 
     // Pass a negative value to the vec2's y to leave room for things below
     ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height), false,
@@ -83,10 +83,12 @@ void DebugConsole::show_log_section() {
         auto const& style = log_type_styles[log_entry.type];
         // Set color
         ImGui::PushStyleColor(ImGuiCol_Text, style.color);
+		ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.22f, 0.22f, 0.22f, 1.0f));
         // Add prefix and render text
         ImGui::TextWrapped("%s", (style.prefix + " " + log_entry.data).c_str());
         // Reset color
         ImGui::PopStyleColor();
+		ImGui::PopStyleColor();
     }
 
     // Scroll to bottom, #TODO: Option to disable this auto scrolling

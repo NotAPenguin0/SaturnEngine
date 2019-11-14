@@ -13,6 +13,8 @@
 #    include "Editor/EntityTree.hpp"
 #    include "Editor/FPSOverlay.hpp"
 #    include "Editor/ProjectMenuWidget.hpp"
+#    include "EditorStyle.hpp"
+#    include "Renderer/Framebuffer.hpp"
 
 namespace fs = std::filesystem;
 
@@ -36,6 +38,7 @@ public:
 
     // Must be called at the start of the frame
     void render(Scene& scene);
+    void render_scene_view(Framebuffer& buf);
     void frame_end();
 
     void create_new_scene(Scene& scene, fs::path path);
