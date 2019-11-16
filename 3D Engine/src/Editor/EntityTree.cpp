@@ -504,20 +504,18 @@ void EntityTree::reset_selected_entity() {
 }
 
 void EntityTree::show(Scene& scene) {
+	static bool inspector_shown = true;
     if (ImGui::Begin("Entity Tree", get_shown_pointer())) {
         auto tree = build_entity_tree(scene);
-        // Start columns section
-        ImGui::Columns(2, "EntityTree", true);
         show_entity_tree(tree, scene);
-        ImGui::NextColumn();
-        if (selected_entity != nullptr) {
-            show_entity_details(selected_entity, scene);
-        }
-        // End column section
-        ImGui::Columns();
     }
-
     ImGui::End();
+    if (ImGui::Begin("Inspector", &inspector_shown)) {
+		if (selected_entity != nullptr) {
+			show_entity_details(selected_entity, scene);
+		}
+	}
+	ImGui::End();
 }
 
 EntityTree::tree_t EntityTree::build_entity_tree(Scene& scene) {

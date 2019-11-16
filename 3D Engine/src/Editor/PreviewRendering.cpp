@@ -2,6 +2,7 @@
 
 #include "Renderer/Font.hpp"
 #include "Renderer/Framebuffer.hpp"
+#include "Renderer/Model.hpp"
 #include "Renderer/OpenGL.hpp"
 #include "Renderer/Shader.hpp"
 #include "Renderer/VertexArray.hpp"
@@ -53,9 +54,7 @@ struct render_info {
     Resource<Shader> shader;
     glm::mat4 pvm_matrix;
     glm::mat4 model_matrix = glm::mat4(1.0f);
-    glm::vec3 cam_pos =
-        glm::vec3(3, -3, 5); // I fucked up y pos somewhere and it's flipped, so
-                             // here's a terrible hack
+    glm::vec3 cam_pos = glm::vec3(3, 10, 5);
 
     struct light {
         glm::vec3 direction;
@@ -93,21 +92,10 @@ void send_light_data(render_info& info) {
     info.shader->set_vec3(6, info.light_data.specular);
 }
 
-static void render_mesh(render_info& info, AssetManager<Mesh>::Asset& asset) {
+static void render_mesh(render_info& info, Mesh& mesh) {
     if (!info.shader.is_loaded()) { return; }
 
-    // TODO: Make sure this only has to happen once for a performance boost
-    Framebuffer::bind(info.framebuf);
-    Shader::bind(*info.shader);
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, max_preview_size, max_preview_size);
-    send_light_data(info);
-    info.pvm_matrix = get_pv_matrix(info.cam_pos) * info.model_matrix;
-    info.shader->set_mat4(0, info.pvm_matrix);
-    info.shader->set_mat4(1, info.model_matrix);
-    info.shader->set_vec3(7, info.cam_pos);
-    auto& vertices = asset.ptr->get_vertices();
+    auto& vertices = mesh.get_vertices();
     VertexArray::bind(vertices);
     glDrawElements(GL_TRIANGLES, vertices.index_size(), GL_UNSIGNED_INT,
                    nullptr);
@@ -188,9 +176,56 @@ impl::texture_t render_mesh_preview(AssetManager<Mesh>::Asset& asset) {
     impl::texture_t texture = impl::create_texture();
     info.framebuf.assign_texture(texture);
 
-    // Render mesh to target
-    impl::render_mesh(info, asset);
+    // TODO: Make sure this only has to happen once for a performance boost
+    Framebuffer::bind(info.framebuf);
+    Shader::bind(*info.shader);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glViewport(0, 0, max_preview_size, max_preview_size);
+    send_light_data(info);
+    info.pvm_matrix = impl::get_pv_matrix(info.cam_pos) * info.model_matrix;
+    info.shader->set_mat4(0, info.pvm_matrix);
+    info.shader->set_mat4(1, info.model_matrix);
+    info.shader->set_vec3(7, info.cam_pos);
 
+    // Render mesh to target
+    impl::render_mesh(info, *asset.ptr);
+
+    // Add to cache
+    impl::cache.try_emplace(asset.path.generic_string(), texture);
+
+    return texture;
+}
+
+impl::texture_t render_model_preview(AssetManager<Model>::Asset& asset) {
+    static impl::render_info info;
+
+    // If the asset is already in the cache, return it
+    if (auto tex = impl::cache.find(asset.path.generic_string());
+        tex != impl::cache.end()) {
+        return tex->second;
+    }
+
+    // Texture is not in cache, render it and add to the cache
+
+    // Setup render target
+    impl::texture_t texture = impl::create_texture();
+    info.framebuf.assign_texture(texture);
+
+    // TODO: Make sure this only has to happen once for a performance boost
+    Framebuffer::bind(info.framebuf);
+    Shader::bind(*info.shader);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glViewport(0, 0, max_preview_size, max_preview_size);
+    send_light_data(info);
+    info.pvm_matrix = impl::get_pv_matrix(info.cam_pos) * info.model_matrix;
+    info.shader->set_mat4(0, info.pvm_matrix);
+    info.shader->set_mat4(1, info.model_matrix);
+    info.shader->set_vec3(7, info.cam_pos);
+
+    // Render model to target
+    for (auto& mesh : asset.ptr->meshes) { impl::render_mesh(info, mesh); }
     // Add to cache
     impl::cache.try_emplace(asset.path.generic_string(), texture);
 

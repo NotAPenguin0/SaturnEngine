@@ -11,6 +11,7 @@ namespace previews {
 constexpr size_t max_preview_size = 256;
 
 unsigned int render_mesh_preview(AssetManager<Mesh>::Asset& asset);
+unsigned int render_model_preview(AssetManager<Model>::Asset& asset);
 
 void clear_cache();
 

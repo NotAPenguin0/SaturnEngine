@@ -3,18 +3,17 @@
 #include <audeo/SoundSource.hpp>
 #include <imgui/imgui.h>
 
+#include "AssetManager/AssetManager.hpp"
 #include "Editor/EditorLog.hpp"
 #include "Editor/PreviewRendering.hpp"
 #include "Editor/SelectFileDialog.hpp"
-#include "AssetManager/AssetManager.hpp"
-#include "Renderer/Mesh.hpp"
-#include "Renderer/Shader.hpp"
-#include "Renderer/Texture.hpp"
 #include "Renderer/Font.hpp"
 #include "Renderer/Material.hpp"
+#include "Renderer/Mesh.hpp"
 #include "Renderer/Model.hpp"
+#include "Renderer/Shader.hpp"
+#include "Renderer/Texture.hpp"
 #include "Utility/Utility.hpp"
-
 
 #include <tuple>
 
@@ -25,7 +24,8 @@ namespace impl {
 
 namespace {
 
-#define ASSET_LIST Shader, Texture, Mesh, audeo::SoundSource, Font, CubeMap, Material, Model
+#define ASSET_LIST                                                             \
+    Shader, Texture, Mesh, audeo::SoundSource, Font, CubeMap, Material, Model
 template<size_t I, typename F, typename... Args>
 void do_for_each_asset(F&& f, Args&&... args) {
     using assets = std::tuple<ASSET_LIST>;
@@ -108,13 +108,21 @@ void display_preview(AssetManager<audeo::SoundSource>::Asset& asset,
 
 template<>
 void display_preview(AssetManager<Texture>::Asset& asset, ImVec2 size) {
-    ImGui::Image(reinterpret_cast<ImTextureID>(asset.ptr->handle()), size);
+    ImGui::Image(reinterpret_cast<ImTextureID>(asset.ptr->handle()), size,
+                 ImVec2(0, 1), ImVec2(1, 0));
 }
 
 template<>
 void display_preview(AssetManager<Mesh>::Asset& asset, ImVec2 size) {
     auto texture_id = previews::render_mesh_preview(asset);
-    ImGui::Image(reinterpret_cast<ImTextureID>(texture_id), size);
+    ImGui::Image(reinterpret_cast<ImTextureID>(texture_id), size, ImVec2(0, 1),
+                 ImVec2(1, 0));
+}
+
+template<>
+void display_preview(AssetManager<Model>::Asset& asset, ImVec2 size) {
+    auto texture_id = previews::render_model_preview(asset);
+	ImGui::Image(reinterpret_cast<ImTextureID>(texture_id), size, ImVec2(0, 1), ImVec2(1, 0));
 }
 
 template<>
@@ -187,7 +195,7 @@ struct show_asset_tab {
                     ImGui::SetDragDropPayload(
                         type.c_str(), &asset,
                         sizeof(typename AssetManager<A>::Asset));
-					display_preview(asset, ImVec2(32, 32));
+                    display_preview(asset, ImVec2(32, 32));
                     ImGui::EndDragDropSource();
                 }
 
