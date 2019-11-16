@@ -161,7 +161,7 @@ template<typename R>
 void from_json(nlohmann::json const& j, Resource<R>& res) {
     if (auto r = j.find("Resource"); r != j.end()) {
         auto path = j["Resource"];
-        if (path != "") { res = AssetManager<R>::get_resource(path); }
+        if (path != "") { res = AssetManager<R>::get_resource(path, false, true); }
     }
 }
 

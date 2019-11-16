@@ -206,7 +206,7 @@ def save_mesh(mesh, path):
     file.write("vertices: %d\n" % len(mesh.vertices))
     for vtx in mesh.vertices:
         vtx_str = str(vtx)
-        # remove []and add a comma at the end
+        # remove [] and add a comma at the end
         vtx_str = vtx_str[1:-1]
         vtx_str += ','
         file.write(vtx_str + "\n")

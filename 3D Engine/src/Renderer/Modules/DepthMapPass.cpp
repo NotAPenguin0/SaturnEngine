@@ -19,8 +19,8 @@ void DepthMapPass::init() {
     info.dimensions = {Precision, Precision};
     depth_map.assign(info);
     // Create depth shader
-    depth_shader =
-        AssetManager<Shader>::get_resource("config/resources/shaders/depth_map.sh", true);
+    depth_shader = AssetManager<Shader>::get_resource(
+        "config/resources/shaders/depth_map.sh", true);
     last_depthmap = &depth_map;
 }
 
@@ -30,21 +30,33 @@ void DepthMapPass::process(Scene& scene) {
     // Obtain lightspace matrix
     glm::mat4 lightspace = get_lightspace_matrix(scene);
 
-    for (auto [transform, mesh] :
-         scene.get_ecs().select<Transform, StaticMesh>()) {
-
-        if (!mesh.mesh.is_loaded()) { continue; }
-
+    auto mesh_to_depth_map = [&lightspace, this](Transform& trans, Mesh& mesh) {
         // Send model matrix
-        send_model_matrix(depth_shader.get(), transform);
+        send_model_matrix(depth_shader.get(), trans);
 
         // Do the rendering
-        auto& vtx_array = mesh.mesh->get_vertices();
+        auto& vtx_array = mesh.get_vertices();
         VertexArray::bind(vtx_array);
         Shader::bind(depth_shader.get());
         depth_shader->set_mat4(Shader::Uniforms::LightSpaceMatrix, lightspace);
         glDrawElements(GL_TRIANGLES, vtx_array.index_size(), GL_UNSIGNED_INT,
                        nullptr);
+    };
+
+    for (auto [transform, mesh] :
+         scene.get_ecs().select<Transform, StaticMesh>()) {
+
+        if (!mesh.mesh.is_loaded()) { continue; }
+        mesh_to_depth_map(transform, *mesh.mesh);
+    }
+
+    for (auto [transform, model] :
+         scene.get_ecs().select<Transform, StaticModel>()) {
+
+        if (!model.model.is_loaded()) { continue; }
+		for (auto& mesh : model.model->meshes) {
+			mesh_to_depth_map(transform, mesh);
+		}
     }
 
     reset();

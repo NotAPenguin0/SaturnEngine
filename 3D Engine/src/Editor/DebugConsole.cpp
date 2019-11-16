@@ -84,10 +84,12 @@ void DebugConsole::show_log_section() {
         // Set color
         ImGui::PushStyleColor(ImGuiCol_Text, style.color);
 		ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.22f, 0.22f, 0.22f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.22f, 0.22f, 0.22f, 1.0f));
         // Add prefix and render text
         ImGui::TextWrapped("%s", (style.prefix + " " + log_entry.data).c_str());
         // Reset color
         ImGui::PopStyleColor();
+		ImGui::PopStyleColor();
 		ImGui::PopStyleColor();
     }
 

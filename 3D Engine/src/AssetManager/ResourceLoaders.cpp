@@ -571,7 +571,7 @@ void create_tex_file(fs::path const& path,
     } else if (tex_type == aiTextureType_SPECULAR) {
         unit = 0;
         format = "RGBA";
-    } else if (tex_type == aiTextureType_NORMALS) {
+    } else if (tex_type == aiTextureType_HEIGHT) {
         unit = 3;
         format = "RGBA";
     }
@@ -615,12 +615,13 @@ void create_material_file(aiMaterial* material,
                           fs::path const& path,
                           std::string const& root_dir) {
     nlohmann::json j;
-
+	
     create_material_texture(material, path, root_dir, aiTextureType_DIFFUSE,
                             "diffuse", j);
     create_material_texture(material, path, root_dir, aiTextureType_SPECULAR,
                             "specular", j);
-    create_material_texture(material, path, root_dir, aiTextureType_NORMALS,
+	// normal/bump map is apparently stored as height in Assimp
+    create_material_texture(material, path, root_dir, aiTextureType_HEIGHT,
                             "normal", j);
     j["shader"] = "assets/shaders/normal_mapping.sh";
 

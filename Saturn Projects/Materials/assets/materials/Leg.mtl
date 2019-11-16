@@ -1,1 +1,1 @@
-{"diffuse":"assets/textures/leg_dif.tex","shader":"assets/shaders/normal_mapping.sh","specular":"assets/textures/leg_showroom_spec.tex"}
+{"diffuse":"assets/textures/leg_dif.tex","normal":"assets/textures/leg_showroom_ddn.tex","shader":"assets/shaders/normal_mapping.sh","specular":"assets/textures/leg_showroom_spec.tex"}

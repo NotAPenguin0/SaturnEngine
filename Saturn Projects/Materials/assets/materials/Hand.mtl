@@ -1,1 +1,1 @@
-{"diffuse":"assets/textures/hand_dif.tex","shader":"assets/shaders/normal_mapping.sh","specular":"assets/textures/hand_showroom_spec.tex"}
+{"diffuse":"assets/textures/hand_dif.tex","normal":"assets/textures/hand_showroom_ddn.tex","shader":"assets/shaders/normal_mapping.sh","specular":"assets/textures/hand_showroom_spec.tex"}

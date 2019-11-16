@@ -29,7 +29,7 @@ private:
                      Components::Transform& relative_transform,
                      Mesh& mesh,
                      Material& material,
-                     bool face_cull);
+                     bool face_cull, glm::mat4 const& lightspace);
 
     void unbind_textures(Material& material);
     void send_material_data(Scene& scene, Shader& shader, Material& material);

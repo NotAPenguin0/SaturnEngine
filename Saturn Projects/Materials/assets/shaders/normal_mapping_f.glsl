@@ -132,12 +132,17 @@ vec3 calc_spot_light(SpotLight light, vec3 norm, float shadow) {
 
     // apply light falloff
     float distance = length(light.position - FragPos);
-    float falloff = light.intensity / (distance); // don't square distance because of gamma correction
+    float falloff = light.intensity / (distance * distance); // don't square distance if using gamma correction
     
+	return ambient + (diffuse + specular) * falloff;
+	
+	if (mod > 0) return vec3(1.0, 0.0, 0.0);
+	return vec3(0.0, 0.0, 0.0);
+	
     return saturate((ambient + (1.0 - shadow) * (diffuse + specular)) * falloff);
 }
 
-float calc_shadow() {
+float calc_shadow(DirectionalLight light, vec3 norm) {
     // perspective division
     vec3 projcoords = FragPosLightSpace.xyz / FragPosLightSpace.w;
     // values out of range will get no shadows
@@ -147,8 +152,8 @@ float calc_shadow() {
     projcoords = projcoords * 0.5 + 0.5;
     float closest_depth = texture(depth_map, projcoords.xy).r;
     float current_depth = projcoords.z;
-
-    float bias = 0.005;
+	#define BIAS_BASE 0.000099
+    float bias = max((BIAS_BASE * 10) * (1.0 - dot(norm, normalize(-light.direction))), BIAS_BASE); 
 //    float shadow = current_depth - bias > closest_depth  ? 1.0 : 0.0;
     // PCF for soft shadows
     float shadow = 0.0;
@@ -167,9 +172,13 @@ float calc_shadow() {
 
 void main() {
     vec3 norm = normalize(texture(normal_map, TexCoords).rgb * 2.0 - 1.0);
+
     norm = normalize(TBN * norm); 
     vec3 light_result = vec3(0.0f);
-    float shadow = calc_shadow();
+    float shadow = 0;
+	for(int i = 0; i < directional_light_count; ++i) {
+		shadow += calc_shadow(directional_lights[i], norm);
+	}
     // Optimize: calculate certain vectors only once!
     for(int i = 0; i < point_light_count; ++i) {
         light_result += calc_point_light(point_lights[i], norm, shadow);

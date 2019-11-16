@@ -22,8 +22,7 @@ void main() {
     vec3 T = normalize(vec3(model * vec4(iTangent, 0.0)));
     vec3 N = normalize(vec3(model * vec4(iNormal, 0.0)));
     vec3 B = cross(N, T);
-    TBN = mat3(T, B, N);
-
+    TBN = mat3(T, B, N); 
     TexCoords = iTexCoords;
     FragPos = vec3(model * vec4(iPos, 1.0));
     FragPosLightSpace = lightspace_matrix * vec4(FragPos, 1.0);

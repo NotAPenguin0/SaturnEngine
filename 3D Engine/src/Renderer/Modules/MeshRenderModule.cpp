@@ -23,7 +23,7 @@ void MeshRenderModule::render_mesh(Scene& scene,
                                    Transform& relative_transform,
                                    Mesh& mesh,
                                    Material& material,
-                                   bool face_cull) {
+                                   bool face_cull, glm::mat4 const& lightspace) {
     auto& shader = material.shader.is_loaded() ? material.shader.get()
                                                : no_shader_error.get();
 
@@ -34,7 +34,6 @@ void MeshRenderModule::render_mesh(Scene& scene,
     // Set lightspace matrix in shader
     Shader::bind(shader);
     if (material.lit) {
-        auto lightspace = get_lightspace_matrix(scene);
         shader.set_mat4(Shader::Uniforms::LightSpaceMatrix, lightspace);
         if (RenderModules::DepthMapPass::last_depthmap) {
             // Set shadow map in shader
@@ -63,6 +62,8 @@ void MeshRenderModule::process(Scene& scene,
                                Viewport& viewport,
                                Framebuffer& target) {
 
+	auto lightspace_mat = get_lightspace_matrix(scene);
+
     for (auto [relative_transform, mesh] :
          scene.get_ecs().select<Transform, StaticMesh>()) {
 
@@ -72,7 +73,7 @@ void MeshRenderModule::process(Scene& scene,
 
         auto& material = *mesh.material;
         render_mesh(scene, relative_transform, mesh.mesh.get(), material,
-                    mesh.face_cull);
+                    mesh.face_cull, lightspace_mat);
     }
 
     for (auto [relative_transform, model] :
@@ -84,7 +85,7 @@ void MeshRenderModule::process(Scene& scene,
 
             auto& material = *mesh.material;
             render_mesh(scene, relative_transform, mesh, material,
-                        model.face_cull);
+                        model.face_cull, lightspace_mat);
         }
     }
 }
