@@ -13,8 +13,7 @@
             0.0,
             1.0,
             0.0
-        ],
-        "ViewportId": 1
+        ]
     },
     "CameraZoomControllerComponent": {
         "MaxZoom": 45.0,

@@ -210,14 +210,9 @@ void Editor::set_window_title() {
 
 void Editor::setup_viewports() {
     log::log("Setting up Editor viewports");
-    // Setup viewport for scene view
-    auto main_cam = this->app->get_renderer()->get_viewport(0).get_camera();
-    auto scene_view = Viewport(main_cam, 0, 0, 800, 600);
+    auto scene_view = Viewport(0, 0, 800, 600);
     scene_view_viewport_id =
         this->app->get_renderer()->add_viewport(scene_view);
-
-    auto& main_view = this->app->get_renderer()->get_viewport(0);
-    main_view.set_camera(-1);
 }
 
 SystemUpdateMode Editor::get_update_mode() {
@@ -265,10 +260,10 @@ void Editor::render(Scene& scene) {
     if (init_style) {
         set_editor_style(Style::Grey);
 
-		init_style = false;
+        init_style = false;
     }
 
-			push_font();
+    push_font();
 
     // initialize editor dockspace
     ImGuiWindowFlags flags =
@@ -404,7 +399,6 @@ void Editor::show_menu_bar(Scene& scene) {
                 if (result != "") {
                     ProjectFile::load(result);
                     app->get_renderer()->get_pre_render_stages().clear();
-                    app->get_renderer()->get_post_render_stages().clear();
                     app->get_renderer()->get_render_modules().clear();
                     for (auto const& stage_data :
                          ProjectFile::get_render_stages()) {
@@ -440,6 +434,13 @@ void Editor::show_menu_bar(Scene& scene) {
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("View")) {
+            if (ImGui::MenuItem("New viewport")) {
+                Viewport vp(editor_camera->get_component<Camera>().id, 0, 0,
+                            800, 600);
+                extra_viewports.push_back(
+                    app->get_renderer()->add_viewport(vp));
+            }
+
             ImGui::MenuItem("Entity Tree", nullptr,
                             editor_widgets.entity_tree.get_shown_pointer());
             ImGui::MenuItem("Debug Console", nullptr,
@@ -563,7 +564,6 @@ void Editor::create_editor_camera(Scene& scene) {
     control_c.zoom_speed = prefs.camera.zoom_speed;
     control_c.invert_x = prefs.camera.invert_x;
     control_c.invert_y = prefs.camera.invert_y;
-    cam_c.viewport_id = scene_view_viewport_id;
     cam_c.fov = prefs.camera.fov;
     cam_c.front = glm::vec3(0.5, -0.5, 0.6);
     cam_c.up = glm::vec3(0, 1, 0);
@@ -571,14 +571,13 @@ void Editor::create_editor_camera(Scene& scene) {
     trans_c.rotation = glm::vec3(-30, 52, 0);
     trans_c.scale = glm::vec3(1, 1, 1);
 
-    auto old_cam_id =
-        app->get_renderer()->get_viewport(scene_view_viewport_id).get_camera();
-    auto& old_cam = scene.get_ecs().get_with_id<Camera>(old_cam_id);
-    cam_c.skybox = old_cam.skybox;
-
     app->get_renderer()
         ->get_viewport(scene_view_viewport_id)
         .set_camera(cam_c.id);
+    for (auto vp : extra_viewports) {
+        auto& vp_ref = app->get_renderer()->get_viewport(vp);
+        if (!vp_ref.has_camera()) { vp_ref.set_camera(cam_c.id); }
+    }
 }
 
 void Editor::on_playmode_enter(Scene& scene) {
@@ -588,8 +587,18 @@ void Editor::on_playmode_enter(Scene& scene) {
         if (cam.entity == editor_camera)
             continue;
         else {
-            auto vp = cam.viewport_id;
-            app->get_renderer()->get_viewport(vp).set_camera(cam.id);
+            // The first camera is considered to be the main camera, and is used
+            // for rendering the game view (which is currently in the scene
+            // view)
+            app->get_renderer()
+                ->get_viewport(scene_view_viewport_id)
+                .set_camera(cam.id);
+            for (auto vp : extra_viewports) {
+                auto& vp_ref = app->get_renderer()->get_viewport(vp);
+                if (vp_ref.get_camera() == editor_camera->get_id()) {
+                    vp_ref.set_camera(-1);
+                }
+            }
         }
     }
     scene.destroy_object(editor_camera);
@@ -597,24 +606,82 @@ void Editor::on_playmode_enter(Scene& scene) {
     scene.on_start();
 }
 
-void Editor::render_scene_view(Framebuffer& buf) {
-    static bool shown = true;
+bool Editor::scene_view_widget(Scene& scene,
+                               const char* label,
+                               bool* shown,
+                               Framebuffer& buf,
+                               size_t vp_id) {
+    using namespace Components;
     ImVec2 size = ImVec2(buf.get_size().x, buf.get_size().y);
-    if (ImGui::Begin("Scene view", &shown)) {
+
+    Viewport& viewport = app->get_renderer()->get_viewport(vp_id);
+    Camera& cam = scene.get_ecs().get_with_id<Camera>(viewport.get_camera());
+    std::string const& cam_name = cam.entity->get_component<Name>().name;
+
+    if (ImGui::Begin(label, nullptr)) {
+        if (ImGui::BeginDragDropTarget()) {
+            if (ImGuiPayload const* payload =
+                    ImGui::AcceptDragDropPayload("p_entity")) {
+                assert(payload->DataSize == sizeof(SceneObject**));
+                // Set the parent of the drag-drop payload to the current entity
+                SceneObject* entity =
+                    *reinterpret_cast<SceneObject**>(payload->Data);
+
+                if (entity->has_component<Camera>()) {
+                    auto& cam = entity->get_component<Camera>();
+                    viewport.set_camera(cam.id);
+                }
+            }
+            ImGui::EndDragDropTarget();
+        }
+
         auto texture = buf.get_texture();
         // flip image for some reason
         ImGui::Image(reinterpret_cast<ImTextureID>(texture), size, ImVec2(0, 1),
                      ImVec2(1, 0));
-        ImVec2 win_size = ImGui::GetWindowSize();
-        app->get_renderer()->resize(win_size.x, win_size.y);
+
+        if (ImGui::IsWindowFocused()) {
+            // ctrl + x to close a viewport
+            if (RawInput::get_key(Key::X).down &&
+                RawInput::get_key(Key::X).has_changed &&
+                RawInput::get_key(Key::LeftControl).down) {
+                ImGui::End();
+                return true;
+            }
+        }
     }
 
     ImGui::End();
+    return false;
 }
+
+void Editor::render_scene_view(Scene& scene) {
+    static bool show_main = true;
+    auto& main_buf = *app->get_renderer()->get_viewport_framebuf(0);
+    scene_view_widget(scene, "Main scene view", &show_main, main_buf,
+                      scene_view_viewport_id);
+
+    size_t to_erase = -1;
+
+    for (auto vp : extra_viewports) {
+        auto& buf = *app->get_renderer()->get_viewport_framebuf(vp);
+        bool closed =
+            scene_view_widget(scene, fmt::format("Scene view #{}", vp).c_str(),
+                              &show_main, buf, vp);
+        if (closed) { to_erase = vp; }
+    }
+
+    if (to_erase != -1) {
+        extra_viewports.erase(std::find(extra_viewports.begin(),
+                                        extra_viewports.end(), to_erase));
+        app->get_renderer()->remove_viewport(to_erase);
+    }
+
+} // namespace Saturn::Editor
 
 void Editor::frame_end() {
     ImGui::End();
-	clear_font();
+    clear_font();
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, app->window_dimensions.x, app->window_dimensions.y);
     ImGui::Render();

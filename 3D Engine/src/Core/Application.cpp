@@ -152,15 +152,16 @@ void Application::run() {
             renderer->render_scene(scene);
 
 #ifdef WITH_EDITOR
-            editor->render_scene_view(*renderer->get_screen_framebuf());
+            editor->render_scene_view(scene);
             editor->frame_end();
 #endif
             glfwSwapBuffers(window_handle);
-        } catch (std::exception const& e) {
+        } /*catch (std::exception const& e) {
             log::warn("{}", e.what());
-			std::cout << e.what();
+            std::cout << e.what() << std::endl;
             editor->frame_end();
-        }
+        }*/
+        catch (int) {}
     }
     scene.on_exit();
 }

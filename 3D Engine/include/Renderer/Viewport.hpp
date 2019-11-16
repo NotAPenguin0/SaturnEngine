@@ -24,6 +24,8 @@ public:
 
 	bool has_camera() const;
 
+	size_t id = 0;
+
 private:
     unsigned int x, y;
     unsigned int w, h;

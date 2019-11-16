@@ -169,8 +169,7 @@ void ProjectFile::create_and_load(fs::path folder) {
             "PreRenderStage DepthMapPass\nRenderModule DebugModule\n"
             "RenderModule MeshRenderModule\nRenderModule "
             "ParticleModule\nRenderModule SkyboxPass\n"
-            "RenderModule TransferModule\nPostRenderStage "
-            "BlitPass\nPostRenderStage UIPass\n"
+            "RenderModule TransferModule\n"
             "RenderModule EditorModule\n";
     file.close();
     load(folder / project_name);

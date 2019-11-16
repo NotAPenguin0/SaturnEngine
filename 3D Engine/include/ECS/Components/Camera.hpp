@@ -24,9 +24,6 @@ struct [[component, default_serialize, category("Camera")]] Camera
     
 	[[tooltip("The skybox to render with this camera")]]
 	Resource<CubeMap> skybox;
-
-	[[hide_in_editor]] 
-	unsigned int viewport_id = 0;
 };
 // clang-format on
 

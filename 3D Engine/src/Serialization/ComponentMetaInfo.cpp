@@ -65,9 +65,6 @@ void init_component_meta_data(std::vector<ComponentInfo>& data) {
 		info.fields["skybox"].type = "Resource<Saturn::CubeMap>";
 		info.fields["skybox"].tooltip = "The skybox to render with this camera";
 		info.fields["skybox"].hide_in_editor = false;
-		info.fields["viewport_id"].type = "unsigned int";
-		info.fields["viewport_id"].tooltip = "";
-		info.fields["viewport_id"].hide_in_editor = true;
 		data.push_back(info);
 	}
 	{

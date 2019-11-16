@@ -6,7 +6,6 @@
 #    include "Editor/EditorLog.hpp"
 #    include "imgui/imgui.h"
 
-#    include "Renderer/Modules/BlitPass.hpp"
 #    include "Renderer/Modules/DebugModule.hpp"
 #    include "Renderer/Modules/DepthMapPass.hpp"
 #    include "Renderer/Modules/EditorModule.hpp"
@@ -48,11 +47,6 @@ add_render_stage(V const& v, Application* app, std::string_view stage) {
             std::make_unique<TransferModule>());
     } else if (stage == "SkyboxPass") {
         app->get_renderer()->add_render_module(std::make_unique<SkyboxPass>());
-    } else if (stage == "BlitPass") {
-        app->get_renderer()->add_post_render_stage(
-            std::make_unique<BlitPass>());
-    } else if (stage == "UIPass") {
-        app->get_renderer()->add_post_render_stage(std::make_unique<UIPass>());
     }
 }
 
@@ -88,9 +82,6 @@ void RenderPipelineWidget::add_stage(Application& app,
     if (type == "PreRenderStage") {
         add_render_stage(app.get_renderer()->get_pre_render_stages(), &app,
                          stage);
-    } else if (type == "PostRenderStage") {
-        add_render_stage(app.get_renderer()->get_post_render_stages(), &app,
-                         stage);
     } else if (type == "RenderModule") {
         add_render_stage(app.get_renderer()->get_render_modules(), &app, stage);
     } else {
@@ -114,13 +105,6 @@ void RenderPipelineWidget::list_render_stages(Application& app) {
         }
     }
     ImGui::Text("");
-    ImGui::Text("Post-Render stages: ");
-    for (auto& stage : app.get_renderer()->get_post_render_stages()) {
-        if (ImGui::Selectable(stage->str_id().data())) {
-            selected = stage.get();
-        }
-    }
-    ImGui::Text("");
 }
 
 void RenderPipelineWidget::show_add_stage_popup(Application& app) {
@@ -135,7 +119,6 @@ void RenderPipelineWidget::show_add_stage_popup(Application& app) {
         static const char* modules[] = {"DebugModule", "EditorModule",
                                         "MeshRenderModule", "ParticleModule",
                                         "TransferModule", "SkyboxPass"};
-        static const char* post_stages[] = {"BlitPass", "UIPass"};
 
         static int stage_index = -1;
         switch (stage_type) {
@@ -167,25 +150,6 @@ void RenderPipelineWidget::show_add_stage_popup(Application& app) {
                             modules[stage_index]);
                         ProjectFile::render_stage_added("RenderModule",
                                                         modules[stage_index]);
-                    }
-                    ImGui::CloseCurrentPopup();
-                }
-                ImGui::SameLine();
-                if (ImGui::Button("Cancel##RenderStage")) {
-                    ImGui::CloseCurrentPopup();
-                }
-                break;
-            case 2:
-                ImGui::Combo("Post-Render Stage ", &stage_index, post_stages,
-                             sizeof(post_stages) / sizeof(const char*));
-                if (ImGui::Button("Add##RenderStage")) {
-
-                    if (stage_index >= 0) {
-                        add_render_stage(
-                            app.get_renderer()->get_post_render_stages(), &app,
-                            post_stages[stage_index]);
-                        ProjectFile::render_stage_added(
-                            "PostRenderStage", post_stages[stage_index]);
                     }
                     ImGui::CloseCurrentPopup();
                 }
@@ -232,11 +196,6 @@ void RenderPipelineWidget::display_stage_info(Application& app) {
         }
         if (remove_stage(app.get_renderer()->get_render_modules())) {
             ProjectFile::render_stage_removed("RenderModule", str_id);
-            selected = nullptr;
-            return;
-        }
-        if (remove_stage(app.get_renderer()->get_post_render_stages())) {
-            ProjectFile::render_stage_removed("PostRenderStage", str_id);
             selected = nullptr;
             return;
         }

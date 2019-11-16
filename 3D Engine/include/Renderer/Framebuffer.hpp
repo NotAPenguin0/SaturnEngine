@@ -6,7 +6,7 @@
 namespace Saturn {
 
 // TODO: Allow different settings for renderbuffer (do when we need to)
-class Framebuffer : public NonCopyable {
+class Framebuffer {
 public:
     struct CreateInfo {
         ImgDim size;
@@ -14,9 +14,22 @@ public:
 
     Framebuffer() = default;
     Framebuffer(CreateInfo create_info);
-    Framebuffer(Framebuffer&& other) = delete;
+    Framebuffer(Framebuffer&& other) { (*this) = std::move(other); }
 
-    Framebuffer& operator=(Framebuffer&& other) = delete;
+    Framebuffer& operator=(Framebuffer&& other) {
+        if (this != &other) {
+            fbo = other.fbo;
+            rbo = other.rbo;
+            texture = other.texture;
+            size = other.size;
+
+            other.fbo = 0;
+            other.rbo = 0;
+            other.texture = 0;
+            other.size = {0, 0};
+        }
+        return *this;
+    }
 
     ~Framebuffer();
 
@@ -51,8 +64,6 @@ private:
     void create_fbo();
     void create_rbo();
     void create_texture();
-
-    static inline unsigned int currently_bound = 0;
 };
 
 } // namespace Saturn

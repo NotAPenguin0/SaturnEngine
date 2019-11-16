@@ -38,24 +38,30 @@ public:
 
     // Must be called at the start of the frame
     void render(Scene& scene);
-    void render_scene_view(Framebuffer& buf);
+    void render_scene_view(Scene& scene);
     void frame_end();
 
     void create_new_scene(Scene& scene, fs::path path);
     void load_scene(Scene& scene, fs::path path, bool use_project_dir = true);
     void save_scene(Scene& scene);
+    void create_editor_camera(Scene& scene);
 
 private:
     void show_menu_bar(Scene& scene);
     void on_scene_reload(Scene& scene);
-    void create_entity(Scene& scene, std::string const& name);
-    void create_editor_camera(Scene& scene);
+    void create_entity(Scene& scene, std::string const& name);  
     void on_playmode_enter(Scene& scene);
     void set_window_title();
+
+	bool scene_view_widget(Scene& scene, const char* label,
+                           bool* shown,
+                           Framebuffer& buf,
+                           size_t vp_id);
 
     Application* app;
     SceneObject* editor_camera = nullptr;
     std::size_t scene_view_viewport_id = 0;
+	std::vector<size_t> extra_viewports;
 
     std::string cur_open_scene;
     std::string cur_open_scene_full_path;

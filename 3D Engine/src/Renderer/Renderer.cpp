@@ -15,18 +15,15 @@
 namespace Saturn {
 
 void Renderer::setup_framebuffer(CreateInfo const& create_info) {
-    Framebuffer::CreateInfo framebuf_info;
-    framebuf_info.size = {800, 600};
-    framebuf.assign(framebuf_info);
+    /*
+        Framebuffer::CreateInfo framebuf_info;
+        framebuf_info.size = {800, 600};
+        framebuf.assign(framebuf_info);
 
-    screen_tex = nullptr;
+        screen_tex = nullptr;*/
 }
 
-void Renderer::create_default_viewport(CreateInfo const& create_info) {
-    add_viewport(Viewport(0, 0, 600, 800));
-    // Set it as the active viewport
-    Viewport::set_active(get_viewport(0));
-}
+void Renderer::create_default_viewport(CreateInfo const& create_info) {}
 
 void Renderer::initialize_postprocessing() {
     PostProcessing::get_instance().load_shaders(
@@ -37,10 +34,10 @@ void Renderer::initialize_postprocessing() {
 Renderer::Renderer(CreateInfo create_info) :
     app(create_info.app), screen_size(create_info.screen_size) {
 
-    setup_framebuffer(create_info);
-    create_default_viewport(create_info);
+    //    setup_framebuffer(create_info);
+    //    create_default_viewport(create_info);
     initialize_postprocessing();
-
+	viewport_targets.reserve(16);
     glDepthFunc(GL_LEQUAL);
 }
 
@@ -50,56 +47,48 @@ void Renderer::clear(
     Color clear_color,
     GLenum flags /*= GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT*/) {
 
-    Framebuffer::bind(framebuf);
-    glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
-    glClear(flags);
+    for (size_t i = 0; i < viewports.size(); ++i) {
+        Framebuffer::bind(viewport_targets[i]);
+        glClearColor(clear_color.r, clear_color.g, clear_color.b,
+                     clear_color.a);
+        glClear(flags);
 
-    for (auto& stage : post_render_stages) {
-        stage->clear(
+        blit_pass.clear(
             {clear_color.r, clear_color.g, clear_color.b, clear_color.a},
             flags);
     }
-    blit_pass.clear(
-        {clear_color.r, clear_color.g, clear_color.b, clear_color.a}, flags);
-
-    Framebuffer::bind(framebuf);
 }
 
 void Renderer::render_scene(Scene& scene) {
     // Render every viewport
+    size_t vp_id = 0;
     for (auto& vp : viewports) {
-        if (!vp.has_camera()) continue;
-
+        if (!vp.has_camera()) {
+            ++vp_id;
+            continue;
+        }
         // First, execute all pre-render stages
-        for (auto& stage : pre_render_stages) {
-            Framebuffer::bind(framebuf);
-            stage->process(scene);
-        }
+        for (auto& stage : pre_render_stages) { stage->process(scene); }
 
-        Framebuffer::bind(framebuf);
+        Framebuffer::bind(viewport_targets[vp_id]);
 
-        render_viewport(scene, vp);
+        render_viewport(scene, vp, vp_id);
 
-        Framebuffer* next_source = &framebuf;
-        for (auto& stage : post_render_stages) {
-            stage->process(scene, *next_source);
-            // Chain post render stages together by having each of them operate
-            // on the result of the previous one
-            next_source = &stage->get_framebuffer();
-        }
-        screen_tex = next_source;
+        ++vp_id;
     }
 }
 
 void Renderer::blit_to_screen(Scene& scene) {
-    blit_pass.process(scene, *screen_tex);
+    blit_pass.process(scene, viewport_targets[0]);
 }
 
-void Renderer::render_viewport(Scene& scene, Viewport& vp) {
+void Renderer::render_viewport(Scene& scene, Viewport& vp, size_t idx) {
     Viewport::set_active(vp);
 
     // Process render modules
-    for (auto& mod : render_modules) { mod->process(scene, vp, framebuf); }
+    for (auto& mod : render_modules) {
+        mod->process(scene, vp, viewport_targets[idx]);
+    }
 }
 
 static unsigned int create_texture(glm::vec2 size) {
@@ -130,24 +119,53 @@ static void resize_if_needed(Framebuffer& target, glm::vec2 size) {
 }
 
 void Renderer::resize(unsigned int x, unsigned int y) {
-    resize_if_needed(framebuf, {x, y});
-    viewports[0] = Viewport(viewports[0].get_camera(), 0, 0, x, y);
-	for (auto& post_pass : post_render_stages) {
-        resize_if_needed(post_pass->get_framebuffer(), {x, y});
-	}
+    //    resize_if_needed(framebuf, {x, y});
+    size_t idx = 0;
+    for (auto& vp : viewports) {
+        vp = Viewport(vp.get_camera(), 0, 0, x, y);
+        resize_if_needed(viewport_targets[idx], {x, y});
+        ++idx;
+    }
 }
 
 Viewport& Renderer::get_viewport(std::size_t index) {
-    if (index >= viewports.size()) {
-        throw InvalidViewportException("Invalid viewport with index " +
-                                       std::to_string(index) + " requested.");
-    }
-    return viewports[index];
+
+    return viewports[viewport_index.at(index)];
 }
 
 std::size_t Renderer::add_viewport(Viewport vp) {
     viewports.push_back(vp);
-    return viewports.size() - 1;
+    Framebuffer::CreateInfo framebuf_info;
+    framebuf_info.size = {vp.dimensions().x, vp.dimensions().y};
+	
+    viewport_targets.emplace_back();
+    auto& vp_buf = viewport_targets[viewports.size() - 1];
+    vp_buf.assign(framebuf_info);
+    auto id = IDGenerator<Viewport>::next();
+    viewport_index[id] = viewports.size() - 1;
+    viewports.back().id = id;
+    return id;
+}
+
+void Renderer::remove_viewport(size_t id) {
+    auto idx = viewport_index[id];
+    // Algorithm for erasing and updating indices:
+    /*
+    1. Swap element to erase with last element
+    2. Update index for swapped elements
+    3. Remove erased id from index map
+    4. Erase
+    */
+
+    // Setup for 1 and 2
+    auto id_to_update = viewports.back().id;
+    auto erased_idx = viewport_index.at(id);
+    std::swap(viewports[erased_idx], viewports.back());
+	std::swap(viewport_targets[erased_idx], viewport_targets.back());
+    viewport_index[id_to_update] = erased_idx;
+    viewport_index.erase(id);
+    viewports.erase(viewports.end() - 1);
+	viewport_targets.erase(viewport_targets.end() - 1);
 }
 
 void Renderer::add_pre_render_stage(
@@ -168,16 +186,6 @@ void Renderer::add_render_module(
     render_modules.back()->init();
     // re-sort the render stages
     std::sort(render_modules.begin(), render_modules.end(),
-              [](auto const& lhs, auto const& rhs) { return *lhs < *rhs; });
-}
-
-void Renderer::add_post_render_stage(
-    std::unique_ptr<RenderModules::PostRenderStage> stage) {
-    post_render_stages.push_back(std::move(stage));
-    // Initialize the render stage
-    post_render_stages.back()->init();
-    // re-sort the render stages
-    std::sort(post_render_stages.begin(), post_render_stages.end(),
               [](auto const& lhs, auto const& rhs) { return *lhs < *rhs; });
 }
 

@@ -272,14 +272,6 @@ std::string generate_scene_obj(std::vector<ComponentData> const& components) {
     for (auto const& component : components) {
         mustache::data comp_data = mustache::data::type::object;
         comp_data["ComponentName"] = component.name;
-        // Ugly, but I can't come up with a better way right now
-        if (component.name == "Camera") {
-            comp_data["AdditionalCode"] = "obj.get_scene()"
-                                          "->get_app()"
-                                          "->get_renderer()"
-                                          "->get_viewport(c.viewport_id)"
-                                          ".set_camera(c.id);";
-        }
         data["DeserializeComponent"].push_back(comp_data);
     }
 
