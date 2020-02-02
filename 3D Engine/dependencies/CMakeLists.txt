@@ -18,7 +18,7 @@ if(MSVC)
         PROPERTIES
         COMPILE_OPTIONS "/W0"
     )
-elseif("${CMAKE_CXX_COMPILER_ID}" matches "GCC" or "${CMAKE_CXX_COMPILER_ID}" matches "Clang")
+elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GCC" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     set_target_properties(glfw glad efsw freetyp assimp
         PROPERTIES
         COMPILE_OPTIONS "-Wno-everything"

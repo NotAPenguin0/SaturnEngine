@@ -28,3 +28,6 @@
 [submodule "3D Engine/dependencies/assimp"]
 	path = 3D Engine/dependencies/assimp
 	url = https://github.com/assimp/assimp
+[submodule "3D Engine/dependencies/audeo"]
+	path = 3D Engine/dependencies/audeo
+	url = https://github.com/NotAPenguin0/audeo
