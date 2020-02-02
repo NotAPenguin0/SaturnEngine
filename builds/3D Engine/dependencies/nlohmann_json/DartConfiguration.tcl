@@ -4,40 +4,30 @@
 
 
 # Configuration directories and files
-SourceDirectory: C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/nlohmann_json
-BuildDirectory: C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/nlohmann_json
+SourceDirectory: C:/Users/michi/Documents/dev/SaturnEngine/3D Engine/dependencies/nlohmann_json
+BuildDirectory: C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/nlohmann_json
 
 # Where to place the cost data store
 CostDataFile: 
 
 # Site is something like machine.domain, i.e. pragmatic.crd
-Site: MICHIELPC
+Site: LAPTOP-RKDF98PC
 
 # Build name is osname-revision-compiler, i.e. Linux-2.4.2-2smp-c++
-BuildName: Win32-MSBuild
+BuildName: Win32-ninja
 
 # Subprojects
 LabelsForSubprojects: 
 
 # Submission information
-IsCDash: 
-CDashVersion: 
-QueryCDashVersion: 
-DropSite: 
-DropLocation: 
-DropSiteUser: 
-DropSitePassword: 
-DropSiteMode: 
-DropMethod: http
-TriggerSite: 
-ScpCommand: C:/Windows/System32/OpenSSH/scp.exe
+SubmitURL: http://
 
 # Dashboard start time
 NightlyStartTime: 00:00:00 EDT
 
 # Commands for the build/test/submit cycle
-ConfigureCommand: "C:/Users/michi_000/Downloads/cmake-3.13.2-win64-x64/cmake-3.13.2-win64-x64/bin/cmake.exe" "C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/nlohmann_json"
-MakeCommand: C:\Users\michi_000\Downloads\cmake-3.13.2-win64-x64\cmake-3.13.2-win64-x64\bin\cmake.exe --build . --config "${CTEST_CONFIGURATION_TYPE}"
+ConfigureCommand: "C:/Program Files/CMake/bin/cmake.exe" "C:/Users/michi/Documents/dev/SaturnEngine/3D Engine/dependencies/nlohmann_json"
+MakeCommand: "C:\Program Files\CMake\bin\cmake.exe" --build . --config "${CTEST_CONFIGURATION_TYPE}"
 DefaultCTestConfigurationType: Release
 
 # version control
@@ -72,7 +62,7 @@ UpdateOptions:
 UpdateType: git
 
 # Compiler info
-Compiler: C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.16.27023/bin/Hostx86/x64/cl.exe
+Compiler: C:/Program Files/LLVM/bin/clang++.exe
 CompilerVersion: 9.0.0
 
 # Dynamic analysis (MemCheck)
@@ -104,7 +94,7 @@ TimeOut: 1500
 # so would cause the system load to exceed this value.
 TestLoad: 
 
-UseLaunchers: 0
+UseLaunchers: 
 CurlOptions: 
 # warning, if you add new options here that have to do with submit,
 # you have to update cmCTestSubmitCommand.cxx

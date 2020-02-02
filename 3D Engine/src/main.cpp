@@ -9,14 +9,6 @@
 #include "Editor/Editor.hpp"
 #endif
 
-/*
- *NOTES:
- *
- * Blending, face culling and depth testing is disabled right now because 2D
- * testing without camera. To renenable: Enable in Renderer::update_screen and
- *in Engine::initialize
- *
- **/
 
 // Function try block because I'm cool
 int main() try {

@@ -56,11 +56,10 @@ add_library(nlohmann_json::nlohmann_json INTERFACE IMPORTED)
 set_target_properties(nlohmann_json::nlohmann_json PROPERTIES
   INTERFACE_COMPILE_FEATURES "cxx_std_11"
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include;${_IMPORT_PREFIX}/include"
-  INTERFACE_SOURCES "${_IMPORT_PREFIX}/nlohmann_json.natvis"
 )
 
-if(CMAKE_VERSION VERSION_LESS 3.1.0)
-  message(FATAL_ERROR "This file relies on consumers using CMake 3.1.0 or greater.")
+if(CMAKE_VERSION VERSION_LESS 3.0.0)
+  message(FATAL_ERROR "This file relies on consumers using CMake 3.0.0 or greater.")
 endif()
 
 # Load information for each installed configuration.

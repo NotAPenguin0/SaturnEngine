@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/michi_000/Desktop/C++/SaturnEngine
+# Install script for directory: C:/Users/michi/Documents/dev/SaturnEngine
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files/SaturnEngine")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/SaturnEngine")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -12,7 +12,7 @@ if(NOT DEFINED CMAKE_INSTALL_CONFIG_NAME)
     string(REGEX REPLACE "^[^A-Za-z0-9_]+" ""
            CMAKE_INSTALL_CONFIG_NAME "${BUILD_TYPE}")
   else()
-    set(CMAKE_INSTALL_CONFIG_NAME "Release")
+    set(CMAKE_INSTALL_CONFIG_NAME "Debug")
   endif()
   message(STATUS "Install configuration: \"${CMAKE_INSTALL_CONFIG_NAME}\"")
 endif()
@@ -34,10 +34,10 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/cmake_install.cmake")
-  include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/include/cmake_install.cmake")
-  include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/src/cmake_install.cmake")
-  include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/CodeGen/Serialization/cmake_install.cmake")
+  include("C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/cmake_install.cmake")
+  include("C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/include/cmake_install.cmake")
+  include("C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/src/cmake_install.cmake")
+  include("C:/Users/michi/Documents/dev/SaturnEngine/builds/CodeGen/Serialization/cmake_install.cmake")
 
 endif()
 
@@ -49,5 +49,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/michi/Documents/dev/SaturnEngine/builds/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -45,8 +45,6 @@
 // Define this to 1 if building GLFW for OSMesa
 /* #undef _GLFW_OSMESA */
 
-// Define this to 1 if building as a shared library / dynamic library / DLL
-/* #undef _GLFW_BUILD_DLL */
 // Define this to 1 to use Vulkan loader linked statically into application
 /* #undef _GLFW_VULKAN_STATIC */
 

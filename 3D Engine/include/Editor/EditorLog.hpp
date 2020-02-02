@@ -35,14 +35,14 @@ void error(Args&&... args) {
 } // namespace log
 } // namespace Saturn
 #else
-namespace log {
+namespace Saturn::log {
 template<typename... Args>
 inline void log(Args&&...) {}
 template<typename... Args>
 inline void warn(Args&&...) {}
 template<typename... Args>
 void error(Args&&... args) {}
-} // namespace log
+} // namespace Saturn::log
 #endif
 
 #endif

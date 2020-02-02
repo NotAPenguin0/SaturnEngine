@@ -50,8 +50,7 @@ add_library(nlohmann_json::nlohmann_json INTERFACE IMPORTED)
 
 set_target_properties(nlohmann_json::nlohmann_json PROPERTIES
   INTERFACE_COMPILE_FEATURES "cxx_std_11"
-  INTERFACE_INCLUDE_DIRECTORIES "C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/nlohmann_json/single_include/"
-  INTERFACE_SOURCES "C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies/nlohmann_json/nlohmann_json.natvis"
+  INTERFACE_INCLUDE_DIRECTORIES "C:/Users/michi/Documents/dev/SaturnEngine/3D Engine/dependencies/nlohmann_json/single_include/"
 )
 
 # This file does not depend on other imported targets which have

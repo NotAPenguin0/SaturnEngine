@@ -34,7 +34,7 @@ ASSIMP_BUILD_ARCHITECTURE:STRING=
 
 //If the supplementary tools for Assimp are built in addition to
 // the library.
-ASSIMP_BUILD_ASSIMP_TOOLS:BOOL=ON
+ASSIMP_BUILD_ASSIMP_TOOLS:BOOL=OFF
 
 //describe the current compiler.
 ASSIMP_BUILD_COMPILER:STRING=
@@ -46,8 +46,10 @@ ASSIMP_BUILD_NONFREE_C4D_IMPORTER:BOOL=OFF
 //If the official samples are built as well (needs Glut).
 ASSIMP_BUILD_SAMPLES:BOOL=OFF
 
+ASSIMP_BUILD_STATIC_LIB:BOOL=ON
+
 //If the test suite for Assimp is built in addition to the library.
-ASSIMP_BUILD_TESTS:BOOL=ON
+ASSIMP_BUILD_TESTS:BOOL=OFF
 
 //Build your own zlib
 ASSIMP_BUILD_ZLIB:BOOL=OFF
@@ -58,12 +60,18 @@ ASSIMP_COVERALLS:BOOL=OFF
 //Set to ON to enable double precision processing
 ASSIMP_DOUBLE_PRECISION:BOOL=OFF
 
+//Enable all warnings.
+ASSIMP_ERROR_MAX:BOOL=OFF
+
 //adds the target headercheck which compiles every header file,
 // default disabled because it adds many targets
 ASSIMP_HEADERCHECK:BOOL=OFF
 
 //Path the header files are installed to.
 ASSIMP_INCLUDE_INSTALL_DIR:STRING=include
+
+//DIsable this if you want to use assimp as a submodule.
+ASSIMP_INSTALL:BOOL=ON
 
 //Suffix to append to library names
 ASSIMP_LIBRARY_SUFFIX:STRING=
@@ -72,7 +80,7 @@ ASSIMP_LIBRARY_SUFFIX:STRING=
 ASSIMP_LIB_INSTALL_DIR:STRING=lib
 
 //Disable Assimp's export functionality.
-ASSIMP_NO_EXPORT:BOOL=OFF
+ASSIMP_NO_EXPORT:BOOL=ON
 
 //Set to ON to generate CPack configuration files and packaging
 // targets
@@ -88,7 +96,7 @@ ASSIMP_UBSAN:BOOL=OFF
 ASSIMP_WERROR:BOOL=OFF
 
 //Build the audeo example files
-AUDEO_BUILD_EXAMPLES:BOOL=ON
+AUDEO_BUILD_EXAMPLES:BOOL=OFF
 
 //Value Computed by CMake
 Assimp_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/assimp
@@ -103,7 +111,12 @@ BUILD_DOCS:BOOL=OFF
 BUILD_FRAMEWORK:BOOL=OFF
 
 //Build package with shared libraries.
-BUILD_SHARED_LIBS:BOOL=ON
+BUILD_SHARED_LIBS:BOOL=OFF
+
+BUILD_STATIC_LIBS:BOOL=ON
+
+//Build the testing tree.
+BUILD_TESTING:BOOL=OFF
 
 //Build the test app
 BUILD_TEST_APP:BOOL=OFF
@@ -116,6 +129,9 @@ BZIP2_LIBRARY_DEBUG:FILEPATH=BZIP2_LIBRARY_DEBUG-NOTFOUND
 
 //Path to a library.
 BZIP2_LIBRARY_RELEASE:FILEPATH=BZIP2_LIBRARY_RELEASE-NOTFOUND
+
+//Path to a program.
+BZRCOMMAND:FILEPATH=BZRCOMMAND-NOTFOUND
 
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=CMAKE_ADDR2LINE-NOTFOUND
@@ -146,6 +162,9 @@ CMAKE_CXX_FLAGS:STRING=
 //Flags used by the CXX compiler during DEBUG builds.
 CMAKE_CXX_FLAGS_DEBUG:STRING=-g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd
 
+//Flags used by the CXX compiler during EDITOR builds.
+CMAKE_CXX_FLAGS_EDITOR:STRING=
+
 //Flags used by the CXX compiler during MINSIZEREL builds.
 CMAKE_CXX_FLAGS_MINSIZEREL:STRING=-Os -DNDEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrt
 
@@ -173,6 +192,9 @@ CMAKE_C_FLAGS:STRING=
 //Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g -Xclang -gcodeview -O0 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd
 
+//Flags used by the C compiler during EDITOR builds.
+CMAKE_C_FLAGS_EDITOR:STRING=
+
 //Flags used by the C compiler during MINSIZEREL builds.
 CMAKE_C_FLAGS_MINSIZEREL:STRING=-Os -DNDEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrt
 
@@ -196,6 +218,9 @@ CMAKE_EXE_LINKER_FLAGS:STRING=
 
 //Flags used by the linker during DEBUG builds.
 CMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=
+
+//Flags used by the linker during EDITOR builds.
+CMAKE_EXE_LINKER_FLAGS_EDITOR:STRING=
 
 //Flags used by the linker during MINSIZEREL builds.
 CMAKE_EXE_LINKER_FLAGS_MINSIZEREL:STRING=
@@ -275,6 +300,10 @@ CMAKE_MODULE_LINKER_FLAGS:STRING=
 CMAKE_MODULE_LINKER_FLAGS_DEBUG:STRING=
 
 //Flags used by the linker during the creation of modules during
+// EDITOR builds.
+CMAKE_MODULE_LINKER_FLAGS_EDITOR:STRING=
+
+//Flags used by the linker during the creation of modules during
 // MINSIZEREL builds.
 CMAKE_MODULE_LINKER_FLAGS_MINSIZEREL:STRING=
 
@@ -331,6 +360,9 @@ CMAKE_RC_FLAGS:STRING=
 //Flags for Windows Resource Compiler during DEBUG builds.
 CMAKE_RC_FLAGS_DEBUG:STRING=
 
+//Flags for Windows Resource Compiler during EDITOR builds.
+CMAKE_RC_FLAGS_EDITOR:STRING=
+
 //Flags for Windows Resource Compiler during MINSIZEREL builds.
 CMAKE_RC_FLAGS_MINSIZEREL:STRING=
 
@@ -350,6 +382,10 @@ CMAKE_SHARED_LINKER_FLAGS:STRING=
 //Flags used by the linker during the creation of shared libraries
 // during DEBUG builds.
 CMAKE_SHARED_LINKER_FLAGS_DEBUG:STRING=
+
+//Flags used by the linker during the creation of shared libraries
+// during EDITOR builds.
+CMAKE_SHARED_LINKER_FLAGS_EDITOR:STRING=
 
 //Flags used by the linker during the creation of shared libraries
 // during MINSIZEREL builds.
@@ -379,6 +415,10 @@ CMAKE_STATIC_LINKER_FLAGS:STRING=
 CMAKE_STATIC_LINKER_FLAGS_DEBUG:STRING=
 
 //Flags used by the linker during the creation of static libraries
+// during EDITOR builds.
+CMAKE_STATIC_LINKER_FLAGS_EDITOR:STRING=
+
+//Flags used by the linker during the creation of static libraries
 // during MINSIZEREL builds.
 CMAKE_STATIC_LINKER_FLAGS_MINSIZEREL:STRING=
 
@@ -399,11 +439,67 @@ CMAKE_STRIP:FILEPATH=CMAKE_STRIP-NOTFOUND
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=OFF
 
+//Path to the coverage program that CTest uses for performing coverage
+// inspection
+COVERAGE_COMMAND:FILEPATH=COVERAGE_COMMAND-NOTFOUND
+
+//Extra command line flags to pass to the coverage tool
+COVERAGE_EXTRA_FLAGS:STRING=-l
+
 //Enable to build 7-Zip source packages
 CPACK_SOURCE_7Z:BOOL=ON
 
 //Enable to build ZIP source packages
 CPACK_SOURCE_ZIP:BOOL=ON
+
+//whether or not to build the examples
+CPPAST_BUILD_EXAMPLE:BOOL=OFF
+
+//whether or not to build the tests
+CPPAST_BUILD_TEST:BOOL=OFF
+
+//whether or not to build the tool
+CPPAST_BUILD_TOOL:BOOL=OFF
+
+//How many times to retry timed-out CTest submissions.
+CTEST_SUBMIT_RETRY_COUNT:STRING=3
+
+//How long to wait between timed-out CTest submissions.
+CTEST_SUBMIT_RETRY_DELAY:STRING=5
+
+//Path to a program.
+CVSCOMMAND:FILEPATH=CVSCOMMAND-NOTFOUND
+
+//Options passed to the cvs update command.
+CVS_UPDATE_OPTIONS:STRING=-d -A -P
+
+//Maximum time allowed before CTest will kill the test.
+DART_TESTING_TIMEOUT:STRING=1500
+
+//override of DEBUG_ASSERT_ASSUME macro
+DEBUG_ASSERT_ASSUME:STRING=
+
+//Value Computed by CMake
+DEBUG_ASSERT_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/CodeGen/Serialization/cppast/external/type_safe/external/debug_assert
+
+//completely disable assertion macro
+DEBUG_ASSERT_DISABLE:BOOL=OFF
+
+//override of DEBUG_ASSERT_FORCE_INLINE macro
+DEBUG_ASSERT_FORCE_INLINE:STRING=
+
+//override of DEBUG_ASSERT_MARK_UNREACHABLE
+DEBUG_ASSERT_MARK_UNREACHABLE:STRING=
+
+//whether or not the default_handler uses fprintf() to print an
+// error message
+DEBUG_ASSERT_NO_STDIO:BOOL=OFF
+
+//Value Computed by CMake
+DEBUG_ASSERT_SOURCE_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/CodeGen/Serialization/cppast/external/type_safe/external/debug_assert
+
+//Doxygen documentation generation tool (http://www.doxygen.org)
+DOXYGEN_EXECUTABLE:FILEPATH=DOXYGEN_EXECUTABLE-NOTFOUND
 
 //Path to a library.
 DirectX_D3DCOMPILER_LIBRARY:FILEPATH=DirectX_D3DCOMPILER_LIBRARY-NOTFOUND
@@ -429,6 +525,33 @@ DirectX_LIBRARY:FILEPATH=C:/Windows/System32/d3d9.dll
 //Single output directory for building all executables.
 EXECUTABLE_OUTPUT_PATH:PATH=
 
+//Value Computed by CMake
+FMT_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/libfmt
+
+//Generate the cuda-test target.
+FMT_CUDA_TEST:BOOL=OFF
+
+//Generate the doc target.
+FMT_DOC:BOOL=OFF
+
+//Generate the fuzz target.
+FMT_FUZZ:BOOL=OFF
+
+//Generate the install target.
+FMT_INSTALL:BOOL=OFF
+
+//Enable extra warnings and expensive tests.
+FMT_PEDANTIC:BOOL=OFF
+
+//Value Computed by CMake
+FMT_SOURCE_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/3D Engine/dependencies/libfmt
+
+//Generate the test target.
+FMT_TEST:BOOL=OFF
+
+//Halt the compilation with an error on compiler warnings.
+FMT_WERROR:BOOL=OFF
+
 //Support bzip2 compressed fonts.
 FT_WITH_BZIP2:BOOL=OFF
 
@@ -441,11 +564,41 @@ FT_WITH_PNG:BOOL=OFF
 //Use system zlib instead of internal library.
 FT_WITH_ZLIB:BOOL=OFF
 
+//Path to a program.
+GITCOMMAND:FILEPATH=C:/Program Files/Git/cmd/git.exe
+
+//Value Computed by CMake
+GLFW_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/glfw
+
+//Build the GLFW documentation
+GLFW_BUILD_DOCS:BOOL=ON
+
+//Build the GLFW example programs
+GLFW_BUILD_EXAMPLES:BOOL=OFF
+
+//Build the GLFW test programs
+GLFW_BUILD_TESTS:BOOL=OFF
+
+//Generate installation target
+GLFW_INSTALL:BOOL=ON
+
+//Value Computed by CMake
+GLFW_SOURCE_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/3D Engine/dependencies/glfw
+
+//Force use of high-performance GPU on hybrid systems
+GLFW_USE_HYBRID_HPG:BOOL=OFF
+
+//Assume the Vulkan loader is linked with the application
+GLFW_VULKAN_STATIC:BOOL=OFF
+
 //Path to a file.
 HARFBUZZ_INCLUDE_DIRS:PATH=HARFBUZZ_INCLUDE_DIRS-NOTFOUND
 
 //Path to a library.
 HARFBUZZ_LIBRARIES:FILEPATH=HARFBUZZ_LIBRARIES-NOTFOUND
+
+//Path to a program.
+HGCOMMAND:FILEPATH=HGCOMMAND-NOTFOUND
 
 //Enable Hunter package manager support
 HUNTER_ENABLED:BOOL=OFF
@@ -465,8 +618,47 @@ IGNORE_GIT_HASH:BOOL=OFF
 //Inject debug postfix in .a/.so/.dll lib names
 INJECT_DEBUG_POSTFIX:BOOL=ON
 
+//Build the unit tests when BUILD_TESTING is enabled.
+JSON_BuildTests:BOOL=ON
+
+//Build test suite with coverage information
+JSON_Coverage:BOOL=OFF
+
+//Install CMake targets during install step.
+JSON_Install:BOOL=ON
+
+//Use non-amalgamated version of the library.
+JSON_MultipleHeaders:BOOL=OFF
+
+//Build test suite without exceptions
+JSON_NoExceptions:BOOL=OFF
+
+//Build test suite with Clang sanitizer
+JSON_Sanitizer:BOOL=OFF
+
+//Execute test suite with Valgrind
+JSON_Valgrind:BOOL=OFF
+
+LIBCLANG_INCLUDE_DIR:PATH=C:/Users/michi/Documents/dev/SaturnEngine/CodeGen/Serialization/libclang/include
+
+LIBCLANG_LIBRARY:FILEPATH=C:/Users/michi/Documents/dev/SaturnEngine/CodeGen/Serialization/libclang/lib/libclang.lib
+
 //Single output directory for building all libraries.
 LIBRARY_OUTPUT_PATH:PATH=
+
+//the preferred LLVM version
+LLVM_PREFERRED_VERSION:STRING=9.0.0
+
+LLVM_VERSION_EXPLICIT:STRING=9.0.0
+
+//Command to build the project
+MAKECOMMAND:STRING="C:\Program Files\CMake\bin\cmake.exe" --build . --config "${CTEST_CONFIGURATION_TYPE}"
+
+//Path to the memory checking command, used for memory error detection.
+MEMORYCHECK_COMMAND:FILEPATH=MEMORYCHECK_COMMAND-NOTFOUND
+
+//File that contains suppressions for the memory checker
+MEMORYCHECK_SUPPRESSIONS_FILE:FILEPATH=
 
 //OpenGL library for win32
 OPENGL_gl_LIBRARY:STRING=opengl32
@@ -474,14 +666,32 @@ OPENGL_gl_LIBRARY:STRING=opengl32
 //GLU library for win32
 OPENGL_glu_LIBRARY:STRING=glu32
 
+//Path to a program.
+P4COMMAND:FILEPATH=P4COMMAND-NOTFOUND
+
 //pkg-config executable
 PKG_CONFIG_EXECUTABLE:FILEPATH=PKG_CONFIG_EXECUTABLE-NOTFOUND
 
 //Path to a library.
 RT_LIBRARY:FILEPATH=RT_LIBRARY-NOTFOUND
 
+//CACHE
+SATURN_WITH_EDITOR:BOOL=ON
+
+//Name of the computer/site where compile is being run
+SITE:STRING=LAPTOP-RKDF98PC
+
+//Path to the SLURM sbatch executable
+SLURM_SBATCH_COMMAND:FILEPATH=SLURM_SBATCH_COMMAND-NOTFOUND
+
+//Path to the SLURM srun executable
+SLURM_SRUN_COMMAND:FILEPATH=SLURM_SRUN_COMMAND-NOTFOUND
+
 //Build efsw as a static library
-STATIC_LIB:BOOL=OFF
+STATIC_LIB:BOOL=ON
+
+//Path to a program.
+SVNCOMMAND:FILEPATH=SVNCOMMAND-NOTFOUND
 
 //Use system installed Irrlicht/IrrXML library.
 SYSTEM_IRRXML:BOOL=OFF
@@ -498,8 +708,41 @@ Serialization_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds
 //Value Computed by CMake
 Serialization_SOURCE_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/CodeGen/Serialization
 
+//whether or not the undefined_behavior_arithmetic policy is used
+TYPE_SAFE_ARITHMETIC_UB:BOOL=ON
+
+//Value Computed by CMake
+TYPE_SAFE_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/CodeGen/Serialization/cppast/external/type_safe
+
+//generate documentation
+TYPE_SAFE_BUILD_DOC:BOOL=OFF
+
+//build test and example
+TYPE_SAFE_BUILD_TEST_EXAMPLE:BOOL=OFF
+
+//whether or not to enable internal assertions for the type_safe
+// library
+TYPE_SAFE_ENABLE_ASSERTIONS:BOOL=ON
+
+//whether or not to enable precondition checks
+TYPE_SAFE_ENABLE_PRECONDITION_CHECKS:BOOL=ON
+
+//whether or not the wrappers in types.hpp are used
+TYPE_SAFE_ENABLE_WRAPPER:BOOL=ON
+
+//Value Computed by CMake
+TYPE_SAFE_SOURCE_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/CodeGen/Serialization/cppast/external/type_safe
+
 //Build efsw with verbose mode.
 VERBOSE:BOOL=OFF
+
+WINDOWS_H_INCLUDE_DIR:PATH=C:/Program Files (x86)/Windows Kits/10/Include/10.0.18362.0/um
+
+WINDOWS_LIBC_INCLUDE_DIR:PATH=C:/Program Files (x86)/Windows Kits/10/Include/10.0.18362.0/ucrt
+
+WINDOWS_SHARED_INCLUDE_DIR:PATH=C:/Program Files (x86)/Windows Kits/10/Include/10.0.18362.0/shared
+
+WINDOWS_VC_INCLUDE_DIR:PATH=C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.24.28314/include
 
 //Path to a file.
 ZLIB_INCLUDE_DIR:PATH=ZLIB_INCLUDE_DIR-NOTFOUND
@@ -526,6 +769,18 @@ audeo_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engi
 audeo_SOURCE_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/3D Engine/dependencies/audeo
 
 //Value Computed by CMake
+cppast_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/CodeGen/Serialization/cppast
+
+//Dependencies for the target
+cppast_LIB_DEPENDS:STATIC=general;_cppast_tiny_process;
+
+//Value Computed by CMake
+cppast_SOURCE_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/CodeGen/Serialization/cppast
+
+//The directory containing a CMake configuration file for debug_assert.
+debug_assert_DIR:PATH=debug_assert_DIR-NOTFOUND
+
+//Value Computed by CMake
 efsw_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/efsw
 
 //Value Computed by CMake
@@ -542,6 +797,27 @@ glad_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engin
 
 //Value Computed by CMake
 glad_SOURCE_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/3D Engine/dependencies/glad
+
+//Value Computed by CMake
+glm_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/glm
+
+//Value Computed by CMake
+glm_SOURCE_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/3D Engine/dependencies/glm
+
+//Path to a program.
+llvm_config_binary_no_suffix:FILEPATH=
+
+//Path to a program.
+llvm_config_binary_suffix:FILEPATH=
+
+//Value Computed by CMake
+nlohmann_json_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/nlohmann_json
+
+//Value Computed by CMake
+nlohmann_json_SOURCE_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/3D Engine/dependencies/nlohmann_json
+
+//The directory containing a CMake configuration file for type_safe.
+type_safe_DIR:PATH=type_safe_DIR-NOTFOUND
 
 //Value Computed by CMake
 zlib_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/assimp/contrib/zlib
@@ -568,6 +844,8 @@ BZIP2_INCLUDE_DIR-ADVANCED:INTERNAL=1
 BZIP2_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: BZIP2_LIBRARY_RELEASE
 BZIP2_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: BZRCOMMAND
+BZRCOMMAND-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_ADDR2LINE
 CMAKE_ADDR2LINE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_AR
@@ -596,6 +874,8 @@ CMAKE_CXX_COMPILER_RANLIB-ADVANCED:INTERNAL=1
 CMAKE_CXX_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_CXX_FLAGS_DEBUG
 CMAKE_CXX_FLAGS_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_CXX_FLAGS_EDITOR
+CMAKE_CXX_FLAGS_EDITOR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_CXX_FLAGS_MINSIZEREL
 CMAKE_CXX_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_CXX_FLAGS_RELEASE
@@ -614,6 +894,8 @@ CMAKE_C_COMPILER_RANLIB-ADVANCED:INTERNAL=1
 CMAKE_C_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_C_FLAGS_DEBUG
 CMAKE_C_FLAGS_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_C_FLAGS_EDITOR
+CMAKE_C_FLAGS_EDITOR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_C_FLAGS_MINSIZEREL
 CMAKE_C_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_C_FLAGS_RELEASE
@@ -630,6 +912,8 @@ CMAKE_EXECUTABLE_FORMAT:INTERNAL=Unknown
 CMAKE_EXE_LINKER_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS_DEBUG
 CMAKE_EXE_LINKER_FLAGS_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS_EDITOR
+CMAKE_EXE_LINKER_FLAGS_EDITOR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS_MINSIZEREL
 CMAKE_EXE_LINKER_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS_RELEASE
@@ -648,6 +932,8 @@ CMAKE_GENERATOR_INSTANCE:INTERNAL=
 CMAKE_GENERATOR_PLATFORM:INTERNAL=
 //Name of generator toolset.
 CMAKE_GENERATOR_TOOLSET:INTERNAL=
+//Have include pthread.h
+CMAKE_HAVE_PTHREAD_H:INTERNAL=
 //Source directory with the top level CMakeLists.txt file for this
 // project
 CMAKE_HOME_DIRECTORY:INTERNAL=C:/Users/michi/Documents/dev/SaturnEngine
@@ -691,6 +977,8 @@ CMAKE_MAKE_PROGRAM-ADVANCED:INTERNAL=1
 CMAKE_MODULE_LINKER_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MODULE_LINKER_FLAGS_DEBUG
 CMAKE_MODULE_LINKER_FLAGS_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_MODULE_LINKER_FLAGS_EDITOR
+CMAKE_MODULE_LINKER_FLAGS_EDITOR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MODULE_LINKER_FLAGS_MINSIZEREL
 CMAKE_MODULE_LINKER_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MODULE_LINKER_FLAGS_RELEASE
@@ -716,6 +1004,8 @@ CMAKE_RC_COMPILER_WORKS:INTERNAL=1
 CMAKE_RC_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_RC_FLAGS_DEBUG
 CMAKE_RC_FLAGS_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_RC_FLAGS_EDITOR
+CMAKE_RC_FLAGS_EDITOR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_RC_FLAGS_MINSIZEREL
 CMAKE_RC_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_RC_FLAGS_RELEASE
@@ -730,6 +1020,8 @@ CMAKE_ROOT:INTERNAL=C:/Program Files/CMake/share/cmake-3.16
 CMAKE_SHARED_LINKER_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS_DEBUG
 CMAKE_SHARED_LINKER_FLAGS_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS_EDITOR
+CMAKE_SHARED_LINKER_FLAGS_EDITOR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL
 CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS_RELEASE
@@ -744,6 +1036,8 @@ CMAKE_SKIP_RPATH-ADVANCED:INTERNAL=1
 CMAKE_STATIC_LINKER_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_STATIC_LINKER_FLAGS_DEBUG
 CMAKE_STATIC_LINKER_FLAGS_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_STATIC_LINKER_FLAGS_EDITOR
+CMAKE_STATIC_LINKER_FLAGS_EDITOR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_STATIC_LINKER_FLAGS_MINSIZEREL
 CMAKE_STATIC_LINKER_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_STATIC_LINKER_FLAGS_RELEASE
@@ -754,10 +1048,26 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 CMAKE_STRIP-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: COVERAGE_COMMAND
+COVERAGE_COMMAND-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: COVERAGE_EXTRA_FLAGS
+COVERAGE_EXTRA_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CPACK_SOURCE_7Z
 CPACK_SOURCE_7Z-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CPACK_SOURCE_ZIP
 CPACK_SOURCE_ZIP-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CTEST_SUBMIT_RETRY_COUNT
+CTEST_SUBMIT_RETRY_COUNT-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CTEST_SUBMIT_RETRY_DELAY
+CTEST_SUBMIT_RETRY_DELAY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CVSCOMMAND
+CVSCOMMAND-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CVS_UPDATE_OPTIONS
+CVS_UPDATE_OPTIONS-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: DART_TESTING_TIMEOUT
+DART_TESTING_TIMEOUT-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: DOXYGEN_EXECUTABLE
+DOXYGEN_EXECUTABLE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: DirectX_D3DCOMPILER_LIBRARY
 DirectX_D3DCOMPILER_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: DirectX_D3DX9_LIBRARY
@@ -776,10 +1086,18 @@ DirectX_LIBRARY-ADVANCED:INTERNAL=1
 DirectX_PREFIX_PATH_INT_CHECK:INTERNAL=C:/apps_x86/Microsoft DirectX SDK*;C:/Program Files (x86)/Microsoft DirectX SDK*;C:/apps/Microsoft DirectX SDK*;C:/Program Files/Microsoft DirectX SDK*;C:/Program Files (x86)/Windows Kits/8.1;C:\Program Files/Microsoft DirectX SDK*
 //Details about finding OpenGL
 FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[opengl32][cfound components: OpenGL ][v()]
+//Details about finding Threads
+FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
+//Test FMT_HAS_VARIANT
+FMT_HAS_VARIANT:INTERNAL=1
+//ADVANCED property for variable: GITCOMMAND
+GITCOMMAND-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: HARFBUZZ_INCLUDE_DIRS
 HARFBUZZ_INCLUDE_DIRS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: HARFBUZZ_LIBRARIES
 HARFBUZZ_LIBRARIES-ADVANCED:INTERNAL=1
+//Test HAS_NULLPTR_WARNING
+HAS_NULLPTR_WARNING:INTERNAL=1
 //Have function fseeko
 HAVE_FSEEKO:INTERNAL=
 //Result of TRY_COMPILE
@@ -788,18 +1106,33 @@ HAVE_OFF64_T:INTERNAL=FALSE
 HAVE_STDDEF_H:INTERNAL=
 //Have include stdint.h
 HAVE_STDINT_H:INTERNAL=
+//Have symbol _strtod_l
+HAVE_STRTOD_L:INTERNAL=1
 //Have include sys/types.h
 HAVE_SYS_TYPES_H:INTERNAL=
+//ADVANCED property for variable: HGCOMMAND
+HGCOMMAND-ADVANCED:INTERNAL=1
 //IrrXML_Include
 IRRXML_INCLUDE_DIR:INTERNAL=C:/Users/michi/Documents/dev/SaturnEngine/3D Engine/dependencies/assimp/contrib/irrXML
 //IrrXML
 IRRXML_LIBRARY:INTERNAL=IrrXML
+LLVM_CONFIG_BINARY:INTERNAL=llvm_config_binary_suffix-NOTFOUND
+LLVM_VERSION:INTERNAL=9.0.0
+//ADVANCED property for variable: MAKECOMMAND
+MAKECOMMAND-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: MEMORYCHECK_COMMAND
+MEMORYCHECK_COMMAND-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: MEMORYCHECK_SUPPRESSIONS_FILE
+MEMORYCHECK_SUPPRESSIONS_FILE-ADVANCED:INTERNAL=1
+NLOHMANN_JSON_CONFIG_INSTALL_DIR:INTERNAL=lib/cmake/nlohmann_json
 //CHECK_TYPE_SIZE: off64_t unknown
 OFF64_T:INTERNAL=
 //ADVANCED property for variable: OPENGL_gl_LIBRARY
 OPENGL_gl_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OPENGL_glu_LIBRARY
 OPENGL_glu_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: P4COMMAND
+P4COMMAND-ADVANCED:INTERNAL=1
 PC_HARFBUZZ_CFLAGS:INTERNAL=
 PC_HARFBUZZ_CFLAGS_I:INTERNAL=
 PC_HARFBUZZ_CFLAGS_OTHER:INTERNAL=
@@ -825,6 +1158,18 @@ PC_HARFBUZZ_VERSION:INTERNAL=
 PKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: RT_LIBRARY
 RT_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: SITE
+SITE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: SLURM_SBATCH_COMMAND
+SLURM_SBATCH_COMMAND-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: SLURM_SRUN_COMMAND
+SLURM_SRUN_COMMAND-ADVANCED:INTERNAL=1
+//Test SUPPORTS_USER_DEFINED_LITERALS
+SUPPORTS_USER_DEFINED_LITERALS:INTERNAL=1
+//Test SUPPORTS_VARIADIC_TEMPLATES
+SUPPORTS_VARIADIC_TEMPLATES:INTERNAL=1
+//ADVANCED property for variable: SVNCOMMAND
+SVNCOMMAND-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: ZLIB_INCLUDE_DIR
 ZLIB_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: ZLIB_LIBRARY_DBG
@@ -842,4 +1187,8 @@ Z_HAVE_UNISTD_H:INTERNAL=
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=C:/Program Files (x86)/SaturnEngine
 __pkg_config_checked_PC_HARFBUZZ:INTERNAL=1
+//Test has_std_17_flag
+has_std_17_flag:INTERNAL=1
+//Test has_std_1z_flag
+has_std_1z_flag:INTERNAL=1
 

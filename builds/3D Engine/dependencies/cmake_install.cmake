@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/michi_000/Desktop/C++/SaturnEngine/3D Engine/dependencies
+# Install script for directory: C:/Users/michi/Documents/dev/SaturnEngine/3D Engine/dependencies
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files/SaturnEngine")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/SaturnEngine")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -12,7 +12,7 @@ if(NOT DEFINED CMAKE_INSTALL_CONFIG_NAME)
     string(REGEX REPLACE "^[^A-Za-z0-9_]+" ""
            CMAKE_INSTALL_CONFIG_NAME "${BUILD_TYPE}")
   else()
-    set(CMAKE_INSTALL_CONFIG_NAME "Release")
+    set(CMAKE_INSTALL_CONFIG_NAME "Debug")
   endif()
   message(STATUS "Install configuration: \"${CMAKE_INSTALL_CONFIG_NAME}\"")
 endif()
@@ -34,15 +34,14 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/glfw/cmake_install.cmake")
-  include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/glad/cmake_install.cmake")
-  include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/glm/cmake_install.cmake")
-  include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/nlohmann_json/cmake_install.cmake")
-  include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/libfmt/cmake_install.cmake")
-  include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/audeo/cmake_install.cmake")
-  include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/efsw/cmake_install.cmake")
-  include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/FreeType/cmake_install.cmake")
-  include("C:/Users/michi_000/Desktop/C++/SaturnEngine/builds/3D Engine/dependencies/assimp/cmake_install.cmake")
+  include("C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/glfw/cmake_install.cmake")
+  include("C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/glad/cmake_install.cmake")
+  include("C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/glm/cmake_install.cmake")
+  include("C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/libfmt/cmake_install.cmake")
+  include("C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/audeo/cmake_install.cmake")
+  include("C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/efsw/cmake_install.cmake")
+  include("C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/FreeType/cmake_install.cmake")
+  include("C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/assimp/cmake_install.cmake")
 
 endif()
 
