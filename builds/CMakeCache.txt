@@ -14,14 +14,118 @@
 # EXTERNAL cache entries
 ########################
 
+//Android JNI IOSystem support is active
+ASSIMP_ANDROID_JNIIOSYSTEM:BOOL=OFF
+
+//Enable AddressSanitizer.
+ASSIMP_ASAN:BOOL=OFF
+
+//Path the tool executables are installed to.
+ASSIMP_BIN_INSTALL_DIR:STRING=bin
+
+//default value of all ASSIMP_BUILD_XXX_EXPORTER values
+ASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT:BOOL=ON
+
+//default value of all ASSIMP_BUILD_XXX_IMPORTER values
+ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT:BOOL=ON
+
+//describe the current architecture.
+ASSIMP_BUILD_ARCHITECTURE:STRING=
+
+//If the supplementary tools for Assimp are built in addition to
+// the library.
+ASSIMP_BUILD_ASSIMP_TOOLS:BOOL=ON
+
+//describe the current compiler.
+ASSIMP_BUILD_COMPILER:STRING=
+
+//Build the C4D importer, which relies on the non-free Melange
+// SDK.
+ASSIMP_BUILD_NONFREE_C4D_IMPORTER:BOOL=OFF
+
+//If the official samples are built as well (needs Glut).
+ASSIMP_BUILD_SAMPLES:BOOL=OFF
+
+//If the test suite for Assimp is built in addition to the library.
+ASSIMP_BUILD_TESTS:BOOL=ON
+
+//Build your own zlib
+ASSIMP_BUILD_ZLIB:BOOL=OFF
+
+//Enable this to measure test coverage.
+ASSIMP_COVERALLS:BOOL=OFF
+
+//Set to ON to enable double precision processing
+ASSIMP_DOUBLE_PRECISION:BOOL=OFF
+
+//adds the target headercheck which compiles every header file,
+// default disabled because it adds many targets
+ASSIMP_HEADERCHECK:BOOL=OFF
+
+//Path the header files are installed to.
+ASSIMP_INCLUDE_INSTALL_DIR:STRING=include
+
+//Suffix to append to library names
+ASSIMP_LIBRARY_SUFFIX:STRING=
+
+//Path the built library files are installed to.
+ASSIMP_LIB_INSTALL_DIR:STRING=lib
+
+//Disable Assimp's export functionality.
+ASSIMP_NO_EXPORT:BOOL=OFF
+
+//Set to ON to generate CPack configuration files and packaging
+// targets
+ASSIMP_OPT_BUILD_PACKAGES:BOOL=OFF
+
+//the package-specific version used for uploading the sources
+ASSIMP_PACKAGE_VERSION:STRING=0
+
+//Enable Undefined Behavior sanitizer.
+ASSIMP_UBSAN:BOOL=OFF
+
+//Treat warnings as errors.
+ASSIMP_WERROR:BOOL=OFF
+
+//Build the audeo example files
+AUDEO_BUILD_EXAMPLES:BOOL=ON
+
+//Value Computed by CMake
+Assimp_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/assimp
+
+//Value Computed by CMake
+Assimp_SOURCE_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/3D Engine/dependencies/assimp
+
+//Build documentation using Doxygen.
+BUILD_DOCS:BOOL=OFF
+
+//Build package as Mac OS X Framework bundle.
+BUILD_FRAMEWORK:BOOL=OFF
+
+//Build package with shared libraries.
+BUILD_SHARED_LIBS:BOOL=ON
+
 //Build the test app
 BUILD_TEST_APP:BOOL=OFF
+
+//Path to a file.
+BZIP2_INCLUDE_DIR:PATH=BZIP2_INCLUDE_DIR-NOTFOUND
+
+//Path to a library.
+BZIP2_LIBRARY_DEBUG:FILEPATH=BZIP2_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+BZIP2_LIBRARY_RELEASE:FILEPATH=BZIP2_LIBRARY_RELEASE-NOTFOUND
 
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=CMAKE_ADDR2LINE-NOTFOUND
 
 //Path to a program.
 CMAKE_AR:FILEPATH=C:/Program Files/LLVM/bin/llvm-ar.exe
+
+//For backwards compatibility, what version of CMake commands and
+// syntax should this version of CMake try to support.
+CMAKE_BACKWARDS_COMPATIBILITY:STRING=2.4
 
 //Choose the type of build, options are: None Debug Release RelWithDebInfo
 // MinSizeRel ...
@@ -81,6 +185,9 @@ CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG -Xclang -gcodeview -D_DLL -D
 //Libraries linked by default with all C applications.
 CMAKE_C_STANDARD_LIBRARIES:STRING=-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames
 
+//Debug Postfix for lib, samples and tools
+CMAKE_DEBUG_POSTFIX:STRING=d
+
 //Path to a program.
 CMAKE_DLLTOOL:FILEPATH=CMAKE_DLLTOOL-NOTFOUND
 
@@ -102,8 +209,56 @@ CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 //Enable/Disable output of compile commands during generation.
 CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=OFF
 
+//User executables (bin)
+CMAKE_INSTALL_BINDIR:PATH=bin
+
+//Read-only architecture-independent data (DATAROOTDIR)
+CMAKE_INSTALL_DATADIR:PATH=
+
+//Read-only architecture-independent data root (share)
+CMAKE_INSTALL_DATAROOTDIR:PATH=share
+
+//Documentation root (DATAROOTDIR/doc/PROJECT_NAME)
+CMAKE_INSTALL_DOCDIR:PATH=
+
+//C header files (include)
+CMAKE_INSTALL_INCLUDEDIR:PATH=include
+
+//Info documentation (DATAROOTDIR/info)
+CMAKE_INSTALL_INFODIR:PATH=
+
+//Object code libraries (lib)
+CMAKE_INSTALL_LIBDIR:PATH=lib
+
+//Program executables (libexec)
+CMAKE_INSTALL_LIBEXECDIR:PATH=libexec
+
+//Locale-dependent data (DATAROOTDIR/locale)
+CMAKE_INSTALL_LOCALEDIR:PATH=
+
+//Modifiable single-machine data (var)
+CMAKE_INSTALL_LOCALSTATEDIR:PATH=var
+
+//Man documentation (DATAROOTDIR/man)
+CMAKE_INSTALL_MANDIR:PATH=
+
+//C header files for non-gcc (/usr/include)
+CMAKE_INSTALL_OLDINCLUDEDIR:PATH=/usr/include
+
 //Install path prefix, prepended onto install directories.
 CMAKE_INSTALL_PREFIX:PATH=C:/Program Files (x86)/SaturnEngine
+
+//Run-time variable data (LOCALSTATEDIR/run)
+CMAKE_INSTALL_RUNSTATEDIR:PATH=
+
+//System admin executables (sbin)
+CMAKE_INSTALL_SBINDIR:PATH=sbin
+
+//Modifiable architecture-independent data (com)
+CMAKE_INSTALL_SHAREDSTATEDIR:PATH=com
+
+//Read-only single-machine data (etc)
+CMAKE_INSTALL_SYSCONFDIR:PATH=etc
 
 //Path to a program.
 CMAKE_LINKER:FILEPATH=C:/Program Files/LLVM/bin/ld.lld.exe
@@ -148,6 +303,21 @@ CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
 CMAKE_PROJECT_NAME:STATIC=SaturnEngine
+
+//Value Computed by CMake
+CMAKE_PROJECT_VERSION:STATIC=5.0.0
+
+//Value Computed by CMake
+CMAKE_PROJECT_VERSION_MAJOR:STATIC=5
+
+//Value Computed by CMake
+CMAKE_PROJECT_VERSION_MINOR:STATIC=0
+
+//Value Computed by CMake
+CMAKE_PROJECT_VERSION_PATCH:STATIC=0
+
+//Value Computed by CMake
+CMAKE_PROJECT_VERSION_TWEAK:STATIC=
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=C:/Program Files/LLVM/bin/llvm-ranlib.exe
@@ -195,10 +365,10 @@ CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 
 //If set, runtime paths are not added when installing shared libraries,
 // but are added when building.
-CMAKE_SKIP_INSTALL_RPATH:BOOL=NO
+CMAKE_SKIP_INSTALL_RPATH:BOOL=OFF
 
 //If set, runtime paths are not added when using shared libraries.
-CMAKE_SKIP_RPATH:BOOL=NO
+CMAKE_SKIP_RPATH:BOOL=OFF
 
 //Flags used by the linker during the creation of static libraries
 // during all build types.
@@ -227,7 +397,76 @@ CMAKE_STRIP:FILEPATH=CMAKE_STRIP-NOTFOUND
 // .SILENT directive, and all commands will be echoed to the console
 // during the make.  This is useful for debugging only. With Visual
 // Studio IDE projects all commands are done without /nologo.
-CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
+CMAKE_VERBOSE_MAKEFILE:BOOL=OFF
+
+//Enable to build 7-Zip source packages
+CPACK_SOURCE_7Z:BOOL=ON
+
+//Enable to build ZIP source packages
+CPACK_SOURCE_ZIP:BOOL=ON
+
+//Path to a library.
+DirectX_D3DCOMPILER_LIBRARY:FILEPATH=DirectX_D3DCOMPILER_LIBRARY-NOTFOUND
+
+//Path to a library.
+DirectX_D3DX9_LIBRARY:FILEPATH=DirectX_D3DX9_LIBRARY-NOTFOUND
+
+//Path to a library.
+DirectX_DXERR_LIBRARY:FILEPATH=DirectX_DXERR_LIBRARY-NOTFOUND
+
+//Path to a library.
+DirectX_DXGI_LIBRARY:FILEPATH=C:/Windows/System32/dxgi.dll
+
+//Path to a library.
+DirectX_DXGUID_LIBRARY:FILEPATH=DirectX_DXGUID_LIBRARY-NOTFOUND
+
+//x
+DirectX_INCLUDE_DIR:PATH=DirectX_INCLUDE_DIR-NOTFOUND
+
+//x
+DirectX_LIBRARY:FILEPATH=C:/Windows/System32/d3d9.dll
+
+//Single output directory for building all executables.
+EXECUTABLE_OUTPUT_PATH:PATH=
+
+//Support bzip2 compressed fonts.
+FT_WITH_BZIP2:BOOL=OFF
+
+//Improve auto-hinting of OpenType fonts.
+FT_WITH_HARFBUZZ:BOOL=OFF
+
+//Support PNG compressed OpenType embedded bitmaps.
+FT_WITH_PNG:BOOL=OFF
+
+//Use system zlib instead of internal library.
+FT_WITH_ZLIB:BOOL=OFF
+
+//Path to a file.
+HARFBUZZ_INCLUDE_DIRS:PATH=HARFBUZZ_INCLUDE_DIRS-NOTFOUND
+
+//Path to a library.
+HARFBUZZ_LIBRARIES:FILEPATH=HARFBUZZ_LIBRARIES-NOTFOUND
+
+//Enable Hunter package manager support
+HUNTER_ENABLED:BOOL=OFF
+
+//Print a lot info
+HUNTER_STATUS_DEBUG:BOOL=OFF
+
+//Print working status
+HUNTER_STATUS_PRINT:BOOL=ON
+
+//Enable/disable TLS certificate checking on downloads
+HUNTER_TLS_VERIFY:BOOL=ON
+
+//Don't call git to get the hash.
+IGNORE_GIT_HASH:BOOL=OFF
+
+//Inject debug postfix in .a/.so/.dll lib names
+INJECT_DEBUG_POSTFIX:BOOL=ON
+
+//Single output directory for building all libraries.
+LIBRARY_OUTPUT_PATH:PATH=
 
 //OpenGL library for win32
 OPENGL_gl_LIBRARY:STRING=opengl32
@@ -235,8 +474,17 @@ OPENGL_gl_LIBRARY:STRING=opengl32
 //GLU library for win32
 OPENGL_glu_LIBRARY:STRING=glu32
 
+//pkg-config executable
+PKG_CONFIG_EXECUTABLE:FILEPATH=PKG_CONFIG_EXECUTABLE-NOTFOUND
+
+//Path to a library.
+RT_LIBRARY:FILEPATH=RT_LIBRARY-NOTFOUND
+
 //Build efsw as a static library
 STATIC_LIB:BOOL=OFF
+
+//Use system installed Irrlicht/IrrXML library.
+SYSTEM_IRRXML:BOOL=OFF
 
 //Value Computed by CMake
 SaturnEngine_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds
@@ -244,8 +492,38 @@ SaturnEngine_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds
 //Value Computed by CMake
 SaturnEngine_SOURCE_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine
 
+//Value Computed by CMake
+Serialization_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/CodeGen/Serialization
+
+//Value Computed by CMake
+Serialization_SOURCE_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/CodeGen/Serialization
+
 //Build efsw with verbose mode.
 VERBOSE:BOOL=OFF
+
+//Path to a file.
+ZLIB_INCLUDE_DIR:PATH=ZLIB_INCLUDE_DIR-NOTFOUND
+
+//Path to a library.
+ZLIB_LIBRARY_DBG:FILEPATH=ZLIB_LIBRARY_DBG-NOTFOUND
+
+//Path to a library.
+ZLIB_LIBRARY_DEBUG:FILEPATH=ZLIB_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+ZLIB_LIBRARY_REL:FILEPATH=ZLIB_LIBRARY_REL-NOTFOUND
+
+//Path to a library.
+ZLIB_LIBRARY_RELEASE:FILEPATH=ZLIB_LIBRARY_RELEASE-NOTFOUND
+
+//Dependencies for the target
+assimp_LIB_DEPENDS:STATIC=general;zlibstatic;general;IrrXML;
+
+//Value Computed by CMake
+audeo_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/audeo
+
+//Value Computed by CMake
+audeo_SOURCE_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/3D Engine/dependencies/audeo
 
 //Value Computed by CMake
 efsw_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/efsw
@@ -254,16 +532,42 @@ efsw_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engin
 efsw_SOURCE_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/3D Engine/dependencies/efsw
 
 //Value Computed by CMake
+freetype_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/FreeType
+
+//Value Computed by CMake
+freetype_SOURCE_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/3D Engine/dependencies/FreeType
+
+//Value Computed by CMake
 glad_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/glad
 
 //Value Computed by CMake
 glad_SOURCE_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/3D Engine/dependencies/glad
+
+//Value Computed by CMake
+zlib_BINARY_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/builds/3D Engine/dependencies/assimp/contrib/zlib
+
+//Value Computed by CMake
+zlib_SOURCE_DIR:STATIC=C:/Users/michi/Documents/dev/SaturnEngine/3D Engine/dependencies/assimp/contrib/zlib
 
 
 ########################
 # INTERNAL cache entries
 ########################
 
+//Enable building amd64 assembly implementation
+AMD64:INTERNAL=FALSE
+//Enable building i686 assembly implementation
+ASM686:INTERNAL=FALSE
+//ADVANCED property for variable: ASSIMP_BUILD_ARCHITECTURE
+ASSIMP_BUILD_ARCHITECTURE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: ASSIMP_BUILD_COMPILER
+ASSIMP_BUILD_COMPILER-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: BZIP2_INCLUDE_DIR
+BZIP2_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: BZIP2_LIBRARY_DEBUG
+BZIP2_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: BZIP2_LIBRARY_RELEASE
+BZIP2_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_ADDR2LINE
 CMAKE_ADDR2LINE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_AR
@@ -347,6 +651,38 @@ CMAKE_GENERATOR_TOOLSET:INTERNAL=
 //Source directory with the top level CMakeLists.txt file for this
 // project
 CMAKE_HOME_DIRECTORY:INTERNAL=C:/Users/michi/Documents/dev/SaturnEngine
+//ADVANCED property for variable: CMAKE_INSTALL_BINDIR
+CMAKE_INSTALL_BINDIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_INSTALL_DATADIR
+CMAKE_INSTALL_DATADIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_INSTALL_DATAROOTDIR
+CMAKE_INSTALL_DATAROOTDIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_INSTALL_DOCDIR
+CMAKE_INSTALL_DOCDIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_INSTALL_INCLUDEDIR
+CMAKE_INSTALL_INCLUDEDIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_INSTALL_INFODIR
+CMAKE_INSTALL_INFODIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_INSTALL_LIBDIR
+CMAKE_INSTALL_LIBDIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_INSTALL_LIBEXECDIR
+CMAKE_INSTALL_LIBEXECDIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_INSTALL_LOCALEDIR
+CMAKE_INSTALL_LOCALEDIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_INSTALL_LOCALSTATEDIR
+CMAKE_INSTALL_LOCALSTATEDIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_INSTALL_MANDIR
+CMAKE_INSTALL_MANDIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_INSTALL_OLDINCLUDEDIR
+CMAKE_INSTALL_OLDINCLUDEDIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_INSTALL_RUNSTATEDIR
+CMAKE_INSTALL_RUNSTATEDIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_INSTALL_SBINDIR
+CMAKE_INSTALL_SBINDIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_INSTALL_SHAREDSTATEDIR
+CMAKE_INSTALL_SHAREDSTATEDIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_INSTALL_SYSCONFDIR
+CMAKE_INSTALL_SYSCONFDIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_LINKER
 CMAKE_LINKER-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MAKE_PROGRAM
@@ -364,7 +700,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=11
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=26
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -418,10 +754,92 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 CMAKE_STRIP-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CPACK_SOURCE_7Z
+CPACK_SOURCE_7Z-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CPACK_SOURCE_ZIP
+CPACK_SOURCE_ZIP-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: DirectX_D3DCOMPILER_LIBRARY
+DirectX_D3DCOMPILER_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: DirectX_D3DX9_LIBRARY
+DirectX_D3DX9_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: DirectX_DXERR_LIBRARY
+DirectX_DXERR_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: DirectX_DXGI_LIBRARY
+DirectX_DXGI_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: DirectX_DXGUID_LIBRARY
+DirectX_DXGUID_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: DirectX_INCLUDE_DIR
+DirectX_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: DirectX_LIBRARY
+DirectX_LIBRARY-ADVANCED:INTERNAL=1
+//x
+DirectX_PREFIX_PATH_INT_CHECK:INTERNAL=C:/apps_x86/Microsoft DirectX SDK*;C:/Program Files (x86)/Microsoft DirectX SDK*;C:/apps/Microsoft DirectX SDK*;C:/Program Files/Microsoft DirectX SDK*;C:/Program Files (x86)/Windows Kits/8.1;C:\Program Files/Microsoft DirectX SDK*
 //Details about finding OpenGL
 FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[opengl32][cfound components: OpenGL ][v()]
+//ADVANCED property for variable: HARFBUZZ_INCLUDE_DIRS
+HARFBUZZ_INCLUDE_DIRS-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: HARFBUZZ_LIBRARIES
+HARFBUZZ_LIBRARIES-ADVANCED:INTERNAL=1
+//Have function fseeko
+HAVE_FSEEKO:INTERNAL=
+//Result of TRY_COMPILE
+HAVE_OFF64_T:INTERNAL=FALSE
+//Have include stddef.h
+HAVE_STDDEF_H:INTERNAL=
+//Have include stdint.h
+HAVE_STDINT_H:INTERNAL=
+//Have include sys/types.h
+HAVE_SYS_TYPES_H:INTERNAL=
+//IrrXML_Include
+IRRXML_INCLUDE_DIR:INTERNAL=C:/Users/michi/Documents/dev/SaturnEngine/3D Engine/dependencies/assimp/contrib/irrXML
+//IrrXML
+IRRXML_LIBRARY:INTERNAL=IrrXML
+//CHECK_TYPE_SIZE: off64_t unknown
+OFF64_T:INTERNAL=
 //ADVANCED property for variable: OPENGL_gl_LIBRARY
 OPENGL_gl_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OPENGL_glu_LIBRARY
 OPENGL_glu_LIBRARY-ADVANCED:INTERNAL=1
+PC_HARFBUZZ_CFLAGS:INTERNAL=
+PC_HARFBUZZ_CFLAGS_I:INTERNAL=
+PC_HARFBUZZ_CFLAGS_OTHER:INTERNAL=
+PC_HARFBUZZ_FOUND:INTERNAL=
+PC_HARFBUZZ_INCLUDEDIR:INTERNAL=
+PC_HARFBUZZ_LIBDIR:INTERNAL=
+PC_HARFBUZZ_LIBS:INTERNAL=
+PC_HARFBUZZ_LIBS_L:INTERNAL=
+PC_HARFBUZZ_LIBS_OTHER:INTERNAL=
+PC_HARFBUZZ_LIBS_PATHS:INTERNAL=
+PC_HARFBUZZ_MODULE_NAME:INTERNAL=
+PC_HARFBUZZ_PREFIX:INTERNAL=
+PC_HARFBUZZ_STATIC_CFLAGS:INTERNAL=
+PC_HARFBUZZ_STATIC_CFLAGS_I:INTERNAL=
+PC_HARFBUZZ_STATIC_CFLAGS_OTHER:INTERNAL=
+PC_HARFBUZZ_STATIC_LIBDIR:INTERNAL=
+PC_HARFBUZZ_STATIC_LIBS:INTERNAL=
+PC_HARFBUZZ_STATIC_LIBS_L:INTERNAL=
+PC_HARFBUZZ_STATIC_LIBS_OTHER:INTERNAL=
+PC_HARFBUZZ_STATIC_LIBS_PATHS:INTERNAL=
+PC_HARFBUZZ_VERSION:INTERNAL=
+//ADVANCED property for variable: PKG_CONFIG_EXECUTABLE
+PKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: RT_LIBRARY
+RT_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: ZLIB_INCLUDE_DIR
+ZLIB_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: ZLIB_LIBRARY_DBG
+ZLIB_LIBRARY_DBG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: ZLIB_LIBRARY_DEBUG
+ZLIB_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: ZLIB_LIBRARY_REL
+ZLIB_LIBRARY_REL-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: ZLIB_LIBRARY_RELEASE
+ZLIB_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//x
+ZLIB_PREFIX_PATH_INT_CHECK:INTERNAL=
+//Have include unistd.h
+Z_HAVE_UNISTD_H:INTERNAL=
+//CMAKE_INSTALL_PREFIX during last run
+_GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=C:/Program Files (x86)/SaturnEngine
+__pkg_config_checked_PC_HARFBUZZ:INTERNAL=1
 
