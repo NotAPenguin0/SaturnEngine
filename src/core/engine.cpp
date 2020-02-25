@@ -13,6 +13,8 @@
 
 #include <phobos/present/present_manager.hpp>
 
+#include <saturn/scene/scene.hpp>
+
 #include <iostream>
 
 class DefaultLogger : public ph::log::LogInterface {
@@ -54,6 +56,11 @@ void Engine::run() {
     ph::Renderer renderer(*vulkan_context);
     ph::ImGuiRenderer imgui_renderer(*window_context, *vulkan_context);
 
+    ph::AssetManager asset_manager;
+
+    Scene demo_scene;
+    demo_scene.init_demo_scene(vulkan_context, &asset_manager);
+
     while(window_context->is_open()) {
         window_context->poll_events();
 
@@ -67,7 +74,10 @@ void Engine::run() {
         ph::FrameInfo& frame = present_manager.get_frame_info();
 
         ph::RenderGraph render_graph;
-        render_graph.clear_color = vk::ClearColorValue(std::array<float, 4>{{1, 0, 0, 1}});
+        render_graph.clear_color = vk::ClearColorValue(std::array<float, 4>{{0, 0, 0, 1}});
+        render_graph.asset_manager = &asset_manager;
+
+        demo_scene.build_render_graph(render_graph);
 
         // Render the frame
         renderer.render_frame(frame, render_graph);
@@ -80,6 +90,7 @@ void Engine::run() {
     // Wait until the VkDevice is idle before we can start shutting down
     vulkan_context->device.waitIdle();
 
+    asset_manager.destroy_all();
     imgui_renderer.destroy();
     present_manager.destroy();
     renderer.destroy();
