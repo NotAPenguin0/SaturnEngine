@@ -1,0 +1,3 @@
+[submodule "external/phobos"]
+	path = external/phobos
+	url = https://github.com/NotAPenguin0/Phobos

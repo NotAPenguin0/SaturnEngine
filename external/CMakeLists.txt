@@ -1,0 +1,13 @@
+add_subdirectory("phobos")
+
+set(SATURN_LINK_LIBRARIES
+    ${SATURN_LINK_LIBRARIES}
+    Phobos
+    PARENT_SCOPE
+)
+
+set(SATURN_INCLUDE_DIRECTORIES
+    ${SATURN_INCLUDE_DIRECTORIES}
+    "${CMAKE_CURRENT_SOURCE_DIR}/phobos/include"
+    PARENT_SCOPE
+)
