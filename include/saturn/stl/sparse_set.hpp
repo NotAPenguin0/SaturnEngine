@@ -22,7 +22,7 @@ public:
     public:
         using value_type = T;
 
-        iterator(std::vector<T> const* direct_ref, size_t index) :
+        iterator(vector<T> const* direct_ref, size_t index) :
             direct_ref(direct_ref), index(index) {
         }
 
