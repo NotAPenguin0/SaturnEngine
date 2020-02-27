@@ -14,6 +14,8 @@
 #include <phobos/present/present_manager.hpp>
 
 #include <saturn/scene/scene.hpp>
+#include <saturn/ecs/systems.hpp>
+#include <saturn/systems/base_systems.hpp>
 
 #include <iostream>
 
@@ -60,12 +62,15 @@ void Engine::run() {
 
     Scene demo_scene;
     demo_scene.init_demo_scene(vulkan_context, &asset_manager);
+    ecs::system_manager systems;
+    systems::register_base_systems(systems);
 
     while(window_context->is_open()) {
         window_context->poll_events();
 
         // Note that updating scene data can happen before waiting for the next frame. 
         // This is why all update() calls should go here.
+        systems.update_all(demo_scene.ecs);
 
         present_manager.wait_for_available_frame();
 

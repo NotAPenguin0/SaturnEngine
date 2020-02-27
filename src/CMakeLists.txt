@@ -8,6 +8,10 @@ set(SATURN_SOURCES
 
     # ECS
     "${CMAKE_CURRENT_SOURCE_DIR}/ecs/registry.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/ecs/systems.cpp"
+
+    # Systems
+    "${CMAKE_CURRENT_SOURCE_DIR}/systems/base_systems.cpp"
 
     # Other
     "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
