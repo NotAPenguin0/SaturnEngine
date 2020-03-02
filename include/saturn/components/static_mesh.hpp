@@ -6,7 +6,7 @@
 
 namespace saturn::components {
 
-struct StaticMesh {
+struct [[component]] StaticMesh {
     ph::Handle<ph::Mesh> mesh;
 };
 

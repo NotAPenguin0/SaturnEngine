@@ -5,10 +5,10 @@
 
 namespace saturn::components {
 
-struct PointLight {
-    glm::vec3 ambient;
-    glm::vec3 diffuse;
-    glm::vec3 specular;
+struct [[component]] PointLight {
+    [[editor::color]] glm::vec3 ambient;
+    [[editor::color]] glm::vec3 diffuse;
+    [[editor::color]] glm::vec3 specular;
 };
 
 }

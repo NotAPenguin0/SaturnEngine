@@ -1,6 +1,8 @@
 #include <saturn/core/engine.hpp>
 
+
 int main() {
-    saturn::Engine engine;
+    using namespace saturn;
+    Engine engine;
     engine.run();
 }

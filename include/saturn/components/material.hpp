@@ -6,7 +6,7 @@
 
 namespace saturn::components {
 
-struct Material {
+struct [[component]] Material {
     ph::Handle<ph::Texture> texture;
 };
 

@@ -23,7 +23,6 @@ void Scene::init_demo_scene(ph::VulkanContext* ctx, ph::AssetManager* asset_mana
 
     ecs.add_component<Transform>(box, glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0.5, 0.5, 0.5));
     ph::Mesh::CreateInfo box_info;
-    box_info.ctx = ctx;
 
     float vertices[] = {
         -1, -1, -1, 0, 0, -1, 1, 1,    1, 1, -1, 0, 0, -1, 0, 0,     1,  -1, -1, 0, 0, -1, 0, 1,
@@ -47,6 +46,7 @@ void Scene::init_demo_scene(ph::VulkanContext* ctx, ph::AssetManager* asset_mana
   
     uint32_t indices[36];
     std::iota(indices, indices + 36, 0);
+    box_info.ctx = ctx;
     box_info.vertex_count = 36;
     box_info.vertices = vertices;
     box_info.vertex_size = 8;
