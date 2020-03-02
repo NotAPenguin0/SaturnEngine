@@ -15,5 +15,22 @@ set(SATURN_SOURCES
 
     # Other
     "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
+
+
+    PARENT_SCOPE
+)
+
+set(SATURN_GENERATED_SOURCES
+    ${SATURN_GENERATED_SOURCES}
+
+    "${CMAKE_CURRENT_SOURCE_DIR}/serialization/components.generated.cpp"
+
+    PARENT_SCOPE
+)
+
+set(CODEGEN_SOURCES
+    ${CODEGEN_SOURCES}
+    "${CMAKE_CURRENT_SOURCE_DIR}/codegen/main.cpp"
+
     PARENT_SCOPE
 )

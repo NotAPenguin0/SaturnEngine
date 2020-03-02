@@ -65,7 +65,7 @@ void Engine::run() {
     ecs::system_manager systems;
     systems::register_base_systems(systems);
 
-    while(window_context->is_open()) {
+    while(window_context->is_open()) { 
         window_context->poll_events();
 
         // Note that updating scene data can happen before waiting for the next frame. 
