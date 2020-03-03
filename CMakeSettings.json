@@ -1,0 +1,100 @@
+﻿{
+  "configurations": [
+    {
+      "name": "x64-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-v",
+      "ctestCommandArgs": "",
+      "variables": [
+        {
+          "name": "Vulkan_INCLUDE_DIR",
+          "value": "C:/VulkanSDK/1.2.131.1/Include",
+          "type": "STRING"
+        },
+        {
+          "name": "Vulkan_LIBRARY",
+          "value": "C:/VulkanSDK/1.2.131.1/Lib/vulkan-1.lib",
+          "type": "STRING"
+        },
+        {
+          "name": "LLVM_PREFERRED_VERSION",
+          "value": "9.0.0",
+          "type": "STRING"
+        },
+        {
+          "name": "LIBCLANG_INCLUDE_DIR",
+          "value": "C:/Program Files/LLVM/include",
+          "type": "PATH"
+        },
+        {
+          "name": "LIBCLANG_LIBRARY",
+          "value": "C:/Program Files/LLVM/lib/libclang.lib",
+          "type": "FILEPATH"
+        },
+        {
+          "name": "LLVM_VERSION_EXPLICIT",
+          "value": "9.0.0",
+          "type": "STRING"
+        }
+      ]
+    },
+    {
+      "name": "x64-Clang-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-v",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "clang_cl_x64" ],
+      "variables": [
+        {
+          "name": "Vulkan_INCLUDE_DIR",
+          "value": "C:/VulkanSDK/1.2.131.1/Include",
+          "type": "STRING"
+        },
+        {
+          "name": "Vulkan_LIBRARY",
+          "value": "C:/VulkanSDK/1.2.131.1/Lib/vulkan-1.lib",
+          "type": "STRING"
+        },
+        {
+          "name": "LLVM_PREFERRED_VERSION",
+          "value": "9.0.0",
+          "type": "STRING"
+        },
+        {
+          "name": "LIBCLANG_INCLUDE_DIR",
+          "value": "C:/Program Files/LLVM/include",
+          "type": "PATH"
+        },
+        {
+          "name": "LIBCLANG_LIBRARY",
+          "value": "C:/Program Files/LLVM/lib/libclang.lib",
+          "type": "FILEPATH"
+        },
+        {
+          "name": "LLVM_VERSION_EXPLICIT",
+          "value": "9.0.0",
+          "type": "STRING"
+        },
+        {
+          "name": "CMAKE_C_COMPILER",
+          "value": "C:/Program Files/LLVM/bin/clang.exe",
+          "type": "FILEPATH"
+        },
+        {
+          "name": "CMAKE_CXX_COMPILER",
+          "value": "C:/Program Files/LLVM/bin/clang++.exe",
+          "type": "FILEPATH"
+        }
+      ]
+    }
+  ]
+}
