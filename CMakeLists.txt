@@ -6,14 +6,19 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(SATURN_SOURCES "")
 set(SATURN_GENERATED_SOURCES "")
-set(CODEGEN_SOURCES "")
 set(SATURN_LINK_LIBRARIES "")
-set(SATURN_INCLUDE_DIRECTORIES "include" "${CMAKE_BINARY_DIR}/generated/include") 
+set(SATURN_INCLUDE_DIRECTORIES "include") 
+
+set(CODEGEN_SOURCES "")
+set(CODEGEN_LINK_LIBRARIES "")
+set(CODEGEN_INCLUDE_DIRECTORIES "include")
 
 add_subdirectory("src")
 add_subdirectory("external")
 
 add_executable(CodeGen ${CODEGEN_SOURCES})
+target_include_directories(CodeGen PUBLIC ${CODEGEN_INCLUDE_DIRECTORIES})
+target_link_libraries(CodeGen PUBLIC ${CODEGEN_LINK_LIBRARIES})
 
 add_custom_target(RunCodeGen
     COMMAND CodeGen
