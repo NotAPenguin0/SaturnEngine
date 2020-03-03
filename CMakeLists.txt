@@ -20,9 +20,20 @@ add_executable(CodeGen ${CODEGEN_SOURCES})
 target_include_directories(CodeGen PUBLIC ${CODEGEN_INCLUDE_DIRECTORIES})
 target_link_libraries(CodeGen PUBLIC ${CODEGEN_LINK_LIBRARIES})
 
+get_directory_property(PHOBOS_INCLUDE_DIRS 
+    DIRECTORY "external/phobos" 
+    DEFINITION PHOBOS_INCLUDE_DIRECTORIES
+)
+
+set(RUN_CODEGEN_INCLUDE_DIRS
+    ${SATURN_INCLUDE_DIRECTORIES}
+    ${PHOBOS_INCLUDE_DIRS}
+)
+
 add_custom_target(RunCodeGen
-    COMMAND CodeGen
+    COMMAND CodeGen "-i \"${RUN_CODEGEN_INCLUDE_DIRS}\""
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    COMMENT "Running codegen."
 )
 
 add_executable(SaturnEngine ${SATURN_SOURCES} ${SATURN_GENERATED_SOURCES})

@@ -2,7 +2,7 @@
 #define SATURN_COMPONENT_STATIC_MESH_HPP_
 
 #include <phobos/assets/handle.hpp>
-#include <phobos/renderer/mesh.hpp>
+#include <phobos/forward.hpp>
 
 namespace saturn::components {
 

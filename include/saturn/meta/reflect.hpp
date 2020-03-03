@@ -11,6 +11,7 @@ Info reflect() {
     Info info;
     info.name = type_name<T>();
     info.raw_name = type_name_no_namespace<T>();
+    info.category = type_category<T>();
     return info;
 }
 

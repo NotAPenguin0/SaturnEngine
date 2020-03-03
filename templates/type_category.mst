@@ -1,0 +1,18 @@
+#include <saturn/meta/type_category.hpp>
+
+{{#component_includes}}
+#include <saturn/components/{{component_filename}}>
+{{/component_includes}}
+
+namespace saturn::meta {
+
+using namespace components;
+
+{{#component_category_impl}}
+template<>
+TypeCategory type_category<{{component_unscoped_name}}>() {
+    return TypeCategory::Component;
+}
+{{/component_category_impl}}
+
+}

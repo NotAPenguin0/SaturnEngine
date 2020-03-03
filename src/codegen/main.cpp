@@ -1,87 +1,74 @@
-#include <cppast/libclang_parser.hpp>
-
-#include <filesystem>
 #include <thread>
 #include <iostream>
-#include <vector>
-#include <memory>
-#include <future>
+#include <sstream>
+#include <atomic>
+#include <condition_variable>
+
+#include <saturn/codegen/argument_parser.hpp>
+#include <saturn/codegen/file_parser.hpp>
+#include <saturn/codegen/ast_visitor.hpp>
+
+#include <chrono>
 
 namespace fs = std::filesystem;
 
-class thread_safe_logger : public cppast::diagnostic_logger {
-public:
-    using cppast::diagnostic_logger::diagnostic_logger;
-       
-    void write_raw(const char* str) const {
-        std::lock_guard lock(write_mutex);
-        std::fprintf(stderr, "%s\n", str);
-   }
-
-private:
-    bool do_log(const char* source, cppast::diagnostic const& d) const override {
-        std::lock_guard lock(write_mutex);
-        auto loc = d.location.to_string();
-        if (loc.empty()) {
-            std::fprintf(stderr, "[%s] [%s] %s\n", source, to_string(d.severity), d.message.c_str());
-        } else {
-            std::fprintf(stderr, "[%s] [%s] %s %s\n", source, to_string(d.severity),
-                d.location.to_string().c_str(), d.message.c_str());
-        }
-        return true;
+std::vector<std::string> str_split(std::string const& s, char delim = ' ') {
+    std::stringstream ss;
+    ss << s;
+    std::vector<std::string> result;
+    std::string elem;
+    while(std::getline(ss, elem, delim)) {
+        result.push_back(elem);
     }
-
-    // Has to be mutable since the do_log function has to be const
-    mutable std::mutex write_mutex;
-};
-
-using parse_result = std::future<std::unique_ptr<cppast::cpp_file>>;
-
-parse_result parse_file(cppast::libclang_compile_config const& config, 
-    thread_safe_logger const& logger, fs::path path) {
-    return std::async(std::launch::async, [&config, &logger, path]() -> std::unique_ptr<cppast::cpp_file> {
-        cppast::libclang_parser parser(type_safe::ref(logger));
-        cppast::cpp_entity_index root_index;
-        try {
-            return parser.parse(root_index, fs::absolute(path).generic_string(), config);
-        }
-        catch (std::exception const& e) {
-            logger.write_raw(e.what());
-            return nullptr;
-        }
-        catch (cppast::libclang_error const& e) {
-            logger.write_raw(e.what());
-            return nullptr;
-        }
-    });
+    return result;
 }
 
-int main() {
+void fill_include_dirs(saturn::codegen::argument_parser const& args, cppast::libclang_compile_config& config) {
+    auto split = str_split(args.get_argument("i"), ';');
+    for (auto const& dir : split) {
+        config.add_include_dir(dir);
+    }
+}
+
+int main(int argc, char** argv) {
+    saturn::codegen::argument_parser args(argc, argv);
 
     cppast::libclang_compile_config config;
     config.set_flags(cppast::cpp_standard::cpp_1z);
-    // TODO: extract include directories from cmake
-    config.add_include_dir(fs::absolute(fs::path("external/phobos/external/glm")).generic_string());
-    config.add_include_dir(fs::absolute(fs::path("external/phobos/include")).generic_string());
-    config.add_include_dir("C:/VulkanSDK/1.2.131.1/Include");
-    config.add_include_dir(fs::absolute(fs::path("external/phobos/external/fmt/include")).generic_string());
-    thread_safe_logger logger;
+    fill_include_dirs(args, config);
 
-    std::vector<parse_result> results;
+    using namespace std::chrono;
+    milliseconds start = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 
-    for (auto file : fs::directory_iterator("include/saturn/components/")) {
-        if (file.is_regular_file() && file.path().extension() == ".hpp") {
-            results.push_back(parse_file(config, logger, file.path()));
-        }
-    }
+    auto results = saturn::codegen::parse_directory("include/saturn/components", config);
     
+    std::vector<std::thread> visitor_threads;
+    std::vector<saturn::codegen::VisitResult> visit_results(results.size());
 
-    for (auto& result : results) {
+    std::atomic<int> thread_counter = 0;
+    std::condition_variable cv;
+    std::mutex mutex;
+
+    saturn::codegen::VisitorSync sync {&cv, &mutex, &thread_counter};
+
+    for (size_t i = 0; i < results.size(); ++i) {
+        auto& result = results[i];
         result.wait();
         auto parsed = result.get();
-        if (parsed != nullptr) {
-            std::cout << parsed->name() << std::endl;
-        }
+        // Launch a new thread
+        visitor_threads.emplace_back(saturn::codegen::visit_file_ast(std::move(parsed), visit_results[i], sync)).detach();
+        ++thread_counter;
+    }
+
+    std::unique_lock lock(mutex);
+    cv.wait(lock, [&]() -> bool { return thread_counter == 0; });
+
+    milliseconds end = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+
+    std::cout << "Parsing all components took " << (end - start).count() << " ms" << std::endl;
+
+    for (auto const& result : visit_results) {
+        std::cout << result.components[0].name << std::endl;
     }
 
     return 0;

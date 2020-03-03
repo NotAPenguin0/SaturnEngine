@@ -31,6 +31,9 @@ set(SATURN_GENERATED_SOURCES
 set(CODEGEN_SOURCES
     ${CODEGEN_SOURCES}
     "${CMAKE_CURRENT_SOURCE_DIR}/codegen/main.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/codegen/argument_parser.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/codegen/file_parser.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/codegen/ast_visitor.cpp"
 
     PARENT_SCOPE
 )
