@@ -25,9 +25,9 @@ std::string_view type_name() {
 template<typename T>
 std::string_view type_name_no_namespace() {
 #ifndef MSVC_VER
-    static std::string const& full_name = type_name<T>();
+    static std::string const full_name = std::string(type_name<T>());
     static size_t const last_colon_index = full_name.find_last_of(':');
-    static std::string no_namespace = full_name.substr(last_colon_index + 1);
+    static std::string const no_namespace = full_name.substr(last_colon_index + 1);
     return no_namespace;
 #else
     // Not implemented

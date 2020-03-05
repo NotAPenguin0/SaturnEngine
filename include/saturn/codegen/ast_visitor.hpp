@@ -30,6 +30,7 @@ struct VisitorSync {
     std::condition_variable* cv;
     std::mutex* mutex;
     std::atomic<int>* thread_counter;
+    std::mutex* results_mutex;
 };
 
 std::thread visit_file_ast(std::unique_ptr<cppast::cpp_file> file, VisitResult& result, VisitorSync sync);

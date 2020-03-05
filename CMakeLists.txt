@@ -11,7 +11,7 @@ set(SATURN_INCLUDE_DIRECTORIES "include")
 
 set(CODEGEN_SOURCES "")
 set(CODEGEN_LINK_LIBRARIES "")
-set(CODEGEN_INCLUDE_DIRECTORIES "include")
+set(CODEGEN_INCLUDE_DIRECTORIES "include" "external")
 
 add_subdirectory("src")
 add_subdirectory("external")
@@ -33,6 +33,7 @@ set(RUN_CODEGEN_INCLUDE_DIRS
 add_custom_target(RunCodeGen
     COMMAND CodeGen "-i \"${RUN_CODEGEN_INCLUDE_DIRS}\""
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    BYPRODUCTS "${SATURN_GENERATED_SOURCES}"
     COMMENT "Running codegen."
 )
 

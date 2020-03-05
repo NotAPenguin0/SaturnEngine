@@ -23,7 +23,10 @@ set(SATURN_SOURCES
 set(SATURN_GENERATED_SOURCES
     ${SATURN_GENERATED_SOURCES}
 
-    "${CMAKE_CURRENT_SOURCE_DIR}/serialization/components.generated.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../include/saturn/meta/type_category.hpp"
+
+#    "${CMAKE_CURRENT_SOURCE_DIR}/serialization/components.generated.cpp"
+#    "${CMAKE_CURRENT_SOURCE_DIR}/meta/type_category.generated.cpp"
 
     PARENT_SCOPE
 )

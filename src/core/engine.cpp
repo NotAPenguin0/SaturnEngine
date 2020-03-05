@@ -17,6 +17,9 @@
 #include <saturn/ecs/systems.hpp>
 #include <saturn/systems/base_systems.hpp>
 
+#include <saturn/meta/reflect.hpp>
+#include <saturn/components/transform.hpp>
+
 #include <iostream>
 
 class DefaultLogger : public ph::log::LogInterface {
@@ -31,6 +34,11 @@ static DefaultLogger logger;
 namespace saturn {
 
 Engine::Engine() {
+
+    using namespace components;    
+    meta::Info transform_info = meta::reflect<Transform>();
+
+
     window_context = ph::create_window_context("SaturnEngine - Vulkan", 1280, 720);
     ph::AppSettings settings;
     settings.enable_validation_layers = true;

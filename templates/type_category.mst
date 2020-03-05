@@ -1,18 +1,37 @@
-#include <saturn/meta/type_category.hpp>
+#ifndef SATURN_TYPE_CATEGORY_HPP_
+#define SATURN_TYPE_CATEGORY_HPP_
+
+#include <saturn/stl/types.hpp>
+#include <saturn/stl/bit_flag.hpp>
 
 {{#component_includes}}
-#include <saturn/components/{{component_filename}}>
+#include <saturn/components/{{component_filename}}.hpp>
 {{/component_includes}}
+
 
 namespace saturn::meta {
 
-using namespace components;
+struct TypeCategory : stl::bit_flag<stl::uint32_t> {
+    using bit_flag::bit_flag;
+    
+    static constexpr stl::uint32_t Component = 1;
+    static constexpr stl::uint32_t System = 2;
+    static constexpr stl::uint32_t Unknown = 4;
+};
+
+template<typename T>
+TypeCategory type_category() {
+    return TypeCategory::Unknown;
+}
 
 {{#component_category_impl}}
 template<>
-TypeCategory type_category<{{component_unscoped_name}}>() {
+TypeCategory type_category<components::{{component_unscoped_name}}>() {
     return TypeCategory::Component;
 }
+
 {{/component_category_impl}}
 
-}
+} // namespace saturn::meta
+
+#endif
