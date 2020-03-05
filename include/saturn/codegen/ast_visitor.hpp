@@ -9,9 +9,19 @@
 #include <thread>
 #include <condition_variable>
 
+#include <saturn/stl/bit_flag.hpp>
+
 namespace saturn::codegen {
 
+struct FieldFlags : stl::bit_flag<stl::uint32_t> {
+    using bit_flag::bit_flag;
+
+    static constexpr stl::uint32_t SerializeIgnore = 1;
+};
+
 struct Field {
+    FieldFlags flags;
+
     std::string type;
     std::string name;
 };

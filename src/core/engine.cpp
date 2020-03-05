@@ -34,11 +34,6 @@ static DefaultLogger logger;
 namespace saturn {
 
 Engine::Engine() {
-
-    using namespace components;    
-    meta::Info transform_info = meta::reflect<Transform>();
-
-
     window_context = ph::create_window_context("SaturnEngine - Vulkan", 1280, 720);
     ph::AppSettings settings;
     settings.enable_validation_layers = true;

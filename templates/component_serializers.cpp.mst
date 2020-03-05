@@ -1,0 +1,20 @@
+#include <saturn/serialization/component_serializers.hpp>
+#include <saturn/serialization/default_serializers.hpp>
+
+namespace saturn::components {
+
+{{#serializer_impl}}
+void from_json(nlohmann::json const& j, {{component_name}}& component) {
+    {{#deserialize_field}}
+    component.{{field_name}} = j["{{field_name}}"];
+    {{/deserialize_field}}
+}
+
+void to_json(nlohmann::json& j, {{component_name}} const& component) {
+    {{#serialize_field}}
+    j["{{field_name}}"] = component.{{field_name}};
+    {{/serialize_field}}
+}
+{{/serializer_impl}}
+
+}

@@ -13,6 +13,9 @@ set(SATURN_SOURCES
     # Systems
     "${CMAKE_CURRENT_SOURCE_DIR}/systems/base_systems.cpp"
 
+    # Serialization
+    "${CMAKE_CURRENT_SOURCE_DIR}/serialization/default_serializers.cpp"
+
     # Other
     "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
 
@@ -24,9 +27,9 @@ set(SATURN_GENERATED_SOURCES
     ${SATURN_GENERATED_SOURCES}
 
     "${CMAKE_CURRENT_SOURCE_DIR}/../include/saturn/meta/type_category.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../include/saturn/serialization/component_serializers.hpp"
 
-#    "${CMAKE_CURRENT_SOURCE_DIR}/serialization/components.generated.cpp"
-#    "${CMAKE_CURRENT_SOURCE_DIR}/meta/type_category.generated.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/serialization/component_serializers.generated.cpp"
 
     PARENT_SCOPE
 )
@@ -39,6 +42,7 @@ set(CODEGEN_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/codegen/ast_visitor.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/codegen/category_generator.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/codegen/utility.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/codegen/serialization_generator.cpp"
 
     PARENT_SCOPE
 )

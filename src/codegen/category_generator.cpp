@@ -8,20 +8,6 @@
 
 namespace saturn::codegen {
 
-static std::string to_filename(std::string_view in) {
-    std::string s;
-    bool begin = true;
-    for (auto c : in) {
-        if (std::isupper(c) && !begin) {
-            s.push_back('_');
-        }
-        s.push_back(std::tolower(c));
-
-        begin = false;
-    }
-    return s;
-}
-
 void generate_type_category_file(VisitResult const& data) {
     using namespace kainjow;
     std::string tmpl = read_file("templates/type_category.mst");

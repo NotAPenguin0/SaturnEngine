@@ -1,11 +1,12 @@
 #include <saturn/codegen/ast_visitor.hpp>
 
 #include <cppast/visitor.hpp>
+#include <cppast/cpp_member_variable.hpp>
 #include <iostream>
 
 namespace saturn::codegen {
 
-bool is_component(cppast::cpp_entity const& entity) {
+static bool is_component(cppast::cpp_entity const& entity) {
     if (entity.kind() != cppast::cpp_entity_kind::class_t) {
         return false;
     }
@@ -13,7 +14,30 @@ bool is_component(cppast::cpp_entity const& entity) {
     return cppast::has_attribute(entity, "component").has_value();
 }
 
+static bool is_field(cppast::cpp_entity const& entity, cppast::visitor_info const& info) {
+    return entity.kind() == cppast::cpp_entity_kind::member_variable_t 
+           && info.access == cppast::cpp_access_specifier_kind::cpp_public;
+}
+
 struct ast_visitor {
+    void parse_field(cppast::cpp_entity const& entity) {
+        auto& field = cur_component_meta.fields.emplace_back();
+        auto const& field_data = static_cast<cppast::cpp_member_variable const&>(entity);
+        field.name = field_data.name();
+        field.type = cppast::to_string(field_data.type());
+
+        // Check if attributes named 'ignore'. This is essentially serialize::ignore and editor::ignore
+        if (auto attr_opt = cppast::has_attribute(entity, "ignore"); attr_opt.has_value()) {
+            auto const& attr = attr_opt.value();
+            if (auto scope_opt = attr.scope(); scope_opt.has_value()){
+                auto const& scope = scope_opt.value();
+                if (scope == "serialize") {
+                    field.flags |= FieldFlags::SerializeIgnore;
+                }
+            }
+        }
+    }
+    
     bool operator()(cppast::cpp_entity const& entity, cppast::visitor_info info) {
         
         // Update current depth if nessecary
@@ -36,9 +60,11 @@ struct ast_visitor {
                 inside_component = false;
                 component_depth = 0;
             }
+        } else {
+            if (is_field(entity, info)) {
+                parse_field(entity);
+            }
         }
-
-        
 
         return true;
     }

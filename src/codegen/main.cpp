@@ -5,6 +5,7 @@
 #include <condition_variable>
 
 #include <saturn/codegen/category_generator.hpp>
+#include <saturn/codegen/serialization_generator.hpp>
 #include <saturn/codegen/argument_parser.hpp>
 #include <saturn/codegen/file_parser.hpp>
 #include <saturn/codegen/ast_visitor.hpp>
@@ -70,6 +71,7 @@ int main(int argc, char** argv) {
     std::cout << "Parsing all components took " << (end - start).count() << " ms" << std::endl;
 
     saturn::codegen::generate_type_category_file(visit_results);
-
+    saturn::codegen::generate_serialization_files(visit_results);
+    
     return 0;
 }

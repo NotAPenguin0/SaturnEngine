@@ -9,6 +9,7 @@ namespace fs = std::filesystem;
 namespace saturn::codegen {
 
 std::string read_file(fs::path const& path);
+std::string to_filename(std::string_view in);
 
 }
 

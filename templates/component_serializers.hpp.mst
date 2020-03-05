@@ -1,0 +1,20 @@
+#ifndef SATURN_COMPONENT_SERIALIZERS_HPP_
+#define SATURN_COMPONENT_SERIALIZERS_HPP_
+
+#include <nlohmann/json.hpp>
+
+{{#component_includes}}
+#include <saturn/components/{{component_filename}}.hpp>
+{{/component_includes}}
+
+namespace saturn::components {
+
+{{#serializer_declarations}}
+void from_json(nlohmann::json const& j, {{component_name}}& component);
+void to_json(nlohmann::json& j, {{component_name}} const& component);
+
+{{/serializer_declarations}}
+
+}
+
+#endif
