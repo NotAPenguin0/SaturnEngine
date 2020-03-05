@@ -16,7 +16,7 @@ Info reflect() {
 }
 
 template<typename T>
-Info reflect(T const& t) {
+Info reflect(T const&) {
     return reflect<T>();
 }
 

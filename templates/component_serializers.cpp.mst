@@ -1,6 +1,10 @@
 #include <saturn/serialization/component_serializers.hpp>
 #include <saturn/serialization/default_serializers.hpp>
 
+#include <phobos/renderer/material.hpp>
+#include <phobos/renderer/mesh.hpp>
+#include <phobos/renderer/texture.hpp>
+
 namespace saturn::components {
 
 {{#serializer_impl}}
