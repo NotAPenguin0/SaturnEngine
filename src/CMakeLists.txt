@@ -34,6 +34,8 @@ set(CODEGEN_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/codegen/argument_parser.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/codegen/file_parser.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/codegen/ast_visitor.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/codegen/category_generator.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/codegen/utility.cpp"
 
     PARENT_SCOPE
 )
