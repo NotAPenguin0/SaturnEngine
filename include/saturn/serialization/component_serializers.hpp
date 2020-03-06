@@ -8,6 +8,8 @@
 #include <saturn/components/static_mesh.hpp>
 #include <saturn/components/transform.hpp>
 
+#include <saturn/ecs/registry.hpp>
+
 namespace saturn::components {
 
 void from_json(nlohmann::json const& j, Material& component);
@@ -22,6 +24,13 @@ void to_json(nlohmann::json& j, StaticMesh const& component);
 void from_json(nlohmann::json const& j, Transform& component);
 void to_json(nlohmann::json& j, Transform const& component);
 
+
+}
+
+namespace saturn::ecs {
+
+void from_json(nlohmann::json const& j, registry& ecs);
+void to_json(nlohmann::json& j, registry const& ecs);
 
 }
 

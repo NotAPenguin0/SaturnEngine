@@ -47,7 +47,7 @@
       "name": "x64-Clang-Debug",
       "generator": "Ninja",
       "configurationType": "Debug",
-      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "buildRoot": "${projectDir}\\build\\${name}",
       "installRoot": "${projectDir}\\out\\install\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-v",
@@ -93,6 +93,11 @@
           "name": "CMAKE_CXX_COMPILER",
           "value": "C:/Program Files/LLVM/bin/clang++.exe",
           "type": "FILEPATH"
+        },
+        {
+          "name": "VS_BUILD",
+          "value": "true",
+          "type": "BOOL"
         }
       ]
     }

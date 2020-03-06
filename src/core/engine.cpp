@@ -7,11 +7,11 @@
 #include <phobos/renderer/renderer.hpp>
 #include <phobos/renderer/imgui_renderer.hpp>
 
+#include <phobos/present/present_manager.hpp>
+
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_mimas.h>
 #include <mimas/mimas.h>
-
-#include <phobos/present/present_manager.hpp>
 
 #include <saturn/scene/scene.hpp>
 #include <saturn/ecs/systems.hpp>
@@ -20,7 +20,13 @@
 #include <saturn/meta/reflect.hpp>
 #include <saturn/components/transform.hpp>
 
+#include <saturn/serialization/component_serializers.hpp>
+#include <saturn/serialization/default_serializers.hpp>
+
 #include <iostream>
+#include <fstream>
+
+#include <nlohmann/json.hpp>
 
 class DefaultLogger : public ph::log::LogInterface {
 public:
@@ -97,6 +103,13 @@ void Engine::run() {
 
     // Wait until the VkDevice is idle before we can start shutting down
     vulkan_context->device.waitIdle();
+
+    // Serialize to file on exit
+    nlohmann::json ecs_json;
+    ecs_json = demo_scene.ecs;
+    std::ofstream out("data/ecs.bin", std::ios::binary);
+    out << ecs_json;
+
 
     asset_manager.destroy_all();
     imgui_renderer.destroy();

@@ -30,8 +30,8 @@ public:
     }
 
     template<typename T>
-    bool has_component(entity_t entity) {
-        component_storage<T>& storage = get_or_emplace_storage<T>();
+    bool has_component(entity_t entity) const {
+        component_storage<T> const& storage = get_or_emplace_storage<T>();
         auto const it = storage.find(entity);
         return it != storage.end();
     }
@@ -41,12 +41,20 @@ public:
         component_storage<T>& storage = get_or_emplace_storage<T>();
         return *storage.find(entity);
     }
+
+    template<typename T>
+    T const& get_component(entity_t entity) const {
+        component_storage<T> const& storage = get_or_emplace_storage<T>();
+        return *storage.find(entity);
+    }
     
 
     template<typename... Ts>
     component_view<Ts...> view() {
         return { get_or_emplace_storage<Ts>() ... };
     }
+
+    stl::vector<entity_t> const& get_entities() const;
 
 private:
     struct storage_data {
@@ -77,8 +85,23 @@ private:
         return *static_cast<component_storage<T>*>(storage.storage.get());
     }
 
+    template<typename T>
+    component_storage<T> const& get_or_emplace_storage() const {
+        stl::uint64_t const index = component_type_id<T>::id;
+
+        // If the index is not found, we have to register the new component
+        if (index >= storages.size()) {
+            storages.emplace_back();
+            storages.back().type_id = index;    
+            storages.back().storage = std::make_unique<component_storage<T>>();
+        }
+
+        storage_data const& storage = storages[index];
+        return *static_cast<component_storage<T> const*>(storage.storage.get());
+    }
+
     stl::vector<entity_t> entities;
-    stl::vector<storage_data> storages;
+    mutable stl::vector<storage_data> storages;
 };
 
 } // namespace saturn::ecs

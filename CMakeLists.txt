@@ -13,6 +13,8 @@ set(CODEGEN_SOURCES "")
 set(CODEGEN_LINK_LIBRARIES "")
 set(CODEGEN_INCLUDE_DIRECTORIES "include" "external")
 
+option(VS_BUILD CACHE OFF)
+
 add_subdirectory("src")
 add_subdirectory("external")
 
@@ -30,12 +32,22 @@ set(RUN_CODEGEN_INCLUDE_DIRS
     ${PHOBOS_INCLUDE_DIRS}
 )
 
-add_custom_target(RunCodeGen
-    COMMAND CodeGen "-i \"${RUN_CODEGEN_INCLUDE_DIRS}\""
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-    BYPRODUCTS "${SATURN_GENERATED_SOURCES}"
-    COMMENT "Running codegen."
-)
+if (NOT VS_BUILD)
+    add_custom_target(RunCodeGen
+        COMMAND CodeGen "-i \"${RUN_CODEGEN_INCLUDE_DIRS}\""
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+        BYPRODUCTS "${SATURN_GENERATED_SOURCES}"
+        COMMENT "Running codegen."
+    ) 
+else()
+    add_custom_target(RunCodeGen
+        COMMAND CodeGen "-i \"${RUN_CODEGEN_INCLUDE_DIRS}\""
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+# BYPRODUCTS doesn't work properly in the current VS version
+#        BYPRODUCTS "${SATURN_GENERATED_SOURCES}"
+        COMMENT "Running codegen."
+    ) 
+endif()
 
 add_executable(SaturnEngine ${SATURN_SOURCES} ${SATURN_GENERATED_SOURCES})
 target_link_libraries(SaturnEngine PUBLIC ${SATURN_LINK_LIBRARIES})

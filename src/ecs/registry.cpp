@@ -8,6 +8,8 @@ entity_t registry::create_entity() {
     return id;
 }
 
-
+stl::vector<entity_t> const& registry::get_entities() const {
+    return entities;
+}
 
 } // namespace saturn::ecs

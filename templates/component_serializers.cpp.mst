@@ -22,3 +22,41 @@ void to_json(nlohmann::json& j, {{component_name}} const& component) {
 {{/serializer_impl}}
 
 }
+
+namespace saturn::ecs {
+
+static void deserialize_into_entity(nlohmann::json const& j, registry& ecs, entity_t entity) {
+    using namespace components;
+    {{#entity_serialize}}
+    if (auto json_it = j.find("{{component_name}}"); json_it != j.end()) {
+        ecs.add_component<{{component_name}}>(entity);
+        ecs.get_component<{{component_name}}>(entity) = *json_it;
+    }
+    {{/entity_serialize}}
+}
+
+static void serialize_from_entity(nlohmann::json& j, registry const& ecs, entity_t entity) {
+    using namespace components;
+    {{#entity_serialize}}
+    if (ecs.has_component<{{component_name}}>(entity)) {
+        j["{{component_name}}"] = ecs.get_component<{{component_name}}>(entity);
+    }
+    {{/entity_serialize}}
+}
+
+void from_json(nlohmann::json const& j, registry& ecs) {
+    for (auto const& json_entity : j) {
+        auto ent = ecs.create_entity();
+        deserialize_into_entity(json_entity, ecs, ent);
+    }
+}
+
+void to_json(nlohmann::json& j, registry const& ecs) {
+    j = nlohmann::json::array();
+    for (entity_t ent : ecs.get_entities()) {
+        nlohmann::json& ent_json = j.emplace_back(nlohmann::json::object());
+        serialize_from_entity(ent_json, ecs, ent);
+    }
+}
+
+}

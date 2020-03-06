@@ -95,6 +95,87 @@ public:
         size_t index;
     };
 
+    class const_iterator {
+    public:
+        using value_type = T const;
+
+        const_iterator(stl::vector<T> const* components_ref, size_t index) :
+            components_ref(components_ref), index(index) {
+        }
+
+        const_iterator(const_iterator const& rhs) = default;
+
+        const_iterator& operator=(const_iterator const& rhs) = default;
+
+        const_iterator& operator++() {
+            ++index;
+            return *this;
+        }
+
+        const_iterator& operator++(int) {
+            const_iterator old = *this;
+            ++index;
+            return old;
+        }
+
+        const_iterator& operator--() {
+            --index;
+            return *this;
+        }
+
+        const_iterator& operator--(int) {
+            const_iterator old = *this;
+            --index;
+            return *this;
+        }
+
+        bool operator==(const_iterator other) const {
+            return components_ref == other.components_ref && index == other.index;
+        }
+
+        bool operator!=(const_iterator other) const {
+            return !(*this == other);
+        }
+
+        bool operator<(const_iterator other) const {
+            SATURN_ASSERT(components_ref == other.components_ref, "Cannot compare incompatible const_iterators");
+            return index < other.index;
+        }
+
+        bool operator<=(const_iterator other) const {
+            SATURN_ASSERT(components_ref == other.direcomponents_refct_ref, "Cannot compare incompatible const_iterators");
+            return index <= other.index;
+        }
+
+        bool operator>(const_iterator other) const {
+            SATURN_ASSERT(components_ref == other.components_ref, "Cannot compare incompatible const_iterators");
+            return index > other.index;
+        }
+
+        bool operator>=(const_iterator other) const {
+            SATURN_ASSERT(components_ref == other.components_ref, "Cannot compare incompatible const_iterators");
+            return index >= other.index;
+        }
+
+        T const& operator*() const {
+            return components_ref->at(index);
+        }
+
+        auto operator->() {
+            return this;
+        }
+
+        auto operator->() const {
+            return this;
+        }
+
+    private:
+        friend class sparse_set;
+
+        stl::vector<T> const* components_ref;
+        size_t index;
+    };
+
     component_storage() = default;
     component_storage(component_storage const&) = default;
     component_storage(component_storage&&) = default;
@@ -108,8 +189,16 @@ public:
         return iterator(&components, 0);
     }
 
+    const_iterator begin() const {
+        return const_iterator(&components, 0);
+    }
+
     iterator end() {
         return iterator(&components, components.size());
+    }
+
+    const_iterator end() const {
+        return const_iterator(&components, components.size());
     }
 
     iterator insert(entity_t entity, T const& value) {
@@ -132,13 +221,28 @@ public:
     iterator find(entity_t entity) {
         underlying_storage::iterator it = underlying_storage::find(entity);
         if (it == underlying_storage::end()) {
-            end();
+            return end();
         }
 
         return iterator(&components, it.get_index());
     }
 
+    const_iterator find(entity_t entity) const {
+        underlying_storage::iterator it = underlying_storage::find(entity);
+        if (it == underlying_storage::end()) {
+            return end();
+        }
+
+        return const_iterator(&components, it.get_index());
+    }
+
     T& get(entity_t entity) {
+        auto it = find(entity);
+        SATURN_ASSERT(it != end(), "Entity not in storage");
+        return *it;
+    }
+
+    T const& get(entity_t entity) const {
         auto it = find(entity);
         SATURN_ASSERT(it != end(), "Entity not in storage");
         return *it;

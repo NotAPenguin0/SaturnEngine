@@ -7,6 +7,8 @@
 #include <saturn/components/{{component_filename}}.hpp>
 {{/component_includes}}
 
+#include <saturn/ecs/registry.hpp>
+
 namespace saturn::components {
 
 {{#serializer_declarations}}
@@ -14,6 +16,13 @@ void from_json(nlohmann::json const& j, {{component_name}}& component);
 void to_json(nlohmann::json& j, {{component_name}} const& component);
 
 {{/serializer_declarations}}
+
+}
+
+namespace saturn::ecs {
+
+void from_json(nlohmann::json const& j, registry& ecs);
+void to_json(nlohmann::json& j, registry const& ecs);
 
 }
 

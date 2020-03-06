@@ -47,6 +47,11 @@ static void gen_src(VisitResult const& data) {
         impls.push_back(component_info);
     }
 
+    auto& entity_info = info["entity_serialize"] = mustache::data::type::list;
+    for (auto const& component : data.components) {
+        entity_info.push_back({"component_name", component.name});
+    }
+
     std::string generated = must.render(info);
     std::ofstream out("src/serialization/component_serializers.generated.cpp");
     out << generated;
