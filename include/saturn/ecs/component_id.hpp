@@ -1,7 +1,7 @@
 #ifndef SATURN_COMPONENT_ID_HPP_
 #define SATURN_COMPONENT_ID_HPP_
 
-#include <saturn/stl/types.hpp>
+#include <stl/types.hpp>
 
 namespace saturn::ecs {
 

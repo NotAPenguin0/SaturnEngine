@@ -9,7 +9,7 @@
 #include <thread>
 #include <condition_variable>
 
-#include <saturn/stl/bit_flag.hpp>
+#include <stl/bit_flag.hpp>
 
 namespace saturn::codegen {
 

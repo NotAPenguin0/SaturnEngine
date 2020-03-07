@@ -1,8 +1,8 @@
 #ifndef SATURN_TYPE_CATEGORY_HPP_
 #define SATURN_TYPE_CATEGORY_HPP_
 
-#include <saturn/stl/types.hpp>
-#include <saturn/stl/bit_flag.hpp>
+#include <stl/types.hpp>
+#include <stl/bit_flag.hpp>
 
 {{#component_includes}}
 #include <saturn/components/{{component_filename}}.hpp>

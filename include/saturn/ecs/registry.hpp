@@ -5,8 +5,8 @@
 #include <saturn/ecs/component_id.hpp>
 #include <saturn/ecs/component_view.hpp>
 
-#include <saturn/stl/vector.hpp>
-#include <saturn/stl/unique_ptr.hpp>
+#include <stl/vector.hpp>
+#include <stl/unique_ptr.hpp>
 
 namespace saturn::ecs {
 

@@ -1,7 +1,7 @@
 #ifndef SATURN_ECS_COMPONENT_STORAGE_BASE_HPP_
 #define SATURN_ECS_COMPONENT_STORAGE_BASE_HPP_
 
-#include <saturn/stl/sparse_set.hpp>
+#include <stl/sparse_set.hpp>
 #include <saturn/ecs/entity.hpp>
 
 namespace saturn::ecs {

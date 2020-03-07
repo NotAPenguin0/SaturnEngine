@@ -2,7 +2,7 @@
 #define SATURN_ECS_SYSTEMS_HPP_
 
 #include <saturn/ecs/registry.hpp>
-#include <saturn/stl/vector.hpp>
+#include <stl/vector.hpp>
 
 namespace saturn::ecs {
 

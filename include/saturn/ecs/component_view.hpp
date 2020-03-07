@@ -25,8 +25,8 @@ public:
         iterator& operator=(iterator const&) = default;
 
         auto operator*() {
-            SATURN_ASSERT(view, "Iterator pointing to invalid view");
-            SATURN_ASSERT(entity != end, "Cannot dereference end iterator");
+            STL_ASSERT(view, "Iterator pointing to invalid view");
+            STL_ASSERT(entity != end, "Cannot dereference end iterator");
 
             return std::tie(std::get<component_storage<Ts>*>(*view)->get(*entity) ... );
         }

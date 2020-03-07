@@ -1,7 +1,7 @@
 #ifndef SATURN_ECS_COMPONENT_STORAGE_HPP_
 #define SATURN_ECS_COMPONENT_STORAGE_HPP_
 
-#include <saturn/stl/sparse_set.hpp>
+#include <stl/sparse_set.hpp>
 
 #include <saturn/ecs/component_storage_base.hpp>
 #include <saturn/ecs/entity.hpp>
@@ -57,22 +57,22 @@ public:
         }
 
         bool operator<(iterator other) const {
-            SATURN_ASSERT(components_ref == other.components_ref, "Cannot compare incompatible iterators");
+            STL_ASSERT(components_ref == other.components_ref, "Cannot compare incompatible iterators");
             return index < other.index;
         }
 
         bool operator<=(iterator other) const {
-            SATURN_ASSERT(components_ref == other.direcomponents_refct_ref, "Cannot compare incompatible iterators");
+            STL_ASSERT(components_ref == other.direcomponents_refct_ref, "Cannot compare incompatible iterators");
             return index <= other.index;
         }
 
         bool operator>(iterator other) const {
-            SATURN_ASSERT(components_ref == other.components_ref, "Cannot compare incompatible iterators");
+            STL_ASSERT(components_ref == other.components_ref, "Cannot compare incompatible iterators");
             return index > other.index;
         }
 
         bool operator>=(iterator other) const {
-            SATURN_ASSERT(components_ref == other.components_ref, "Cannot compare incompatible iterators");
+            STL_ASSERT(components_ref == other.components_ref, "Cannot compare incompatible iterators");
             return index >= other.index;
         }
 
@@ -138,22 +138,22 @@ public:
         }
 
         bool operator<(const_iterator other) const {
-            SATURN_ASSERT(components_ref == other.components_ref, "Cannot compare incompatible const_iterators");
+            STL_ASSERT(components_ref == other.components_ref, "Cannot compare incompatible const_iterators");
             return index < other.index;
         }
 
         bool operator<=(const_iterator other) const {
-            SATURN_ASSERT(components_ref == other.direcomponents_refct_ref, "Cannot compare incompatible const_iterators");
+            STL_ASSERT(components_ref == other.direcomponents_refct_ref, "Cannot compare incompatible const_iterators");
             return index <= other.index;
         }
 
         bool operator>(const_iterator other) const {
-            SATURN_ASSERT(components_ref == other.components_ref, "Cannot compare incompatible const_iterators");
+            STL_ASSERT(components_ref == other.components_ref, "Cannot compare incompatible const_iterators");
             return index > other.index;
         }
 
         bool operator>=(const_iterator other) const {
-            SATURN_ASSERT(components_ref == other.components_ref, "Cannot compare incompatible const_iterators");
+            STL_ASSERT(components_ref == other.components_ref, "Cannot compare incompatible const_iterators");
             return index >= other.index;
         }
 
@@ -238,13 +238,13 @@ public:
 
     T& get(entity_t entity) {
         auto it = find(entity);
-        SATURN_ASSERT(it != end(), "Entity not in storage");
+        STL_ASSERT(it != end(), "Entity not in storage");
         return *it;
     }
 
     T const& get(entity_t entity) const {
         auto it = find(entity);
-        SATURN_ASSERT(it != end(), "Entity not in storage");
+        STL_ASSERT(it != end(), "Entity not in storage");
         return *it;
     }
 
