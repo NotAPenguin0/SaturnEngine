@@ -5,7 +5,7 @@ Currently, I am working on this project alone.
 
 # Coming Soon
 
-Another rewrite with a new Vulkan renderer.
+Another rewrite with a new Vulkan renderer. (See the vulkan branch, https://github.com/NotAPenguin0/SaturnEngine/tree/vulkan)
 
 # Features
 
