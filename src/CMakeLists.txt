@@ -8,16 +8,16 @@ set(SATURN_SOURCES
 
     # ECS
     "${CMAKE_CURRENT_SOURCE_DIR}/ecs/registry.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/ecs/systems.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/ecs/system_manager.cpp"
 
     # Systems
-    "${CMAKE_CURRENT_SOURCE_DIR}/systems/base_systems.cpp"
+    
 
     # Serialization
     "${CMAKE_CURRENT_SOURCE_DIR}/serialization/default_serializers.cpp"
 
     # Other
-    "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../external/phobos/imgui_style.cpp"
 
 
     PARENT_SCOPE

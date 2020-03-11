@@ -49,8 +49,18 @@ else()
     ) 
 endif()
 
-add_executable(SaturnEngine ${SATURN_SOURCES} ${SATURN_GENERATED_SOURCES})
+add_library(SaturnEngine STATIC ${SATURN_SOURCES} ${SATURN_GENERATED_SOURCES})
 target_link_libraries(SaturnEngine PUBLIC ${SATURN_LINK_LIBRARIES})
 target_include_directories(SaturnEngine PUBLIC ${SATURN_INCLUDE_DIRECTORIES})
 
 add_dependencies(SaturnEngine RunCodeGen)
+
+option(BUILD_EDITOR CACHE ON)
+if (BUILD_EDITOR)
+    add_executable(SaturnEditor)
+    target_include_directories(SaturnEditor PUBLIC ${SATURN_INCLUDE_DIRECTORIES})
+    target_link_libraries(SaturnEditor PUBLIC SaturnEngine)
+    add_subdirectory("src/editor")
+
+    add_dependencies(SaturnEditor SaturnEngine)
+endif(BUILD_EDITOR)

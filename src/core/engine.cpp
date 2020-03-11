@@ -7,6 +7,8 @@
 #include <phobos/renderer/renderer.hpp>
 #include <phobos/renderer/imgui_renderer.hpp>
 
+#include <phobos/../../imgui_style.hpp>
+
 #include <phobos/present/present_manager.hpp>
 
 #include <imgui/imgui.h>
@@ -14,8 +16,7 @@
 #include <mimas/mimas.h>
 
 #include <saturn/scene/scene.hpp>
-#include <saturn/ecs/systems.hpp>
-#include <saturn/systems/base_systems.hpp>
+#include <saturn/ecs/system_manager.hpp>
 
 #include <saturn/meta/reflect.hpp>
 #include <saturn/components/transform.hpp>
@@ -45,6 +46,15 @@ Engine::Engine() {
     settings.enable_validation_layers = true;
     settings.version = ph::Version{0, 0, 1};
     vulkan_context = ph::create_vulkan_context(*window_context, &logger, settings);
+
+     // Initialize ImGui
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigDockingWithShift = false;
+    io.ConfigWindowsMoveFromTitleBarOnly = true;
+    style_theme_grey();
 }
 
 Engine::~Engine() {
@@ -53,15 +63,6 @@ Engine::~Engine() {
 }
 
 void Engine::run() {
-
-    // Initialize ImGui
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    io.ConfigDockingWithShift = false;
-    io.ConfigWindowsMoveFromTitleBarOnly = true;
-
     // Create Phobos rendering devices
     ph::PresentManager present_manager(*vulkan_context);
     ph::Renderer renderer(*vulkan_context);
@@ -71,21 +72,24 @@ void Engine::run() {
 
     Scene demo_scene;
     demo_scene.init_demo_scene(vulkan_context, &asset_manager);
-    ecs::system_manager systems;
-    systems::register_base_systems(systems);
+
+    
+
+    auto offscreen_attachment = present_manager.add_color_attachment("color1");
 
     while(window_context->is_open()) { 
         window_context->poll_events();
-
-        // Note that updating scene data can happen before waiting for the next frame. 
-        // This is why all update() calls should go here.
-        systems.update_all(demo_scene.ecs);
-
+    
         present_manager.wait_for_available_frame();
 
         imgui_renderer.begin_frame();
 
         ph::FrameInfo& frame = present_manager.get_frame_info();
+        frame.offscreen_target = 
+            ph::RenderTarget(vulkan_context, vulkan_context->default_render_pass, {offscreen_attachment, frame.depth_attachment});
+
+        FrameContext frame_ctx { demo_scene.ecs, frame };
+        systems.update_all(frame_ctx);
 
         ph::RenderGraph render_graph;
         render_graph.clear_color = vk::ClearColorValue(std::array<float, 4>{{0, 0, 0, 1}});
@@ -112,8 +116,8 @@ void Engine::run() {
 
 
     asset_manager.destroy_all();
-    imgui_renderer.destroy();
     present_manager.destroy();
+    imgui_renderer.destroy();
     renderer.destroy();
 }
 

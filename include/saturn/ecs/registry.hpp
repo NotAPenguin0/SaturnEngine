@@ -78,7 +78,7 @@ private:
         if (index >= storages.size()) {
             storages.emplace_back();
             storages.back().type_id = index;    
-            storages.back().storage = std::make_unique<component_storage<T>>();
+            storages.back().storage = stl::make_unique<component_storage<T>>();
         }
 
         storage_data& storage = storages[index];
@@ -93,7 +93,7 @@ private:
         if (index >= storages.size()) {
             storages.emplace_back();
             storages.back().type_id = index;    
-            storages.back().storage = std::make_unique<component_storage<T>>();
+            storages.back().storage = stl::make_unique<component_storage<T>>();
         }
 
         storage_data const& storage = storages[index];
