@@ -29,12 +29,13 @@ void EditorSystem::update(saturn::FrameContext& ctx) {
     }
 
     static bool show_scene = true;
-    if (ImGui::Begin("Scene", &show_scene)) {
+    if (ImGui::Begin("Scene", &show_scene, ImGuiWindowFlags_HorizontalScrollbar)) {
         auto img = ctx.render_info.present_manager->get_attachment(ctx.render_info, "color1");
         ImGui::Image(img.get_imgui_tex_id(), ImVec2(img.get_width(), img.get_height()));
     }
 
     ImGui::End();
 
+    // End dockspace window
     ImGui::End();
 }

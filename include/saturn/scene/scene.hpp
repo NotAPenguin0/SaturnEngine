@@ -4,6 +4,7 @@
 #include <saturn/ecs/registry.hpp>
 
 #include <phobos/renderer/render_graph.hpp>
+#include <phobos/present/frame_info.hpp>
 
 namespace saturn {
 
@@ -12,7 +13,7 @@ public:
     ecs::registry ecs;
 
     void init_demo_scene(ph::VulkanContext* ctx, ph::AssetManager* asset_manager);
-    void build_render_graph(ph::RenderGraph& graph);
+    void build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph);
 private:
     // TODO: Fix this to be more customizable
     ph::Material default_material;

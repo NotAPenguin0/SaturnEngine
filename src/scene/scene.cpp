@@ -8,6 +8,8 @@
 #include <stb/stb_image.h>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <phobos/present/present_manager.hpp>
+
 #include <numeric>
 
 namespace saturn {
@@ -72,13 +74,15 @@ void Scene::init_demo_scene(ph::VulkanContext* ctx, ph::AssetManager* asset_mana
     default_material.texture = texture;
 }  
 
-void Scene::build_render_graph(ph::RenderGraph& graph) {
+void Scene::build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph) {
     using namespace components;
 
     graph.materials.push_back(&default_material);
 
+    auto color_attachment = frame.present_manager->get_attachment(frame, "color1");
     glm::mat4 view = glm::lookAt(glm::vec3(2, 2, 0), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 
+        (float)color_attachment.get_width() / (float)color_attachment.get_height(), 0.1f, 100.0f);
     projection[1][1] *= -1;
 
     graph.view = view;

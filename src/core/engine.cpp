@@ -73,9 +73,8 @@ void Engine::run() {
     Scene demo_scene;
     demo_scene.init_demo_scene(vulkan_context, &asset_manager);
 
-    
-
-    auto offscreen_attachment = present_manager.add_color_attachment("color1");
+    present_manager.add_color_attachment("color1");
+    present_manager.add_depth_attachment("depth1");
 
     while(window_context->is_open()) { 
         window_context->poll_events();
@@ -85,8 +84,10 @@ void Engine::run() {
         imgui_renderer.begin_frame();
 
         ph::FrameInfo& frame = present_manager.get_frame_info();
+        auto color_attachment = present_manager.get_attachment(frame, "color1");
+        auto depth_attachment = present_manager.get_attachment(frame, "depth1");
         frame.offscreen_target = 
-            ph::RenderTarget(vulkan_context, vulkan_context->default_render_pass, {offscreen_attachment, frame.depth_attachment});
+            ph::RenderTarget(vulkan_context, vulkan_context->default_render_pass, {color_attachment, depth_attachment});
 
         FrameContext frame_ctx { demo_scene.ecs, frame };
         systems.update_all(frame_ctx);
@@ -95,7 +96,7 @@ void Engine::run() {
         render_graph.clear_color = vk::ClearColorValue(std::array<float, 4>{{0, 0, 0, 1}});
         render_graph.asset_manager = &asset_manager;
 
-        demo_scene.build_render_graph(render_graph);
+        demo_scene.build_render_graph(frame, render_graph);
 
         // Render the frame
         renderer.render_frame(frame, render_graph);
