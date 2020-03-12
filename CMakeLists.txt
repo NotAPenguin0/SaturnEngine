@@ -53,7 +53,11 @@ add_library(SaturnEngine STATIC ${SATURN_SOURCES} ${SATURN_GENERATED_SOURCES})
 target_link_libraries(SaturnEngine PUBLIC ${SATURN_LINK_LIBRARIES})
 target_include_directories(SaturnEngine PUBLIC ${SATURN_INCLUDE_DIRECTORIES})
 
+target_compile_options(SaturnEngine PRIVATE "-Wall" "-Werror")
+
 add_dependencies(SaturnEngine RunCodeGen)
+
+#target_compile_options(SaturnEngine PUBLIC "-ftime-trace")
 
 option(BUILD_EDITOR CACHE ON)
 if (BUILD_EDITOR)
@@ -62,5 +66,8 @@ if (BUILD_EDITOR)
     target_link_libraries(SaturnEditor PUBLIC SaturnEngine)
     add_subdirectory("src/editor")
 
+    target_compile_options(SaturnEditor PRIVATE "-Wall" "-Werror")
+
     add_dependencies(SaturnEditor SaturnEngine)
 endif(BUILD_EDITOR)
+
