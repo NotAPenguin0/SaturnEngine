@@ -2,6 +2,12 @@
 
 namespace saturn::ecs {
 
+void system_manager::startup(ph::VulkanContext& ctx) {
+    for (auto& sys : systems) {
+        sys->startup(ctx);
+    }
+}
+
 void system_manager::update_all(saturn::FrameContext& ctx) {
     for (auto& sys : systems) {
         sys->update(ctx);

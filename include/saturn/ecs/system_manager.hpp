@@ -14,6 +14,7 @@ public:
     template<typename S, typename... Args>
     void add_system(Args&&... args);
 
+    void startup(ph::VulkanContext& ctx);
     void update_all(saturn::FrameContext& ctx);
 
 private:

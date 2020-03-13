@@ -57,6 +57,7 @@ void Engine::run() {
     // Create Phobos rendering devices
     ph::PresentManager present_manager(*vulkan_context);
     ph::Renderer renderer(*vulkan_context);
+
     ph::ImGuiRenderer imgui_renderer(*window_context, *vulkan_context);
 
     ph::AssetManager asset_manager;
@@ -67,6 +68,8 @@ void Engine::run() {
     present_manager.add_color_attachment("color1");
     present_manager.add_depth_attachment("depth1");
 
+    systems.startup(*vulkan_context);
+
     while(window_context->is_open()) { 
         window_context->poll_events();
     
@@ -75,11 +78,12 @@ void Engine::run() {
         imgui_renderer.begin_frame();
 
         ph::FrameInfo& frame = present_manager.get_frame_info();
-        auto& color_attachment = present_manager.get_attachment("color1");
-        auto& depth_attachment = present_manager.get_attachment("depth1");
 
         FrameContext frame_ctx { demo_scene.ecs, frame };
         systems.update_all(frame_ctx);
+
+        auto& color_attachment = present_manager.get_attachment("color1");
+        auto& depth_attachment = present_manager.get_attachment("depth1");
 
         frame.offscreen_target = 
             ph::RenderTarget(vulkan_context, vulkan_context->default_render_pass, {color_attachment, depth_attachment});

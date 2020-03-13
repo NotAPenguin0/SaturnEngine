@@ -1,10 +1,26 @@
 #include <editor/editor_system.hpp>
 #include <phobos/present/present_manager.hpp>
 
+#include <phobos/util/cmdbuf_util.hpp>
+
 #include <imgui/imgui.h>
+#include <imgui/imgui_impl_vulkan.h>
 
 EditorSystem::EditorSystem(LogWindow* log_window) : log_window(log_window) {
 
+}
+
+void EditorSystem::startup(ph::VulkanContext& ctx) {
+    ImGuiIO io = ImGui::GetIO();
+    editor_font = io.Fonts->AddFontFromFileTTF("data/fonts/heebo/Heebo-Regular.ttf", 16.0f);
+
+    // Upload font textures
+    vk::CommandBuffer cmd_buf = ph::begin_single_time_command_buffer(ctx);
+    
+    ImGui_ImplVulkan_CreateFontsTexture(cmd_buf);
+
+    ph::end_single_time_command_buffer(ctx, cmd_buf);
+    ImGui_ImplVulkan_DestroyFontUploadObjects();
 }
 
 void EditorSystem::update(saturn::FrameContext& ctx) {
@@ -24,6 +40,8 @@ void EditorSystem::update(saturn::FrameContext& ctx) {
     ImGui::Begin("MainEditorSpace", nullptr, flags);
     ImGui::PopStyleVar(3);
 
+    ImGui::PushFont(editor_font);
+
     // DockSpace
     ImGuiIO& io = ImGui::GetIO();
     if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
@@ -36,7 +54,7 @@ void EditorSystem::update(saturn::FrameContext& ctx) {
     if (ImGui::Begin("Scene", &show_scene, ImGuiWindowFlags_HorizontalScrollbar)) {
         auto& img = ctx.render_info.present_manager->get_attachment("color1");
         auto& depth = ctx.render_info.present_manager->get_attachment("depth1");
-        auto const size = ImGui::GetWindowSize();
+        auto const size = ImGui::GetContentRegionAvail();
         img.resize(size.x, size.y);
         depth.resize(size.x, size.y);
         ImGui::Image(img.get_imgui_tex_id(), ImVec2(img.get_width(), img.get_height()));
@@ -45,6 +63,8 @@ void EditorSystem::update(saturn::FrameContext& ctx) {
     ImGui::End();
 
     log_window->show_gui();
+
+    ImGui::PopFont();
 
     // End dockspace window
     ImGui::End();
