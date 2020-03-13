@@ -30,7 +30,11 @@ void EditorSystem::update(saturn::FrameContext& ctx) {
 
     static bool show_scene = true;
     if (ImGui::Begin("Scene", &show_scene, ImGuiWindowFlags_HorizontalScrollbar)) {
-        auto img = ctx.render_info.present_manager->get_attachment(ctx.render_info, "color1");
+        auto& img = ctx.render_info.present_manager->get_attachment("color1");
+        auto& depth = ctx.render_info.present_manager->get_attachment("depth1");
+        auto const size = ImGui::GetWindowSize();
+        img.resize(size.x, size.y);
+        depth.resize(size.x, size.y);
         ImGui::Image(img.get_imgui_tex_id(), ImVec2(img.get_width(), img.get_height()));
     }
 

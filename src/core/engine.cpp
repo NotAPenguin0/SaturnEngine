@@ -84,13 +84,14 @@ void Engine::run() {
         imgui_renderer.begin_frame();
 
         ph::FrameInfo& frame = present_manager.get_frame_info();
-        auto color_attachment = present_manager.get_attachment(frame, "color1");
-        auto depth_attachment = present_manager.get_attachment(frame, "depth1");
-        frame.offscreen_target = 
-            ph::RenderTarget(vulkan_context, vulkan_context->default_render_pass, {color_attachment, depth_attachment});
+        auto& color_attachment = present_manager.get_attachment("color1");
+        auto& depth_attachment = present_manager.get_attachment("depth1");
 
         FrameContext frame_ctx { demo_scene.ecs, frame };
         systems.update_all(frame_ctx);
+
+        frame.offscreen_target = 
+            ph::RenderTarget(vulkan_context, vulkan_context->default_render_pass, {color_attachment, depth_attachment});
 
         ph::RenderGraph render_graph;
         render_graph.clear_color = vk::ClearColorValue(std::array<float, 4>{{0, 0, 0, 1}});
