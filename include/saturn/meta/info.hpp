@@ -7,7 +7,6 @@
 
 namespace saturn::meta {
 
-
 struct Info {
     std::string_view name;
     // Name without preceding namespace

@@ -25,6 +25,13 @@ void to_json(nlohmann::json& j, PointLight const& component) {
     j["diffuse"] = component.diffuse;
     j["specular"] = component.specular;
 }
+void from_json(nlohmann::json const& j, StaticMesh& component) {
+    component.mesh = j["mesh"];
+}
+
+void to_json(nlohmann::json& j, StaticMesh const& component) {
+    j["mesh"] = component.mesh;
+}
 void from_json(nlohmann::json const& j, Transform& component) {
     component.position = j["position"];
     component.rotation = j["rotation"];
@@ -35,13 +42,6 @@ void to_json(nlohmann::json& j, Transform const& component) {
     j["position"] = component.position;
     j["rotation"] = component.rotation;
     j["scale"] = component.scale;
-}
-void from_json(nlohmann::json const& j, StaticMesh& component) {
-    component.mesh = j["mesh"];
-}
-
-void to_json(nlohmann::json& j, StaticMesh const& component) {
-    j["mesh"] = component.mesh;
 }
 
 }
@@ -58,13 +58,13 @@ static void deserialize_into_entity(nlohmann::json const& j, registry& ecs, enti
         ecs.add_component<PointLight>(entity);
         ecs.get_component<PointLight>(entity) = *json_it;
     }
-    if (auto json_it = j.find("Transform"); json_it != j.end()) {
-        ecs.add_component<Transform>(entity);
-        ecs.get_component<Transform>(entity) = *json_it;
-    }
     if (auto json_it = j.find("StaticMesh"); json_it != j.end()) {
         ecs.add_component<StaticMesh>(entity);
         ecs.get_component<StaticMesh>(entity) = *json_it;
+    }
+    if (auto json_it = j.find("Transform"); json_it != j.end()) {
+        ecs.add_component<Transform>(entity);
+        ecs.get_component<Transform>(entity) = *json_it;
     }
 }
 
@@ -76,11 +76,11 @@ static void serialize_from_entity(nlohmann::json& j, registry const& ecs, entity
     if (ecs.has_component<PointLight>(entity)) {
         j["PointLight"] = ecs.get_component<PointLight>(entity);
     }
-    if (ecs.has_component<Transform>(entity)) {
-        j["Transform"] = ecs.get_component<Transform>(entity);
-    }
     if (ecs.has_component<StaticMesh>(entity)) {
         j["StaticMesh"] = ecs.get_component<StaticMesh>(entity);
+    }
+    if (ecs.has_component<Transform>(entity)) {
+        j["Transform"] = ecs.get_component<Transform>(entity);
     }
 }
 

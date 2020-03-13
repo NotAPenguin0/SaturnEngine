@@ -3,6 +3,10 @@
 
 #include <imgui/imgui.h>
 
+EditorSystem::EditorSystem(LogWindow* log_window) : log_window(log_window) {
+
+}
+
 void EditorSystem::update(saturn::FrameContext& ctx) {
     ImGuiWindowFlags flags =
         ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
@@ -39,6 +43,8 @@ void EditorSystem::update(saturn::FrameContext& ctx) {
     }
 
     ImGui::End();
+
+    log_window->show_gui();
 
     // End dockspace window
     ImGui::End();

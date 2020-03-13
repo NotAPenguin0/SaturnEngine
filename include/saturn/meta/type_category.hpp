@@ -6,8 +6,8 @@
 
 #include <saturn/components/material.hpp>
 #include <saturn/components/point_light.hpp>
-#include <saturn/components/transform.hpp>
 #include <saturn/components/static_mesh.hpp>
+#include <saturn/components/transform.hpp>
 
 
 namespace saturn::meta {
@@ -36,12 +36,12 @@ TypeCategory type_category<components::PointLight>() {
 }
 
 template<>
-TypeCategory type_category<components::Transform>() {
+TypeCategory type_category<components::StaticMesh>() {
     return TypeCategory::Component;
 }
 
 template<>
-TypeCategory type_category<components::StaticMesh>() {
+TypeCategory type_category<components::Transform>() {
     return TypeCategory::Component;
 }
 

@@ -29,23 +29,14 @@
 
 #include <nlohmann/json.hpp>
 
-class DefaultLogger : public ph::log::LogInterface {
-public:
-    void write(ph::log::Severity, std::string_view msg) {
-        std::cerr << msg << std::endl;
-    }
-};
-
-static DefaultLogger logger;
-
 namespace saturn {
 
-Engine::Engine() {
+Engine::Engine(ph::log::LogInterface* logger) {
     window_context = ph::create_window_context("SaturnEngine - Vulkan", 1280, 720);
     ph::AppSettings settings;
     settings.enable_validation_layers = true;
     settings.version = ph::Version{0, 0, 1};
-    vulkan_context = ph::create_vulkan_context(*window_context, &logger, settings);
+    vulkan_context = ph::create_vulkan_context(*window_context, logger, settings);
 
      // Initialize ImGui
     IMGUI_CHECKVERSION();

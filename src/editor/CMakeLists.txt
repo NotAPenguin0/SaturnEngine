@@ -3,4 +3,5 @@ target_sources(SaturnEditor PUBLIC
     "editor_main.cpp"
 
     "editor_system.cpp"
+    "log_window.cpp"
 )

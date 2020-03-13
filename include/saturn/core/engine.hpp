@@ -9,7 +9,7 @@ namespace saturn {
 
 class Engine {
 public:
-    Engine();
+    Engine(ph::log::LogInterface* logger);
     ~Engine();
 
     void run();
