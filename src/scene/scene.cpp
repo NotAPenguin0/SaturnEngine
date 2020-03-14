@@ -14,6 +14,8 @@
 #include <saturn/serialization/default_serializers.hpp>
 #include <saturn/serialization/component_serializers.hpp>
 
+#include <saturn/utility/math.hpp>
+
 #include <fstream>
 #include <numeric>
 
@@ -22,16 +24,26 @@ namespace saturn {
 void Scene::init_demo_scene(ph::VulkanContext* ctx) {
     using namespace components;
 
-    static Context context { ctx };
+    static Context context { ctx, this };
     set_serialize_context(&context);
 
     load_from_file("data/ecs.bin");
+
+    Handle<assets::Model> model_handle = assets::load_model(context, "data/models/bunny.obj");
+    
+    assets::Model* model = assets::get_model(model_handle);
+    // Add dummy material component. Default material will be used anyway (TODO)
+    blueprints.add_component<Material>(model->blueprint);
+    blueprints.add_component<Transform>(model->blueprint, 
+        glm::vec3(0, 0, 0), glm::vec3(0, 80.0f, 0), glm::vec3(0.6, 0.6, 0.6));
+    ecs.import_entity(blueprints, model->blueprint);
 }  
 
 void Scene::build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph) {
     using namespace components;
     
     for (auto const&[material] : ecs.view<Material>()) {
+        if (material.texture.id == -1) continue;
         graph.materials.push_back(ph::Material{assets::get_texture(material.texture)});
     }
 
@@ -65,10 +77,13 @@ void Scene::build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph) {
 
         ph::RenderGraph::Instance instance;
         glm::mat4 model = glm::mat4(1.0);
-        // TODO: Rotations
-        model = glm::scale(model, transform.scale);
+
         model = glm::translate(model, transform.position);
-       
+        model = glm::rotate(model, {glm::radians(transform.rotation.x),
+                                glm::radians(transform.rotation.y),
+                                glm::radians(transform.rotation.z)});
+        model = glm::scale(model, transform.scale);
+
         instance.transform = model;
 
         draw_cmd.instances.push_back(instance);

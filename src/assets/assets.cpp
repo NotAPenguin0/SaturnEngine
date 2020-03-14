@@ -1,6 +1,7 @@
 #include <saturn/assets/assets.hpp>
 #include <saturn/assets/importers/simple_mesh.hpp>
 #include <saturn/assets/importers/stb_texture_import.hpp>
+#include <saturn/assets/importers/obj.hpp>
 
 #include <phobos/renderer/mesh.hpp>
 #include <phobos/renderer/texture.hpp>
@@ -67,8 +68,17 @@ namespace data {
 
 static std::unordered_map<stl::int64_t, AssetData<ph::Mesh>> meshes;
 static std::unordered_map<stl::int64_t, AssetData<ph::Texture>> textures;
+static std::unordered_map<stl::int64_t, AssetData<Model>> models;
 
 } // namespace data
+
+Handle<ph::Mesh> take_mesh(ph::Mesh& mesh) {
+    stl::int64_t id = id_generator<ph::Mesh>::next();
+
+    data::meshes.emplace(id, AssetData<ph::Mesh>{"", stl::move(mesh)});
+
+    return { id };
+}
 
 Handle<ph::Mesh> load_mesh(Context& ctx, fs::path const& path) {
     auto const maybe_already_loaded_handle = _get_with_path_internal(data::meshes, path);
@@ -91,6 +101,7 @@ fs::path const& get_mesh_path(Handle<ph::Mesh> handle) {
 }
 
 
+
 Handle<ph::Texture> load_texture(Context& ctx, fs::path const& path) {
     // If the path was already loaded at some point, don't load it again
     auto const maybe_already_loaded_handle = _get_with_path_internal(data::textures, path);
@@ -110,6 +121,28 @@ ph::Texture* get_texture(Handle<ph::Texture> handle) {
 
 fs::path const& get_texture_path(Handle<ph::Texture> handle) {
     return _get_path_internal(data::textures, handle);
+}
+
+
+
+Handle<Model> load_model(Context& ctx, fs::path const& path) {
+    auto const maybe_already_loaded_handle = _get_with_path_internal(data::models, path);
+    if (maybe_already_loaded_handle.id != -1) { return maybe_already_loaded_handle; }
+
+    stl::int64_t id = id_generator<Model>::next();
+
+    Model model = importers::import_obj_model(ctx, path);
+    data::models.emplace(id, AssetData<Model>{path, model});
+
+    return { id };
+}
+
+Model* get_model(Handle<Model> handle) {
+    return _get_internal(data::models, handle);
+}
+
+fs::path const& get_model_path(Handle<Model> handle) {
+    return _get_path_internal(data::models, handle);
 }
 
 void destroy_all_assets() {

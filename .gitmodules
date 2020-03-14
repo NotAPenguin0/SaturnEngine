@@ -13,3 +13,6 @@
 [submodule "external/stl"]
 	path = external/stl
 	url = https://github.com/NotAPenguin0/stl
+[submodule "external/assimp"]
+	path = external/assimp
+	url = https://github.com/assimp/assimp

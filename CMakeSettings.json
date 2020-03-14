@@ -40,6 +40,41 @@
           "name": "LLVM_VERSION_EXPLICIT",
           "value": "9.0.0",
           "type": "STRING"
+        },
+        {
+          "name": "VS_BUILD",
+          "value": "true",
+          "type": "BOOL"
+        },
+        {
+          "name": "ASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT",
+          "value": "False",
+          "type": "BOOL"
+        },
+        {
+          "name": "ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT",
+          "value": "False",
+          "type": "BOOL"
+        },
+        {
+          "name": "ASSIMP_BUILD_ASSIMP_TOOLS",
+          "value": "False",
+          "type": "BOOL"
+        },
+        {
+          "name": "BUILD_SHARED_LIBS",
+          "value": "False",
+          "type": "BOOL"
+        },
+        {
+          "name": "ASSIMP_BUILD_OBJ_IMPORTER",
+          "value": "True",
+          "type": "BOOL"
+        },
+        {
+          "name": "ASSIMP_BUILD_TESTS",
+          "value": "False",
+          "type": "BOOL"
         }
       ]
     },
@@ -97,6 +132,31 @@
         {
           "name": "VS_BUILD",
           "value": "true",
+          "type": "BOOL"
+        },
+        {
+          "name": "ASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT",
+          "value": "False",
+          "type": "BOOL"
+        },
+        {
+          "name": "ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT",
+          "value": "False",
+          "type": "BOOL"
+        },
+        {
+          "name": "ASSIMP_BUILD_ASSIMP_TOOLS",
+          "value": "False",
+          "type": "BOOL"
+        },
+        {
+          "name": "BUILD_SHARED_LIBS",
+          "value": "False",
+          "type": "BOOL"
+        },
+        {
+          "name": "ASSIMP_BUILD_OBJ_IMPORTER",
+          "value": "True",
           "type": "BOOL"
         }
       ]

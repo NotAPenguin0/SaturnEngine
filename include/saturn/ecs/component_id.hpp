@@ -13,12 +13,12 @@ struct type_id_counter {
     }
 };
 
-
 template<typename T>
 stl::uint64_t get_component_type_id() {
     static stl::uint64_t id = type_id_counter::next();
     return id;
 }
+
 
 } // namespace saturn::ecs
 

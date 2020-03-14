@@ -14,14 +14,14 @@ namespace saturn {
 class Scene {
 public:
     ecs::registry ecs;
+    // Stores entity blueprints
+    ecs::registry blueprints;
 
     void init_demo_scene(ph::VulkanContext* ctx);
     void build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph);
 
     void save_to_file(fs::path const& path);
     void load_from_file(fs::path const& path);
-
-private:
 };
 
 } // namespace saturn

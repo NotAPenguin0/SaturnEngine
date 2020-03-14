@@ -56,7 +56,7 @@ void to_json(nlohmann::json& j, Transform const& component) {
 
 namespace saturn::ecs {
 
-static void deserialize_into_entity(nlohmann::json const& j, registry& ecs, entity_t entity) {
+void deserialize_into_entity(nlohmann::json const& j, registry& ecs, entity_t entity) {
     using namespace components;
     if (auto json_it = j.find("Material"); json_it != j.end()) {
         ecs.add_component<Material>(entity);
@@ -76,7 +76,7 @@ static void deserialize_into_entity(nlohmann::json const& j, registry& ecs, enti
     }
 }
 
-static void serialize_from_entity(nlohmann::json& j, registry const& ecs, entity_t entity) {
+void serialize_from_entity(nlohmann::json& j, registry const& ecs, entity_t entity) {
     using namespace components;
     if (ecs.has_component<Material>(entity)) {
         j["Material"] = ecs.get_component<Material>(entity);

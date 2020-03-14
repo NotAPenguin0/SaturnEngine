@@ -105,7 +105,7 @@ void Engine::run() {
     vulkan_context->device.waitIdle();
 
     // Serialize to file on exit
-    demo_scene.save_to_file("data/ecs.bin");
+//    demo_scene.save_to_file("data/ecs.bin");
 
     assets::destroy_all_assets();
     present_manager.destroy();

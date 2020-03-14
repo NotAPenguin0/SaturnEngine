@@ -5,8 +5,11 @@
 
 namespace saturn {
 
+class Scene;
+
 struct Context {
     ph::VulkanContext* vulkan;
+    Scene* scene;
 };
 
 }

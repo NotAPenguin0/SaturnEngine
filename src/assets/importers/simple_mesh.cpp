@@ -9,7 +9,7 @@
 #include <numeric>
 
 namespace saturn::assets::importers {
-
+    
 ph::Mesh import_simple_mesh(Context& ctx, fs::path const& path) {
     std::ifstream file(path);
     if (!file.good()) {

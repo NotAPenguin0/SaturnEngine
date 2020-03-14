@@ -4,6 +4,14 @@ project(SaturnEngine)
 enable_language(CXX)
 set(CMAKE_CXX_STANDARD 17)
 
+enable_language(RC)
+if (WIN32) 
+    set(CMAKE_RC_FLAGS ${CMAKE_RC_FLAGS} 
+        "-I\"${WINDOWS_H_INCLUDE_DIR}\" -I\"${WINDOWS_SHARED_INCLUDE_DIR}\" -I\"${WINDOWS_LIBC_INCLUDE_DIR}\" -I\"${WINDOWS_VC_INCLUDE_DIR}\""
+    )
+endif()
+
+
 set(SATURN_SOURCES "")
 set(SATURN_GENERATED_SOURCES "")
 set(SATURN_LINK_LIBRARIES "")
@@ -51,7 +59,7 @@ endif()
 
 add_library(SaturnEngine STATIC ${SATURN_SOURCES} ${SATURN_GENERATED_SOURCES})
 target_link_libraries(SaturnEngine PUBLIC ${SATURN_LINK_LIBRARIES})
-target_include_directories(SaturnEngine PUBLIC ${SATURN_INCLUDE_DIRECTORIES})
+target_include_directories(SaturnEngine PUBLIC ${SATURN_INCLUDE_DIRECTORIES} ${PHOBOS_INCLUDE_DIRS})
 
 target_compile_options(SaturnEngine PRIVATE "-Wall" "-Werror")
 
@@ -63,7 +71,7 @@ option(BUILD_EDITOR CACHE ON)
 if (BUILD_EDITOR)
     add_executable(SaturnEditor)
     target_include_directories(SaturnEditor PUBLIC ${SATURN_INCLUDE_DIRECTORIES})
-    target_link_libraries(SaturnEditor PUBLIC SaturnEngine)
+    target_link_libraries(SaturnEditor PUBLIC SaturnEngine ${SATURN_LINK_LIBRARIES})
     add_subdirectory("src/editor")
 
     target_compile_options(SaturnEditor PRIVATE "-Wall" "-Werror")

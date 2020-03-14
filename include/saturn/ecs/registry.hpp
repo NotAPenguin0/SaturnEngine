@@ -23,6 +23,9 @@ public:
 
     entity_t create_entity();
 
+    // 'Imports' an entity from registry [source] to this registry. Effectively makes a copy of all entity data
+    entity_t import_entity(registry& source, entity_t other);
+
     template<typename T, typename... Args>
     void add_component(entity_t entity, Args&&... args) {
         component_storage<T>& storage = get_or_emplace_storage<T>();
@@ -58,7 +61,7 @@ public:
 
 private:
     struct storage_data {
-        stl::uint64_t type_id;
+        stl::uint64_t type_id = 0;
         stl::unique_ptr<component_storage_base> storage;
     };
 
@@ -76,9 +79,14 @@ private:
 
         // If the index is not found, we have to register the new component
         if (index >= storages.size()) {
-            storages.emplace_back();
-            storages.back().type_id = index;    
-            storages.back().storage = stl::make_unique<component_storage<T>>();
+            storages.resize(index + 1);
+            storages[index].type_id = index;    
+            storages[index].storage = stl::make_unique<component_storage<T>>();
+        }
+        // Initialize storage if it wasn't created yet
+        if (storages[index].storage == nullptr) {
+            storages[index].type_id = index;
+            storages[index].storage = stl::make_unique<component_storage<T>>();
         }
 
         storage_data& storage = storages[index];
@@ -91,9 +99,14 @@ private:
 
         // If the index is not found, we have to register the new component
         if (index >= storages.size()) {
-            storages.emplace_back();
-            storages.back().type_id = index;    
-            storages.back().storage = stl::make_unique<component_storage<T>>();
+            storages.resize(index + 1);
+            storages[index].type_id = index;    
+            storages[index].storage = stl::make_unique<component_storage<T>>();
+        }
+        // Initialize storage if it wasn't created yet
+        if (storages[index].storage == nullptr) {
+            storages[index].type_id = index;
+            storages[index].storage = stl::make_unique<component_storage<T>>();
         }
 
         storage_data const& storage = storages[index];
