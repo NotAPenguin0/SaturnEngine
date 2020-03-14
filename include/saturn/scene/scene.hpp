@@ -6,6 +6,9 @@
 #include <phobos/renderer/render_graph.hpp>
 #include <phobos/present/frame_info.hpp>
 
+#include <filesystem>
+namespace fs = std::filesystem;
+
 namespace saturn {
 
 class Scene {
@@ -14,9 +17,11 @@ public:
 
     void init_demo_scene(ph::VulkanContext* ctx);
     void build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph);
+
+    void save_to_file(fs::path const& path);
+    void load_from_file(fs::path const& path);
+
 private:
-    // TODO: Fix this to be more customizable
-    ph::Material default_material;
 };
 
 } // namespace saturn

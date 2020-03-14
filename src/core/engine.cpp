@@ -105,10 +105,7 @@ void Engine::run() {
     vulkan_context->device.waitIdle();
 
     // Serialize to file on exit
-    nlohmann::json ecs_json;
-    ecs_json = demo_scene.ecs;
-    std::ofstream out("data/ecs.bin", std::ios::binary);
-    out << ecs_json;
+    demo_scene.save_to_file("data/ecs.bin");
 
     assets::destroy_all_assets();
     present_manager.destroy();

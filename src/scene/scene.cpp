@@ -12,7 +12,9 @@
 
 #include <saturn/assets/assets.hpp>
 #include <saturn/serialization/default_serializers.hpp>
+#include <saturn/serialization/component_serializers.hpp>
 
+#include <fstream>
 #include <numeric>
 
 namespace saturn {
@@ -23,28 +25,15 @@ void Scene::init_demo_scene(ph::VulkanContext* ctx) {
     static Context context { ctx };
     set_serialize_context(&context);
 
-    ecs::entity_t light = ecs.create_entity();
-    ecs::entity_t box = ecs.create_entity();
-
-    ecs.add_component<Transform>(light, glm::vec3(0, 2, 0), glm::vec3(0, 0, 0), glm::vec3(1, 1, 1));
-    ecs.add_component<PointLight>(light, glm::vec3(0.1, 0.1, 0.1), glm::vec3(0.75, 0.75, 0.75), glm::vec3(1, 1, 1));
-
-    ecs.add_component<Transform>(box, glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0.5, 0.5, 0.5));
-    
-    Handle<ph::Mesh> box_mesh = assets::load_mesh(context, "data/meshes/cube.txt");
-
-    Handle<ph::Texture> texture = assets::load_texture(context, "data/textures/blank.png");
-
-    ecs.add_component<StaticMesh>(box, box_mesh);
-    ecs.add_component<Material>(box, texture);
-
-    default_material.texture = assets::get_texture(texture);
+    load_from_file("data/ecs.bin");
 }  
 
 void Scene::build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph) {
     using namespace components;
-
-    graph.materials.push_back(&default_material);
+    
+    for (auto const&[material] : ecs.view<Material>()) {
+        graph.materials.push_back(ph::Material{assets::get_texture(material.texture)});
+    }
 
     auto& color_attachment = frame.present_manager->get_attachment("color1");
     glm::mat4 view = glm::lookAt(glm::vec3(2, 2, 0), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
@@ -70,6 +59,7 @@ void Scene::build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph) {
         : ecs.view<Transform, StaticMesh, Material>()) {
         
         ph::RenderGraph::DrawCommand draw_cmd;
+        // TODO: Fix when we get better material component
         draw_cmd.material_index = 0;
         draw_cmd.mesh = assets::get_mesh(mesh.mesh);
 
@@ -84,6 +74,20 @@ void Scene::build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph) {
         draw_cmd.instances.push_back(instance);
         graph.draw_commands.push_back(draw_cmd);
     }
+}
+
+void Scene::save_to_file(fs::path const& path) {
+    nlohmann::json ecs_json;
+    ecs_json = ecs;
+    std::ofstream out("data/ecs.bin", std::ios::binary);
+    out << ecs_json;
+}
+
+void Scene::load_from_file(fs::path const& path) {
+    std::ifstream file(path);
+    nlohmann::json j;
+    file >> j;
+    ecs = j;
 }
 
 } // namespace saturn

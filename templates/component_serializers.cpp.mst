@@ -19,6 +19,8 @@ void to_json(nlohmann::json& j, {{component_name}} const& component) {
     j["{{field_name}}"] = component.{{field_name}};
     {{/serialize_field}}
 }
+
+
 {{/serializer_impl}}
 
 }

@@ -72,7 +72,7 @@ private:
 
     template<typename T>
     component_storage<T>& get_or_emplace_storage() {
-        stl::uint64_t const index = component_type_id<T>::id;
+        stl::uint64_t const index = get_component_type_id<T>();
 
         // If the index is not found, we have to register the new component
         if (index >= storages.size()) {
@@ -87,7 +87,7 @@ private:
 
     template<typename T>
     component_storage<T> const& get_or_emplace_storage() const {
-        stl::uint64_t const index = component_type_id<T>::id;
+        stl::uint64_t const index = get_component_type_id<T>();
 
         // If the index is not found, we have to register the new component
         if (index >= storages.size()) {

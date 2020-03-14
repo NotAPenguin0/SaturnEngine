@@ -30,7 +30,7 @@ void from_json(nlohmann::json const& j, Handle<ph::Mesh>& handle) {
 }
 
 void to_json(nlohmann::json& j, Handle<ph::Mesh> const& handle) {
-    j = assets::get_mesh_path(handle);
+    j = assets::get_mesh_path(handle).generic_string();
 }
 
 void from_json(nlohmann::json const& j, Handle<ph::Texture>& handle) {
@@ -38,7 +38,7 @@ void from_json(nlohmann::json const& j, Handle<ph::Texture>& handle) {
 }
 
 void to_json(nlohmann::json& j, Handle<ph::Texture> const& handle) {
-    j = assets::get_texture_path(handle);
+    j = assets::get_texture_path(handle).generic_string();
 }
 
 } // namespace saturn
