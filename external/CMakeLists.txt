@@ -2,11 +2,32 @@ add_subdirectory("phobos")
 add_subdirectory("cppast")
 add_subdirectory("stl")
 
-set(SATURN_LINK_LIBRARIES
-    ${SATURN_LINK_LIBRARIES}
+set(LINK_LIBRARIES "")
+
+set(LINK_LIBRARIES
+    ${LINK_LIBRARIES}
     Phobos
     stl
-    PARENT_SCOPE
+)
+
+if (NOT VS_BUILD)
+    add_subdirectory("assimp")
+    target_compile_options(assimp PUBLIC "-w")
+    set(LINK_LIBRARIES 
+        ${LINK_LIBRARIES} 
+        assimp 
+    )
+else()
+    set(SATURN_LINK_LIBRARIES 
+        ${LINK_LIBRARIES} 
+        "assimpd.lib" "IrrXMLd.lib" "zlibstaticd.lib" 
+    )
+endif()
+
+set(SATURN_LINK_LIBRARIES 
+    ${SATURN_LINK_LIBRARIES}
+    ${LINK_LIBRARIES}
+    PARENT_SCOPE    
 )
 
 set(CODEGEN_LINK_LIBRARIES
@@ -21,6 +42,8 @@ set(SATURN_INCLUDE_DIRECTORIES
     "${CMAKE_CURRENT_SOURCE_DIR}/phobos/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/nlohmann_json/single_include"
     "${CMAKE_CURRENT_SOURCE_DIR}/stl/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/assimp/include"
+    "${CMAKE_BINARY_DIR}/external/assimp/include"
     PARENT_SCOPE
 )
 
