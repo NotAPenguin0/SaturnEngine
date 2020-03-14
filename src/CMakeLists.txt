@@ -1,5 +1,10 @@
 set(SATURN_SOURCES
     ${SATURN_SOURCES}
+    # Assets
+    "${CMAKE_CURRENT_SOURCE_DIR}/assets/assets.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/assets/importers/simple_mesh.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/assets/importers/stb_texture_import.cpp"
+
     # Core
     "${CMAKE_CURRENT_SOURCE_DIR}/core/engine.cpp"
 

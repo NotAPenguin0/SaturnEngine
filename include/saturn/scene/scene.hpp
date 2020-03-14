@@ -12,7 +12,7 @@ class Scene {
 public:
     ecs::registry ecs;
 
-    void init_demo_scene(ph::VulkanContext* ctx, ph::AssetManager* asset_manager);
+    void init_demo_scene(ph::VulkanContext* ctx);
     void build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph);
 private:
     // TODO: Fix this to be more customizable

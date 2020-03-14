@@ -15,6 +15,8 @@
 #include <imgui/imgui_impl_mimas.h>
 #include <mimas/mimas.h>
 
+#include <saturn/assets/assets.hpp>
+
 #include <saturn/scene/scene.hpp>
 #include <saturn/ecs/system_manager.hpp>
 
@@ -60,10 +62,8 @@ void Engine::run() {
 
     ph::ImGuiRenderer imgui_renderer(*window_context, *vulkan_context);
 
-    ph::AssetManager asset_manager;
-
     Scene demo_scene;
-    demo_scene.init_demo_scene(vulkan_context, &asset_manager);
+    demo_scene.init_demo_scene(vulkan_context);
 
     present_manager.add_color_attachment("color1");
     present_manager.add_depth_attachment("depth1");
@@ -79,7 +79,7 @@ void Engine::run() {
 
         ph::FrameInfo& frame = present_manager.get_frame_info();
 
-        FrameContext frame_ctx { demo_scene.ecs, frame };
+        FrameContext frame_ctx { demo_scene, demo_scene.ecs, frame };
         systems.update_all(frame_ctx);
 
         auto& color_attachment = present_manager.get_attachment("color1");
@@ -90,7 +90,6 @@ void Engine::run() {
 
         ph::RenderGraph render_graph;
         render_graph.clear_color = vk::ClearColorValue(std::array<float, 4>{{0, 0, 0, 1}});
-        render_graph.asset_manager = &asset_manager;
 
         demo_scene.build_render_graph(frame, render_graph);
 
@@ -111,8 +110,7 @@ void Engine::run() {
     std::ofstream out("data/ecs.bin", std::ios::binary);
     out << ecs_json;
 
-
-    asset_manager.destroy_all();
+    assets::destroy_all_assets();
     present_manager.destroy();
     imgui_renderer.destroy();
     renderer.destroy();

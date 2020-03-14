@@ -1,0 +1,125 @@
+#include <saturn/assets/assets.hpp>
+#include <saturn/assets/importers/simple_mesh.hpp>
+#include <saturn/assets/importers/stb_texture_import.hpp>
+
+#include <phobos/renderer/mesh.hpp>
+#include <phobos/renderer/texture.hpp>
+
+#include <unordered_map>
+#include <stl/assert.hpp>
+#include <stl/utility.hpp>
+
+namespace saturn::assets {
+
+namespace {
+
+template<typename T, typename IdType = stl::int64_t>
+struct id_generator {
+    static inline IdType cur = 0;
+    static IdType next() {
+        return cur++;
+    }
+};
+
+template<typename T>
+struct AssetData {
+    fs::path path;
+    T asset;
+};
+
+template<typename T>
+T* _get_internal(std::unordered_map<stl::int64_t, AssetData<T>>& data, Handle<T> handle) {
+    if (handle.id == -1) { return nullptr; }
+    auto it = data.find(handle.id);
+    if (it == data.end()) {
+        return nullptr;
+    }
+
+    else return &it->second.asset;
+}
+
+template<typename T>
+fs::path const& _get_path_internal(std::unordered_map<stl::int64_t, AssetData<T>>& data, Handle<T> handle) {
+    if (handle.id == -1) { return ""; }
+
+    auto it = data.find(handle.id);
+    if (it == data.end()) {
+        return "";
+    }
+
+    else return it->second.path;
+}
+
+template<typename T>
+Handle<T> _get_with_path_internal(std::unordered_map<stl::int64_t, AssetData<T>>& data, fs::path const& path) {
+    for (auto const&[id, asset] : data) {
+        if (asset.path == path) {
+            return { id };
+        }
+    }
+
+    return { -1 };
+}
+
+} // anonymous namespace
+
+namespace data {
+
+static std::unordered_map<stl::int64_t, AssetData<ph::Mesh>> meshes;
+static std::unordered_map<stl::int64_t, AssetData<ph::Texture>> textures;
+
+} // namespace data
+
+Handle<ph::Mesh> load_mesh(Context& ctx, fs::path const& path) {
+    auto const maybe_already_loaded_handle = _get_with_path_internal(data::meshes, path);
+    if (maybe_already_loaded_handle.id != -1) { return maybe_already_loaded_handle; }
+
+    stl::int64_t id = id_generator<ph::Mesh>::next();
+
+    ph::Mesh mesh = importers::import_simple_mesh(ctx, path);
+    data::meshes.emplace(id, AssetData<ph::Mesh>{path, stl::move(mesh)});
+
+    return { id };
+}
+
+ph::Mesh* get_mesh(Handle<ph::Mesh> handle) {
+    return _get_internal(data::meshes, handle);
+}
+
+fs::path const& get_mesh_path(Handle<ph::Mesh> handle) {
+    return _get_path_internal(data::meshes, handle);
+}
+
+
+Handle<ph::Texture> load_texture(Context& ctx, fs::path const& path) {
+    // If the path was already loaded at some point, don't load it again
+    auto const maybe_already_loaded_handle = _get_with_path_internal(data::textures, path);
+    if (maybe_already_loaded_handle.id != -1) { return maybe_already_loaded_handle; }
+
+    stl::int64_t id = id_generator<ph::Texture>::next();
+
+    ph::Texture tex = importers::import_with_stb(ctx, path);
+    data::textures.emplace(id, AssetData<ph::Texture>{path, stl::move(tex)});
+
+    return { id };
+}
+
+ph::Texture* get_texture(Handle<ph::Texture> handle) {
+    return _get_internal(data::textures, handle);
+}
+
+fs::path const& get_texture_path(Handle<ph::Texture> handle) {
+    return _get_path_internal(data::textures, handle);
+}
+
+void destroy_all_assets() {
+    for (auto&[id, mesh] : data::meshes) {
+        mesh.asset.destroy();
+    }
+
+    for (auto&[id, texture] : data::textures) {
+        texture.asset.destroy();
+    }
+}
+
+}

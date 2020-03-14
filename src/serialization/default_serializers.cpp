@@ -1,4 +1,7 @@
 #include <saturn/serialization/default_serializers.hpp>
+#include <saturn/assets/assets.hpp>
+
+static saturn::Context* serialize_context;
 
 namespace glm {
 
@@ -14,4 +17,28 @@ void to_json(nlohmann::json& j, vec3 const& v) {
     j[2] = v.z;
 }
 
+} // namespace glm
+
+namespace saturn {
+
+void set_serialize_context(Context* ctx) {
+    serialize_context = ctx;
 }
+
+void from_json(nlohmann::json const& j, Handle<ph::Mesh>& handle) {
+    handle = assets::load_mesh(*serialize_context, j.get<std::string>());
+}
+
+void to_json(nlohmann::json& j, Handle<ph::Mesh> const& handle) {
+    j = assets::get_mesh_path(handle);
+}
+
+void from_json(nlohmann::json const& j, Handle<ph::Texture>& handle) {
+    handle = assets::load_texture(*serialize_context, j.get<std::string>());
+}
+
+void to_json(nlohmann::json& j, Handle<ph::Texture> const& handle) {
+    j = assets::get_texture_path(handle);
+}
+
+} // namespace saturn

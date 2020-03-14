@@ -17,8 +17,7 @@ private:
     bool shown = true;
     bool auto_scroll = true;
 
-    static constexpr stl::size_t max_messages = 100;
-    stl::vector<std::string> messages;
+    std::string messages_str;
 };
 
 #endif

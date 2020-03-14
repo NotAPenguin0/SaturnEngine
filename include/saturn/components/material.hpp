@@ -2,12 +2,12 @@
 #define SATURN_COMPONENT_MATERIAL_HPP_
 
 #include <phobos/forward.hpp>
-#include <phobos/assets/handle.hpp>
+#include <saturn/utility/handle.hpp>
 
 namespace saturn::components {
 
 struct [[component]] Material {
-    ph::Handle<ph::Texture> texture;
+    Handle<ph::Texture> texture;
 };
 
 }

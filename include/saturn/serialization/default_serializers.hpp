@@ -2,8 +2,11 @@
 #define SATURN_DEFAULT_SERIALIZERS_HPP_
 
 #include <glm/vec3.hpp>
-#include <phobos/assets/handle.hpp>
+#include <phobos/forward.hpp>
 #include <nlohmann/json.hpp>
+
+#include <saturn/utility/handle.hpp>
+#include <saturn/utility/context.hpp>
 
 namespace glm {
 
@@ -12,17 +15,15 @@ void to_json(nlohmann::json& j, vec3 const& v);
 
 }
 
-namespace ph {
+namespace saturn {
 
-template<typename T>
-void from_json(nlohmann::json const& j, Handle<T>& handle) {
-    // Not implemented
-}
+void set_serialize_context(Context* ctx);
 
-template<typename T>
-void to_json(nlohmann::json& j, Handle<T> const& handle) {
-    // Not implemented
-}
+void from_json(nlohmann::json const& j, Handle<ph::Mesh>& handle);
+void to_json(nlohmann::json& j, Handle<ph::Mesh> const& handle);
+
+void from_json(nlohmann::json const& j, Handle<ph::Texture>& handle);
+void to_json(nlohmann::json& j, Handle<ph::Texture> const& handle);
 
 }
 
