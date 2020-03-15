@@ -4,11 +4,10 @@
 #include <stl/types.hpp>
 #include <stl/bit_flag.hpp>
 
-#include <saturn/components/material.hpp>
 #include <saturn/components/mesh_renderer.hpp>
+#include <saturn/components/static_mesh.hpp>
 #include <saturn/components/point_light.hpp>
 #include <saturn/components/transform.hpp>
-#include <saturn/components/static_mesh.hpp>
 #include <samples/components/rotator.hpp>
 
 
@@ -28,12 +27,12 @@ TypeCategory type_category() {
 }
 
 template<>
-TypeCategory type_category<components::Material>() {
+TypeCategory type_category<components::MeshRenderer>() {
     return TypeCategory::Component;
 }
 
 template<>
-TypeCategory type_category<components::MeshRenderer>() {
+TypeCategory type_category<components::StaticMesh>() {
     return TypeCategory::Component;
 }
 
@@ -44,11 +43,6 @@ TypeCategory type_category<components::PointLight>() {
 
 template<>
 TypeCategory type_category<components::Transform>() {
-    return TypeCategory::Component;
-}
-
-template<>
-TypeCategory type_category<components::StaticMesh>() {
     return TypeCategory::Component;
 }
 

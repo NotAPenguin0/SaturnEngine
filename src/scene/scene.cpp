@@ -35,10 +35,8 @@ void Scene::init_demo_scene(ph::VulkanContext* ctx) {
     Handle<assets::Model> model_handle = assets::load_model(context, "data/models/cube/cube.obj");
     
     assets::Model* model = assets::get_model(model_handle);
-    // Add dummy material component. Default material will be used anyway (TODO)
-    blueprints.add_component<Material>(model->blueprint);
     blueprints.add_component<Transform>(model->blueprint, 
-        glm::vec3(0, 0, 0), glm::vec3(0, 80.0f, 0), glm::vec3(1.3, 1.3, 1.3));
+        glm::vec3(0, 0, 0), glm::vec3(0, 80.0f, 0), glm::vec3(1, 1, 1));
     blueprints.add_component<Rotator>(model->blueprint, 
         0.0f, glm::vec3(0, 1, 0));
     ecs.import_entity(blueprints, model->blueprint);
