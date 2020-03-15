@@ -1,0 +1,7 @@
+set(SATURN_SOURCES
+    ${SATURN_SOURCES}
+
+    "${CMAKE_CURRENT_SOURCE_DIR}/rotator_system.cpp"
+
+    PARENT_SCOPE
+)

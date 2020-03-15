@@ -42,7 +42,16 @@ int main(int argc, char** argv) {
     using namespace std::chrono;
     milliseconds start = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 
+
+    std::vector<saturn::codegen::libclang_parse_result> samples;
+    if (args.get_argument("samples") == "on") {
+        samples = saturn::codegen::parse_directory("include/samples/components", config);
+    }
+
     auto results = saturn::codegen::parse_directory("include/saturn/components", config);
+    for (auto& sample : samples) {
+        results.push_back(std::move(sample));
+    }
     
     std::vector<std::thread> visitor_threads;
     saturn::codegen::VisitResult visit_results;

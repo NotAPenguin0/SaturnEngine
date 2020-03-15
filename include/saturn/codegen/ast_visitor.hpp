@@ -27,6 +27,7 @@ struct Field {
 };
 
 struct ComponentMeta {
+    std::string filename;
     std::string name;
     std::string unscoped_name;
     std::vector<Field> fields;

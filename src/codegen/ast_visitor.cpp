@@ -39,7 +39,11 @@ struct ast_visitor {
     }
     
     bool operator()(cppast::cpp_entity const& entity, cppast::visitor_info info) {
-        
+        if (entity.kind() == cppast::cpp_entity_kind::file_t) {
+            // Strip the 'include/' from the filename
+            std::string const& raw_name = entity.name();
+            filename = raw_name.substr(raw_name.find_first_of('/') + 1);
+        }
         // Update current depth if nessecary
         if (info.event == cppast::visitor_info::container_entity_enter) {
             ++depth;
@@ -51,6 +55,7 @@ struct ast_visitor {
                 cur_component_meta = ComponentMeta{};
                 cur_component_meta.name = entity.name();
                 cur_component_meta.unscoped_name = entity.name();
+                cur_component_meta.filename = filename;
             }
         } else if (info.event == cppast::visitor_info::container_entity_exit) {
             --depth;
@@ -70,7 +75,7 @@ struct ast_visitor {
     }
 
     VisitResult data;
-
+    std::string filename = "";
     ComponentMeta cur_component_meta = {};
     bool inside_component = false;
     size_t depth = 0;

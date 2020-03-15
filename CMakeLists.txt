@@ -22,6 +22,11 @@ set(CODEGEN_LINK_LIBRARIES "")
 set(CODEGEN_INCLUDE_DIRECTORIES "include" "external")
 
 option(VS_BUILD CACHE OFF)
+option(SATURN_BUILD_SAMPLES CACHE ON)
+
+if (SATURN_BUILD_SAMPLES)
+    add_subdirectory("src/samples")
+endif(SATURN_BUILD_SAMPLES)
 
 add_subdirectory("src")
 add_subdirectory("external")
@@ -40,16 +45,22 @@ set(RUN_CODEGEN_INCLUDE_DIRS
     ${PHOBOS_INCLUDE_DIRS}
 )
 
+if (SATURN_BUILD_SAMPLES)
+    set(CODEGEN_SAMPLES_ARG "on")
+else() 
+    set(CODEGEN_SAMPLES_ARG "off")
+endif()
+
 if (NOT VS_BUILD)
     add_custom_target(RunCodeGen
-        COMMAND CodeGen "-i \"${RUN_CODEGEN_INCLUDE_DIRS}\""
+        COMMAND CodeGen "-samples ${CODEGEN_SAMPLES_ARG} -i \"${RUN_CODEGEN_INCLUDE_DIRS}\""
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         BYPRODUCTS "${SATURN_GENERATED_SOURCES}"
         COMMENT "Running codegen."
     ) 
 else()
     add_custom_target(RunCodeGen
-        COMMAND CodeGen "-i \"${RUN_CODEGEN_INCLUDE_DIRS}\""
+        COMMAND CodeGen "-samples ${CODEGEN_SAMPLES_ARG} -i \"${RUN_CODEGEN_INCLUDE_DIRS}\""
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 # BYPRODUCTS doesn't work properly in the current VS version
 #        BYPRODUCTS "${SATURN_GENERATED_SOURCES}"
@@ -77,5 +88,9 @@ if (BUILD_EDITOR)
     target_compile_options(SaturnEditor PRIVATE "-Wall" "-Werror")
 
     add_dependencies(SaturnEditor SaturnEngine)
+
+    if (SATURN_BUILD_SAMPLES)
+        target_compile_definitions(SaturnEditor PRIVATE "SATURN_BUILD_SAMPLES")
+    endif(SATURN_BUILD_SAMPLES)
 endif(BUILD_EDITOR)
 

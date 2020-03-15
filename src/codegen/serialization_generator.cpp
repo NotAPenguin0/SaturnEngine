@@ -17,7 +17,7 @@ static void gen_header(VisitResult const& data) {
     auto& funcs = info["serializer_declarations"] = mustache::data::type::list;
 
     for (auto const& component : data.components) {
-        includes.push_back({"component_filename", to_filename(component.unscoped_name)});
+        includes.push_back({"component_filename", component.filename});
         funcs.push_back({"component_name", component.name});
     }
 

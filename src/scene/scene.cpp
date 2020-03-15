@@ -3,7 +3,7 @@
 #include <saturn/components/point_light.hpp>
 #include <saturn/components/static_mesh.hpp>
 #include <saturn/components/transform.hpp>
-#include <saturn/components/material.hpp>
+#include <saturn/components/mesh_renderer.hpp>
 
 #include <stb/stb_image.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -19,6 +19,9 @@
 #include <fstream>
 #include <numeric>
 
+// Temporary
+#include <samples/components/rotator.hpp>
+
 namespace saturn {
 
 void Scene::init_demo_scene(ph::VulkanContext* ctx) {
@@ -29,22 +32,23 @@ void Scene::init_demo_scene(ph::VulkanContext* ctx) {
 
     load_from_file("data/ecs.bin");
 
-    Handle<assets::Model> model_handle = assets::load_model(context, "data/models/bunny.obj");
+    Handle<assets::Model> model_handle = assets::load_model(context, "data/models/cube/cube.obj");
     
     assets::Model* model = assets::get_model(model_handle);
     // Add dummy material component. Default material will be used anyway (TODO)
     blueprints.add_component<Material>(model->blueprint);
     blueprints.add_component<Transform>(model->blueprint, 
-        glm::vec3(0, 0, 0), glm::vec3(0, 80.0f, 0), glm::vec3(0.6, 0.6, 0.6));
+        glm::vec3(0, 0, 0), glm::vec3(0, 80.0f, 0), glm::vec3(1.3, 1.3, 1.3));
+    blueprints.add_component<Rotator>(model->blueprint, 
+        0.0f, glm::vec3(0, 1, 0));
     ecs.import_entity(blueprints, model->blueprint);
 }  
 
 void Scene::build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph) {
     using namespace components;
     
-    for (auto const&[material] : ecs.view<Material>()) {
-        if (material.texture.id == -1) continue;
-        graph.materials.push_back(ph::Material{assets::get_texture(material.texture)});
+    for (auto material : assets::get_all_materials()) {
+        graph.materials.push_back(*material);
     }
 
     auto& color_attachment = frame.present_manager->get_attachment("color1");
@@ -67,12 +71,15 @@ void Scene::build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph) {
         graph.point_lights.push_back(pt_light);
     }
 
-    for (auto const&[transform, mesh, material] 
-        : ecs.view<Transform, StaticMesh, Material>()) {
+    for (auto const&[transform, mesh, mesh_renderer] 
+        : ecs.view<Transform, StaticMesh, MeshRenderer>()) {
         
         ph::RenderGraph::DrawCommand draw_cmd;
-        // TODO: Fix when we get better material component
-        draw_cmd.material_index = 0;
+        if (mesh_renderer.material.id >= 0) {
+            draw_cmd.material_index = mesh_renderer.material.id;
+        } else {
+            draw_cmd.material_index = 0;
+        }
         draw_cmd.mesh = assets::get_mesh(mesh.mesh);
 
         ph::RenderGraph::Instance instance;

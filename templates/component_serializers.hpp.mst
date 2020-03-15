@@ -4,7 +4,7 @@
 #include <nlohmann/json.hpp>
 
 {{#component_includes}}
-#include <saturn/components/{{component_filename}}.hpp>
+#include <{{component_filename}}>
 {{/component_includes}}
 
 #include <saturn/ecs/registry.hpp>

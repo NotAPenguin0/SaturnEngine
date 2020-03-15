@@ -25,6 +25,9 @@ void to_json(nlohmann::json& j, Handle<ph::Mesh> const& handle);
 void from_json(nlohmann::json const& j, Handle<ph::Texture>& handle);
 void to_json(nlohmann::json& j, Handle<ph::Texture> const& handle);
 
+void from_json(nlohmann::json const& j, Handle<ph::Material>& handle);
+void to_json(nlohmann::json& j, Handle<ph::Material> const& handle);
+
 }
 
 #endif

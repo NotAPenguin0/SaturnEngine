@@ -17,7 +17,7 @@ void generate_type_category_file(VisitResult const& data) {
     auto& includes = mst_data["component_includes"] = mustache::data::type::list;
     auto& impls = mst_data["component_category_impl"] = mustache::data::type::list;
     for (auto const& component : data.components) {
-        includes.push_back({"component_filename", to_filename(component.unscoped_name)});
+        includes.push_back({"component_filename", component.filename});
         impls.push_back({"component_unscoped_name", component.unscoped_name});
     }
 

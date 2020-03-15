@@ -5,6 +5,7 @@
 
 #include <phobos/renderer/mesh.hpp>
 #include <phobos/renderer/texture.hpp>
+#include <phobos/renderer/material.hpp>
 
 #include <unordered_map>
 #include <stl/assert.hpp>
@@ -40,6 +41,17 @@ T* _get_internal(std::unordered_map<stl::int64_t, AssetData<T>>& data, Handle<T>
 }
 
 template<typename T>
+stl::vector<T*> _get_all_internal(std::unordered_map<stl::int64_t, AssetData<T>>& data) {
+    stl::vector<T*> assets(stl::tags::uninitialized, data.size());
+    for (auto&[id, asset] : data) {
+        if (id >= 0) {
+            assets[id] = &asset.asset;
+        }
+    }
+    return assets;
+}
+
+template<typename T>
 fs::path const& _get_path_internal(std::unordered_map<stl::int64_t, AssetData<T>>& data, Handle<T> handle) {
     if (handle.id == -1) { return ""; }
 
@@ -69,6 +81,7 @@ namespace data {
 static std::unordered_map<stl::int64_t, AssetData<ph::Mesh>> meshes;
 static std::unordered_map<stl::int64_t, AssetData<ph::Texture>> textures;
 static std::unordered_map<stl::int64_t, AssetData<Model>> models;
+static std::unordered_map<stl::int64_t, AssetData<ph::Material>> materials;
 
 } // namespace data
 
@@ -143,6 +156,37 @@ Model* get_model(Handle<Model> handle) {
 
 fs::path const& get_model_path(Handle<Model> handle) {
     return _get_path_internal(data::models, handle);
+}
+
+Handle<ph::Material> take_material(ph::Material& material) {
+    stl::int64_t id = id_generator<ph::Mesh>::next();
+
+    data::materials.emplace(id, AssetData<ph::Material>{"", stl::move(material)});
+
+    return { id };
+}
+
+Handle<ph::Material> load_material(Context& ctx, fs::path const& path) {
+    auto const maybe_already_loaded_handle = _get_with_path_internal(data::materials, path);
+    if (maybe_already_loaded_handle.id != -1) { return maybe_already_loaded_handle; }
+
+    stl::int64_t id = id_generator<Model>::next();
+
+    // TODO: No mtl importer yet
+
+    return { -1 };
+}
+
+ph::Material* get_material(Handle<ph::Material> handle) {
+    return _get_internal(data::materials, handle);
+}
+
+fs::path const& get_material_path(Handle<ph::Material> handle) {
+    return _get_path_internal(data::materials, handle);
+}
+
+stl::vector<ph::Material*> get_all_materials() {
+    return _get_all_internal(data::materials);
 }
 
 void destroy_all_assets() {

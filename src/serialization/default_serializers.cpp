@@ -46,4 +46,21 @@ void to_json(nlohmann::json& j, Handle<ph::Texture> const& handle) {
     j = assets::get_texture_path(handle).generic_string();
 }
 
+
+void from_json(nlohmann::json const& j, Handle<ph::Material>& handle) {
+    /*if (j.is_null()) { 
+        handle.id = -1; 
+    } else {
+        handle = assets::load_texture(*serialize_context, j.get<std::string>());
+    }
+    */
+   handle.id = -1;
+}
+
+void to_json(nlohmann::json& j, Handle<ph::Material> const& handle) {
+    /*if (handle.id == -1) { return; }
+    j = assets::get_texture_path(handle).generic_string();
+    */
+}
+
 } // namespace saturn

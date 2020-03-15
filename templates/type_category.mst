@@ -5,7 +5,7 @@
 #include <stl/bit_flag.hpp>
 
 {{#component_includes}}
-#include <saturn/components/{{component_filename}}.hpp>
+#include <{{component_filename}}>
 {{/component_includes}}
 
 
