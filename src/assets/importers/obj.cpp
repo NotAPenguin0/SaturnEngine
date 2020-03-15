@@ -73,7 +73,7 @@ static void add_mesh(Context& ctx, ModelMaterials const& materials, Model model,
 
     // Add default transform component
     blueprints.add_component<Transform>(model.blueprint,
-        glm::vec3(0, 0, 0), glm::vec3(0, 90, 0), glm::vec3(0.02, 0.02, 0.02));
+        glm::vec3(0, -3, 0), glm::vec3(0, 90, 0), glm::vec3(0.005, 0.005, 0.005));
     blueprints.add_component<StaticMesh>(model.blueprint, handle);
     // Add the material for this mesh
     Handle<ph::Material> material = materials[mesh->mMaterialIndex];

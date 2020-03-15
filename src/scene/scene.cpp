@@ -32,11 +32,11 @@ void Scene::init_demo_scene(ph::VulkanContext* ctx) {
 
     load_from_file("data/ecs.bin");
 
-    Handle<assets::Model> model_handle = assets::load_model(context, "data/models/teapot/teapot.obj");
+    Handle<assets::Model> model_handle = assets::load_model(context, "data/models/sponza/sponza.obj");
     
     assets::Model* model = assets::get_model(model_handle);
-//    blueprints.add_component<Rotator>(model->blueprint, 
-//        0.0f, glm::vec3(0, 1, 0));
+    blueprints.add_component<Rotator>(model->blueprint, 
+        0.0f, glm::vec3(0, 1, 0));
     ecs.import_entity(blueprints, model->blueprint);
 }  
 

@@ -18,7 +18,16 @@ public:
     public:
         iterator() = default;
         iterator(view_type& view, component_storage_base::iterator entity, component_storage_base::iterator end) 
-            : view(&view), entity(entity), end(end) {}
+            : view(&view), entity(entity), end(end) {
+            // Only do this if we're not at the end
+            if (entity != end) {
+                // If the current entity doesn't match
+                if (!((std::get<component_storage<Ts>*>(view)->find(*entity) != std::get<component_storage<Ts>*>(view)->end()) && ...)) {
+                    // Advance until we find a match, or end()
+                    advance_to_next();
+                }
+            }
+        }
 
         iterator(iterator const&) = default;
 
