@@ -32,7 +32,7 @@ void LogWindow::show_gui() {
         ImGui::PopStyleVar();
 
         // Scroll to bottom. Only enable this if auto scroll is enabled
-        if (auto_scroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) {
+        if (auto_scroll && (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())) {
             ImGui::SetScrollHereY(1.0f);
         }
 
