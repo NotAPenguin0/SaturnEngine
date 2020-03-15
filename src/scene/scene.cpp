@@ -48,7 +48,7 @@ void Scene::build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph) {
     }
 
     auto& color_attachment = frame.present_manager->get_attachment("color1");
-    glm::mat4 view = glm::lookAt(glm::vec3(2, 2, 0), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+    glm::mat4 view = glm::lookAt(glm::vec3(2, 2, 0), glm::vec3(0, 3, 0), glm::vec3(0, 1, 0));
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), 
         (float)color_attachment.get_width() / (float)color_attachment.get_height(), 0.1f, 100.0f);
     projection[1][1] *= -1;

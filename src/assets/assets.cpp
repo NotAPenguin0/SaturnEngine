@@ -11,6 +11,8 @@
 #include <stl/assert.hpp>
 #include <stl/utility.hpp>
 
+#include <string>
+
 namespace saturn::assets {
 
 namespace {
@@ -88,7 +90,7 @@ static std::unordered_map<stl::int64_t, AssetData<ph::Material>> materials;
 Handle<ph::Mesh> take_mesh(ph::Mesh& mesh) {
     stl::int64_t id = id_generator<ph::Mesh>::next();
 
-    data::meshes.emplace(id, AssetData<ph::Mesh>{"", stl::move(mesh)});
+    data::meshes.emplace(id, AssetData<ph::Mesh>{std::to_string(id), stl::move(mesh)});
 
     return { id };
 }
