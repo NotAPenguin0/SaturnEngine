@@ -55,10 +55,13 @@ void from_json(nlohmann::json const& j, registry& ecs) {
 
 void to_json(nlohmann::json& j, registry const& ecs) {
     j = nlohmann::json::array();
-    for (entity_t ent : ecs.get_entities()) {
+    // TODO: Serialize parent somehow
+    auto serialize_fn = [&j, &ecs](entity_t entity, stl::tree<entity_t>::const_traverse_info const& info) {
         nlohmann::json& ent_json = j.emplace_back(nlohmann::json::object());
-        serialize_from_entity(ent_json, ecs, ent);
-    }
+        serialize_from_entity(ent_json, ecs, entity);
+    };
+
+    ecs.get_entities().traverse(serialize_fn);
 }
 
 }

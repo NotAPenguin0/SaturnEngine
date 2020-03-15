@@ -6,13 +6,14 @@
 #include <saturn/ecs/component_view.hpp>
 
 #include <stl/vector.hpp>
+#include <stl/tree.hpp>
 #include <stl/unique_ptr.hpp>
 
 namespace saturn::ecs {
 
 class registry {
 public:
-    registry() = default;
+    registry();
     registry(registry const&) = delete;
     registry(registry&&) = default;
     
@@ -21,7 +22,7 @@ public:
 
     ~registry() = default;
 
-    entity_t create_entity();
+    entity_t create_entity(entity_t parent = 0);
 
     // 'Imports' an entity from registry [source] to this registry. Effectively makes a copy of all entity data
     entity_t import_entity(registry& source, entity_t other);
@@ -57,7 +58,7 @@ public:
         return { get_or_emplace_storage<Ts>() ... };
     }
 
-    stl::vector<entity_t> const& get_entities() const;
+    stl::tree<entity_t> const& get_entities() const;
 
 private:
     struct storage_data {
@@ -113,7 +114,7 @@ private:
         return *static_cast<component_storage<T> const*>(storage.storage.get());
     }
 
-    stl::vector<entity_t> entities;
+    stl::tree<entity_t> entities;
     mutable stl::vector<storage_data> storages;
 };
 

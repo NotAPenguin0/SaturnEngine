@@ -16,15 +16,6 @@ void to_json(nlohmann::json& j, MeshRenderer const& component) {
 }
 
 
-void from_json(nlohmann::json const& j, StaticMesh& component) {
-    component.mesh = j["mesh"];
-}
-
-void to_json(nlohmann::json& j, StaticMesh const& component) {
-    j["mesh"] = component.mesh;
-}
-
-
 void from_json(nlohmann::json const& j, PointLight& component) {
     component.ambient = j["ambient"];
     component.diffuse = j["diffuse"];
@@ -35,6 +26,15 @@ void to_json(nlohmann::json& j, PointLight const& component) {
     j["ambient"] = component.ambient;
     j["diffuse"] = component.diffuse;
     j["specular"] = component.specular;
+}
+
+
+void from_json(nlohmann::json const& j, StaticMesh& component) {
+    component.mesh = j["mesh"];
+}
+
+void to_json(nlohmann::json& j, StaticMesh const& component) {
+    j["mesh"] = component.mesh;
 }
 
 
@@ -73,13 +73,13 @@ void deserialize_into_entity(nlohmann::json const& j, registry& ecs, entity_t en
         ecs.add_component<MeshRenderer>(entity);
         ecs.get_component<MeshRenderer>(entity) = *json_it;
     }
-    if (auto json_it = j.find("StaticMesh"); json_it != j.end()) {
-        ecs.add_component<StaticMesh>(entity);
-        ecs.get_component<StaticMesh>(entity) = *json_it;
-    }
     if (auto json_it = j.find("PointLight"); json_it != j.end()) {
         ecs.add_component<PointLight>(entity);
         ecs.get_component<PointLight>(entity) = *json_it;
+    }
+    if (auto json_it = j.find("StaticMesh"); json_it != j.end()) {
+        ecs.add_component<StaticMesh>(entity);
+        ecs.get_component<StaticMesh>(entity) = *json_it;
     }
     if (auto json_it = j.find("Transform"); json_it != j.end()) {
         ecs.add_component<Transform>(entity);
@@ -96,11 +96,11 @@ void serialize_from_entity(nlohmann::json& j, registry const& ecs, entity_t enti
     if (ecs.has_component<MeshRenderer>(entity)) {
         j["MeshRenderer"] = ecs.get_component<MeshRenderer>(entity);
     }
-    if (ecs.has_component<StaticMesh>(entity)) {
-        j["StaticMesh"] = ecs.get_component<StaticMesh>(entity);
-    }
     if (ecs.has_component<PointLight>(entity)) {
         j["PointLight"] = ecs.get_component<PointLight>(entity);
+    }
+    if (ecs.has_component<StaticMesh>(entity)) {
+        j["StaticMesh"] = ecs.get_component<StaticMesh>(entity);
     }
     if (ecs.has_component<Transform>(entity)) {
         j["Transform"] = ecs.get_component<Transform>(entity);
@@ -119,10 +119,13 @@ void from_json(nlohmann::json const& j, registry& ecs) {
 
 void to_json(nlohmann::json& j, registry const& ecs) {
     j = nlohmann::json::array();
-    for (entity_t ent : ecs.get_entities()) {
+    // TODO: Serialize parent somehow
+    auto serialize_fn = [&j, &ecs](entity_t entity, stl::tree<entity_t>::const_traverse_info const& info) {
         nlohmann::json& ent_json = j.emplace_back(nlohmann::json::object());
-        serialize_from_entity(ent_json, ecs, ent);
-    }
+        serialize_from_entity(ent_json, ecs, entity);
+    };
+
+    ecs.get_entities().traverse(serialize_fn);
 }
 
 }
