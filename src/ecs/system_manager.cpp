@@ -2,9 +2,9 @@
 
 namespace saturn::ecs {
 
-void system_manager::startup(ph::VulkanContext& ctx) {
+void system_manager::startup(ph::VulkanContext& ctx, Scene& scene) {
     for (auto& sys : systems) {
-        sys->startup(ctx);
+        sys->startup(ctx, scene);
     }
 }
 

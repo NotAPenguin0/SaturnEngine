@@ -3,6 +3,7 @@
 #include <saturn/components/point_light.hpp>
 #include <saturn/components/static_mesh.hpp>
 #include <saturn/components/transform.hpp>
+#include <saturn/components/camera.hpp>
 #include <saturn/components/mesh_renderer.hpp>
 
 #include <stb/stb_image.h>
@@ -19,9 +20,6 @@
 #include <fstream>
 #include <numeric>
 
-// Temporary
-#include <samples/components/rotator.hpp>
-
 namespace saturn {
 
 void Scene::init_demo_scene(ph::VulkanContext* ctx) {
@@ -32,31 +30,40 @@ void Scene::init_demo_scene(ph::VulkanContext* ctx) {
 
     load_from_file("data/ecs.bin");
 
+    // Create camera entity
+    main_camera = ecs.create_entity();
+    ecs.add_component<Camera>(main_camera);
+    ecs.add_component<Transform>(main_camera, glm::vec3(2, 2, 0), glm::vec3(0, 0, 0), glm::vec3(1, 1, 1));
+
     Handle<assets::Model> model_handle = assets::load_model(context, "data/models/sponza/sponza.obj");
     
     assets::Model* model = assets::get_model(model_handle);
-    blueprints.add_component<Rotator>(model->blueprint, 
-        0.0f, glm::vec3(0, 1, 0));
     ecs.import_entity(blueprints, model->blueprint);
 }  
 
 void Scene::build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph) {
     using namespace components;
     
+    // Gather materials
     for (auto material : assets::get_all_materials()) {
         graph.materials.push_back(*material);
     }
 
     auto& color_attachment = frame.present_manager->get_attachment("color1");
-    glm::mat4 view = glm::lookAt(glm::vec3(2, 2, 0), glm::vec3(0, 3, 0), glm::vec3(0, 1, 0));
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 
-        (float)color_attachment.get_width() / (float)color_attachment.get_height(), 0.1f, 100.0f);
-    projection[1][1] *= -1;
 
-    graph.view = view;
-    graph.projection = projection;
-    graph.camera_pos = glm::vec3(2, 2, 0);
+    // Setup camera data
+    for (auto [transform, camera] : ecs.view<Transform, Camera>()) {
+        graph.camera_pos = transform.position;
+        graph.view = glm::lookAt(transform.position, transform.position + camera.front, camera.up);
+        graph.projection = glm::perspective(camera.fov, 
+            (float)color_attachment.get_width() / (float)color_attachment.get_height(), 0.1f, 100.0f);
+        // Flip projection because vulkan
+        graph.projection[1][1] *= -1;
+        // Only a single camera entity is supported atm
+        break;
+    }
 
+    // Setup light data
     for (auto const&[transform, light] : ecs.view<Transform, PointLight>()) {
         ph::PointLight pt_light;
         pt_light.position = transform.position;
@@ -67,6 +74,7 @@ void Scene::build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph) {
         graph.point_lights.push_back(pt_light);
     }
 
+    // Meshes to render
     for (auto const&[transform, mesh, mesh_renderer] 
         : ecs.view<Transform, StaticMesh, MeshRenderer>()) {
         

@@ -6,6 +6,8 @@
 #include <stl/vector.hpp>
 #include <string>
 
+namespace editor {
+
 class LogWindow : public ph::log::LogInterface {
 public:
     LogWindow();
@@ -19,5 +21,7 @@ private:
 
     std::string messages_str;
 };
+
+}
 
 #endif

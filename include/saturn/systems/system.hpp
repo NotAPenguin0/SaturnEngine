@@ -11,7 +11,7 @@ public:
     System() = default;
     virtual ~System() = default;
 
-    virtual void startup(ph::VulkanContext& ctx) {};
+    virtual void startup(ph::VulkanContext&, Scene&) {};
     virtual void update(FrameContext& ctx) = 0;
 };
 

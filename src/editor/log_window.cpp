@@ -3,6 +3,8 @@
 #include <imgui/imgui.h>
 #include <iostream>
 
+namespace editor {
+
 LogWindow::LogWindow() {
 
 }
@@ -44,4 +46,6 @@ void LogWindow::show_gui() {
 void LogWindow::write(ph::log::Severity severity, std::string_view str) {
     messages_str += str;
     messages_str += "\n";
+}
+
 }

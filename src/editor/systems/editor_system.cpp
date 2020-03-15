@@ -1,4 +1,4 @@
-#include <editor/editor_system.hpp>
+#include <editor/systems/editor_system.hpp>
 #include <phobos/present/present_manager.hpp>
 
 #include <phobos/util/cmdbuf_util.hpp>
@@ -6,11 +6,13 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_vulkan.h>
 
+namespace editor {
+
 EditorSystem::EditorSystem(LogWindow* log_window) : log_window(log_window) {
 
 }
 
-void EditorSystem::startup(ph::VulkanContext& ctx) {
+void EditorSystem::startup(ph::VulkanContext& ctx, saturn::Scene&) {
     ImGuiIO io = ImGui::GetIO();
     editor_font = io.Fonts->AddFontFromFileTTF("data/fonts/heebo/Heebo-Regular.ttf", 16.0f);
 
@@ -68,4 +70,6 @@ void EditorSystem::update(saturn::FrameContext& ctx) {
 
     // End dockspace window
     ImGui::End();
+}
+
 }

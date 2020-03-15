@@ -1,6 +1,7 @@
 #include <saturn/core/engine.hpp>
 
-#include <editor/editor_system.hpp>
+#include <editor/systems/editor_system.hpp>
+#include <editor/systems/camera.hpp>
 #include <editor/log_window.hpp>
 
 #ifdef SATURN_BUILD_SAMPLES
@@ -8,9 +9,10 @@
 #endif
 
 int main() {
-    LogWindow log_window;
+    editor::LogWindow log_window;
     saturn::Engine engine(&log_window);
-    engine.get_systems().add_system<EditorSystem>(&log_window);
+    engine.get_systems().add_system<editor::EditorSystem>(&log_window);
+    engine.get_systems().add_system<editor::CameraSystem>();
 #ifdef SATURN_BUILD_SAMPLES
     engine.get_systems().add_system<samples::RotatorSystem>();
 #endif

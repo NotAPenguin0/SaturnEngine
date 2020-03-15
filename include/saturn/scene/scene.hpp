@@ -17,6 +17,8 @@ public:
     // Stores entity blueprints
     ecs::registry blueprints;
 
+    ecs::entity_t main_camera;
+
     void init_demo_scene(ph::VulkanContext* ctx);
     void build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph);
 

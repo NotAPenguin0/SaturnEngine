@@ -5,12 +5,16 @@
 #include <saturn/ecs/registry.hpp>
 #include <phobos/present/frame_info.hpp>
 
+#include <phobos/forward.hpp>
+
 namespace saturn {
 
 struct FrameContext {
+    ph::VulkanContext* vulkan;
     Scene& scene;
     ecs::registry& ecs;
     ph::FrameInfo& render_info;
+    float delta_time = 0;
 };  
 
 }

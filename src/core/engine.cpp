@@ -1,4 +1,5 @@
 #include <saturn/core/engine.hpp>
+#include <saturn/core/input.hpp>
 
 #include <phobos/core/window_context.hpp>
 #include <phobos/core/vulkan_context.hpp>
@@ -40,6 +41,8 @@ Engine::Engine(ph::log::LogInterface* logger) {
     settings.version = ph::Version{0, 0, 1};
     vulkan_context = ph::create_vulkan_context(*window_context, logger, settings);
 
+    Input::initialize(*window_context);
+
      // Initialize ImGui
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -60,6 +63,7 @@ void Engine::run() {
     ph::PresentManager present_manager(*vulkan_context);
     ph::Renderer renderer(*vulkan_context);
 
+
     ph::ImGuiRenderer imgui_renderer(*window_context, *vulkan_context);
 
     Scene demo_scene;
@@ -68,18 +72,21 @@ void Engine::run() {
     present_manager.add_color_attachment("color1");
     present_manager.add_depth_attachment("depth1");
 
-    systems.startup(*vulkan_context);
+    systems.startup(*vulkan_context, demo_scene);
 
     while(window_context->is_open()) { 
         window_context->poll_events();
-    
+        InputEventManager::process_events();
+
         present_manager.wait_for_available_frame();
 
         imgui_renderer.begin_frame();
 
         ph::FrameInfo& frame = present_manager.get_frame_info();
 
-        FrameContext frame_ctx { demo_scene, demo_scene.ecs, frame };
+        float delta_time = ImGui::GetIO().DeltaTime;
+
+        FrameContext frame_ctx { vulkan_context, demo_scene, demo_scene.ecs, frame, delta_time };
         systems.update_all(frame_ctx);
 
         auto& color_attachment = present_manager.get_attachment("color1");

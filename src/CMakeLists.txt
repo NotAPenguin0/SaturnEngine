@@ -8,6 +8,7 @@ set(SATURN_SOURCES
 
     # Core
     "${CMAKE_CURRENT_SOURCE_DIR}/core/engine.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/core/input.cpp"
 
     # Scene
     "${CMAKE_CURRENT_SOURCE_DIR}/scene/scene.cpp"

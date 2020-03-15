@@ -47,10 +47,17 @@ int main(int argc, char** argv) {
     if (args.get_argument("samples") == "on") {
         samples = saturn::codegen::parse_directory("include/samples/components", config);
     }
+    std::vector<saturn::codegen::libclang_parse_result> editor;
+    if (args.get_argument("editor") == "on") {
+        editor = saturn::codegen::parse_directory("include/editor/components", config);
+    }
 
     auto results = saturn::codegen::parse_directory("include/saturn/components", config);
     for (auto& sample : samples) {
         results.push_back(std::move(sample));
+    }
+    for (auto& editor_result : editor) {
+        results.push_back(std::move(editor_result));
     }
     
     std::vector<std::thread> visitor_threads;

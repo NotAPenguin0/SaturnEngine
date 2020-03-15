@@ -23,6 +23,7 @@ set(CODEGEN_INCLUDE_DIRECTORIES "include" "external")
 
 option(VS_BUILD CACHE OFF)
 option(SATURN_BUILD_SAMPLES CACHE ON)
+option(BUILD_EDITOR CACHE ON)
 
 if (SATURN_BUILD_SAMPLES)
     add_subdirectory("src/samples")
@@ -49,18 +50,24 @@ if (SATURN_BUILD_SAMPLES)
     set(CODEGEN_SAMPLES_ARG "on")
 else() 
     set(CODEGEN_SAMPLES_ARG "off")
-endif()
+endif(SATURN_BUILD_SAMPLES)
+
+if (BUILD_EDITOR)
+    set(CODEGEN_EDITOR_ARG "on")
+else()
+    set(CODEGEN_EDITOR_ARG "off")
+endif(BUILD_EDITOR)
 
 if (NOT VS_BUILD)
     add_custom_target(RunCodeGen
-        COMMAND CodeGen "-samples ${CODEGEN_SAMPLES_ARG} -i \"${RUN_CODEGEN_INCLUDE_DIRS}\""
+        COMMAND CodeGen "-samples ${CODEGEN_SAMPLES_ARG} -editor ${CODEGEN_EDITOR_ARG} -i \"${RUN_CODEGEN_INCLUDE_DIRS}\""
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         BYPRODUCTS "${SATURN_GENERATED_SOURCES}"
         COMMENT "Running codegen."
     ) 
 else()
     add_custom_target(RunCodeGen
-        COMMAND CodeGen "-samples ${CODEGEN_SAMPLES_ARG} -i \"${RUN_CODEGEN_INCLUDE_DIRS}\""
+        COMMAND CodeGen "-samples ${CODEGEN_SAMPLES_ARG} -editor ${CODEGEN_EDITOR_ARG} -i \"${RUN_CODEGEN_INCLUDE_DIRS}\""
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 # BYPRODUCTS doesn't work properly in the current VS version
 #        BYPRODUCTS "${SATURN_GENERATED_SOURCES}"
@@ -78,7 +85,6 @@ add_dependencies(SaturnEngine RunCodeGen)
 
 #target_compile_options(SaturnEngine PUBLIC "-ftime-trace")
 
-option(BUILD_EDITOR CACHE ON)
 if (BUILD_EDITOR)
     add_executable(SaturnEditor)
     target_include_directories(SaturnEditor PUBLIC ${SATURN_INCLUDE_DIRECTORIES})
