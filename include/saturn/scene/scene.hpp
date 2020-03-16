@@ -22,8 +22,8 @@ public:
     void init_demo_scene(ph::VulkanContext* ctx);
     void build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph);
 
-    void save_to_file(fs::path const& path);
-    void load_from_file(fs::path const& path);
+    void save_to_file(ecs::registry const& registry, fs::path const& path);
+    void load_from_file(ecs::registry& registry, fs::path const& path);
 };
 
 } // namespace saturn

@@ -5,6 +5,7 @@
 #include <saturn/components/transform.hpp>
 #include <saturn/components/camera.hpp>
 #include <saturn/components/mesh_renderer.hpp>
+#include <saturn/components/name.hpp>
 
 #include <stb/stb_image.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -28,10 +29,12 @@ void Scene::init_demo_scene(ph::VulkanContext* ctx) {
     static Context context { ctx, this };
     set_serialize_context(&context);
 
-    load_from_file("data/ecs.bin");
+    load_from_file(ecs, "data/ecs.bin");
+    load_from_file(blueprints, "data/blueprints.bin");
 
     // Create camera entity
     main_camera = ecs.create_entity();
+    ecs.add_component<Name>(main_camera, "Main Camera");
     ecs.add_component<Camera>(main_camera);
     ecs.add_component<Transform>(main_camera, glm::vec3(2, 2, 0), glm::vec3(0, 0, 0), glm::vec3(1, 1, 1));
 
@@ -102,18 +105,18 @@ void Scene::build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph) {
     }
 }
 
-void Scene::save_to_file(fs::path const& path) {
+void Scene::save_to_file(ecs::registry const& registry, fs::path const& path) {
     nlohmann::json ecs_json;
-    ecs_json = ecs;
-    std::ofstream out("data/ecs.bin", std::ios::binary);
+    ecs_json = registry;
+    std::ofstream out(path, std::ios::binary);
     out << ecs_json;
 }
 
-void Scene::load_from_file(fs::path const& path) {
+void Scene::load_from_file(ecs::registry& registry, fs::path const& path) {
     std::ifstream file(path);
     nlohmann::json j;
     file >> j;
-    ecs = j;
+    registry = j;
 }
 
 } // namespace saturn

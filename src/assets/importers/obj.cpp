@@ -5,6 +5,7 @@
 #include <saturn/components/static_mesh.hpp>
 #include <saturn/components/mesh_renderer.hpp>
 #include <saturn/components/transform.hpp>
+#include <saturn/components/name.hpp>
 
 #include <phobos/renderer/mesh.hpp>
 #include <phobos/renderer/material.hpp>
@@ -24,7 +25,6 @@ namespace saturn::assets::importers {
 using ModelMaterials = stl::vector<Handle<ph::Material>>;
 
 static void add_mesh(Context& ctx, ModelMaterials const& materials, Model model, aiMesh const* mesh, aiScene const* scene) {
-    
     ph::Mesh::CreateInfo info;
     info.ctx = ctx.vulkan;
     // Position, Normal, TexCoord
@@ -78,6 +78,7 @@ static void add_mesh(Context& ctx, ModelMaterials const& materials, Model model,
     // Add the material for this mesh
     Handle<ph::Material> material = materials[mesh->mMaterialIndex];
     blueprints.add_component<MeshRenderer>(model.blueprint, material);
+    blueprints.add_component<Name>(model.blueprint, mesh->mName.C_Str());
 }
 
 static void process_node(Context& ctx, ModelMaterials const& materials, Model cur_entity, aiNode const* node, aiScene const* scene) {
@@ -126,8 +127,10 @@ static ModelMaterials load_materials(Context& ctx, fs::path const& cwd, aiScene 
 }
 
 Model import_obj_model(Context& ctx, fs::path const& path) {
+    using namespace saturn::components;
     // A model is simply a blueprint entity
     ecs::entity_t blueprint_root = ctx.scene->blueprints.create_entity();
+    ctx.scene->blueprints.add_component<Name>(blueprint_root, path.stem().generic_string());
 
     constexpr int postprocess = aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals;
     Assimp::Importer importer;

@@ -8,8 +8,7 @@
 namespace saturn::ecs {
 
 registry::registry() {
-    // Create root entity. This entity is defined to have ID 0
-    *entities.root() = id_generator.next();
+
 }
 
 entity_t registry::create_entity(entity_t parent) {
