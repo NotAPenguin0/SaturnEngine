@@ -6,13 +6,14 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_vulkan.h>
 
+#include <editor/widgets/entity_tree.hpp>
+
 namespace editor {
 
 EditorSystem::EditorSystem(LogWindow* log_window) : log_window(log_window) {
-
 }
 
-void EditorSystem::startup(ph::VulkanContext& ctx, saturn::Scene&) {
+void EditorSystem::startup(ph::VulkanContext& ctx, saturn::Scene& scene) {
     ImGuiIO io = ImGui::GetIO();
     editor_font = io.Fonts->AddFontFromFileTTF("data/fonts/heebo/Heebo-Regular.ttf", 16.0f);
 
@@ -24,6 +25,10 @@ void EditorSystem::startup(ph::VulkanContext& ctx, saturn::Scene&) {
     ph::end_single_time_command_buffer(ctx, cmd_buf);
     ctx.device.waitIdle();
     ImGui_ImplVulkan_DestroyFontUploadObjects();
+
+    // Add widgets
+    widgets.push_back(stl::make_unique<EntityTree>("Scene Tree", scene.ecs));
+    widgets.push_back(stl::make_unique<EntityTree>("Blueprints Tree", scene.blueprints));
 }
 
 void EditorSystem::update(saturn::FrameContext& ctx) {
@@ -65,6 +70,11 @@ void EditorSystem::update(saturn::FrameContext& ctx) {
     ImGui::End();
 
     log_window->show_gui();
+
+    // Show all widgets
+    for (auto& widget : widgets) {
+        if (widget->is_shown()) { widget->show(ctx); }
+    }
 
     ImGui::PopFont();
 

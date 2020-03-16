@@ -2,7 +2,7 @@
 
 #include <editor/systems/editor_system.hpp>
 #include <editor/systems/camera.hpp>
-#include <editor/log_window.hpp>
+#include <editor/widgets/log_window.hpp>
 
 #ifdef SATURN_BUILD_SAMPLES
     #include <samples/rotator_system.hpp>

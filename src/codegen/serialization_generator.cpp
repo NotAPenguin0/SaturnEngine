@@ -22,8 +22,10 @@ static void gen_header(VisitResult const& data) {
     }
 
     std::string generated = must.render(info);
+
     std::ofstream out("include/saturn/serialization/component_serializers.hpp");
     out << generated;
+
 }
 
 static void gen_src(VisitResult const& data) {
@@ -53,8 +55,10 @@ static void gen_src(VisitResult const& data) {
     }
 
     std::string generated = must.render(info);
+
     std::ofstream out("src/serialization/component_serializers.generated.cpp");
     out << generated;
+
 }
 
 void generate_serialization_files(VisitResult const& data) {

@@ -22,9 +22,10 @@ void generate_type_category_file(VisitResult const& data) {
     }
 
     std::string generated = mst.render(mst_data);
-
+    
     std::ofstream out("include/saturn/meta/type_category.hpp");
     out << generated;
+
 }
 
 }

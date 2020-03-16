@@ -3,7 +3,11 @@
 
 #include <saturn/systems/system.hpp>
 
-#include <editor/log_window.hpp>
+#include <editor/widgets/widget.hpp>
+#include <editor/widgets/log_window.hpp>
+
+#include <stl/vector.hpp>
+#include <stl/unique_ptr.hpp>
 
 struct ImFont;
 
@@ -13,11 +17,13 @@ class EditorSystem : public saturn::systems::System {
 public:
     EditorSystem(LogWindow* log_window);
 
-    void startup(ph::VulkanContext& ctx, saturn::Scene&) override;
+    void startup(ph::VulkanContext& ctx, saturn::Scene& scene) override;
     void update(saturn::FrameContext& ctx) override;
 private:
     LogWindow* log_window;
     ImFont* editor_font;
+
+    stl::vector<stl::unique_ptr<Widget>> widgets;
 };
 
 }

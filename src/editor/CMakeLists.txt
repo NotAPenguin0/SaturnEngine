@@ -4,5 +4,7 @@ target_sources(SaturnEditor PUBLIC
 
     "systems/editor_system.cpp"
     "systems/camera.cpp"
-    "log_window.cpp"
+
+    "widgets/log_window.cpp"
+    "widgets/entity_tree.cpp"
 )

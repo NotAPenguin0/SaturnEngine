@@ -3,8 +3,8 @@
 
 #include <nlohmann/json.hpp>
 
-#include <saturn/components/camera.hpp>
 #include <saturn/components/mesh_renderer.hpp>
+#include <saturn/components/camera.hpp>
 #include <saturn/components/point_light.hpp>
 #include <saturn/components/static_mesh.hpp>
 #include <saturn/components/transform.hpp>
@@ -15,11 +15,11 @@
 
 namespace saturn::components {
 
-void from_json(nlohmann::json const& j, Camera& component);
-void to_json(nlohmann::json& j, Camera const& component);
-
 void from_json(nlohmann::json const& j, MeshRenderer& component);
 void to_json(nlohmann::json& j, MeshRenderer const& component);
+
+void from_json(nlohmann::json const& j, Camera& component);
+void to_json(nlohmann::json& j, Camera const& component);
 
 void from_json(nlohmann::json const& j, PointLight& component);
 void to_json(nlohmann::json& j, PointLight const& component);

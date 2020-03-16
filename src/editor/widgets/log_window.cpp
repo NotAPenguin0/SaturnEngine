@@ -1,4 +1,4 @@
-#include <editor/log_window.hpp>
+#include <editor/widgets/log_window.hpp>
 
 #include <imgui/imgui.h>
 #include <iostream>
