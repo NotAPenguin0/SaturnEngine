@@ -19,21 +19,21 @@ void LogWindow::show_gui() {
 
         ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.22f, 0.22f, 0.22f, 1.0f));
 		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.22f, 0.22f, 0.22f, 1.0f));
-        ImGui::BeginChild("##log_scroll_region", ImVec2(0, 0), false, ImGuiWindowFlags_NoScrollbar);
+        ImGui::BeginChild("##log_scroll_region", ImVec2(0, 0), false);
 
         // Display messages
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1));
         ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.14f, 0.14f, 0.14f, 1.00f));
         // Show log as an input text widget spanning the entire size of the window
         // TODO: Figure out how to correctly use the clipboard
-        ImGui::InputTextMultiline("##log_text", messages_str.data(), messages_str.size(), 
-            ImGui::GetContentRegionAvail(), ImGuiInputTextFlags_ReadOnly);
+        ImGui::TextWrapped("%s", messages_str.c_str());
         ImGui::PopStyleColor();
         ImGui::PopStyleVar();
 
         // Scroll to bottom. Only enable this if auto scroll is enabled
         if (auto_scroll && (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())) {
             ImGui::SetScrollHereY(1.0f);
+            
         }
 
         ImGui::EndChild();
@@ -44,8 +44,10 @@ void LogWindow::show_gui() {
 }
 
 void LogWindow::write(ph::log::Severity severity, std::string_view str) {
-    messages_str += str;
+    (messages_str += get_timestamp_string() += " ") += str;
     messages_str += "\n";
+
+    std::cout << str << "\n";
 }
 
 }

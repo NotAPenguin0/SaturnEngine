@@ -38,7 +38,6 @@ static void do_freelook(saturn::FrameContext& ctx, Transform& transform, Camera&
 static void do_movement(saturn::FrameContext& ctx, Transform& transform, Camera& camera, EditorCamera& controller) {
     float const speed = controller.sensitivity * ctx.delta_time;
 
-
     float const horizontal = saturn::RawInput::get_mouse().xoffset;
     float const vertical = saturn::RawInput::get_mouse().yoffset;
 

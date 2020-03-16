@@ -35,7 +35,7 @@ void Scene::init_demo_scene(ph::VulkanContext* ctx) {
     ecs.add_component<Camera>(main_camera);
     ecs.add_component<Transform>(main_camera, glm::vec3(2, 2, 0), glm::vec3(0, 0, 0), glm::vec3(1, 1, 1));
 
-    Handle<assets::Model> model_handle = assets::load_model(context, "data/models/sponza/sponza.obj");
+    Handle<assets::Model> model_handle = assets::load_model(context, "data/models/crytek-sponza/sponza.obj");
     
     assets::Model* model = assets::get_model(model_handle);
     ecs.import_entity(blueprints, model->blueprint);
@@ -56,7 +56,7 @@ void Scene::build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph) {
         graph.camera_pos = transform.position;
         graph.view = glm::lookAt(transform.position, transform.position + camera.front, camera.up);
         graph.projection = glm::perspective(camera.fov, 
-            (float)color_attachment.get_width() / (float)color_attachment.get_height(), 0.1f, 100.0f);
+            (float)color_attachment.get_width() / (float)color_attachment.get_height(), 0.1f, 5000.0f);
         // Flip projection because vulkan
         graph.projection[1][1] *= -1;
         // Only a single camera entity is supported atm

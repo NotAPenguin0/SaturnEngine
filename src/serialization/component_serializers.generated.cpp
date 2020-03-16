@@ -29,15 +29,6 @@ void to_json(nlohmann::json& j, MeshRenderer const& component) {
 }
 
 
-void from_json(nlohmann::json const& j, StaticMesh& component) {
-    component.mesh = j["mesh"];
-}
-
-void to_json(nlohmann::json& j, StaticMesh const& component) {
-    j["mesh"] = component.mesh;
-}
-
-
 void from_json(nlohmann::json const& j, PointLight& component) {
     component.ambient = j["ambient"];
     component.diffuse = j["diffuse"];
@@ -48,6 +39,15 @@ void to_json(nlohmann::json& j, PointLight const& component) {
     j["ambient"] = component.ambient;
     j["diffuse"] = component.diffuse;
     j["specular"] = component.specular;
+}
+
+
+void from_json(nlohmann::json const& j, StaticMesh& component) {
+    component.mesh = j["mesh"];
+}
+
+void to_json(nlohmann::json& j, StaticMesh const& component) {
+    j["mesh"] = component.mesh;
 }
 
 
@@ -89,7 +89,7 @@ void to_json(nlohmann::json& j, EditorCamera const& component) {
 
 namespace saturn::ecs {
 
-void deserialize_into_entity(nlohmann::json const& j, registry& ecs, entity_t entity) {
+static void do_deserialize(registry& ecs, nlohmann::json const& j, entity_t entity) {
     using namespace components;
     if (auto json_it = j.find("Camera"); json_it != j.end()) {
         ecs.add_component<Camera>(entity);
@@ -99,13 +99,13 @@ void deserialize_into_entity(nlohmann::json const& j, registry& ecs, entity_t en
         ecs.add_component<MeshRenderer>(entity);
         ecs.get_component<MeshRenderer>(entity) = *json_it;
     }
-    if (auto json_it = j.find("StaticMesh"); json_it != j.end()) {
-        ecs.add_component<StaticMesh>(entity);
-        ecs.get_component<StaticMesh>(entity) = *json_it;
-    }
     if (auto json_it = j.find("PointLight"); json_it != j.end()) {
         ecs.add_component<PointLight>(entity);
         ecs.get_component<PointLight>(entity) = *json_it;
+    }
+    if (auto json_it = j.find("StaticMesh"); json_it != j.end()) {
+        ecs.add_component<StaticMesh>(entity);
+        ecs.get_component<StaticMesh>(entity) = *json_it;
     }
     if (auto json_it = j.find("Transform"); json_it != j.end()) {
         ecs.add_component<Transform>(entity);
@@ -121,7 +121,18 @@ void deserialize_into_entity(nlohmann::json const& j, registry& ecs, entity_t en
     }
 }
 
-void serialize_from_entity(nlohmann::json& j, registry const& ecs, entity_t entity) {
+void deserialize_into_entity(nlohmann::json const& j, registry& ecs, entity_t entity) {
+    do_deserialize(ecs, j, entity);
+    auto children = j.find("Children");
+    if (children != j.end()) {
+        for (auto const& child : *children) {
+            entity_t child_entity = ecs.create_entity(entity);
+            deserialize_into_entity(child, ecs, child_entity);
+        }
+    }
+}
+
+static void do_serialize(registry const& ecs, nlohmann::json& j, entity_t entity) {
     using namespace components;
     if (ecs.has_component<Camera>(entity)) {
         j["Camera"] = ecs.get_component<Camera>(entity);
@@ -129,11 +140,11 @@ void serialize_from_entity(nlohmann::json& j, registry const& ecs, entity_t enti
     if (ecs.has_component<MeshRenderer>(entity)) {
         j["MeshRenderer"] = ecs.get_component<MeshRenderer>(entity);
     }
-    if (ecs.has_component<StaticMesh>(entity)) {
-        j["StaticMesh"] = ecs.get_component<StaticMesh>(entity);
-    }
     if (ecs.has_component<PointLight>(entity)) {
         j["PointLight"] = ecs.get_component<PointLight>(entity);
+    }
+    if (ecs.has_component<StaticMesh>(entity)) {
+        j["StaticMesh"] = ecs.get_component<StaticMesh>(entity);
     }
     if (ecs.has_component<Transform>(entity)) {
         j["Transform"] = ecs.get_component<Transform>(entity);
@@ -144,6 +155,28 @@ void serialize_from_entity(nlohmann::json& j, registry const& ecs, entity_t enti
     if (ecs.has_component<EditorCamera>(entity)) {
         j["EditorCamera"] = ecs.get_component<EditorCamera>(entity);
     }
+}
+
+void serialize_from_entity(nlohmann::json& j, registry const& ecs, entity_t entity) {
+    auto entity_it = ecs.get_entities().find(entity);
+
+    auto serialize_fun = [&ecs](entity_t entity, stl::tree<entity_t>::const_traverse_info const& info, nlohmann::json& j)
+        -> std::tuple<nlohmann::json&> {
+        // Root entity
+        
+        if (info.level == 0) {
+            do_serialize(ecs, j, entity);
+            j["Children"] = nlohmann::json::array();
+            return std::tie(j["Children"]);
+        } else { // Child entity
+            nlohmann::json child_json;
+            do_serialize(ecs, child_json, entity);
+            j.push_back(stl::move(child_json));
+            return std::tie(j);
+        }
+    };
+    
+   ecs.get_entities().traverse_from(entity_it, serialize_fun, j);
 }
 
 void from_json(nlohmann::json const& j, registry& ecs) {

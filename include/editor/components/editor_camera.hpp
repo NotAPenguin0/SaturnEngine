@@ -4,7 +4,7 @@
 namespace saturn::components {
 
 struct [[component]] EditorCamera {
-    float sensitivity = 20.0f;
+    float sensitivity = 15.0f;
 };
 
 }

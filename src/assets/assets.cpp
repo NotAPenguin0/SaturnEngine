@@ -104,6 +104,8 @@ Handle<ph::Mesh> load_mesh(Context& ctx, fs::path const& path) {
     ph::Mesh mesh = importers::import_simple_mesh(ctx, path);
     data::meshes.emplace(id, AssetData<ph::Mesh>{path, stl::move(mesh)});
 
+    ctx.vulkan->logger->write_fmt(ph::log::Severity::Info, "Loaded mesh {}", path.generic_string());
+
     return { id };
 }
 
@@ -127,6 +129,8 @@ Handle<ph::Texture> load_texture(Context& ctx, fs::path const& path) {
     ph::Texture tex = importers::import_with_stb(ctx, path);
     data::textures.emplace(id, AssetData<ph::Texture>{path, stl::move(tex)});
 
+    ctx.vulkan->logger->write_fmt(ph::log::Severity::Info, "Loaded texture {}", path.generic_string());
+
     return { id };
 }
 
@@ -148,6 +152,8 @@ Handle<Model> load_model(Context& ctx, fs::path const& path) {
 
     Model model = importers::import_obj_model(ctx, path);
     data::models.emplace(id, AssetData<Model>{path, model});
+
+    ctx.vulkan->logger->write_fmt(ph::log::Severity::Info, "Loaded model {}", path.generic_string());
 
     return { id };
 }
