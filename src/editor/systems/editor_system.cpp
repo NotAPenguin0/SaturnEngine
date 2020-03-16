@@ -8,9 +8,11 @@
 
 #include <editor/widgets/entity_tree.hpp>
 
+
 namespace editor {
 
 EditorSystem::EditorSystem(LogWindow* log_window) : log_window(log_window) {
+
 }
 
 void EditorSystem::startup(ph::VulkanContext& ctx, saturn::Scene& scene) {
@@ -26,9 +28,8 @@ void EditorSystem::startup(ph::VulkanContext& ctx, saturn::Scene& scene) {
     ctx.device.waitIdle();
     ImGui_ImplVulkan_DestroyFontUploadObjects();
 
-    // Add widgets
-    widgets.push_back(stl::make_unique<EntityTree>("Scene Tree", scene.ecs));
-    widgets.push_back(stl::make_unique<EntityTree>("Blueprints Tree", scene.blueprints));
+    scene_tree = stl::make_unique<EntityTree>("Scene Tree", scene.ecs);
+    blueprints_tree = stl::make_unique<EntityTree>("Blueprints", scene.blueprints);
 }
 
 void EditorSystem::update(saturn::FrameContext& ctx) {
@@ -75,6 +76,30 @@ void EditorSystem::update(saturn::FrameContext& ctx) {
     for (auto& widget : widgets) {
         if (widget->is_shown()) { widget->show(ctx); }
     }
+
+    if (scene_tree->is_shown()) { scene_tree->show(ctx); }
+    if (blueprints_tree->is_shown()) { blueprints_tree->show(ctx); }
+
+    static saturn::ecs::entity_t last_scene_selected = 0;
+    static saturn::ecs::entity_t last_blueprints_selected = 0;
+
+    // If we clicked a new entity in the scene view this frame, deselect the entity in the blueprints view
+    if (scene_tree->selected_entity != last_scene_selected) { 
+        blueprints_tree->selected_entity = 0;
+    } else if (blueprints_tree->selected_entity != last_blueprints_selected) { // same for blueprints
+        scene_tree->selected_entity = 0;
+    }
+
+    if (inspector.is_shown()) {
+        if (scene_tree->selected_entity != 0) {
+            inspector.show(ctx.scene.ecs, scene_tree->selected_entity);
+        } else {
+            inspector.show(ctx.scene.blueprints, blueprints_tree->selected_entity);
+        }
+    }
+
+    last_scene_selected = scene_tree->selected_entity;
+    last_blueprints_selected = blueprints_tree->selected_entity;
 
     ImGui::PopFont();
 

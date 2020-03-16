@@ -7,4 +7,5 @@ target_sources(SaturnEditor PUBLIC
 
     "widgets/log_window.cpp"
     "widgets/entity_tree.cpp"
+    "widgets/inspector.cpp"
 )

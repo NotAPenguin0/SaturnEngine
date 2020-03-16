@@ -9,6 +9,7 @@
 #include <saturn/codegen/argument_parser.hpp>
 #include <saturn/codegen/file_parser.hpp>
 #include <saturn/codegen/ast_visitor.hpp>
+#include <saturn/codegen/meta_generator.hpp>
 
 #include <chrono>
 
@@ -88,6 +89,7 @@ int main(int argc, char** argv) {
 
     saturn::codegen::generate_type_category_file(visit_results);
     saturn::codegen::generate_serialization_files(visit_results);
+    saturn::codegen::generate_meta_files(visit_results);
     
     return 0;
 }

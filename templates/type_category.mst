@@ -26,7 +26,7 @@ TypeCategory type_category() {
 
 {{#component_category_impl}}
 template<>
-TypeCategory type_category<components::{{component_unscoped_name}}>() {
+inline TypeCategory type_category<components::{{component_unscoped_name}}>() {
     return TypeCategory::Component;
 }
 

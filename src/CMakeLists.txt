@@ -35,6 +35,7 @@ set(SATURN_GENERATED_SOURCES
 
     "${CMAKE_CURRENT_SOURCE_DIR}/../include/saturn/meta/type_category.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/../include/saturn/serialization/component_serializers.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../include/saturn/meta/for_each_component.hpp"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/serialization/component_serializers.generated.cpp"
 
@@ -50,6 +51,7 @@ set(CODEGEN_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/codegen/category_generator.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/codegen/utility.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/codegen/serialization_generator.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/codegen/meta_generator.cpp"
 
     PARENT_SCOPE
 )

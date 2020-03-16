@@ -11,10 +11,10 @@ namespace saturn::meta {
 template<typename T>
 std::string_view type_name() {
 #ifndef MSVC_VER
-    // Example returned string: std::string saturn::meta::type_name() [T = saturn::components::Transform]
+    // Example returned string: std::string_view saturn::meta::type_name() [T = saturn::components::Transform]
     // Note that here, the actual type name starts at index 50
     static std::string pretty_func = std::string(__PRETTY_FUNCTION__);
-    static std::string result = pretty_func.substr(50, pretty_func.size() - 51);
+    static std::string result = pretty_func.substr(68, pretty_func.size() - 69);
     return result;
 #else
     // Not implemented

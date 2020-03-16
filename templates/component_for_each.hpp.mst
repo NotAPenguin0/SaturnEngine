@@ -1,0 +1,48 @@
+#ifndef SATURN_META_FOR_EACH_COMPONENT_HPP_
+#define SATURN_META_FOR_EACH_COMPONENT_HPP_
+
+{{#component_includes}}
+#include <{{component_filename}}>
+{{/component_includes}}
+
+#include <stl/utility.hpp>
+
+namespace saturn::meta {
+
+#define component_list {{#component_types}}::saturn::components::{{component_name}}{{opt_comma}} {{/component_types}}
+
+namespace detail {
+
+template<template<typename> typename, typename...>
+struct for_each_component_impl;
+
+template<template<typename> typename F, typename CFirst>
+struct for_each_component_impl<F, CFirst> {
+    template<typename... Args>
+    void operator()(Args&&... args) {
+        F<CFirst>{}(stl::forward<Args>(args) ...);
+    }
+};
+
+template<template<typename> typename F, typename CFirst, typename CNext, typename... CRest>
+struct for_each_component_impl<F, CFirst, CNext, CRest ...> {
+    template<typename... Args>
+    void operator()(Args&&... args) {
+        F<CFirst>{}(stl::forward<Args>(args) ...);
+        for_each_component_impl<F, CNext, CRest...>{}(stl::forward<Args>(args) ...);
+    }
+};
+
+}
+
+
+template<template<typename> typename F, typename... Args>
+void for_each_component(Args&&... args) {
+    detail::for_each_component_impl<F, component_list>{}(stl::forward<Args>(args) ...);
+}
+
+#undef component_list
+
+}
+
+#endif
