@@ -10,6 +10,7 @@
 
 #include <stl/vector.hpp>
 #include <filesystem>
+#include <string_view>
 
 namespace fs = std::filesystem;
 
@@ -18,7 +19,7 @@ namespace saturn::assets {
 // MESH
 
 // Takes ownership of given mesh and returns a handle to it
-Handle<ph::Mesh> take_mesh(ph::Mesh& mesh);
+Handle<ph::Mesh> take_mesh(ph::Mesh& mesh, std::string_view name);
 
 Handle<ph::Mesh> load_mesh(Context& ctx, fs::path const& path);
 
@@ -44,7 +45,7 @@ fs::path const& get_model_path(Handle<Model> handle);
 
 // MATERIAL
 
-Handle<ph::Material> take_material(ph::Material& material);
+Handle<ph::Material> take_material(ph::Material& material, std::string_view name);
 
 Handle<ph::Material> load_material(Context& ctx, fs::path const& path);
 

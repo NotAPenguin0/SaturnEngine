@@ -80,6 +80,7 @@ Handle<T> _get_with_path_internal(std::unordered_map<stl::int64_t, AssetData<T>>
 
 namespace data {
 
+// TODO: Swap the maps out for vectors?
 static std::unordered_map<stl::int64_t, AssetData<ph::Mesh>> meshes;
 static std::unordered_map<stl::int64_t, AssetData<ph::Texture>> textures;
 static std::unordered_map<stl::int64_t, AssetData<Model>> models;
@@ -87,10 +88,10 @@ static std::unordered_map<stl::int64_t, AssetData<ph::Material>> materials;
 
 } // namespace data
 
-Handle<ph::Mesh> take_mesh(ph::Mesh& mesh) {
+Handle<ph::Mesh> take_mesh(ph::Mesh& mesh, std::string_view name) {
     stl::int64_t id = id_generator<ph::Mesh>::next();
 
-    data::meshes.emplace(id, AssetData<ph::Mesh>{std::to_string(id), stl::move(mesh)});
+    data::meshes.emplace(id, AssetData<ph::Mesh>{std::string(name), stl::move(mesh)});
 
     return { id };
 }
@@ -166,10 +167,10 @@ fs::path const& get_model_path(Handle<Model> handle) {
     return _get_path_internal(data::models, handle);
 }
 
-Handle<ph::Material> take_material(ph::Material& material) {
+Handle<ph::Material> take_material(ph::Material& material, std::string_view name) {
     stl::int64_t id = id_generator<ph::Mesh>::next();
 
-    data::materials.emplace(id, AssetData<ph::Material>{"", stl::move(material)});
+    data::materials.emplace(id, AssetData<ph::Material>{std::string(name), stl::move(material)});
 
     return { id };
 }

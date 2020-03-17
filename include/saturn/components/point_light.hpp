@@ -1,14 +1,14 @@
 #ifndef SATURN_COMPONENTS_POINT_LIGHT_HPP_
 #define SATURN_COMPONENTS_POINT_LIGHT_HPP_
 
-#include <glm/vec3.hpp>
+#include <saturn/utility/color.hpp>
 
 namespace saturn::components {
 
 struct [[component]] PointLight {
-    [[editor::color]] glm::vec3 ambient;
-    [[editor::color]] glm::vec3 diffuse;
-    [[editor::color]] glm::vec3 specular;
+    color3 ambient;
+    color3 diffuse;
+    color3 specular;
 };
 
 }

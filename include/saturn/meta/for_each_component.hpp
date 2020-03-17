@@ -1,20 +1,20 @@
 #ifndef SATURN_META_FOR_EACH_COMPONENT_HPP_
 #define SATURN_META_FOR_EACH_COMPONENT_HPP_
 
-#include <saturn/components/mesh_renderer.hpp>
 #include <saturn/components/camera.hpp>
+#include <saturn/components/mesh_renderer.hpp>
 #include <saturn/components/name.hpp>
+#include <saturn/components/static_mesh.hpp>
 #include <saturn/components/point_light.hpp>
 #include <saturn/components/transform.hpp>
 #include <samples/components/rotator.hpp>
 #include <editor/components/editor_camera.hpp>
-#include <saturn/components/static_mesh.hpp>
 
 #include <stl/utility.hpp>
 
 namespace saturn::meta {
 
-#define component_list ::saturn::components::MeshRenderer, ::saturn::components::Camera, ::saturn::components::Name, ::saturn::components::PointLight, ::saturn::components::Transform, ::saturn::components::Rotator, ::saturn::components::EditorCamera, ::saturn::components::StaticMesh 
+#define component_list ::saturn::components::Camera, ::saturn::components::MeshRenderer, ::saturn::components::Name, ::saturn::components::StaticMesh, ::saturn::components::PointLight, ::saturn::components::Transform, ::saturn::components::Rotator, ::saturn::components::EditorCamera 
 
 namespace detail {
 

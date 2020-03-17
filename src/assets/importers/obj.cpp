@@ -65,7 +65,7 @@ static void add_mesh(Context& ctx, ModelMaterials const& materials, Model model,
     // Create the mesh
     ph::Mesh loaded_mesh(info);
     // Send it to the asset system to store there
-    Handle<ph::Mesh> handle = assets::take_mesh(loaded_mesh);
+    Handle<ph::Mesh> handle = assets::take_mesh(loaded_mesh, mesh->mName.C_Str());
 
     // Finally add the loaded mesh to the blueprint
     using namespace components;
@@ -114,7 +114,7 @@ static ModelMaterials load_materials(Context& ctx, fs::path const& cwd, aiScene 
             material.texture = get_texture(texture);
 
             // Send the material to the asset system
-            Handle<ph::Material> handle = take_material(material);
+            Handle<ph::Material> handle = take_material(material, mat->GetName().C_Str());
 
             materials.push_back(handle);
         } else {

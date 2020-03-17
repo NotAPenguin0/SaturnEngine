@@ -1,0 +1,16 @@
+#ifndef SATURN_EDITOR_DISPLAY_COMPONENT_FIELDS_GENERATED_HPP_
+#define SATURN_EDITOR_DISPLAY_COMPONENT_FIELDS_GENERATED_HPP_
+
+{{#component_includes}}
+#include <{{component_filename}}>
+{{/component_includes}}
+
+namespace editor {
+
+{{#display_field_decl}}
+void display_component_fields(saturn::components::{{component_name}}& component);
+{{/display_field_decl}}
+
+}
+
+#endif

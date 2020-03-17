@@ -1,0 +1,19 @@
+#include <editor/widgets/display_component_fields.hpp>
+#include <editor/widgets/display_field.hpp>
+
+// Generated source file. Do not modify manually.
+
+namespace editor {
+
+// Note that we append the component name to the field name. This is to avoid ImGui being annoying about fields with the same names
+
+{{#display_fields_impl}}
+void display_component_fields(saturn::components::{{component_name}}& component) {
+    display_field dispatcher;
+    {{#do_display_field}}
+    dispatcher("{{field_name}}##{{component_name}}", &component.{{field_name}});
+    {{/do_display_field}}
+}
+{{/display_fields_impl}}
+
+}

@@ -1,4 +1,5 @@
 #include <editor/widgets/inspector.hpp>
+#include <editor/widgets/display_component_fields.hpp>
 
 #include <saturn/meta/for_each_component.hpp>
 #include <saturn/meta/reflect.hpp>
@@ -22,7 +23,8 @@ struct display_entity_component {
         if (ecs.has_component<C>(entity)) {
             meta::Info info = meta::reflect<C>();
             if (ImGui::CollapsingHeader(info.name.data())) {
-
+                // Display the fields using our generated dispatcher
+                display_component_fields(ecs.get_component<C>(entity));
             }
         }
     }

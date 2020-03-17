@@ -38,6 +38,9 @@ set(SATURN_GENERATED_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/../include/saturn/meta/for_each_component.hpp"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/serialization/component_serializers.generated.cpp"
+    # TODO: Only do this when editor is enabled
+    "${CMAKE_CURRENT_SOURCE_DIR}/../include/editor/widgets/display_component_fields.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/editor/widgets/display_component_fields.cpp"
 
     PARENT_SCOPE
 )
@@ -52,6 +55,7 @@ set(CODEGEN_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/codegen/utility.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/codegen/serialization_generator.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/codegen/meta_generator.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/codegen/display_fields_generator.cpp"
 
     PARENT_SCOPE
 )
