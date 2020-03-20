@@ -10,10 +10,10 @@
 
 namespace saturn::assets::importers {
     
-ph::Mesh import_simple_mesh(Context& ctx, fs::path const& path) {
+std::optional<ph::Mesh> import_simple_mesh(Context& ctx, fs::path const& path) {
     std::ifstream file(path);
     if (!file.good()) {
-        throw std::runtime_error("file " + path.generic_string() + " not found.");
+        return std::nullopt;
     }
     
     stl::size_t total_values = 0;
@@ -39,7 +39,7 @@ ph::Mesh import_simple_mesh(Context& ctx, fs::path const& path) {
     info.vertex_count = vertex_count;
     info.indices = indices.data();
     info.index_count = vertex_count;
-    return ph::Mesh(info);
+    return { ph::Mesh(info) };
 }
 
 }

@@ -4,6 +4,8 @@
 #include <stl/types.hpp>
 #include <stl/bit_flag.hpp>
 
+#include <saturn/components/blueprint.hpp>
+#include <saturn/components/blueprint_instance.hpp>
 #include <saturn/components/camera.hpp>
 #include <saturn/components/mesh_renderer.hpp>
 #include <saturn/components/name.hpp>
@@ -27,6 +29,16 @@ struct TypeCategory : stl::bit_flag<stl::uint32_t> {
 template<typename T>
 TypeCategory type_category() {
     return TypeCategory::Unknown;
+}
+
+template<>
+inline TypeCategory type_category<components::Blueprint>() {
+    return TypeCategory::Component;
+}
+
+template<>
+inline TypeCategory type_category<components::BlueprintInstance>() {
+    return TypeCategory::Component;
 }
 
 template<>

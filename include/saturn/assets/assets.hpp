@@ -12,6 +12,8 @@
 #include <filesystem>
 #include <string_view>
 
+#include <saturn/ecs/entity.hpp>
+
 namespace fs = std::filesystem;
 
 namespace saturn::assets {
@@ -36,6 +38,8 @@ ph::Texture* get_texture(Handle<ph::Texture> handle);
 fs::path const& get_texture_path(Handle<ph::Texture> handle);
 
 // MODEL
+
+Handle<Model> load_model(ecs::entity_t root, Context& ctx, fs::path const& path);
 
 Handle<Model> load_model(Context& ctx, fs::path const& path);
 

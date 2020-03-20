@@ -23,9 +23,10 @@ public:
     ~registry() = default;
 
     entity_t create_entity(entity_t parent = 0);
+    entity_t create_blueprint_entity(entity_t parent = 0);
 
     // 'Imports' an entity from registry [source] to this registry. Effectively makes a copy of all entity data
-    entity_t import_entity(registry& source, entity_t other);
+    entity_t import_blueprint(registry& source, entity_t other);
 
     template<typename T, typename... Args>
     void add_component(entity_t entity, Args&&... args) {

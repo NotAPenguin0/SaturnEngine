@@ -3,6 +3,8 @@
 
 #include <nlohmann/json.hpp>
 
+#include <saturn/components/blueprint.hpp>
+#include <saturn/components/blueprint_instance.hpp>
 #include <saturn/components/camera.hpp>
 #include <saturn/components/mesh_renderer.hpp>
 #include <saturn/components/name.hpp>
@@ -15,6 +17,12 @@
 #include <saturn/ecs/registry.hpp>
 
 namespace saturn::components {
+
+void from_json(nlohmann::json const& j, Blueprint& component);
+void to_json(nlohmann::json& j, Blueprint const& component);
+
+void from_json(nlohmann::json const& j, BlueprintInstance& component);
+void to_json(nlohmann::json& j, BlueprintInstance const& component);
 
 void from_json(nlohmann::json const& j, Camera& component);
 void to_json(nlohmann::json& j, Camera const& component);

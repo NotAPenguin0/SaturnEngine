@@ -10,6 +10,8 @@
 
 #include <saturn/assets/assets.hpp>
 
+#include <saturn/ecs/entity.hpp>
+
 namespace editor {
 
 struct display_field {
@@ -17,6 +19,7 @@ public:
     void operator()(std::string_view name, float* value);
     void operator()(std::string_view name, glm::vec3* value);
     void operator()(std::string_view name, saturn::color3* value);
+    void operator()(std::string_view name, saturn::ecs::entity_t* value);
 
     void operator()(std::string_view name, saturn::Handle<ph::Mesh>* value);
     void operator()(std::string_view name, saturn::Handle<ph::Texture>* value);

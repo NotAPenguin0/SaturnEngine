@@ -6,13 +6,15 @@
 #include <phobos/forward.hpp>
 #include <filesystem>
 
+#include <optional>
+
 namespace fs = std::filesystem;
 
 namespace saturn {
 
 namespace assets::importers {
 
-ph::Mesh import_simple_mesh(Context& ctx, fs::path const& path);
+std::optional<ph::Mesh> import_simple_mesh(Context& ctx, fs::path const& path);
 
 }
 

@@ -7,6 +7,15 @@ namespace editor {
 
 // Note that we append the component name to the field name. This is to avoid ImGui being annoying about fields with the same names
 
+void display_component_fields(saturn::components::Blueprint& component) {
+    display_field dispatcher;
+    dispatcher("blueprint##Blueprint", &component.blueprint);
+    dispatcher("model##Blueprint", &component.model);
+}
+void display_component_fields(saturn::components::BlueprintInstance& component) {
+    display_field dispatcher;
+    dispatcher("blueprint##BlueprintInstance", &component.blueprint);
+}
 void display_component_fields(saturn::components::Camera& component) {
     display_field dispatcher;
     dispatcher("front##Camera", &component.front);

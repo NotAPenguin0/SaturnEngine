@@ -8,6 +8,8 @@
 #include <saturn/utility/handle.hpp>
 #include <saturn/utility/context.hpp>
 
+#include <saturn/assets/model.hpp>
+
 namespace glm {
 
 void from_json(nlohmann::json const& j, vec3& v);
@@ -16,6 +18,9 @@ void to_json(nlohmann::json& j, vec3 const& v);
 }
 
 namespace saturn {
+
+// sad, globals
+extern Context* serialize_context;
 
 void set_serialize_context(Context* ctx);
 
@@ -27,6 +32,9 @@ void to_json(nlohmann::json& j, Handle<ph::Texture> const& handle);
 
 void from_json(nlohmann::json const& j, Handle<ph::Material>& handle);
 void to_json(nlohmann::json& j, Handle<ph::Material> const& handle);
+
+void from_json(nlohmann::json const& j, Handle<assets::Model>& handle);
+void to_json(nlohmann::json& j, Handle<assets::Model> const& handle);
 
 }
 

@@ -1,6 +1,8 @@
 #ifndef SATURN_META_FOR_EACH_COMPONENT_HPP_
 #define SATURN_META_FOR_EACH_COMPONENT_HPP_
 
+#include <saturn/components/blueprint.hpp>
+#include <saturn/components/blueprint_instance.hpp>
 #include <saturn/components/camera.hpp>
 #include <saturn/components/mesh_renderer.hpp>
 #include <saturn/components/name.hpp>
@@ -14,7 +16,7 @@
 
 namespace saturn::meta {
 
-#define component_list ::saturn::components::Camera, ::saturn::components::MeshRenderer, ::saturn::components::Name, ::saturn::components::StaticMesh, ::saturn::components::PointLight, ::saturn::components::Transform, ::saturn::components::Rotator, ::saturn::components::EditorCamera 
+#define component_list ::saturn::components::Blueprint, ::saturn::components::BlueprintInstance, ::saturn::components::Camera, ::saturn::components::MeshRenderer, ::saturn::components::Name, ::saturn::components::StaticMesh, ::saturn::components::PointLight, ::saturn::components::Transform, ::saturn::components::Rotator, ::saturn::components::EditorCamera 
 
 namespace detail {
 

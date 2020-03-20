@@ -22,6 +22,10 @@ void display_field::operator()(std::string_view name, saturn::color3* value) {
     ImGui::ColorEdit3(name.data(), &value->r);
 }
 
+void display_field::operator()(std::string_view name, saturn::ecs::entity_t* value) {
+    // ignore
+}
+
 void display_field::operator()(std::string_view name, saturn::Handle<ph::Mesh>* value) {
     ImGui::TextUnformatted(
         fmt::format("{}: {}", remove_component_tag(name), saturn::assets::get_mesh_path(*value).generic_string()).c_str()

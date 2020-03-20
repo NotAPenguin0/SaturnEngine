@@ -18,8 +18,11 @@
 
 #include <saturn/utility/math.hpp>
 
+#include <saturn/meta/for_each_component.hpp>
+
+#include <stl/tuple.hpp>
+
 #include <fstream>
-#include <numeric>
 
 namespace saturn {
 
@@ -29,19 +32,17 @@ void Scene::init_demo_scene(ph::VulkanContext* ctx) {
     static Context context { ctx, this };
     set_serialize_context(&context);
 
-    load_from_file(ecs, "data/ecs.bin");
-    load_from_file(blueprints, "data/blueprints.bin");
+    load_from_file(ecs, "data/ecs.json");
+    load_from_file(blueprints, "data/blueprints.json");
 
-    // Create camera entity
-    main_camera = ecs.create_entity();
-    ecs.add_component<Name>(main_camera, "Main Camera");
-    ecs.add_component<Camera>(main_camera);
-    ecs.add_component<Transform>(main_camera, glm::vec3(2, 2, 0), glm::vec3(0, 0, 0), glm::vec3(1, 1, 1));
+//    assets::load_model(context, "data/models/crytek-sponza/sponza.obj");
 
-    Handle<assets::Model> model_handle = assets::load_model(context, "data/models/crytek-sponza/sponza.obj");
-    
-    assets::Model* model = assets::get_model(model_handle);
-    ecs.import_entity(blueprints, model->blueprint);
+    load_assets(context);
+
+    // After the entire blueprint ecs has loaded, we can resolve references to the blueprints
+    resolve_blueprint_references();
+    // Set the main_camera variable. Note that we won't be using this anymore once we get multiple cameras working
+    find_main_camera();
 }  
 
 void Scene::build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph) {
@@ -109,7 +110,7 @@ void Scene::save_to_file(ecs::registry const& registry, fs::path const& path) {
     nlohmann::json ecs_json;
     ecs_json = registry;
     std::ofstream out(path, std::ios::binary);
-    out << ecs_json;
+    out << ecs_json.dump(4);
 }
 
 void Scene::load_from_file(ecs::registry& registry, fs::path const& path) {
@@ -118,5 +119,59 @@ void Scene::load_from_file(ecs::registry& registry, fs::path const& path) {
     file >> j;
     registry = j;
 }
+
+void Scene::resolve_blueprint_references() {
+    using namespace components;
+    auto instantiate_fun = [this](ecs::entity_t entity, stl::tree<ecs::entity_t>::const_traverse_info) -> stl::tuple<> {
+        if (ecs.has_component<BlueprintInstance>(entity)) {
+            instantiate_blueprint(entity, ecs.get_component<BlueprintInstance>(entity).blueprint);
+        }
+
+        return {};
+    };
+
+    ecs.get_entities().traverse(instantiate_fun);
+}
+
+namespace {
+
+template<typename C>
+struct instantiate_component {
+    void operator()(ecs::registry const& blueprints, ecs::registry& dst, ecs::entity_t bp, ecs::entity_t dst_entity) {
+        // Do not copy blueprint component
+        if constexpr (std::is_same_v<C, components::Blueprint>) { return; }
+        // Do the copy
+        if (blueprints.has_component<C>(bp)) {
+            dst.add_component<C>(dst_entity, blueprints.get_component<C>(bp));
+        }
+    }
+};
+
+}
+
+
+void Scene::instantiate_blueprint(ecs::entity_t entity, ecs::entity_t blueprint) {
+    meta::for_each_component<instantiate_component>(blueprints, ecs, blueprint, entity);
+}
+
+
+void Scene::find_main_camera() {
+    auto find_camera_fun = [this](ecs::entity_t entity, stl::tree<ecs::entity_t>::const_traverse_info) -> stl::tuple<> {
+        if (ecs.has_component<components::Camera>(entity)) {
+            main_camera = entity;
+        }
+        return {};
+    };
+
+    ecs.get_entities().traverse(find_camera_fun);
+}
+
+void Scene::load_assets(Context& ctx) {
+    for (auto const& to_load : models_to_load) {
+        assets::load_model(to_load.root, ctx, to_load.path);
+    }
+    models_to_load.clear();
+}
+
 
 } // namespace saturn

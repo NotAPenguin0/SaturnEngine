@@ -5,6 +5,10 @@
 #include <phobos/renderer/mesh.hpp>
 #include <phobos/renderer/texture.hpp>
 
+#include <stl/tuple.hpp>
+
+#include <saturn/scene/scene.hpp>
+
 namespace saturn::components {
 
 {{#serializer_impl}}
@@ -29,6 +33,20 @@ namespace saturn::ecs {
 
 static void do_deserialize(registry& ecs, nlohmann::json const& j, entity_t entity) {
     using namespace components;
+    // Blueprint instances are handled in the blueprint resolve pass
+    if (auto json_it = j.find("BlueprintInstance"); json_it != j.end()) { 
+        ecs.add_component<BlueprintInstance>(entity);
+        ecs.get_component<BlueprintInstance>(entity) = *json_it;
+    
+        return;
+    }
+
+    if (auto json_it = j.find("Blueprint"); json_it != j.end()) {
+        if (!(*json_it)["model"].is_null()) {
+            serialize_context->scene->models_to_load.push_back({entity, fs::path((*json_it)["model"].get<std::string>())});
+        }
+    }
+
     {{#entity_serialize}}
     if (auto json_it = j.find("{{component_name}}"); json_it != j.end()) {
         ecs.add_component<{{component_name}}>(entity);
@@ -50,6 +68,12 @@ void deserialize_into_entity(nlohmann::json const& j, registry& ecs, entity_t en
 
 static void do_serialize(registry const& ecs, nlohmann::json& j, entity_t entity) {
     using namespace components;
+    // Blueprint instances are handled in a special way
+    if (ecs.has_component<components::BlueprintInstance>(entity)) {
+        auto const& bp = ecs.get_component<components::BlueprintInstance>(entity);
+        j["BlueprintInstance"]["blueprint"] = bp.blueprint;
+        return;
+    }
     {{#entity_serialize}}
     if (ecs.has_component<{{component_name}}>(entity)) {
         j["{{component_name}}"] = ecs.get_component<{{component_name}}>(entity);
@@ -61,23 +85,18 @@ void serialize_from_entity(nlohmann::json& j, registry const& ecs, entity_t enti
     auto entity_it = ecs.get_entities().find(entity);
 
     auto serialize_fun = [&ecs](entity_t entity, stl::tree<entity_t>::const_traverse_info const& info, nlohmann::json& j)
-        -> std::tuple<nlohmann::json&> {
-        // Root entity
+        -> stl::tuple<nlohmann::json&> {
         
-        if (info.level == 0) {
-            do_serialize(ecs, j, entity);
-            j["Children"] = nlohmann::json::array();
-            return std::tie(j["Children"]);
-        } else { // Child entity
-            nlohmann::json child_json;
-            do_serialize(ecs, child_json, entity);
-            j.push_back(stl::move(child_json));
-            return std::tie(j);
-        }
+        nlohmann::json entity_j;
+        entity_j["Children"] = nlohmann::json::array();
+        do_serialize(ecs, entity_j, entity);
+        j.push_back(stl::move(entity_j));
+        return stl::tie(j.back()["Children"]);
     };
     
    ecs.get_entities().traverse_from(entity_it, serialize_fun, j);
 }
+
 
 void from_json(nlohmann::json const& j, registry& ecs) {
     for (auto const& json_entity : j) {
@@ -88,13 +107,8 @@ void from_json(nlohmann::json const& j, registry& ecs) {
 
 void to_json(nlohmann::json& j, registry const& ecs) {
     j = nlohmann::json::array();
-    // TODO: Serialize parent somehow
-    auto serialize_fn = [&j, &ecs](entity_t entity, stl::tree<entity_t>::const_traverse_info const& info) {
-        nlohmann::json& ent_json = j.emplace_back(nlohmann::json::object());
-        serialize_from_entity(ent_json, ecs, entity);
-    };
 
-    ecs.get_entities().traverse(serialize_fn);
+    serialize_from_entity(j, ecs, ecs.get_entities().root()->data);
 }
 
 }

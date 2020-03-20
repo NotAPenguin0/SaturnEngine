@@ -234,6 +234,7 @@ public:
     struct MouseEvent {
         float mouse_x;
         float mouse_y;
+        // TODO: Separate wheel into x and y
         float wheel;
     };
 
@@ -251,7 +252,7 @@ private:
     static void keyboard_callback(Mimas_Window* win, Mimas_Key key, Mimas_Key_Action action, void*);
     static void mouse_position_callback(Mimas_Window* win, mimas_i32 xpos, mimas_i32 ypos, void*);
     static void mouse_button_callback(Mimas_Window* win, Mimas_Key button, Mimas_Mouse_Button_Action action, void*);
-    static void scroll_callback(Mimas_Window* win, double xoffset, double yoffset);
+    static void scroll_callback(Mimas_Window* win, mimas_i32 xoffset, mimas_i32 yoffset, void*);
 
     static void process_keyboard_events();
     static void process_mouse_events();

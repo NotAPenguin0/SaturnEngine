@@ -247,8 +247,7 @@ void InputEventManager::init(ph::WindowContext& window) {
     mimas_set_window_key_callback(window.handle, &InputEventManager::keyboard_callback, nullptr);
     mimas_set_window_cursor_pos_callback(window.handle, &InputEventManager::mouse_position_callback, nullptr);
     mimas_set_window_mouse_button_callback(window.handle, &InputEventManager::mouse_button_callback, nullptr);
-    
-//    mimas_set_window_cursor_scroll_callback(window.handle, &InputEventManager::scroll_callback, nullptr);
+    mimas_set_window_scroll_callback(window.handle, &InputEventManager::scroll_callback, nullptr);
 //    mimas_set_joystick_callback(JoystickInputManager::joystick_connection_callback);
 //    JoystickInputManager::find_present_joysticks();
     window_ctx = &window;
@@ -285,7 +284,7 @@ void InputEventManager::mouse_position_callback(Mimas_Window* win, mimas_i32 xpo
     events.mouse_events.push(MouseEvent{xoffset, yoffset, 0.0f});
 }
 
-void InputEventManager::scroll_callback(Mimas_Window* win, double xoffset, double yoffset) {
+void InputEventManager::scroll_callback(Mimas_Window* win, mimas_i32 xoffset, mimas_i32 yoffset, void*) {
     events.mouse_events.push(
         MouseEvent{0.0f, 0.0f, static_cast<float>(yoffset)});
 }

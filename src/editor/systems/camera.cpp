@@ -55,8 +55,8 @@ static void do_movement(saturn::FrameContext& ctx, Transform& transform, Camera&
 }
 
 void CameraSystem::startup(ph::VulkanContext&, saturn::Scene& scene) {
-    // Add the editor camera controller to the main scene camera
-    scene.ecs.add_component<EditorCamera>(scene.main_camera);
+    // Add the editor camera controller to the main scene camera. This is no longer needed since it's embedded in the scene's json
+//    scene.ecs.add_component<EditorCamera>(scene.main_camera);
 }
 
 void CameraSystem::update(saturn::FrameContext& ctx) {

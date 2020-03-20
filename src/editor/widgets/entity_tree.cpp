@@ -3,6 +3,8 @@
 #include <imgui/imgui.h>
 #include <unordered_map>
 
+#include <stl/tuple.hpp>
+
 #include <saturn/components/name.hpp>
 
 using namespace saturn::components;
@@ -15,16 +17,16 @@ EntityTree::EntityTree(const char* name, saturn::ecs::registry& ecs) : name(name
 
 using expanded_map_t = std::unordered_map<saturn::ecs::entity_t, bool>;
 
-static std::tuple<saturn::ecs::registry*, expanded_map_t*, saturn::ecs::entity_t*> display_tree(
+static stl::tuple<saturn::ecs::registry*, expanded_map_t*, saturn::ecs::entity_t*> display_tree(
     saturn::ecs::entity_t entity, stl::tree<saturn::ecs::entity_t>::const_traverse_info info, 
     saturn::ecs::registry* ecs, expanded_map_t* expanded, saturn::ecs::entity_t* selected_entity) {
 
     // Skip root entity
-    if (entity == 0) { return std::make_tuple(ecs, expanded, selected_entity); }
+    if (entity == 0) { return stl::make_tuple(ecs, expanded, selected_entity); }
 
     // If the parent was not expanded, skip this entity
     if (info.parent.leaf() != nullptr && (*expanded)[info.parent->data] == false) {
-        return std::make_tuple(ecs, expanded, selected_entity);
+        return stl::make_tuple(ecs, expanded, selected_entity);
     }
 
     // display this entity
@@ -53,7 +55,7 @@ static std::tuple<saturn::ecs::registry*, expanded_map_t*, saturn::ecs::entity_t
     }
 
     // Continue iterating with the same parameters
-    return std::make_tuple(ecs, expanded, selected_entity);
+    return stl::make_tuple(ecs, expanded, selected_entity);
 }
 
 static void tree_post_callback(saturn::ecs::entity_t entity, stl::tree<saturn::ecs::entity_t>::const_traverse_info,

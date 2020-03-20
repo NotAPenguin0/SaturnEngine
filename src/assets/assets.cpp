@@ -11,6 +11,9 @@
 #include <stl/assert.hpp>
 #include <stl/utility.hpp>
 
+#include <saturn/components/blueprint.hpp>
+#include <saturn/scene/scene.hpp>
+
 #include <string>
 
 namespace saturn::assets {
@@ -102,8 +105,9 @@ Handle<ph::Mesh> load_mesh(Context& ctx, fs::path const& path) {
 
     stl::int64_t id = id_generator<ph::Mesh>::next();
 
-    ph::Mesh mesh = importers::import_simple_mesh(ctx, path);
-    data::meshes.emplace(id, AssetData<ph::Mesh>{path, stl::move(mesh)});
+    std::optional<ph::Mesh> mesh = importers::import_simple_mesh(ctx, path);
+    if (!mesh) { return { -1 }; }
+    data::meshes.emplace(id, AssetData<ph::Mesh>{path, stl::move(*mesh)});
 
     ctx.vulkan->logger->write_fmt(ph::log::Severity::Info, "Loaded mesh {}", path.generic_string());
 
@@ -143,7 +147,21 @@ fs::path const& get_texture_path(Handle<ph::Texture> handle) {
     return _get_path_internal(data::textures, handle);
 }
 
+Handle<Model> load_model(ecs::entity_t root, Context& ctx, fs::path const& path) {
+    auto const maybe_already_loaded_handle = _get_with_path_internal(data::models, path);
+    if (maybe_already_loaded_handle.id != -1) { return maybe_already_loaded_handle; }
 
+    stl::int64_t id = id_generator<Model>::next();
+
+    Model model = importers::import_obj_model(root, ctx, path);
+    // set correct ID
+    ctx.scene->blueprints.get_component<components::Blueprint>(model.blueprint).model.id = id;
+    data::models.emplace(id, AssetData<Model>{path, model});
+
+    ctx.vulkan->logger->write_fmt(ph::log::Severity::Info, "Loaded model {}", path.generic_string());
+
+    return { id };
+}
 
 Handle<Model> load_model(Context& ctx, fs::path const& path) {
     auto const maybe_already_loaded_handle = _get_with_path_internal(data::models, path);
@@ -152,6 +170,8 @@ Handle<Model> load_model(Context& ctx, fs::path const& path) {
     stl::int64_t id = id_generator<Model>::next();
 
     Model model = importers::import_obj_model(ctx, path);
+    // set correct ID
+    ctx.scene->blueprints.get_component<components::Blueprint>(model.blueprint).model.id = id;
     data::models.emplace(id, AssetData<Model>{path, model});
 
     ctx.vulkan->logger->write_fmt(ph::log::Severity::Info, "Loaded model {}", path.generic_string());
@@ -168,7 +188,7 @@ fs::path const& get_model_path(Handle<Model> handle) {
 }
 
 Handle<ph::Material> take_material(ph::Material& material, std::string_view name) {
-    stl::int64_t id = id_generator<ph::Mesh>::next();
+    stl::int64_t id = id_generator<ph::Material>::next();
 
     data::materials.emplace(id, AssetData<ph::Material>{std::string(name), stl::move(material)});
 
@@ -179,7 +199,7 @@ Handle<ph::Material> load_material(Context& ctx, fs::path const& path) {
     auto const maybe_already_loaded_handle = _get_with_path_internal(data::materials, path);
     if (maybe_already_loaded_handle.id != -1) { return maybe_already_loaded_handle; }
 
-    stl::int64_t id = id_generator<Model>::next();
+    stl::int64_t id = id_generator<ph::Material>::next();
 
     // TODO: No mtl importer yet
 

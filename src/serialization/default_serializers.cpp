@@ -1,7 +1,7 @@
 #include <saturn/serialization/default_serializers.hpp>
 #include <saturn/assets/assets.hpp>
 
-static saturn::Context* serialize_context;
+saturn::Context* saturn::serialize_context = nullptr;
 
 namespace glm {
 
@@ -53,6 +53,16 @@ void from_json(nlohmann::json const& j, Handle<ph::Material>& handle) {
 
 void to_json(nlohmann::json& j, Handle<ph::Material> const& handle) {
     j = handle.id;
+}
+
+void from_json(nlohmann::json const& j, Handle<assets::Model>& handle) {
+    // The process of loading models is deferred to a later stage so the entity tree doesn't get messed up
+//    handle = assets::load_model(*serialize_context, j.get<std::string>());
+}
+
+void to_json(nlohmann::json& j, Handle<assets::Model> const& handle) {
+    if (handle.id == -1) return;
+    j = assets::get_model_path(handle).generic_string();
 }
 
 } // namespace saturn
