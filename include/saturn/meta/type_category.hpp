@@ -9,11 +9,11 @@
 #include <saturn/components/camera.hpp>
 #include <saturn/components/mesh_renderer.hpp>
 #include <saturn/components/name.hpp>
-#include <saturn/components/point_light.hpp>
 #include <saturn/components/static_mesh.hpp>
-#include <saturn/components/transform.hpp>
+#include <saturn/components/point_light.hpp>
 #include <samples/components/rotator.hpp>
 #include <editor/components/editor_camera.hpp>
+#include <saturn/components/transform.hpp>
 
 
 namespace saturn::meta {
@@ -57,17 +57,12 @@ inline TypeCategory type_category<components::Name>() {
 }
 
 template<>
-inline TypeCategory type_category<components::PointLight>() {
-    return TypeCategory::Component;
-}
-
-template<>
 inline TypeCategory type_category<components::StaticMesh>() {
     return TypeCategory::Component;
 }
 
 template<>
-inline TypeCategory type_category<components::Transform>() {
+inline TypeCategory type_category<components::PointLight>() {
     return TypeCategory::Component;
 }
 
@@ -78,6 +73,11 @@ inline TypeCategory type_category<components::Rotator>() {
 
 template<>
 inline TypeCategory type_category<components::EditorCamera>() {
+    return TypeCategory::Component;
+}
+
+template<>
+inline TypeCategory type_category<components::Transform>() {
     return TypeCategory::Component;
 }
 

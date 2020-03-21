@@ -62,6 +62,15 @@ void to_json(nlohmann::json& j, Name const& component) {
 }
 
 
+void from_json(nlohmann::json const& j, StaticMesh& component) {
+    component.mesh = j["mesh"];
+}
+
+void to_json(nlohmann::json& j, StaticMesh const& component) {
+    j["mesh"] = component.mesh;
+}
+
+
 void from_json(nlohmann::json const& j, PointLight& component) {
     component.ambient = j["ambient"];
     component.diffuse = j["diffuse"];
@@ -72,28 +81,6 @@ void to_json(nlohmann::json& j, PointLight const& component) {
     j["ambient"] = component.ambient;
     j["diffuse"] = component.diffuse;
     j["specular"] = component.specular;
-}
-
-
-void from_json(nlohmann::json const& j, StaticMesh& component) {
-    component.mesh = j["mesh"];
-}
-
-void to_json(nlohmann::json& j, StaticMesh const& component) {
-    j["mesh"] = component.mesh;
-}
-
-
-void from_json(nlohmann::json const& j, Transform& component) {
-    component.position = j["position"];
-    component.rotation = j["rotation"];
-    component.scale = j["scale"];
-}
-
-void to_json(nlohmann::json& j, Transform const& component) {
-    j["position"] = component.position;
-    j["rotation"] = component.rotation;
-    j["scale"] = component.scale;
 }
 
 
@@ -114,6 +101,19 @@ void from_json(nlohmann::json const& j, EditorCamera& component) {
 
 void to_json(nlohmann::json& j, EditorCamera const& component) {
     j["sensitivity"] = component.sensitivity;
+}
+
+
+void from_json(nlohmann::json const& j, Transform& component) {
+    component.position = j["position"];
+    component.rotation = j["rotation"];
+    component.scale = j["scale"];
+}
+
+void to_json(nlohmann::json& j, Transform const& component) {
+    j["position"] = component.position;
+    j["rotation"] = component.rotation;
+    j["scale"] = component.scale;
 }
 
 
@@ -158,17 +158,13 @@ static void do_deserialize(registry& ecs, nlohmann::json const& j, entity_t enti
         ecs.add_component<Name>(entity);
         ecs.get_component<Name>(entity) = *json_it;
     }
-    if (auto json_it = j.find("PointLight"); json_it != j.end()) {
-        ecs.add_component<PointLight>(entity);
-        ecs.get_component<PointLight>(entity) = *json_it;
-    }
     if (auto json_it = j.find("StaticMesh"); json_it != j.end()) {
         ecs.add_component<StaticMesh>(entity);
         ecs.get_component<StaticMesh>(entity) = *json_it;
     }
-    if (auto json_it = j.find("Transform"); json_it != j.end()) {
-        ecs.add_component<Transform>(entity);
-        ecs.get_component<Transform>(entity) = *json_it;
+    if (auto json_it = j.find("PointLight"); json_it != j.end()) {
+        ecs.add_component<PointLight>(entity);
+        ecs.get_component<PointLight>(entity) = *json_it;
     }
     if (auto json_it = j.find("Rotator"); json_it != j.end()) {
         ecs.add_component<Rotator>(entity);
@@ -177,6 +173,10 @@ static void do_deserialize(registry& ecs, nlohmann::json const& j, entity_t enti
     if (auto json_it = j.find("EditorCamera"); json_it != j.end()) {
         ecs.add_component<EditorCamera>(entity);
         ecs.get_component<EditorCamera>(entity) = *json_it;
+    }
+    if (auto json_it = j.find("Transform"); json_it != j.end()) {
+        ecs.add_component<Transform>(entity);
+        ecs.get_component<Transform>(entity) = *json_it;
     }
 }
 
@@ -214,20 +214,20 @@ static void do_serialize(registry const& ecs, nlohmann::json& j, entity_t entity
     if (ecs.has_component<Name>(entity)) {
         j["Name"] = ecs.get_component<Name>(entity);
     }
-    if (ecs.has_component<PointLight>(entity)) {
-        j["PointLight"] = ecs.get_component<PointLight>(entity);
-    }
     if (ecs.has_component<StaticMesh>(entity)) {
         j["StaticMesh"] = ecs.get_component<StaticMesh>(entity);
     }
-    if (ecs.has_component<Transform>(entity)) {
-        j["Transform"] = ecs.get_component<Transform>(entity);
+    if (ecs.has_component<PointLight>(entity)) {
+        j["PointLight"] = ecs.get_component<PointLight>(entity);
     }
     if (ecs.has_component<Rotator>(entity)) {
         j["Rotator"] = ecs.get_component<Rotator>(entity);
     }
     if (ecs.has_component<EditorCamera>(entity)) {
         j["EditorCamera"] = ecs.get_component<EditorCamera>(entity);
+    }
+    if (ecs.has_component<Transform>(entity)) {
+        j["Transform"] = ecs.get_component<Transform>(entity);
     }
 }
 

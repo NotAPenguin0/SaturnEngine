@@ -32,10 +32,15 @@ void Scene::init_demo_scene(ph::VulkanContext* ctx) {
     static Context context { ctx, this };
     set_serialize_context(&context);
 
+    // Create default material that will be used when no material is found.
+    // We do this before anything else to make sure it ends up with ID 0
+    ph::Material material;
+    Handle<ph::Texture> default_texture = assets::load_texture(context, "data/textures/blank.png");
+    material.texture = assets::get_texture(default_texture);
+    assets::take_material(material, "default_material");
+
     load_from_file(ecs, "data/ecs.json");
     load_from_file(blueprints, "data/blueprints.json");
-
-//    assets::load_model(context, "data/models/crytek-sponza/sponza.obj");
 
     load_assets(context);
 
@@ -84,13 +89,13 @@ void Scene::build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph) {
         
         ph::RenderGraph::DrawCommand draw_cmd;
         if (mesh_renderer.material.id >= 0) {
+            // We can do this since the material id's are in the same order as the material vector
             draw_cmd.material_index = mesh_renderer.material.id;
         } else {
             draw_cmd.material_index = 0;
         }
         draw_cmd.mesh = assets::get_mesh(mesh.mesh);
 
-        ph::RenderGraph::Instance instance;
         glm::mat4 model = glm::mat4(1.0);
 
         model = glm::translate(model, transform.position);
@@ -99,9 +104,8 @@ void Scene::build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph) {
                                 glm::radians(transform.rotation.z)});
         model = glm::scale(model, transform.scale);
 
-        instance.transform = model;
 
-        draw_cmd.instances.push_back(instance);
+        graph.transforms.push_back(stl::move(model));
         graph.draw_commands.push_back(draw_cmd);
     }
 }

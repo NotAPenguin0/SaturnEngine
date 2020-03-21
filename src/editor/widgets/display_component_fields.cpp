@@ -26,21 +26,15 @@ void display_component_fields(saturn::components::MeshRenderer& component) {
     display_field dispatcher;
     dispatcher("material##MeshRenderer", &component.material);
 }
+void display_component_fields(saturn::components::StaticMesh& component) {
+    display_field dispatcher;
+    dispatcher("mesh##StaticMesh", &component.mesh);
+}
 void display_component_fields(saturn::components::PointLight& component) {
     display_field dispatcher;
     dispatcher("ambient##PointLight", &component.ambient);
     dispatcher("diffuse##PointLight", &component.diffuse);
     dispatcher("specular##PointLight", &component.specular);
-}
-void display_component_fields(saturn::components::StaticMesh& component) {
-    display_field dispatcher;
-    dispatcher("mesh##StaticMesh", &component.mesh);
-}
-void display_component_fields(saturn::components::Transform& component) {
-    display_field dispatcher;
-    dispatcher("position##Transform", &component.position);
-    dispatcher("rotation##Transform", &component.rotation);
-    dispatcher("scale##Transform", &component.scale);
 }
 void display_component_fields(saturn::components::Rotator& component) {
     display_field dispatcher;
@@ -50,6 +44,12 @@ void display_component_fields(saturn::components::Rotator& component) {
 void display_component_fields(saturn::components::EditorCamera& component) {
     display_field dispatcher;
     dispatcher("sensitivity##EditorCamera", &component.sensitivity);
+}
+void display_component_fields(saturn::components::Transform& component) {
+    display_field dispatcher;
+    dispatcher("position##Transform", &component.position);
+    dispatcher("rotation##Transform", &component.rotation);
+    dispatcher("scale##Transform", &component.scale);
 }
 
 }

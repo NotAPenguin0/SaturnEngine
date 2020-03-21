@@ -72,8 +72,6 @@ static void add_mesh(Context& ctx, ModelMaterials const& materials, Model model,
     using namespace components;
     ecs::registry& blueprints = ctx.scene->blueprints;
 
-    // Add default transform component
-    blueprints.get_component<Transform>(model.blueprint) = Transform{ glm::vec3(2, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1, 1, 1) };
     blueprints.get_component<StaticMesh>(model.blueprint) = StaticMesh{ handle };
     // Add the material for this mesh
     Handle<ph::Material> material = materials[mesh->mMaterialIndex];
@@ -85,7 +83,7 @@ static void process_node(Context& ctx, ModelMaterials const& materials, Model cu
     using namespace components;
     for (size_t i = 0; i < node->mNumMeshes; ++i) {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        // Create an entity for this mesh
+        // Create an entity for this mesh. We need these components added before add_mesh will work
         ctx.scene->blueprints.add_component<Transform>(cur_entity.blueprint);
         ctx.scene->blueprints.add_component<StaticMesh>(cur_entity.blueprint);
         ctx.scene->blueprints.add_component<MeshRenderer>(cur_entity.blueprint);
