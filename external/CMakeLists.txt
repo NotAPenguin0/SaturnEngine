@@ -1,6 +1,5 @@
 add_subdirectory("phobos")
 add_subdirectory("cppast")
-add_subdirectory("stl")
 
 set(LINK_LIBRARIES "")
 
