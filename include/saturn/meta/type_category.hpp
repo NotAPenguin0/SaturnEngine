@@ -9,8 +9,8 @@
 #include <saturn/components/camera.hpp>
 #include <saturn/components/mesh_renderer.hpp>
 #include <saturn/components/name.hpp>
-#include <saturn/components/static_mesh.hpp>
 #include <saturn/components/point_light.hpp>
+#include <saturn/components/static_mesh.hpp>
 #include <saturn/components/transform.hpp>
 #include <samples/components/rotator.hpp>
 #include <editor/components/editor_camera.hpp>
@@ -57,12 +57,12 @@ inline TypeCategory type_category<components::Name>() {
 }
 
 template<>
-inline TypeCategory type_category<components::StaticMesh>() {
+inline TypeCategory type_category<components::PointLight>() {
     return TypeCategory::Component;
 }
 
 template<>
-inline TypeCategory type_category<components::PointLight>() {
+inline TypeCategory type_category<components::StaticMesh>() {
     return TypeCategory::Component;
 }
 

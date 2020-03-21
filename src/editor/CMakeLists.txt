@@ -9,4 +9,6 @@ target_sources(SaturnEditor PUBLIC
     "widgets/entity_tree.cpp"
     "widgets/inspector.cpp"
     "widgets/display_field.cpp"
+    "widgets/file_dialog.cpp"
+    "widgets/main_menu_bar.cpp"
 )

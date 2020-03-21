@@ -7,6 +7,8 @@
 #include <imgui/imgui_impl_vulkan.h>
 
 #include <editor/widgets/entity_tree.hpp>
+#include <editor/widgets/file_dialog.hpp>
+#include <editor/widgets/main_menu_bar.hpp>
 
 
 namespace editor {
@@ -57,6 +59,8 @@ void EditorSystem::update(saturn::FrameContext& ctx) {
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f),
                          ImGuiDockNodeFlags_None);
     }
+
+    show_main_menu_bar(ctx);
 
     static bool show_scene = true;
     if (ImGui::Begin("Scene", &show_scene, ImGuiWindowFlags_HorizontalScrollbar)) {

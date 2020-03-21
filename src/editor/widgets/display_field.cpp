@@ -27,24 +27,30 @@ void display_field::operator()(std::string_view name, saturn::ecs::entity_t* val
 }
 
 void display_field::operator()(std::string_view name, saturn::Handle<ph::Mesh>* value) {
+    if (value->id == -1) { return; }
     ImGui::TextUnformatted(
         fmt::format("{}: {}", remove_component_tag(name), saturn::assets::get_mesh_path(*value).generic_string()).c_str()
     );
 }
 
 void display_field::operator()(std::string_view name, saturn::Handle<ph::Texture>* value) {
+    if (value->id == -1) { return; }
     ImGui::TextUnformatted(
         fmt::format("{}: {}", remove_component_tag(name), saturn::assets::get_texture_path(*value).generic_string()).c_str()
     );
 }
 
 void display_field::operator()(std::string_view name, saturn::Handle<ph::Material>* value) {
+    if (value->id == -1) { return; }
     ImGui::TextUnformatted(
         fmt::format("{}: {}", remove_component_tag(name), saturn::assets::get_material_path(*value).generic_string()).c_str()
     );
 }
 
 void display_field::operator()(std::string_view name, saturn::Handle<saturn::assets::Model>* value) {
+    // Skip invalid handle
+    if (value->id == -1) { return;  }
+
     ImGui::TextUnformatted(
         fmt::format("{}: {}", remove_component_tag(name), saturn::assets::get_model_path(*value).generic_string()).c_str()
     );

@@ -6,8 +6,8 @@
 #include <saturn/components/camera.hpp>
 #include <saturn/components/mesh_renderer.hpp>
 #include <saturn/components/name.hpp>
-#include <saturn/components/static_mesh.hpp>
 #include <saturn/components/point_light.hpp>
+#include <saturn/components/static_mesh.hpp>
 #include <saturn/components/transform.hpp>
 #include <samples/components/rotator.hpp>
 #include <editor/components/editor_camera.hpp>
@@ -16,7 +16,7 @@
 
 namespace saturn::meta {
 
-#define component_list ::saturn::components::Blueprint, ::saturn::components::BlueprintInstance, ::saturn::components::Camera, ::saturn::components::MeshRenderer, ::saturn::components::Name, ::saturn::components::StaticMesh, ::saturn::components::PointLight, ::saturn::components::Transform, ::saturn::components::Rotator, ::saturn::components::EditorCamera 
+#define component_list ::saturn::components::Blueprint, ::saturn::components::BlueprintInstance, ::saturn::components::Camera, ::saturn::components::MeshRenderer, ::saturn::components::Name, ::saturn::components::PointLight, ::saturn::components::StaticMesh, ::saturn::components::Transform, ::saturn::components::Rotator, ::saturn::components::EditorCamera 
 
 namespace detail {
 

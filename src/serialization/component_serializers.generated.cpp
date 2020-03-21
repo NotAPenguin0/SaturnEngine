@@ -62,15 +62,6 @@ void to_json(nlohmann::json& j, Name const& component) {
 }
 
 
-void from_json(nlohmann::json const& j, StaticMesh& component) {
-    component.mesh = j["mesh"];
-}
-
-void to_json(nlohmann::json& j, StaticMesh const& component) {
-    j["mesh"] = component.mesh;
-}
-
-
 void from_json(nlohmann::json const& j, PointLight& component) {
     component.ambient = j["ambient"];
     component.diffuse = j["diffuse"];
@@ -81,6 +72,15 @@ void to_json(nlohmann::json& j, PointLight const& component) {
     j["ambient"] = component.ambient;
     j["diffuse"] = component.diffuse;
     j["specular"] = component.specular;
+}
+
+
+void from_json(nlohmann::json const& j, StaticMesh& component) {
+    component.mesh = j["mesh"];
+}
+
+void to_json(nlohmann::json& j, StaticMesh const& component) {
+    j["mesh"] = component.mesh;
 }
 
 
@@ -158,13 +158,13 @@ static void do_deserialize(registry& ecs, nlohmann::json const& j, entity_t enti
         ecs.add_component<Name>(entity);
         ecs.get_component<Name>(entity) = *json_it;
     }
-    if (auto json_it = j.find("StaticMesh"); json_it != j.end()) {
-        ecs.add_component<StaticMesh>(entity);
-        ecs.get_component<StaticMesh>(entity) = *json_it;
-    }
     if (auto json_it = j.find("PointLight"); json_it != j.end()) {
         ecs.add_component<PointLight>(entity);
         ecs.get_component<PointLight>(entity) = *json_it;
+    }
+    if (auto json_it = j.find("StaticMesh"); json_it != j.end()) {
+        ecs.add_component<StaticMesh>(entity);
+        ecs.get_component<StaticMesh>(entity) = *json_it;
     }
     if (auto json_it = j.find("Transform"); json_it != j.end()) {
         ecs.add_component<Transform>(entity);
@@ -214,11 +214,11 @@ static void do_serialize(registry const& ecs, nlohmann::json& j, entity_t entity
     if (ecs.has_component<Name>(entity)) {
         j["Name"] = ecs.get_component<Name>(entity);
     }
-    if (ecs.has_component<StaticMesh>(entity)) {
-        j["StaticMesh"] = ecs.get_component<StaticMesh>(entity);
-    }
     if (ecs.has_component<PointLight>(entity)) {
         j["PointLight"] = ecs.get_component<PointLight>(entity);
+    }
+    if (ecs.has_component<StaticMesh>(entity)) {
+        j["StaticMesh"] = ecs.get_component<StaticMesh>(entity);
     }
     if (ecs.has_component<Transform>(entity)) {
         j["Transform"] = ecs.get_component<Transform>(entity);

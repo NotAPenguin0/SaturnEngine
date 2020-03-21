@@ -73,6 +73,7 @@ void EntityTree::show(saturn::FrameContext& ctx) {
         expanded_entities[0] = true;
         auto const& color = ImGui::GetStyleColorVec4(ImGuiCol_HeaderHovered);
         ImGui::PushStyleColor(ImGuiCol_Header, color);
+        // Display all entities
         ecs->get_entities().traverse(display_tree, tree_post_callback, ecs, &expanded_entities, &selected_entity);
         ImGui::PopStyleColor();
     }
