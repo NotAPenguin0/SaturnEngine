@@ -79,11 +79,10 @@ add_library(SaturnEngine STATIC ${SATURN_SOURCES} ${SATURN_GENERATED_SOURCES})
 target_link_libraries(SaturnEngine PUBLIC ${SATURN_LINK_LIBRARIES})
 target_include_directories(SaturnEngine PUBLIC ${SATURN_INCLUDE_DIRECTORIES} ${PHOBOS_INCLUDE_DIRS})
 
-target_compile_options(SaturnEngine PRIVATE "-Wall" "-Werror")
+target_compile_options(SaturnEngine PRIVATE "-Wall" "-Wextra" "-pedantic" "-Werror")
 
 add_dependencies(SaturnEngine RunCodeGen)
 
-#target_compile_options(SaturnEngine PUBLIC "-ftime-trace")
 
 if (BUILD_EDITOR)
     add_executable(SaturnEditor)
@@ -94,7 +93,7 @@ if (BUILD_EDITOR)
     endif(WIN32)
     add_subdirectory("src/editor")
 
-    target_compile_options(SaturnEditor PRIVATE "-Wall" "-Werror")
+    target_compile_options(SaturnEditor PRIVATE "-Wall" "-Wextra" "-pedantic" "-Werror")
 
     add_dependencies(SaturnEditor SaturnEngine)
 

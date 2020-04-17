@@ -9,6 +9,7 @@ struct [[component]] PointLight {
     color3 ambient;
     color3 diffuse;
     color3 specular;
+    float intensity;
 };
 
 }

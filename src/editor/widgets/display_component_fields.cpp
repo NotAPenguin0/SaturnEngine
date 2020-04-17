@@ -35,11 +35,7 @@ void display_component_fields(saturn::components::PointLight& component) {
     dispatcher("ambient##PointLight", &component.ambient);
     dispatcher("diffuse##PointLight", &component.diffuse);
     dispatcher("specular##PointLight", &component.specular);
-}
-void display_component_fields(saturn::components::Rotator& component) {
-    display_field dispatcher;
-    dispatcher("speed##Rotator", &component.speed);
-    dispatcher("axes##Rotator", &component.axes);
+    dispatcher("intensity##PointLight", &component.intensity);
 }
 void display_component_fields(saturn::components::EditorCamera& component) {
     display_field dispatcher;
@@ -50,6 +46,11 @@ void display_component_fields(saturn::components::Transform& component) {
     dispatcher("position##Transform", &component.position);
     dispatcher("rotation##Transform", &component.rotation);
     dispatcher("scale##Transform", &component.scale);
+}
+void display_component_fields(saturn::components::Rotator& component) {
+    display_field dispatcher;
+    dispatcher("speed##Rotator", &component.speed);
+    dispatcher("axes##Rotator", &component.axes);
 }
 
 }

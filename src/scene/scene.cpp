@@ -79,6 +79,7 @@ void Scene::build_render_graph(ph::FrameInfo& frame, ph::RenderGraph& graph) {
         pt_light.ambient = light.ambient;
         pt_light.diffuse = light.diffuse;
         pt_light.specular = light.specular;
+        pt_light.intensity = light.intensity;
 
         graph.point_lights.push_back(pt_light);
     }

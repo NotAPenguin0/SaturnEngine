@@ -5,18 +5,18 @@
 #include <saturn/components/blueprint_instance.hpp>
 #include <saturn/components/camera.hpp>
 #include <saturn/components/mesh_renderer.hpp>
-#include <saturn/components/name.hpp>
 #include <saturn/components/static_mesh.hpp>
 #include <saturn/components/point_light.hpp>
-#include <samples/components/rotator.hpp>
+#include <saturn/components/name.hpp>
 #include <editor/components/editor_camera.hpp>
 #include <saturn/components/transform.hpp>
+#include <samples/components/rotator.hpp>
 
 #include <stl/utility.hpp>
 
 namespace saturn::meta {
 
-#define component_list ::saturn::components::Blueprint, ::saturn::components::BlueprintInstance, ::saturn::components::Camera, ::saturn::components::MeshRenderer, ::saturn::components::Name, ::saturn::components::StaticMesh, ::saturn::components::PointLight, ::saturn::components::Rotator, ::saturn::components::EditorCamera, ::saturn::components::Transform 
+#define component_list ::saturn::components::Blueprint, ::saturn::components::BlueprintInstance, ::saturn::components::Camera, ::saturn::components::MeshRenderer, ::saturn::components::StaticMesh, ::saturn::components::PointLight, ::saturn::components::Name, ::saturn::components::EditorCamera, ::saturn::components::Transform, ::saturn::components::Rotator 
 
 namespace detail {
 

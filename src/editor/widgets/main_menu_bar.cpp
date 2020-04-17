@@ -18,8 +18,10 @@ static void show_dev_menu(saturn::FrameContext& ctx) {
 
         fs::path path = fs::relative(dialog.get_result(), fs::current_path());
 
-        saturn::Context load_context { ctx.vulkan, &ctx.scene };
-        saturn::assets::load_model(load_context, path);
+        if (!path.empty()) {
+            saturn::Context load_context { ctx.vulkan, &ctx.scene };
+            saturn::assets::load_model(load_context, path);
+        }
     }
 }
 
